@@ -102,6 +102,7 @@ BOOL CKiwiSdiExecApp::InitInstance()
 	CCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
 
+	m_nCmdShow = SW_SHOWMAXIMIZED;
 	// ∆Ù”√°∞DDE ÷¥––°±
 	EnableShellOpen();
 	RegisterShellFileTypes(TRUE);

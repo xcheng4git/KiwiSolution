@@ -124,6 +124,10 @@ BEGIN
         MENUITEM "复制(&C)\tCtrl+C",              ID_EDIT_COPY
         MENUITEM "粘贴(&P)\tCtrl+V",              ID_EDIT_PASTE
     END
+    POPUP "工具(&T)"
+    BEGIN
+        MENUITEM "全屏(&F)",                      ID_TOOL_FULLSCREEN
+    END
     POPUP "视图(&V)"
     BEGIN
         MENUITEM "工具栏(&T)",                     ID_VIEW_TOOLBAR
