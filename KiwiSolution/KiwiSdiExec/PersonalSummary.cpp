@@ -123,6 +123,7 @@ void CPersonalSummary::OnInitialUpdate()
 	m_listSummary2.SetItemText(0, 7, _T("乡科级副职"));
 	m_listSummary2.SetItemText(0, 8, _T(" "));
 
-	//m_listCtrl01.ModifyExtendedStyle(LVS_EX_GRIDLINES,LVS_EX_GRIDLINES);
+	m_listSummary1.ModifyExtendedStyle(LVS_EX_GRIDLINES, LVS_EX_GRIDLINES);
+	m_listSummary2.ModifyExtendedStyle(LVS_EX_GRIDLINES, LVS_EX_GRIDLINES);
 }
 
