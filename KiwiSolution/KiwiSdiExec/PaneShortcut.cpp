@@ -61,6 +61,7 @@ void CPaneShortcut::InvokeNewFileDialog()
 void CPaneShortcut::InvokeNewFormDialog()
 {
 	CDlgNewForm dlg;
+	dlg.m_strCurrentFile = m_strCurrentFile;
 	dlg.DoModal();
 }
 

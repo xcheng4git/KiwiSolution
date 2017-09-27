@@ -15,6 +15,7 @@ public:
 
 // 对话框数据
 	enum { IDD = IDD_DIALOG_NEW_FORM };
+	CString m_strCurrentFile;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
@@ -22,6 +23,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	CXTPListCtrl m_listFormType;
+	CXTPHeaderCtrl   m_header;
+
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 };

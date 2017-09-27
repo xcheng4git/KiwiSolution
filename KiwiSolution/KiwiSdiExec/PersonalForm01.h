@@ -61,6 +61,9 @@ public:
 #endif
 #endif
 
+public:
+	CString m_strCurrentFile;
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 
