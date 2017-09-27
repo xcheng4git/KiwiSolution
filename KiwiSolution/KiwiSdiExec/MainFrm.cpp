@@ -27,6 +27,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_CREATE_PERSONAL_FORM, OnCreatePersonalForm)
 	ON_MESSAGE(WM_SHOW_PERSONAL_SUMMARY, &CMainFrame::OnShowPersonalSummary)
 	ON_MESSAGE(WM_UPDATE_ORGNIZATION, &CMainFrame::OnUpdateOrgnization)
+	ON_COMMAND(ID_TOOL_FULLSCREEN, &CMainFrame::OnToolFullscreen)
+	ON_UPDATE_COMMAND_UI(ID_TOOL_FULLSCREEN, &CMainFrame::OnUpdateToolFullscreen)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -42,6 +44,7 @@ static UINT indicators[] =
 CMainFrame::CMainFrame()
 {
 	// TODO:  在此添加成员初始化代码
+	m_bFullscreen = false;
 }
 
 CMainFrame::~CMainFrame()
@@ -88,7 +91,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		IDD_PANE_SHORTCUT, CRect(0, 0, 240, 100), xtpPaneDockBottom, paneOrgnization);
 	paneShortcut->SetOptions(xtpPaneNoCloseable | xtpPaneNoFloatable | xtpPaneNoDockable | xtpPaneNoHideable);
 	paneShortcut->SetMaxTrackSize(CSize(240, 100)); paneShortcut->SetMinTrackSize(CSize(240, 100));
-
 
 	return 0;
 }
@@ -211,4 +213,41 @@ afx_msg LRESULT CMainFrame::OnUpdateOrgnization(WPARAM wParam, LPARAM lParam)
 		::PostMessage(m_wndPaneOrgnization.m_hWnd, WM_UPDATE_ORGNIZATION, 0l, 0l);
 	}
 	return 0;
+}
+
+
+void CMainFrame::OnToolFullscreen()
+{
+	// TODO:  在此添加命令处理程序代码
+	if (!m_bFullscreen) {
+				GetWindowRect(&m_rcMainFrame);
+
+				ModifyStyle(WS_CAPTION, 0);
+				// Now resize the main window
+				int cxScrn = ::GetSystemMetrics(SM_CXSCREEN);
+				int cyScrn = ::GetSystemMetrics(SM_CYSCREEN);
+				int cxBorder = ::GetSystemMetrics(SM_CXBORDER);
+				int cyBorder = ::GetSystemMetrics(SM_CYBORDER);
+				SetWindowPos(NULL, -cxBorder, -cyBorder, cxScrn + cxBorder * 2,
+					cyScrn + cyBorder * 2, SWP_NOZORDER);
+
+				RecalcLayout(TRUE);
+			}
+	else {
+		ModifyStyle(0, WS_CAPTION);
+		MoveWindow(&m_rcMainFrame);
+
+		RecalcLayout(TRUE);
+	}
+
+	m_bFullscreen = !m_bFullscreen;
+}
+
+
+void CMainFrame::OnUpdateToolFullscreen(CCmdUI *pCmdUI)
+{
+	// TODO:  在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(m_bFullscreen);
+
+	
 }

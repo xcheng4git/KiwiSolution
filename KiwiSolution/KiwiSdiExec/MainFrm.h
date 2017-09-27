@@ -39,6 +39,9 @@ protected:
 	CPaneOrgnization m_wndPaneOrgnization;
 	CPaneShortcut m_wndPaneShortcut;
 
+	bool m_bFullscreen;
+	CRect m_rcMainFrame;
+
 protected:  // 控件条嵌入成员
 	CToolBar          m_wndToolBar;
 	CStatusBar        m_wndStatusBar;
@@ -53,5 +56,8 @@ protected:
 	afx_msg LRESULT OnCreatePersonalForm(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShowPersonalSummary(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnUpdateOrgnization(WPARAM wParam, LPARAM lParam);
+public:
+	afx_msg void OnToolFullscreen();
+	afx_msg void OnUpdateToolFullscreen(CCmdUI *pCmdUI);
 };
 
