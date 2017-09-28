@@ -1,6 +1,7 @@
 #pragma once
+#include "afxwin.h"
 
-
+#include "DatePickerCombo.h"
 
 template <class BASE_CLASS>
 class CAutoFocusWnd : public BASE_CLASS
@@ -43,8 +44,8 @@ protected:
 };
 // CPersonalForm01 窗体视图
 
-class CPersonalForm01 : public CAutoFocusWnd<CFormView>
-//class CPersonalForm01 : public CFormView
+//class CPersonalForm01 : public CAutoFocusWnd<CFormView>
+class CPersonalForm01 : public CFormView
 {
 	DECLARE_DYNCREATE(CPersonalForm01)
 
@@ -65,11 +66,28 @@ public:
 	CString m_strCurrentFile;
 
 protected:
+	enum { BorderLeft = 1, BorderTop = 2, BorderRight = 4, BorderBottom = 8 };
+	void DrawFormHeader(CDC* pDC, CRect* pBox);
+	void DrawForm(CDC* pDC, CRect* pBox);
+	inline void DrawTextCell(CDC* pDC, CRect& box, CString& strText, int enumBorder);
+
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual void OnInitialUpdate();
+	virtual void OnDraw(CDC* /*pDC*/);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	CDatePickerCombo m_comboBirthday;
 };
 
-
+#define MARGIN_X 20
+#define MARGIN_Y 10
+#define PAGE_START_OFFSET_X 20
+#define PAGE_START_OFFSET_Y 20
+#define HEADER_START_OFFSET_X 10
+#define HEADER_START_OFFSET_Y 30
+#define HEADER_HEIGHT 40
+#define CELL_HEIGHT 40
+#define CELL_WIDTH_RATIO 1.0/7.0

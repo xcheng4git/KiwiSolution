@@ -105,6 +105,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DatePickerCombo.h" />
     <ClInclude Include="DlgNewFile.h" />
     <ClInclude Include="DlgNewFolder.h" />
     <ClInclude Include="DlgNewForm.h" />
@@ -123,6 +124,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DatePickerCombo.cpp" />
     <ClCompile Include="DlgNewFile.cpp" />
     <ClCompile Include="DlgNewFolder.cpp" />
     <ClCompile Include="DlgNewForm.cpp" />

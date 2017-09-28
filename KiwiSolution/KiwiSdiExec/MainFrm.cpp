@@ -175,11 +175,12 @@ afx_msg LRESULT CMainFrame::OnCreatePersonalForm(WPARAM wParam, LPARAM lParam)
 	WORD id = LOWORD(wParam);
 	switch (id) {
 	case 1:
+	{
 		CPersonalForm01* pView = (CPersonalForm01*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm01), IDD_PERSONAL_FORM01);
-		pView->m_strCurrentFile.Format(_T("%s"), (CString *)lParam);
+		pView->m_strCurrentFile.Format(_T("%s"), *(CString *)lParam);
 		pView->OnInitialUpdate();
-
 		return 0;
+	}
 	case 2:
 		CreatePersonalForm(RUNTIME_CLASS(CPersonalForm02), IDD_PERSONAL_FORM02);
 		return 0;

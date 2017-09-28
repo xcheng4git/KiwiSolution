@@ -33,11 +33,18 @@
 #define IDC_LIST_FORM_TYPE              1011
 #define IDC_LIST1                       1012
 #define IDC_LIST_SUMMARY_1              1012
-#define ID_32771                        32771
-#define ID_TOOL_FULLSCREEN              32772
 #define IDC_LIST_SUMMARY_2              1013
 #define IDC_STATICBOX1                  1014
 #define IDC_STATICBOX2                  1015
+#define IDC_BUTTON_TEST_FORM            1016
+#define IDC_EDIT_GENDER                 1018
+#define IDC_EDIT_NATION                 1019
+#define IDC_EDIT_BIRTH_PLACE            1020
+#define IDC_COMBO_PARTY                 1021
+#define IDC_COMBO_BIRTHDAY              1022
+#define IDC_MONTHCALENDAR1              1023
+#define ID_32771                        32771
+#define ID_TOOL_FULLSCREEN              32772
 
 // Next default values for new objects
 // 
@@ -45,7 +52,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        319
 #define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1016
+#define _APS_NEXT_CONTROL_VALUE         1024
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

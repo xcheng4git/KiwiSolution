@@ -53,6 +53,7 @@ BEGIN_MESSAGE_MAP(CPaneOrgnization, CDialogEx)
 	ON_NOTIFY(TVN_SELCHANGED, IDC_TREE_ORGNIZATION, &CPaneOrgnization::OnSelchangedTreeOrgnization)
 	ON_MESSAGE(WM_UPDATE_ORGNIZATION, &CPaneOrgnization::OnUpdateOrgnization)
 	ON_NOTIFY(NM_CLICK, IDC_TREE_ORGNIZATION, &CPaneOrgnization::OnClickTreeOrgnization)
+	ON_BN_CLICKED(IDC_BUTTON_TEST_FORM, &CPaneOrgnization::OnClickedButtonTestForm)
 END_MESSAGE_MAP()
 
 
@@ -160,4 +161,12 @@ void CPaneOrgnization::OnClickTreeOrgnization(NMHDR *pNMHDR, LRESULT *pResult)
 	*pResult = 0;
 
 	m_bClicked = true;
+}
+
+
+void CPaneOrgnization::OnClickedButtonTestForm()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	::PostMessage(pWnd->m_hWnd, WM_CREATE_PERSONAL_FORM, 1l, LPARAM(new CString(_T("孙中山"))));
 }

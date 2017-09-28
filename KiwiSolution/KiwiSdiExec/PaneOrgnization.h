@@ -32,4 +32,5 @@ protected:
 	afx_msg LRESULT OnUpdateOrgnization(WPARAM wParam, LPARAM lParam);
 public:
 	afx_msg void OnClickTreeOrgnization(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnClickedButtonTestForm();
 };
