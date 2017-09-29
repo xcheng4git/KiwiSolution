@@ -76,7 +76,7 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	virtual void OnInitialUpdate();
+	virtual void OnInitialUpdate(); 
 	virtual void OnDraw(CDC* /*pDC*/);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	CDatePickerCombo m_comboBirthday;
