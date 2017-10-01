@@ -6,6 +6,12 @@
 
 #include "PersonalForm01.h"
 
+#include "Utility.h"
+#include "SQLiteHelper.h"
+#include <sstream>
+using namespace std;
+
+#include "msword/msword.h"
 
 // CPersonalForm01
 
@@ -17,11 +23,19 @@ CPersonalForm01::CPersonalForm01()
 {
 	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
 	m_fontEdit.CreateFontIndirect(&lf);
+
+	m_strPicPathname = _T("");
 }
 
 CPersonalForm01::~CPersonalForm01()
 {
 	m_fontEdit.DeleteObject();
+}
+
+void CPersonalForm01::SetCurrentFile(CString filePath)
+{
+	m_strCurrentFolder = filePath.Left(filePath.Find(_T("/"), 0));
+	m_strCurrentFile = filePath.Right(filePath.GetLength() - filePath.Find(_T("/"), 0) - 1);
 }
 
 void CPersonalForm01::DrawFormHeader(CDC* pDC, CRect* pBox)
@@ -143,15 +157,93 @@ void CPersonalForm01::DrawTextCell(CDC* pDC, CRect& box, CString& strText, int e
 	}
 }
 
+void CPersonalForm01::QueryAndFillFileForm()
+{
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str("");
+
+	ss << "select * from file_form_01 where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		help->closeDB(); delete help;
+		return;
+	}
+
+	GetDlgItem(IDC_EDIT_GENDER)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
+	GetDlgItem(IDC_EDIT_NATION)->SetWindowTextW(CA2W(re[1 * col + 3], CP_UTF8));
+
+	GetDlgItem(IDC_EDIT_BIRTH_PLACE)->SetWindowTextW(CA2W(re[1 * col + 4], CP_UTF8));
+	COleDateTime t; t.ParseDateTime(CA2W(re[1 * col + 5], CP_UTF8));
+	m_ctrlBirthday.SetTime(t);
+	//GetDlgItem(IDC_COMBO_BIRTHDAY)->SetWindowTextW(CA2W(re[1 * col + 5], CP_UTF8));
+	GetDlgItem(IDC_COMBO_PARTY)->SetWindowTextW(CA2W(re[1 * col + 6], CP_UTF8));
+
+	t.ParseDateTime(CA2W(re[1 * col + 7], CP_UTF8));
+	((CDateTimeCtrl*)GetDlgItem(IDC_PICKER_INPARTY_DATE))->SetTime(t);
+	t.ParseDateTime(CA2W(re[1 * col + 8], CP_UTF8));
+	((CDateTimeCtrl*)GetDlgItem(IDC_PICKER_INWORK_DATE))->SetTime(t);
+	GetDlgItem(IDC_EDIT_PROFESSION)->SetWindowTextW(CA2W(re[1 * col + 9], CP_UTF8));
+
+	GetDlgItem(IDC_EDIT_FULL_EDUCATE_DEGREE)->SetWindowTextW(CA2W(re[1 * col + 10], CP_UTF8));
+	GetDlgItem(IDC_EDIT_FULL_EDUCATE_PLACE)->SetWindowTextW(CA2W(re[1 * col + 11], CP_UTF8));
+
+	GetDlgItem(IDC_EDIT_PART_EDUCATE_DEGREE)->SetWindowTextW(CA2W(re[1 * col + 12], CP_UTF8));
+	GetDlgItem(IDC_EDIT_PART_EDUCATE_PLACE)->SetWindowTextW(CA2W(re[1 * col + 13], CP_UTF8));
+
+	GetDlgItem(IDC_EDIT_PARTY_REP)->SetWindowTextW(CA2W(re[1 * col + 14], CP_UTF8));
+	GetDlgItem(IDC_EDIT_NPC_MEMBER)->SetWindowTextW(CA2W(re[1 * col + 15], CP_UTF8));
+	GetDlgItem(IDC_EDIT_CPPCC_MEMBER)->SetWindowTextW(CA2W(re[1 * col + 16], CP_UTF8));
+
+	GetDlgItem(IDC_EDIT_WORKING_UNIT)->SetWindowTextW(CA2W(re[1 * col + 17], CP_UTF8));
+	GetDlgItem(IDC_EDIT_CURRENT_POSITION)->SetWindowTextW(CA2W(re[1 * col + 18], CP_UTF8));
+
+	GetDlgItem(IDC_EDIT_HOME_ADDRESS)->SetWindowTextW(CA2W(re[1 * col + 19], CP_UTF8));
+	GetDlgItem(IDC_EDIT_PHONE)->SetWindowTextW(CA2W(re[1 * col + 20], CP_UTF8));
+
+	GetDlgItem(IDC_EDIT_RESUME)->SetWindowTextW(CA2W(re[1 * col + 21], CP_UTF8));
+
+	m_strPicPathname.Format(_T("%s"), CA2W(re[1 * col + 22], CP_UTF8));
+	if (!m_strPicPathname.IsEmpty() && m_strPicPathname != _T("(null)") ) {
+		CImage  image;
+		image.Load(m_strPicPathname);
+		CRect   rect; m_picFile.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+		CDC *pDc = m_picFile.GetDC();//获取picture的DC  
+		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+		ReleaseDC(pDc);
+	}
+	else
+		m_strPicPathname.Empty();
+
+	ss.str(""); ss.clear();
+	help->closeDB();
+	delete help;
+
+}
+
 void CPersonalForm01::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_COMBO_BIRTHDAY, m_comboBirthday);
+	DDX_Control(pDX, IDC_COMBO_BIRTHDAY, m_ctrlBirthday);
+	//  DDX_Control(pDX, IDC_FILE_PICTURE, m_picFile);
+	DDX_Control(pDX, IDC_FILE_PICTURE, m_picFile);
 }
 
 BEGIN_MESSAGE_MAP(CPersonalForm01, CFormView)
 	ON_WM_SIZE()
 	ON_BN_CLICKED(IDC_CMD_SAVE_FORM, &CPersonalForm01::OnClickedCmdSaveForm)
+	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm01::OnClickedCmdPrintForm)
+	ON_STN_CLICKED(IDC_FILE_PICTURE, &CPersonalForm01::OnClickedFilePicture)
 END_MESSAGE_MAP()
 
 
@@ -218,6 +310,8 @@ void CPersonalForm01::OnInitialUpdate()
 	GetDlgItem(IDC_EDIT_PHONE)->SetFont(&m_fontEdit);
 
 	GetDlgItem(IDC_EDIT_RESUME)->SetFont(&m_fontEdit);
+
+	QueryAndFillFileForm();
 }
 
 
@@ -258,17 +352,18 @@ void CPersonalForm01::OnDraw(CDC* /*pDC*/)
 		rt.top + MARGIN_Y + PAGE_START_OFFSET_Y + HEADER_START_OFFSET_Y + HEADER_HEIGHT + 1, 
 		rt.right - MARGIN_X - PAGE_START_OFFSET_X, rt.bottom - MARGIN_Y - PAGE_START_OFFSET_Y));
 
-	
 	dc.BitBlt(rt.left, rt.top, rt.right - rt.left, rt.bottom - rt.top, &memDC, 0, 0, SRCCOPY);
+	memBitmap.DeleteObject(); memDC.DeleteDC();
 
+	if (!m_strPicPathname.IsEmpty()) {
+		CImage  image;
+		image.Load(m_strPicPathname);
+		CRect   rect; m_picFile.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+		CDC *pDc = m_picFile.GetDC();//获取picture的DC  
+		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+		ReleaseDC(pDc);
+	}
 
-	memBitmap.DeleteObject();
-	memDC.DeleteDC();
-	/*
-	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 26; _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3);
-	CFont font; VERIFY(font.CreateFontIndirect(&lf));
-	CFont* pOldFont = dc.SelectObject(&font); dc.SetBkMode(TRANSPARENT);
-	*/
 	//dc.DeleteDC();
 }
 
@@ -323,6 +418,11 @@ void CPersonalForm01::OnSize(UINT nType, int cx, int cy)
 	}
 	if (pWnd = GetDlgItem(IDC_EDIT_PROFESSION)) {
 		pRt = new CRect(rt.left + 5 * len*CELL_WIDTH_RATIO + 5, rt.top + 2 * CELL_HEIGHT + 5, rt.left + 6 * len*CELL_WIDTH_RATIO - 5, rt.top + 3 * CELL_HEIGHT - 5);
+		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+	}
+	//////////////////////////////////////////////////////
+	if (pWnd = GetDlgItem(IDC_FILE_PICTURE)) {
+		pRt = new CRect(rt.left + 6 * len*CELL_WIDTH_RATIO + 5, rt.top + 0 * CELL_HEIGHT + 5, rt.right - 5, rt.top + 5 * CELL_HEIGHT - 5);
 		pWnd->MoveWindow(pRt, FALSE); delete pRt;
 	}
 	//////////////////////////////////////////////////////
@@ -387,5 +487,232 @@ void CPersonalForm01::OnSize(UINT nType, int cx, int cy)
 void CPersonalForm01::OnClickedCmdSaveForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str(""); ss.clear();
+
+	ss << "select count(*) from file_form_01 where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int hasRecord = atoi(re[1 * col + 0]);
+	
+	if (hasRecord) {
+		ss << "delete from file_form_01 where file_id=" << file_id << ";";
+		help->execSQL(ss.str().c_str());
+
+		//应该把原来的照片文件删除
+	}
+
+	CString strText;
+	ss << "insert into file_form_01 values(" << file_id << ",";
+	GetDlgItem(IDC_EDIT_NAME)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_EDIT_GENDER)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_EDIT_NATION)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+
+	GetDlgItem(IDC_EDIT_BIRTH_PLACE)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_COMBO_BIRTHDAY)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_COMBO_PARTY)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+
+	GetDlgItem(IDC_PICKER_INPARTY_DATE)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_PICKER_INWORK_DATE)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_EDIT_PROFESSION)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+
+	GetDlgItem(IDC_EDIT_FULL_EDUCATE_DEGREE)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_EDIT_FULL_EDUCATE_PLACE)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+
+	GetDlgItem(IDC_EDIT_PART_EDUCATE_DEGREE)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_EDIT_PART_EDUCATE_PLACE)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+
+	GetDlgItem(IDC_EDIT_PARTY_REP)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_EDIT_NPC_MEMBER)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_EDIT_CPPCC_MEMBER)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+
+	GetDlgItem(IDC_EDIT_WORKING_UNIT)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_EDIT_CURRENT_POSITION)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+
+	GetDlgItem(IDC_EDIT_HOME_ADDRESS)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_EDIT_PHONE)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+
+	GetDlgItem(IDC_EDIT_RESUME)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', "; strText.ReleaseBuffer();
+
+	if (!m_strPicPathname.IsEmpty()){
+		CImage  image;
+		image.Load(m_strPicPathname); //把图像保存到特定目录,然后将路径存数据库
+		m_strPicPathname = CUtility::GetModuleDirectory() + _T("\\photo\\") + CUtility::GetGuid() + _T(".jpg");
+		image.Save(m_strPicPathname.GetBuffer());
+		ss << "'" << CW2A(m_strPicPathname.GetBuffer(), CP_UTF8) << "') ";
+	}
+	else {
+		ss << "'') ";
+	}
+	
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	help->execSQL(ss.str().c_str());
+
+	help->closeDB();
+	delete help;
+	ss.str("");  ss.clear();
+	GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 }
- 
+
+const wchar_t *pBookmarks[] = { _T("姓名"), _T("性别"), _T("民族"), _T("籍贯"), _T("出生年月"), _T("政治面貌"), _T("入党时间"), _T("参加工作时间"), 
+								_T("有何专长"), _T("全日制学位"), _T("全日制学校"), _T("在职学位"), _T("在职学校"), _T("党代表"), _T("人大代表"), 
+								_T("政协委员"), _T("工作单位"), _T("现任职务"), _T("家庭住址"), _T("联系电话"), _T("工作简历") };
+void CPersonalForm01::OnClickedCmdPrintForm()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str("");
+
+	ss << "select * from file_form_01 where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		help->closeDB(); delete help;
+		AfxMessageBox(_T("没有从数据库检索到 " + m_strCurrentFolder + m_strCurrentFile + " 的数据"));
+		return;
+	}
+
+	COleVariant covZero((short)0), covTrue((short)TRUE), covFalse((short)FALSE), covOptional((long)DISP_E_PARAMNOTFOUND, VT_ERROR),
+		covDocxType((short)0), start_line, end_line, dot(CUtility::GetModuleDirectory()+_T("\\template\\表1.dotx")); //dot(_T("template1.dot")); // 
+
+	CApplication wordApp;
+	CDocuments docs;
+	CDocument0 docx;
+	CBookmarks bookmarks;
+	CBookmark0 bookmark;
+	CRange range;
+	CCell cell;
+
+	if (!wordApp.CreateDispatch(_T("Word.Application"))) {
+		AfxMessageBox(_T("no word product."));
+		return;
+	}
+
+	wordApp.put_Visible(FALSE);
+	CString wordVersion = wordApp.get_Version();
+	docs = wordApp.get_Documents();
+	docx = docs.Add(dot, covOptional, covOptional, covOptional);
+	bookmarks = docx.get_Bookmarks();
+
+	for (int i = 0; i < 21; i++) {
+		bookmark = bookmarks.Item(&_variant_t(pBookmarks[i]));
+		range = bookmark.get_Range();
+		range.put_Text((CA2W(re[1 * col + i+1], CP_UTF8)));
+	}
+	
+	//插入图片
+	bookmark = bookmarks.Item(&_variant_t(_T("照片")));
+	range = bookmark.get_Range();
+	CnlineShapes shape = docx.get_InlineShapes();
+	//shape.AddPicture(_T("C:\\Projects\\Kiwi.Git\\KiwiSolution\\KiwiSdiExec\\a.jpg"), covFalse, covTrue, &_variant_t(range));
+	shape.AddPicture(m_strPicPathname.GetBuffer(), covFalse, covTrue, &_variant_t(range));
+
+	CString strSavePath = CUtility::GetModuleDirectory() + _T("\\temp.docx");
+	docx.SaveAs(COleVariant(strSavePath), covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional);
+
+	docx.PrintOut(covFalse,              // Background.
+		covOptional,           // Append.
+		covOptional,           // Range.
+		covOptional,           // OutputFileName.
+		covOptional,           // From.
+		covOptional,           // To.
+		covOptional,           // Item.
+		COleVariant((long)1),  // Copies.
+		covOptional,           // Pages.
+		covOptional,           // PageType.
+		covOptional,           // PrintToFile.
+		covOptional,           // Collate.
+		covOptional,           // ActivePrinterMacGX.
+		covOptional,           // ManualDuplexPrint.
+		covOptional,           // PrintZoomColumn  New with Word 2002
+		covOptional,           // PrintZoomRow          ditto
+		covOptional,           // PrintZoomPaperWidth   ditto
+		covOptional);          // PrintZoomPaperHeight  ditto*/
+
+	docx.Close(covFalse, covOptional, covOptional);
+	wordApp.Quit(covOptional, covOptional, covOptional);
+	range.ReleaseDispatch(); bookmarks.ReleaseDispatch(); wordApp.ReleaseDispatch();
+
+}
+
+
+void CPersonalForm01::OnClickedFilePicture()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	CString strFileName;
+	CFileDialog dlg(TRUE, _T("*.jpg"), strFileName, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER, _T("图像文件(*.bmp;*.jpg)|*.bmp;*.jpg|All Files(*.*)|*.*|"), this);
+
+	if (dlg.DoModal() == IDOK)
+	{
+		m_strPicPathname = dlg.GetPathName();
+
+		//string filename = CW2A(m_strPicPathname.GetBuffer(), CP_UTF8);
+		//cv::Mat img = cv::imread(filename);
+		//CRect   rect; m_picFile.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+		//cv::Mat matPixel; cv::resize(img, matPixel, cv::Size(rect.Width(), rect.Height())); img.release();
+		//int nChannels = (matPixel.type() >> 3) - CV_8U + 1;
+		//int iSize = matPixel.cols*matPixel.rows*nChannels;
+		//HBITMAP hBmp = CreateBitmap(matPixel.cols, matPixel.rows, 1, nChannels * 8, matPixel.data);
+		//HBITMAP hOldBmp = m_picFile.SetBitmap(hBmp);
+		//DeleteObject(hOldBmp);
+
+		//////CDC *pDc = m_picFile.GetDC();
+		////CClientDC dc(this);
+		////CDC dcCompatible;
+		////dcCompatible.CreateCompatibleDC(&dc);
+		////dcCompatible.SelectObject(hBmp);
+		////dc.BitBlt(0, 0, rect.Width(), rect.Height(), &dcCompatible, 0, 0, SRCCOPY);
+		//////ReleaseDC(pDc);
+		//InvalidateRect(NULL);
+
+		CImage  image;
+		image.Load(m_strPicPathname); //把图像保存到特定目录,然后将路径存数据库
+		CRect   rect; m_picFile.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+		CDC *pDc = m_picFile.GetDC();//获取picture的DC  
+		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+		ReleaseDC(pDc);
+		
+	}
+
+}

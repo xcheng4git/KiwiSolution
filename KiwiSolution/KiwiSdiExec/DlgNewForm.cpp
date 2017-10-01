@@ -99,7 +99,7 @@ void CDlgNewForm::OnOK()
 	int type_id = _ttoi(m_listFormType.GetItemText(row, 3));
 
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
-	::PostMessage(pWnd->m_hWnd, WM_CREATE_PERSONAL_FORM, WPARAM(type_id), LPARAM(&m_strCurrentFile));
+	::PostMessage(pWnd->m_hWnd, WM_CREATE_PERSONAL_FORM, WPARAM(type_id), LPARAM(new CString(m_strCurrentFolder + _T("/") + m_strCurrentFile)));
 
 	CDialogEx::OnOK();
 }

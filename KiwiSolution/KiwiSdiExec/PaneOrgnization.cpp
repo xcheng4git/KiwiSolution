@@ -168,5 +168,5 @@ void CPaneOrgnization::OnClickedButtonTestForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
-	::PostMessage(pWnd->m_hWnd, WM_CREATE_PERSONAL_FORM, 1l, LPARAM(new CString(_T("孙中山"))));
+	::PostMessage(pWnd->m_hWnd, WM_CREATE_PERSONAL_FORM, 1l, LPARAM(new CString(_T("天下为公/孙中山"))));
 }

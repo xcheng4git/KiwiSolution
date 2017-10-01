@@ -8,8 +8,8 @@ public:
 	virtual ~CSQLiteHelper();
 
 	sqlite3 *db;
-	void execSQL(char *sql);
-	char**rawQuery(char *sql, int *row, int *column, char **result);
+	void execSQL(const char *sql);
+	char**rawQuery(const char *sql, int *row, int *column, char **result);
 	void openDB(char *path);
 	void closeDB();
 

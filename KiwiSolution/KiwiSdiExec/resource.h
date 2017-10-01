@@ -59,6 +59,10 @@
 #define IDC_EDIT_RESUME                 1042
 #define IDC_COMMAND1                    1043
 #define IDC_CMD_SAVE_FORM               1043
+#define IDC_CMD_PRINT_FORM              1046
+#define IDC_FILE_PICTURE                1047
+#define IDC_EDIT1                       1048
+#define IDC_EDIT_PIC_PATHNAME           1048
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 
@@ -66,9 +70,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        319
+#define _APS_NEXT_RESOURCE_VALUE        320
 #define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1044
+#define _APS_NEXT_CONTROL_VALUE         1049
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

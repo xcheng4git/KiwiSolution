@@ -2,6 +2,7 @@
 #include "afxwin.h"
 
 #include "DatePickerCombo.h"
+#include "afxdtctl.h"
 
 template <class BASE_CLASS>
 class CAutoFocusWnd : public BASE_CLASS
@@ -64,12 +65,16 @@ public:
 
 public:
 	CString m_strCurrentFile;
+	CString m_strCurrentFolder;
+	void SetCurrentFile(CString filePath);
 
 protected:
 	enum { BorderLeft = 1, BorderTop = 2, BorderRight = 4, BorderBottom = 8 };
 	void DrawFormHeader(CDC* pDC, CRect* pBox);
 	void DrawForm(CDC* pDC, CRect* pBox);
 	inline void DrawTextCell(CDC* pDC, CRect& box, CString& strText, int enumBorder);
+
+	void QueryAndFillFileForm();
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
@@ -79,10 +84,14 @@ public:
 	virtual void OnInitialUpdate(); 
 	virtual void OnDraw(CDC* /*pDC*/);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
-	CDatePickerCombo m_comboBirthday;
 
 	CFont m_fontEdit;
 	afx_msg void OnClickedCmdSaveForm();
+	CDateTimeCtrl m_ctrlBirthday;
+	afx_msg void OnClickedCmdPrintForm();
+	afx_msg void OnClickedFilePicture();
+	CStatic m_picFile;
+	CString m_strPicPathname;
 };
 
 #define MARGIN_X 20

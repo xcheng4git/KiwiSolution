@@ -177,7 +177,7 @@ afx_msg LRESULT CMainFrame::OnCreatePersonalForm(WPARAM wParam, LPARAM lParam)
 	case 1:
 	{
 		CPersonalForm01* pView = (CPersonalForm01*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm01), IDD_PERSONAL_FORM01);
-		pView->m_strCurrentFile.Format(_T("%s"), *(CString *)lParam);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
 		pView->OnInitialUpdate();
 		return 0;
 	}
@@ -196,17 +196,17 @@ afx_msg LRESULT CMainFrame::OnShowPersonalSummary(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam == 0) {
 		CString *folder = (CString *)lParam;
-		m_wndPaneShortcut.m_strCurrentFolder.Format(_T("%s"), *folder);
+		m_wndPaneShortcut.m_strCurrentFolder.Format(_T("%s"), *folder); //delete folder;
 	}
 	else {
 		CString *folder = (CString *)wParam, *file = (CString *)lParam;
-		m_wndPaneShortcut.m_strCurrentFolder.Format(_T("%s"), *folder);
-		m_wndPaneShortcut.m_strCurrentFile.Format(_T("%s"), *file);
+		m_wndPaneShortcut.m_strCurrentFolder.Format(_T("%s"), *folder); //delete folder;
+		m_wndPaneShortcut.m_strCurrentFile.Format(_T("%s"), *file); //delete file;
 
 		CView* pView = CreatePersonalForm(RUNTIME_CLASS(CPersonalSummary), IDD_PERSONAL_SUMMARY);
 		::PostMessage(pView->m_hWnd, WM_SHOW_PERSONAL_SUMMARY, wParam, lParam);
 
-		pView->OnInitialUpdate();
+		pView->OnInitialUpdate();		
 	}
 	return 0;
 }

@@ -113,6 +113,30 @@
     <ClInclude Include="KiwiSdiExecDoc.h" />
     <ClInclude Include="KiwiSdiExecView.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="msword\CApplication.h" />
+    <ClInclude Include="msword\CBookmark0.h" />
+    <ClInclude Include="msword\CBookmarks.h" />
+    <ClInclude Include="msword\CBorder.h" />
+    <ClInclude Include="msword\CBorders.h" />
+    <ClInclude Include="msword\CCell.h" />
+    <ClInclude Include="msword\CCells.h" />
+    <ClInclude Include="msword\CColumn.h" />
+    <ClInclude Include="msword\CColumns0.h" />
+    <ClInclude Include="msword\CDocument0.h" />
+    <ClInclude Include="msword\CDocuments.h" />
+    <ClInclude Include="msword\CFont0.h" />
+    <ClInclude Include="msword\CnlineShape.h" />
+    <ClInclude Include="msword\CnlineShapes.h" />
+    <ClInclude Include="msword\CPageSetup.h" />
+    <ClInclude Include="msword\CParagraph.h" />
+    <ClInclude Include="msword\CParagraphs.h" />
+    <ClInclude Include="msword\CRange.h" />
+    <ClInclude Include="msword\CRow.h" />
+    <ClInclude Include="msword\CRows.h" />
+    <ClInclude Include="msword\CSelection.h" />
+    <ClInclude Include="msword\CTable0.h" />
+    <ClInclude Include="msword\CTables0.h" />
+    <ClInclude Include="msword\msword.h" />
     <ClInclude Include="PaneOrgnization.h" />
     <ClInclude Include="PaneShortcut.h" />
     <ClInclude Include="PersonalForm01.h" />
@@ -122,6 +146,7 @@
     <ClInclude Include="SQLiteHelper.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DatePickerCombo.cpp" />
@@ -142,6 +167,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="KiwiSdiExec.reg" />

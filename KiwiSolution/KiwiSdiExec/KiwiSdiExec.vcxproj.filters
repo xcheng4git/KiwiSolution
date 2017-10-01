@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\msword">
+      <UniqueIdentifier>{274b96cd-a527-4935-8058-16f438eb745e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -69,6 +72,81 @@
     <ClInclude Include="DatePickerCombo.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="msword\CApplication.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CBookmark0.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CBookmarks.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CBorder.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CBorders.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CCell.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CCells.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CColumn.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CColumns0.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CDocument0.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CDocuments.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CFont0.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CPageSetup.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CParagraph.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CParagraphs.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CRange.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CRow.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CRows.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CSelection.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CTable0.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CTables0.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\msword.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CnlineShape.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="msword\CnlineShapes.h">
+      <Filter>头文件\msword</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KiwiSdiExec.cpp">
@@ -114,6 +192,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DatePickerCombo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

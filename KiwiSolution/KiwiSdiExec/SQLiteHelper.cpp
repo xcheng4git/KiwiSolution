@@ -39,12 +39,12 @@ CSQLiteHelper::~CSQLiteHelper()
 {
 }
 
-void CSQLiteHelper::execSQL(char *sql)
+void CSQLiteHelper::execSQL(const char *sql)
 {
 	sqlite3_exec(db, sql, 0, 0, 0);
 }
 
-char **CSQLiteHelper::rawQuery(char *sql, int *row, int *column, char **result)
+char **CSQLiteHelper::rawQuery(const char *sql, int *row, int *column, char **result)
 {
 	sqlite3_get_table(db, sql, &result, row, column, 0);
 	return result;

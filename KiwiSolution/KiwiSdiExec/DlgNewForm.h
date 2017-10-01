@@ -16,6 +16,7 @@ public:
 // 对话框数据
 	enum { IDD = IDD_DIALOG_NEW_FORM };
 	CString m_strCurrentFile;
+	CString m_strCurrentFolder;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
