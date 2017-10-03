@@ -29,6 +29,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_UPDATE_ORGNIZATION, &CMainFrame::OnUpdateOrgnization)
 	ON_COMMAND(ID_TOOL_FULLSCREEN, &CMainFrame::OnToolFullscreen)
 	ON_UPDATE_COMMAND_UI(ID_TOOL_FULLSCREEN, &CMainFrame::OnUpdateToolFullscreen)
+	ON_MESSAGE(WM_SHOW_DEFAULT_SUMMARY, &CMainFrame::OnShowDefaultSummary)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -194,11 +195,6 @@ afx_msg LRESULT CMainFrame::OnCreatePersonalForm(WPARAM wParam, LPARAM lParam)
 
 afx_msg LRESULT CMainFrame::OnShowPersonalSummary(WPARAM wParam, LPARAM lParam)
 {
-	if (wParam == 0) {
-		CString *folder = (CString *)lParam;
-		m_wndPaneShortcut.m_strCurrentFolder.Format(_T("%s"), *folder); //delete folder;
-	}
-	else {
 		CString *folder = (CString *)wParam, *file = (CString *)lParam;
 		m_wndPaneShortcut.m_strCurrentFolder.Format(_T("%s"), *folder); //delete folder;
 		m_wndPaneShortcut.m_strCurrentFile.Format(_T("%s"), *file); //delete file;
@@ -207,7 +203,7 @@ afx_msg LRESULT CMainFrame::OnShowPersonalSummary(WPARAM wParam, LPARAM lParam)
 		::PostMessage(pView->m_hWnd, WM_SHOW_PERSONAL_SUMMARY, wParam, lParam);
 
 		pView->OnInitialUpdate();		
-	}
+
 	return 0;
 }
 
@@ -255,4 +251,16 @@ void CMainFrame::OnUpdateToolFullscreen(CCmdUI *pCmdUI)
 	pCmdUI->SetCheck(m_bFullscreen);
 
 	
+}
+
+
+afx_msg LRESULT CMainFrame::OnShowDefaultSummary(WPARAM wParam, LPARAM lParam)
+{
+	CString *folder = (CString *)lParam;
+	m_wndPaneShortcut.m_strCurrentFolder.Format(_T("%s"), *folder); //delete folder;
+
+	CView* pView = CreatePersonalForm(RUNTIME_CLASS(CKiwiSdiExecView), IDD_KIWISDIEXEC_FORM);
+	pView->OnInitialUpdate();
+
+	return 0;
 }

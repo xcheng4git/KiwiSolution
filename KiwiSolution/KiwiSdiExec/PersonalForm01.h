@@ -92,6 +92,9 @@ public:
 	afx_msg void OnClickedFilePicture();
 	CStatic m_picFile;
 	CString m_strPicPathname;
+
+	CBitmap m_bmpClose;
+	afx_msg void OnClickedButtonCloseForm01();
 };
 
 #define MARGIN_X 20

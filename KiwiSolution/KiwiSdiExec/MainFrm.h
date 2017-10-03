@@ -59,5 +59,7 @@ protected:
 public:
 	afx_msg void OnToolFullscreen();
 	afx_msg void OnUpdateToolFullscreen(CCmdUI *pCmdUI);
+protected:
+	afx_msg LRESULT OnShowDefaultSummary(WPARAM wParam, LPARAM lParam);
 };
 

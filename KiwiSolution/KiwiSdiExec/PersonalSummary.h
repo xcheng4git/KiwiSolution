@@ -30,12 +30,17 @@ public:
 	CString m_strHeader;
 	CString m_strBox1;
 	CString m_strBox2;
+
+	CString m_strCurrentFile;
+	CString m_strCurrentFolder;
+	CBitmap m_bmpClose;
 protected:
 	afx_msg LRESULT OnShowPersonalSummary(WPARAM wParam, LPARAM lParam);
 public:
 	CXTPListCtrl m_listSummary1;
 	CXTPListCtrl m_listSummary2;
 	virtual void OnInitialUpdate();
+	afx_msg void OnClickedButtonClose();
 };
 
 

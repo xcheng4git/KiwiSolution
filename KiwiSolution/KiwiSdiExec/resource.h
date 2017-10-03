@@ -23,6 +23,12 @@
 #define IDD_DIALOG_NEW_FOLDER           316
 #define IDD_DIALOG_NEW_FILE             317
 #define IDD_DIALOG_NEW_FORM             318
+#define IDB_BITMAP_XINGTAI1             322
+#define IDB_BITMAP_XINGTAI2             323
+#define IDB_BITMAP_XINGTAI3             324
+#define IDB_BITMAP_XINGTAI4             325
+#define IDB_BITMAP_TIP                  326
+#define IDB_BITMAP_CLOSE                329
 #define IDC_EDIT_TEST                   1002
 #define IDC_LIST_SHORTCUT               1005
 #define IDC_TREE_ORGNIZATION            1006
@@ -63,6 +69,37 @@
 #define IDC_FILE_PICTURE                1047
 #define IDC_EDIT1                       1048
 #define IDC_EDIT_PIC_PATHNAME           1048
+#define IDC_PIC_GROUP1_1                1049
+#define IDC_PIC_GROUP1_2                1050
+#define IDC_STATIC_GROUP1_1_TIP         1051
+#define IDC_STATIC_GROUP1_2_TIP         1052
+#define IDC_STATIC_GROUP1_1_DATA        1053
+#define IDC_STATIC_GROUP1_2_DATA        1054
+#define IDC_PIC_GROUP2_1                1055
+#define IDC_STATIC_GROUP2_1_TIP         1056
+#define IDC_STATIC_GROUP2_1_DATA        1057
+#define IDC_PIC_GROUP2_2                1058
+#define IDC_STATIC_GROUP2_2_TIP         1059
+#define IDC_STATIC_GROUP2_2_DATA        1060
+#define IDC_PIC_GROUP2_3                1061
+#define IDC_STATIC_GROUP2_3_TIP         1062
+#define IDC_STATIC_GROUP2_3_DATA        1063
+#define IDC_PIC_GROUP2_4                1064
+#define IDC_STATIC_GROUP2_4_TIP         1065
+#define IDC_STATIC_GROUP2_4_DATA        1066
+#define IDC_PIC_GROUP3_1                1067
+#define IDC_PIC_GROUP3_2                1068
+#define IDC_STATIC_GROUP3_1_TIP         1069
+#define IDC_STATIC_GROUP3_2_TIP         1070
+#define IDC_STATIC_GROUP3_1_DATA        1071
+#define IDC_STATIC_GROUP3_2_DATA        1072
+#define IDC_STATIC_DEFULAT_TITLE        1073
+#define IDC_STATIC_GROUP1               1074
+#define IDC_STATIC_GROUP2               1075
+#define IDC_STATIC_GROUP3               1076
+#define IDC_BUTTON_CLOSE                1079
+#define IDC_BUTTON_CLOSE_FORM1          1080
+#define IDC_BUTTON_CLOSE_FORM01         1080
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 
@@ -70,9 +107,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        320
+#define _APS_NEXT_RESOURCE_VALUE        330
 #define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1049
+#define _APS_NEXT_CONTROL_VALUE         1081
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

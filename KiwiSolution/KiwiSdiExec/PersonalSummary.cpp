@@ -6,6 +6,7 @@
 #include "PersonalSummary.h"
 
 
+#include "MainFrm.h"
 // CPersonalSummary
 
 IMPLEMENT_DYNCREATE(CPersonalSummary, CFormView)
@@ -14,11 +15,12 @@ CPersonalSummary::CPersonalSummary()
 	: CFormView(CPersonalSummary::IDD)
 	, m_strHeader(_T(""))
 {
-
+	m_bmpClose.LoadBitmap(IDB_BITMAP_CLOSE);
 }
 
 CPersonalSummary::~CPersonalSummary()
 {
+	m_bmpClose.DeleteObject();
 }
 
 void CPersonalSummary::DoDataExchange(CDataExchange* pDX)
@@ -33,6 +35,7 @@ void CPersonalSummary::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CPersonalSummary, CFormView)
 	ON_MESSAGE(WM_SHOW_PERSONAL_SUMMARY, &CPersonalSummary::OnShowPersonalSummary)
+	ON_BN_CLICKED(IDC_BUTTON_CLOSE, &CPersonalSummary::OnClickedButtonClose)
 END_MESSAGE_MAP()
 
 
@@ -65,7 +68,8 @@ afx_msg LRESULT CPersonalSummary::OnShowPersonalSummary(WPARAM wParam, LPARAM lP
 	m_strBox1.Format(_T("1.基本情况"));
 	m_strBox2.Format(_T("2.廉政电子档案"));
 
-
+	m_strCurrentFolder.Format(_T("%s"), *folder);
+	m_strCurrentFile.Format(_T("%s"), *file);
 	//最后
 	UpdateData(false);
 
@@ -125,5 +129,19 @@ void CPersonalSummary::OnInitialUpdate()
 
 	m_listSummary1.ModifyExtendedStyle(LVS_EX_GRIDLINES, LVS_EX_GRIDLINES);
 	m_listSummary2.ModifyExtendedStyle(LVS_EX_GRIDLINES, LVS_EX_GRIDLINES);
+	
+	//CRect rect;
+	//GetDlgItem(IDC_STATIC_HEADER)->GetWindowRect(&rect);
+	//((CButton*)GetDlgItem(IDC_BUTTON_CLOSE))->MoveWindow(new CRect(rect.right - 17, rect.top, rect.right, rect.top+17));
+	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE))->SetBitmap(m_bmpClose);
 }
 
+
+
+void CPersonalSummary::OnClickedButtonClose()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+
+	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
+}

@@ -177,6 +177,15 @@
     <ResourceCompile Include="KiwiSdiExec.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\bitmap2.bmp" />
+    <Image Include="res\bitmap3.bmp" />
+    <Image Include="res\bitmap_x.bmp" />
+    <Image Include="res\bmp00001.bmp" />
+    <Image Include="res\bmp00002.bmp" />
+    <Image Include="res\bmp00003.bmp" />
+    <Image Include="res\bmp00004.bmp" />
+    <Image Include="res\ico00001.ico" />
     <Image Include="res\icon1.ico" />
     <Image Include="res\icon11.ico" />
     <Image Include="res\icon14.ico" />

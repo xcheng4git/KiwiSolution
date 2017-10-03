@@ -5,6 +5,7 @@
 #pragma once
 
 #include "resource.h"
+#include "afxwin.h"
 
 
 class CKiwiSdiExecView : public CFormView
@@ -37,12 +38,17 @@ public:
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
+	CFont m_fontGroup, m_fontTip, m_fontTitle;
+	CBitmap m_bmpXingt1, m_bmpXingt2, m_bmpXingt3, m_bmpXingt4;
+	CBitmap m_bmpTip;
 
 protected:
 
 // 生成的消息映射函数
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	CStatic m_picGroup1_2;
 };
 
 #ifndef _DEBUG  // KiwiSdiExecView.cpp 中的调试版本

@@ -6,6 +6,8 @@
 
 #include "PersonalForm01.h"
 
+#include "MainFrm.h"
+
 #include "Utility.h"
 #include "SQLiteHelper.h"
 #include <sstream>
@@ -25,11 +27,13 @@ CPersonalForm01::CPersonalForm01()
 	m_fontEdit.CreateFontIndirect(&lf);
 
 	m_strPicPathname = _T("");
+	m_bmpClose.LoadBitmap(IDB_BITMAP_CLOSE);
 }
 
 CPersonalForm01::~CPersonalForm01()
 {
 	m_fontEdit.DeleteObject();
+	m_bmpClose.DeleteObject();
 }
 
 void CPersonalForm01::SetCurrentFile(CString filePath)
@@ -215,12 +219,15 @@ void CPersonalForm01::QueryAndFillFileForm()
 
 	m_strPicPathname.Format(_T("%s"), CA2W(re[1 * col + 22], CP_UTF8));
 	if (!m_strPicPathname.IsEmpty() && m_strPicPathname != _T("(null)") ) {
-		CImage  image;
-		image.Load(m_strPicPathname);
-		CRect   rect; m_picFile.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-		CDC *pDc = m_picFile.GetDC();//获取picture的DC  
-		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-		ReleaseDC(pDc);
+		if (true == (bool)PathFileExists(m_strPicPathname.GetBuffer())) {
+			CImage  image;
+			image.Load(m_strPicPathname);
+			CRect   rect; m_picFile.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+			CDC *pDc = m_picFile.GetDC();//获取picture的DC  
+			image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+			ReleaseDC(pDc);
+		} else
+			m_strPicPathname.Empty();
 	}
 	else
 		m_strPicPathname.Empty();
@@ -244,6 +251,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm01, CFormView)
 	ON_BN_CLICKED(IDC_CMD_SAVE_FORM, &CPersonalForm01::OnClickedCmdSaveForm)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm01::OnClickedCmdPrintForm)
 	ON_STN_CLICKED(IDC_FILE_PICTURE, &CPersonalForm01::OnClickedFilePicture)
+	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM01, &CPersonalForm01::OnClickedButtonCloseForm01)
 END_MESSAGE_MAP()
 
 
@@ -374,6 +382,14 @@ void CPersonalForm01::OnSize(UINT nType, int cx, int cy)
 
 	// TODO:  在此处添加消息处理程序代码
 	CRect rt; GetClientRect(&rt);
+	//////////////////////////////////////////////////////
+	CWnd *pWnd; CRect *pRt;
+	if (pWnd = GetDlgItem(IDC_BUTTON_CLOSE_FORM01)) {
+		pRt = new CRect(rt.right - MARGIN_X - 17, rt.top + MARGIN_Y, rt.right - MARGIN_X, rt.top + MARGIN_Y + 17);
+		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+		((CButton*)pWnd)->SetBitmap(m_bmpClose);
+	}
+
 	rt.left += (MARGIN_X + PAGE_START_OFFSET_X + HEADER_START_OFFSET_X);
 	rt.top += (MARGIN_Y + PAGE_START_OFFSET_Y + HEADER_START_OFFSET_Y + HEADER_HEIGHT + 1);
 	rt.right -= (MARGIN_X + PAGE_START_OFFSET_X);
@@ -381,7 +397,7 @@ void CPersonalForm01::OnSize(UINT nType, int cx, int cy)
 
 	int len = rt.right - rt.left;
 
-	CWnd *pWnd; CRect *pRt;
+	 
 	if (pWnd = GetDlgItem(IDC_EDIT_NAME)) {
 		pRt = new CRect(rt.left + int(1 * len*CELL_WIDTH_RATIO + 5), rt.top + 0 * CELL_HEIGHT + 5, rt.left + 2 * len*CELL_WIDTH_RATIO - 5, rt.top + 1 * CELL_HEIGHT - 5);
 		pWnd->MoveWindow(pRt, FALSE); delete pRt;
@@ -479,6 +495,8 @@ void CPersonalForm01::OnSize(UINT nType, int cx, int cy)
 		pRt = new CRect(rt.left + 1 * len*CELL_WIDTH_RATIO + 5, rt.top + 9 * CELL_HEIGHT + 5, rt.right - 5, rt.bottom - 5);
 		pWnd->MoveWindow(pRt, FALSE); delete pRt;
 	}
+
+
 
 	//InvalidateRect(NULL);
 }
@@ -715,4 +733,13 @@ void CPersonalForm01::OnClickedFilePicture()
 		
 	}
 
+}
+
+
+void CPersonalForm01::OnClickedButtonCloseForm01()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+
+	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
 }
