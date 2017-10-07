@@ -43,11 +43,19 @@
 #define IDC_STATICBOX1                  1014
 #define IDC_STATICBOX2                  1015
 #define IDC_BUTTON_TEST_FORM            1016
+#define IDC_STATICBOX3                  1016
+#define IDC_STATICBOX4                  1017
 #define IDC_EDIT_GENDER                 1018
+#define IDC_STATICBOX5                  1018
 #define IDC_EDIT_NATION                 1019
+#define IDC_STATICBOX6                  1019
 #define IDC_EDIT_BIRTH_PLACE            1020
+#define IDC_STATICBOX7                  1020
 #define IDC_COMBO_PARTY                 1021
+#define IDC_STATICBOX8                  1021
 #define IDC_COMBO_BIRTHDAY              1022
+#define IDC_STATICBOX9                  1022
+#define IDC_STATICBOX10                 1023
 #define IDC_EDIT_PROFESSION             1026
 #define IDC_EDIT_FULL_EDUCATE_DEGREE    1027
 #define IDC_EDIT_FULL_EDUCATE_PLACE     1028
@@ -71,23 +79,32 @@
 #define IDC_EDIT_PIC_PATHNAME           1048
 #define IDC_PIC_GROUP1_1                1049
 #define IDC_PIC_GROUP1_2                1050
+#define IDC_EDIT3                       1050
 #define IDC_STATIC_GROUP1_1_TIP         1051
 #define IDC_STATIC_GROUP1_2_TIP         1052
+#define IDC_EDIT5                       1052
 #define IDC_STATIC_GROUP1_1_DATA        1053
 #define IDC_STATIC_GROUP1_2_DATA        1054
+#define IDC_EDIT7                       1054
 #define IDC_PIC_GROUP2_1                1055
+#define IDC_EDIT8                       1055
 #define IDC_STATIC_GROUP2_1_TIP         1056
 #define IDC_STATIC_GROUP2_1_DATA        1057
 #define IDC_PIC_GROUP2_2                1058
 #define IDC_STATIC_GROUP2_2_TIP         1059
 #define IDC_STATIC_GROUP2_2_DATA        1060
 #define IDC_PIC_GROUP2_3                1061
+#define IDC_EDIT14                      1061
 #define IDC_STATIC_GROUP2_3_TIP         1062
+#define IDC_EDIT15                      1062
 #define IDC_STATIC_GROUP2_3_DATA        1063
+#define IDC_EDIT16                      1063
 #define IDC_PIC_GROUP2_4                1064
 #define IDC_STATIC_GROUP2_4_TIP         1065
+#define IDC_EDIT18                      1065
 #define IDC_STATIC_GROUP2_4_DATA        1066
 #define IDC_PIC_GROUP3_1                1067
+#define IDC_EDIT20                      1067
 #define IDC_PIC_GROUP3_2                1068
 #define IDC_STATIC_GROUP3_1_TIP         1069
 #define IDC_STATIC_GROUP3_2_TIP         1070
@@ -100,6 +117,8 @@
 #define IDC_BUTTON_CLOSE                1079
 #define IDC_BUTTON_CLOSE_FORM1          1080
 #define IDC_BUTTON_CLOSE_FORM01         1080
+#define IDC_CHECK1                      1082
+#define IDC_CHECK2                      1083
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 
@@ -109,7 +128,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        330
 #define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1081
+#define _APS_NEXT_CONTROL_VALUE         1083
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
