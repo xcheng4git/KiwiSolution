@@ -4,7 +4,7 @@
 
 // CPersonalForm02 ¥∞ÃÂ ”Õº
 
-class CPersonalForm02 : public CIFormView
+class CPersonalForm02 : public CFormView
 {
 	DECLARE_DYNCREATE(CPersonalForm02)
 
