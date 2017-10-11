@@ -56,9 +56,14 @@
 #define IDC_COMBO_BIRTHDAY              1022
 #define IDC_STATICBOX9                  1022
 #define IDC_STATICBOX10                 1023
+#define IDC_STATICBOX11                 1024
+#define IDC_STATICBOX12                 1025
 #define IDC_EDIT_PROFESSION             1026
+#define IDC_STATICBOX13                 1026
 #define IDC_EDIT_FULL_EDUCATE_DEGREE    1027
+#define IDC_STATICBOX14                 1027
 #define IDC_EDIT_FULL_EDUCATE_PLACE     1028
+#define IDC_STATICBOX15                 1028
 #define IDC_EDIT_PART_EDUCATE_DEGREE    1029
 #define IDC_EDIT_PART_EDUCATE_PLACE     1030
 #define IDC_EDIT_PARTY_REP              1031
@@ -100,9 +105,11 @@
 #define IDC_STATIC_GROUP2_3_DATA        1063
 #define IDC_EDIT16                      1063
 #define IDC_PIC_GROUP2_4                1064
+#define IDC_EDIT17                      1064
 #define IDC_STATIC_GROUP2_4_TIP         1065
 #define IDC_EDIT18                      1065
 #define IDC_STATIC_GROUP2_4_DATA        1066
+#define IDC_EDIT19                      1066
 #define IDC_PIC_GROUP3_1                1067
 #define IDC_EDIT20                      1067
 #define IDC_PIC_GROUP3_2                1068
@@ -117,18 +124,29 @@
 #define IDC_BUTTON_CLOSE                1079
 #define IDC_BUTTON_CLOSE_FORM1          1080
 #define IDC_BUTTON_CLOSE_FORM01         1080
-#define IDC_CHECK1                      1082
-#define IDC_CHECK2                      1083
+#define IDC_RADIO1                      1084
+#define IDC_RADIO2                      1085
+#define IDC_BUTTON_CLOSE_FORM02         1086
+#define IDC_RADIO3                      1087
+#define IDC_RADIO4                      1088
+#define IDC_RADIO5                      1089
+#define IDC_RADIO6                      1090
+#define IDC_SCROLLBAR1                  1091
+#define IDC_RADIO7                      1092
+#define IDC_RADIO8                      1093
+#define IDC_RADIO9                      1094
+#define IDC_RADIO10                     1095
+#define IDC_RADIO11                     1096
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
-
+#define IDM_ABOUTBOX                    0x0010 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        330
 #define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1083
+#define _APS_NEXT_CONTROL_VALUE         1092
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
