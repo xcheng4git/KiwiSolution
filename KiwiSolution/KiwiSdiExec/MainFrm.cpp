@@ -12,6 +12,7 @@
 #include "PersonalSummary.h"
 #include "PersonalForm01.h"
 #include "PersonalForm02.h"
+#include "PersonalForm03.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -183,13 +184,25 @@ afx_msg LRESULT CMainFrame::OnCreatePersonalForm(WPARAM wParam, LPARAM lParam)
 		return 0;
 	}
 	case 2:
-		CreatePersonalForm(RUNTIME_CLASS(CPersonalForm02), IDD_PERSONAL_FORM02);
+	{
+		CPersonalForm02* pView = (CPersonalForm02*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm02), IDD_PERSONAL_FORM02);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
+		return 0;
+
+	}
+	case 3:
+	{
+		PersonalForm03* pView = (PersonalForm03*)CreatePersonalForm(RUNTIME_CLASS(PersonalForm03), IDD_PERSONAL_FORM03);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
 		return 0;
 
 	}
 
 
-	return 0;
+		return 0;
+	}
 }
 
 
@@ -199,8 +212,10 @@ afx_msg LRESULT CMainFrame::OnShowPersonalSummary(WPARAM wParam, LPARAM lParam)
 		m_wndPaneShortcut.m_strCurrentFolder.Format(_T("%s"), *folder); //delete folder;
 		m_wndPaneShortcut.m_strCurrentFile.Format(_T("%s"), *file); //delete file;
 
-		CView* pView = CreatePersonalForm(RUNTIME_CLASS(CPersonalSummary), IDD_PERSONAL_SUMMARY);
-		::PostMessage(pView->m_hWnd, WM_SHOW_PERSONAL_SUMMARY, wParam, lParam);
+		CPersonalSummary* pView = (CPersonalSummary*)CreatePersonalForm(RUNTIME_CLASS(CPersonalSummary), IDD_PERSONAL_SUMMARY);
+		pView->m_strCurrentFolder.Format(_T("%s"), *folder);
+		pView->m_strCurrentFile.Format(_T("%s"), *file);
+		//::PostMessage(pView->m_hWnd, WM_SHOW_PERSONAL_SUMMARY, wParam, lParam);
 
 		pView->OnInitialUpdate();		
 
