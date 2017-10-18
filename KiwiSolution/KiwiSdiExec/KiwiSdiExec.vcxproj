@@ -141,6 +141,7 @@
     <ClInclude Include="PaneShortcut.h" />
     <ClInclude Include="PersonalForm01.h" />
     <ClInclude Include="PersonalForm02.h" />
+    <ClInclude Include="PersonalForm03.h" />
     <ClInclude Include="PersonalSummary.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SQLiteHelper.h" />
@@ -161,6 +162,7 @@
     <ClCompile Include="PaneShortcut.cpp" />
     <ClCompile Include="PersonalForm01.cpp" />
     <ClCompile Include="PersonalForm02.cpp" />
+    <ClCompile Include="PersonalForm03.cpp" />
     <ClCompile Include="PersonalSummary.cpp" />
     <ClCompile Include="SQLiteHelper.cpp" />
     <ClCompile Include="stdafx.cpp">

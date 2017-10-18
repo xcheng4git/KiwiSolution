@@ -33,8 +33,6 @@ public:
 	   afx_msg void OnClickedButtonCloseForm02();
 	   afx_msg void OnClickedFilePicture();
 	   CStatic m_picFile;
-	   void OnVScroll(UINT nSBCode, UINT nPos, UINT nMax, UINT nMin, CScrollBar* pScrollBar);
-	   CScrollBar m_verticalScrollbar;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 	
@@ -52,14 +50,6 @@ public:
 	afx_msg void OnStnClickedFilePicture();
 	// 初始化函数
 	BOOL m_radiobtngroup1;
-	enum 
-	{
-		nMin=0
-	};
-	enum 
-	{
-		nMax=100
-	};
 };
 
 

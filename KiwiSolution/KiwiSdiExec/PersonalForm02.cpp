@@ -18,12 +18,13 @@ CPersonalForm02::CPersonalForm02()
 	: CFormView(CPersonalForm02::IDD)
 	, m_radiobtngroup1(FALSE)
 {
-
+	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
+	m_fontEdit.CreateFontIndirect(&lf);
 }
 
 CPersonalForm02::~CPersonalForm02()
 {
-
+	m_fontEdit.DeleteObject();
 }
 void CPersonalForm02::SetCurrentFile(CString filePath)
 {
@@ -71,8 +72,8 @@ void CPersonalForm02::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 
 	// TODO:  在此添加专用代码和/或调用基类
-	SetScaleToFitSize(CSize(1, 1));
-	ModifyStyle(0, WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
+	//SetScaleToFitSize(CSize(1, 1));
+	//ModifyStyle(0, WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
 
 	GetDlgItem(IDC_EDIT3)->SetFont(&m_fontEdit);
 	GetDlgItem(IDC_EDIT5)->SetFont(&m_fontEdit);
@@ -91,10 +92,43 @@ void CPersonalForm02::OnInitialUpdate()
 	GetDlgItem(IDC_EDIT16)->SetFont(&m_fontEdit);
 	GetDlgItem(IDC_EDIT18)->SetFont(&m_fontEdit);
 	GetDlgItem(IDC_EDIT20)->SetFont(&m_fontEdit);
+	if (((CButton *)GetDlgItem(IDC_RADIO3))->GetCheck() == 1)
+	{
+		GetDlgItem(IDC_RADIO3)->SetFont(&m_fontEdit);
+	}
+	else if (((CButton *)GetDlgItem(IDC_RADIO4))->GetCheck() == 1)
+		{
+			GetDlgItem(IDC_RADIO4)->SetFont(&m_fontEdit);
+		}
+	else if (((CButton *)GetDlgItem(IDC_RADIO5))->GetCheck() == 1)
+	{
+		GetDlgItem(IDC_RADIO5)->SetFont(&m_fontEdit);
+	}
+	else 
+	{
+		GetDlgItem(IDC_RADIO6)->SetFont(&m_fontEdit);
+	}
+	if (((CButton *)GetDlgItem(IDC_RADIO7))->GetCheck() == 1)
+	{
+		GetDlgItem(IDC_RADIO7)->SetFont(&m_fontEdit);
+	}
+	else if (((CButton *)GetDlgItem(IDC_RADIO8))->GetCheck() == 1)
+	{
+		GetDlgItem(IDC_RADIO8)->SetFont(&m_fontEdit);
+	}
+	else if (((CButton *)GetDlgItem(IDC_RADIO9))->GetCheck() == 1)
+	{
+		GetDlgItem(IDC_RADIO9)->SetFont(&m_fontEdit);
+	}
+	else if (((CButton *)GetDlgItem(IDC_RADIO10))->GetCheck() == 1)
+	{
+		GetDlgItem(IDC_RADIO10)->SetFont(&m_fontEdit);
+	}
+	else
+		GetDlgItem(IDC_RADIO11)->SetFont(&m_fontEdit);
 
-	CScrollBar *pSB = (CScrollBar*)GetDlgItem(IDC_SCROLLBAR1);
-	pSB->SetScrollRange(nMin, nMax);
-
+	GetDlgItem(IDC_DATETIMEPICKER1)->SetFont(&m_fontEdit);
+	GetDlgItem(IDC_EDIT21)->SetFont(&m_fontEdit);
 }
 
 
@@ -114,7 +148,7 @@ void CPersonalForm02::OnBnClickedCmdSaveForm()
 	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	int file_id = atoi(re[1 * col + 0]);
 	ss.str(""); ss.clear();
-
+	//第一张表
 	ss << "select count(*) from file_form_2 where file_id=" << file_id << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result); ss.str(""); ss.clear();
 	int hasRecord = atoi(re[1 * col + 0]);
@@ -167,6 +201,78 @@ void CPersonalForm02::OnBnClickedCmdSaveForm()
 	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
 
 	help->execSQL(ss.str().c_str());
+	//第二张表
+
+	ss << "select count(*) from file_form_3 where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result); ss.str(""); ss.clear();
+	
+
+	if (hasRecord) {
+		ss << "delete from file_form_3 where file_id=" << file_id << ";";
+		help->execSQL(ss.str().c_str()); ss.str(""); ss.clear();
+
+		//应该把原来的照片文件删除
+	}
+
+	
+	ss << "insert into file_form_3 values(" << file_id << ",";
+
+	if (((CButton *)GetDlgItem(IDC_RADIO3))->GetCheck() == 1)
+	{
+		GetDlgItem(IDC_RADIO3)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	}
+	else if (((CButton *)GetDlgItem(IDC_RADIO4))->GetCheck() == 1)
+	{
+		GetDlgItem(IDC_RADIO4)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	}
+	else if (((CButton *)GetDlgItem(IDC_RADIO5))->GetCheck() == 1)
+	{
+		GetDlgItem(IDC_RADIO5)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	}
+	else
+	{
+		GetDlgItem(IDC_RADIO6)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	}
+	//
+	if (((CButton *)GetDlgItem(IDC_RADIO7))->GetCheck() == 1)
+	{
+		GetDlgItem(IDC_RADIO7)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	}
+	else if (((CButton *)GetDlgItem(IDC_RADIO8))->GetCheck() == 1)
+	{
+		GetDlgItem(IDC_RADIO8)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	}
+	else if (((CButton *)GetDlgItem(IDC_RADIO9))->GetCheck() == 1)
+	{
+		GetDlgItem(IDC_RADIO9)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	}
+	else if (((CButton *)GetDlgItem(IDC_RADIO10))->GetCheck() == 1)
+	{
+		GetDlgItem(IDC_RADIO10)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	}
+	else
+	{
+		GetDlgItem(IDC_RADIO11)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	}
+	GetDlgItem(IDC_DATETIMEPICKER1)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+
+	GetDlgItem(IDC_EDIT21)->GetWindowTextW(strText);
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
+	
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	help->execSQL(ss.str().c_str());
+
 
 	help->closeDB();
 	delete help;
@@ -288,39 +394,3 @@ void CPersonalForm02::OnStnClickedFilePicture()
 		ReleaseDC(pDc);
 	}
 }
-//添加滚动条
-
-void CPersonalForm02::OnVScroll(UINT nSBCode, UINT nPos,UINT nMax,UINT nMin,CScrollBar* pScrollBar)
-{
-
-	int nTemp1, nTemp2;
-	nTemp1 = pScrollBar->GetScrollPos();
-	CString str;
-	str.Format(_T("%d", nTemp1));
-	GetDlgItem(IDC_SCROLLBAR1)->SetWindowText(str);
-	switch (nSBCode)
-	{
-	case SB_THUMBPOSITION:
-		pScrollBar->SetScrollPos(nPos);
-		break;
-	case SB_LINEUP:
-		nTemp2 = (nMax - nMin) / 10;
-		if ((nTemp1 - nTemp2) > nMin)
-			nTemp1 -= nTemp2;
-		else
-			nTemp1 = nMin;
-		pScrollBar->SetScrollPos(nTemp1);
-		break;
-	case SB_LINEDOWN:
-		nTemp2 = (nMax - nMin) / 10;
-		if ((nTemp1 + nTemp2) < nMax)
-			nTemp1 += nTemp2;
-		else
-			nTemp1 = nMax;
-		pScrollBar->SetScrollPos(nTemp1);
-		break;
-	}
-	CFormView::OnVScroll(nSBCode, nPos, pScrollBar);
-}
-
-

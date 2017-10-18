@@ -280,8 +280,8 @@ void CPersonalForm01::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 
 	// TODO:  在此添加专用代码和/或调用基类
-	SetScaleToFitSize(CSize(1, 1));
-	ModifyStyle(0, WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
+	//SetScaleToFitSize(CSize(1, 1));
+	//ModifyStyle(0, WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
 
 	GetDlgItem(IDC_CMD_SAVE_FORM)->SetFont(&m_fontEdit); 
 
