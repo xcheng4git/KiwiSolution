@@ -44,7 +44,6 @@ BEGIN_MESSAGE_MAP(CPersonalForm02, CFormView)
 	ON_BN_CLICKED(IDC_CMD_SAVE_FORM, &CPersonalForm02::OnBnClickedCmdSaveForm)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm02::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM02, &CPersonalForm02::OnBnClickedButtonCloseForm02)
-	ON_STN_CLICKED(IDC_FILE_PICTURE, &CPersonalForm02::OnStnClickedFilePicture)
 END_MESSAGE_MAP()
 
 
@@ -157,7 +156,6 @@ void CPersonalForm02::OnBnClickedCmdSaveForm()
 		ss << "delete from file_form_2 where file_id=" << file_id << ";";
 		help->execSQL(ss.str().c_str()); ss.str(""); ss.clear();
 
-		//应该把原来的照片文件删除
 	}
 
 	CString strText;
@@ -211,7 +209,6 @@ void CPersonalForm02::OnBnClickedCmdSaveForm()
 		ss << "delete from file_form_3 where file_id=" << file_id << ";";
 		help->execSQL(ss.str().c_str()); ss.str(""); ss.clear();
 
-		//应该把原来的照片文件删除
 	}
 
 	
@@ -335,13 +332,6 @@ void CPersonalForm02::OnBnClickedCmdPrintForm()
 		range.put_Text((CA2W(re[1 * col + i + 1], CP_UTF8)));
 	}
 
-	//插入图片
-	bookmark = bookmarks.Item(&_variant_t(_T("照片")));
-	range = bookmark.get_Range();
-	CnlineShapes shape = docx.get_InlineShapes();
-	//shape.AddPicture(_T("C:\\Projects\\Kiwi.Git\\KiwiSolution\\KiwiSdiExec\\a.jpg"), covFalse, covTrue, &_variant_t(range));
-	shape.AddPicture(m_strPicPathname.GetBuffer(), covFalse, covTrue, &_variant_t(range));
-
 	CString strSavePath = CUtility::GetModuleDirectory() + _T("\\temp.docx");
 	docx.SaveAs(COleVariant(strSavePath), covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional);
 
@@ -374,23 +364,4 @@ void CPersonalForm02::OnBnClickedButtonCloseForm02()
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
 	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
-}
-
-
-void CPersonalForm02::OnStnClickedFilePicture()
-{
-	// TODO:  在此添加控件通知处理程序代码
-	CString strFileName;
-	CFileDialog dlg(TRUE, _T("*.jpg"), strFileName, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER, _T("图像文件(*.bmp;*.jpg)|*.bmp;*.jpg|All Files(*.*)|*.*|"), this);
-
-	if (dlg.DoModal() == IDOK)
-	{
-		m_strPicPathname = dlg.GetPathName();
-		CImage  image;
-		image.Load(m_strPicPathname); //把图像保存到特定目录,然后将路径存数据库
-		CRect   rect; m_picFile.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-		CDC *pDc = m_picFile.GetDC();//获取picture的DC  
-		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-		ReleaseDC(pDc);
-	}
 }

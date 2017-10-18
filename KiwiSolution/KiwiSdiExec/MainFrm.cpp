@@ -13,6 +13,8 @@
 #include "PersonalForm01.h"
 #include "PersonalForm02.h"
 #include "PersonalForm03.h"
+#include "PersonalForm04.h"
+#include "PersonalForm05.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -199,8 +201,22 @@ afx_msg LRESULT CMainFrame::OnCreatePersonalForm(WPARAM wParam, LPARAM lParam)
 		return 0;
 
 	}
+	case 4:
+	{
+		CPersonalForm04* pView = (CPersonalForm04*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm04), IDD_PERSONAL_FORM03);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
+		return 0;
 
+	}
+	case 5:
+	{
+		CPersonalForm05* pView = (CPersonalForm05*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm05), IDD_PERSONAL_FORM03);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
+		return 0;
 
+	}
 		return 0;
 	}
 }
@@ -276,6 +292,9 @@ afx_msg LRESULT CMainFrame::OnShowDefaultSummary(WPARAM wParam, LPARAM lParam)
 
 	CView* pView = CreatePersonalForm(RUNTIME_CLASS(CKiwiSdiExecView), IDD_KIWISDIEXEC_FORM);
 	pView->OnInitialUpdate();
+
+	//////////////////////////////////////
+	//考虑把其他的窗口的关闭,销毁
 
 	return 0;
 }

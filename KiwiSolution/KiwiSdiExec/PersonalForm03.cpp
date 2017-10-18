@@ -18,11 +18,13 @@ IMPLEMENT_DYNCREATE(PersonalForm03, CFormView)
 PersonalForm03::PersonalForm03()
 	: CFormView(PersonalForm03::IDD)
 {
-
+	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
+	m_fontEdit.CreateFontIndirect(&lf);
 }
 
 PersonalForm03::~PersonalForm03()
 {
+	m_fontEdit.DeleteObject();
 }
 void PersonalForm03::SetCurrentFile(CString filePath)
 {
@@ -85,27 +87,6 @@ void PersonalForm03::OnInitialUpdate()
 
 
 
-const wchar_t *pBookmarks2[] = { _T("护照号"), _T("签发日期"), _T("有效期至"), _T("保管机构"), _T("备注") };
-
-void PersonalForm03::OnStnClickedFilePicture()
-{
-	// TODO:  在此添加控件通知处理程序代码
-	CString strFileName;
-	CFileDialog dlg(TRUE, _T("*.jpg"), strFileName, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER, _T("图像文件(*.bmp;*.jpg)|*.bmp;*.jpg|All Files(*.*)|*.*|"), this);
-
-	if (dlg.DoModal() == IDOK)
-	{
-		m_strPicPathname = dlg.GetPathName();
-		CImage  image;
-		image.Load(m_strPicPathname); //把图像保存到特定目录,然后将路径存数据库
-		CRect   rect; m_picFile.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-		CDC *pDc = m_picFile.GetDC();//获取picture的DC  
-		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-		ReleaseDC(pDc);
-	}
-}
-
-
 void PersonalForm03::OnBnClickedButtonCloseForm3()
 {
 	// TODO:  在此添加控件通知处理程序代码
@@ -132,28 +113,54 @@ void PersonalForm03::OnBnClickedCmdSaveForm()
 	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	int file_id = atoi(re[1 * col + 0]);
 	ss.str(""); ss.clear();
-	//第一张表
-	ss << "select count(*) from file_form_4 where file_id=" << file_id << ";";
-	re = help->rawQuery(ss.str().c_str(), &row, &col, result); ss.str(""); ss.clear();
+	
+	ss << "select count(*) from file_form_flags where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	int hasRecord = atoi(re[1 * col + 0]);
-
-	if (hasRecord) {
-		ss << "delete from file_form_4 where file_id=" << file_id << ";";
-		help->execSQL(ss.str().c_str()); ss.str(""); ss.clear();
-
-		//应该把原来的照片文件删除
+	if (!hasRecord) {
+		ss << "insert into file_form_flags(file_id) values(" << file_id << ")";
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
 	}
 
 	CString strText;
+	/////////////////////////////////////////////////////////////////////////////
+	//表2-1
+#pragma region FillForm2_1
+	
 	GetDlgItem(IDC_EDIT1)->GetWindowTextW(strText);
 	if (strText == _T("无"))
 	{
-		ss << "insert into test(file_id,file_4IfHaveThisSituation) values(" << file_id << ",";
-		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
+		ss << "update file_form_flags set file_4IfHaveThisSituation=0 where file_id=" << file_id; 
+		//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+		goto FillForm2_2;
 	}
-	else{
-		ss << "insert into test(file_id,file_4IfHaveThisSituation) values(" << file_id << "," ;
-		ss << "'" << _T("有") << "') ";
+
+	{
+		ss << "update file_form_flags set file_4IfHaveThisSituation=1 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
+	
+	{
+		if (((CButton *)GetDlgItem(IDC_RADIO2))->GetCheck() == 1)
+		{
+			ss << "update file_form_flags set file_4IfChange=0 where file_id=" << file_id;
+			help->execSQL(ss.str().c_str()); 
+			ss.str(""); ss.clear();
+			goto FillForm2_2;
+		}
+		else if (((CButton *)GetDlgItem(IDC_RADIO1))->GetCheck() == 1)
+		{
+			ss << "update file_form_flags set file_4IfChange=1 where file_id=" << file_id;
+			help->execSQL(ss.str().c_str());
+			ss.str(""); ss.clear();
+		}
+	}
+	{
 		ss << "insert into file_form_4 values(" << file_id << ",";
 
 		GetDlgItem(IDC_EDIT1)->GetWindowTextW(strText);
@@ -167,144 +174,240 @@ void PersonalForm03::OnBnClickedCmdSaveForm()
 		GetDlgItem(IDC_EDIT5)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
 
-		if (((CButton *)GetDlgItem(IDC_RADIO2))->GetCheck() == 1)
-		{
-			ss << "insert into test(file_4IfChange) values(";
-			GetDlgItem(IDC_RADIO2)->GetWindowTextW(strText);
-			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
-		}
-		else if (((CButton *)GetDlgItem(IDC_RADIO1))->GetCheck() == 1)
-		{
-			ss << "insert into test(file_4IfChange) values(";
-			GetDlgItem(IDC_RADIO1)->GetWindowTextW(strText);
-			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
+		//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
 
+	{
+		GetDlgItem(IDC_EDIT6)->GetWindowTextW(strText);
+		strText.Trim();
+		if (!strText.IsEmpty()) {
 			ss << "insert into file_form_4 values(" << file_id << ",";
 
-			GetDlgItem(IDC_EDIT1)->GetWindowTextW(strText);
 			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-			GetDlgItem(IDC_DATETIMEPICKER1)->GetWindowTextW(strText);
+			GetDlgItem(IDC_DATETIMEPICKER2)->GetWindowTextW(strText);
 			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-			GetDlgItem(IDC_DATETIMEPICKER3)->GetWindowTextW(strText);
+			GetDlgItem(IDC_DATETIMEPICKER4)->GetWindowTextW(strText);
 			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-			GetDlgItem(IDC_EDIT4)->GetWindowTextW(strText);
+			GetDlgItem(IDC_EDIT9)->GetWindowTextW(strText);
 			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-			GetDlgItem(IDC_EDIT5)->GetWindowTextW(strText);
+			GetDlgItem(IDC_EDIT10)->GetWindowTextW(strText);
 			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
+
+			//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+			help->execSQL(ss.str().c_str());
+			ss.str(""); ss.clear();
 		}
+	}
+#pragma endregion
+
+	/////////////////////////////////////////////////////////////////////////////
+	//表2-2
+#pragma region FillForm2_2
+FillForm2_2:
+	{
+		if (((CButton *)GetDlgItem(IDC_RADIO3))->GetCheck() == 1)
+		{
+			ss << "update file_form_flags set file_5IfHaveThisSituation=0 where file_id=" << file_id;
+			help->execSQL(ss.str().c_str());
+			ss.str(""); ss.clear();
+			goto FillForm2_3;
+		}
+
+		ss << "update file_form_flags set file_5IfHaveThisSituation=1 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
+
+	{
+		ss << "insert into file_form_5 values(" << file_id << ",";
 		
-	}
-	
-	
-	
-
-	/*
-	ss << "insert into file_form_4 values(" << file_id << ",";
-	GetDlgItem(IDC_EDIT6)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_DATETIMEPICKER2)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_DATETIMEPICKER4)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_EDIT9)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_EDIT10)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
-	*/
-	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
-	help->execSQL(ss.str().c_str());
-	//第二张表
-
-	ss << "select count(*) from file_form_5 where file_id=" << file_id << ";";
-	re = help->rawQuery(ss.str().c_str(), &row, &col, result); ss.str(""); ss.clear();
-
-
-	if (hasRecord) {
-		ss << "delete from file_form_5 where file_id=" << file_id << ";";
-		help->execSQL(ss.str().c_str()); ss.str(""); ss.clear();
-
-		//应该把原来的照片文件删除
-	}
-
-
-	ss << "insert into file_form_5 values(" << file_id << ",";
-
-	if (((CButton *)GetDlgItem(IDC_RADIO12))->GetCheck() == 1)
-	{
-		GetDlgItem(IDC_RADIO12)->GetWindowTextW(strText);
+		GetDlgItem(IDC_DATETIMEPICKER5)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	}
-	else
-	{
-		GetDlgItem(IDC_RADIO3)->GetWindowTextW(strText);
+		GetDlgItem(IDC_DATETIMEPICKER6)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	}
-
-	GetDlgItem(IDC_DATETIMEPICKER5)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_DATETIMEPICKER6)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_EDIT11)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_EDIT24)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_EDIT27)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_EDIT30)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
-
-	//第三张表
-
-	ss << "select count(*) from file_form_6 where file_id=" << file_id << ";";
-	re = help->rawQuery(ss.str().c_str(), &row, &col, result); ss.str(""); ss.clear();
-
-
-	if (hasRecord) {
-		ss << "delete from file_form_6 where file_id=" << file_id << ";";
-		help->execSQL(ss.str().c_str()); ss.str(""); ss.clear();
-
-		//应该把原来的照片文件删除
-	}
-
-
-	ss << "insert into file_form_6 values(" << file_id << ",";
-
-	if (((CButton *)GetDlgItem(IDC_RADIO13))->GetCheck() == 1)
-	{
-		GetDlgItem(IDC_RADIO13)->GetWindowTextW(strText);
+		GetDlgItem(IDC_EDIT11)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	}
-	else
-	{
-		GetDlgItem(IDC_RADIO5)->GetWindowTextW(strText);
+		GetDlgItem(IDC_EDIT24)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	}
+		GetDlgItem(IDC_EDIT27)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT30)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
 
+		//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
+	{
+		GetDlgItem(IDC_EDIT22)->GetWindowTextW(strText);
+		strText.Trim();
+		if (!strText.IsEmpty()) {
+			ss << "insert into file_form_5 values(" << file_id << ",";
+
+			strText.ReleaseBuffer();
+			GetDlgItem(IDC_DATETIMEPICKER7)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_DATETIMEPICKER8)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_EDIT22)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_EDIT25)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_EDIT28)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_EDIT31)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
+
+			//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+			help->execSQL(ss.str().c_str());
+			ss.str(""); ss.clear();
+		}
+		else
+			goto FillForm2_3;
+
+		GetDlgItem(IDC_EDIT23)->GetWindowTextW(strText);
+		strText.Trim();
+		if (!strText.IsEmpty()) {
+			ss << "insert into file_form_5 values(" << file_id << ",";
+
+			strText.ReleaseBuffer();
+			GetDlgItem(IDC_DATETIMEPICKER9)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_DATETIMEPICKER10)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_EDIT23)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_EDIT26)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_EDIT29)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_EDIT32)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
+
+			//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+			help->execSQL(ss.str().c_str());
+			ss.str(""); ss.clear();
+		}
+	}
+#pragma endregion
+
+	/////////////////////////////////////////////////////////////////////////////
+	//表2-3
+#pragma region FillForm2_3
+FillForm2_3 :
 	GetDlgItem(IDC_EDIT33)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_EDIT35)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_DATETIMEPICKER11)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_DATETIMEPICKER12)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_EDIT37)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_EDIT38)->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
+	if (strText == _T("无"))
+	{
+		ss << "update file_form_flags set file_6IfHaveThisSituation=0 where file_id=" << file_id;
 
-	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+		goto FillComplete;
+	}
 
-	help->execSQL(ss.str().c_str());
+	{
+		ss << "update file_form_flags set file_6IfHaveThisSituation=1 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
+
+	{
+		if (((CButton *)GetDlgItem(IDC_RADIO5))->GetCheck() == 1)
+		{
+			ss << "update file_form_flags set file_6IfChange=0 where file_id=" << file_id;
+			help->execSQL(ss.str().c_str());
+			ss.str(""); ss.clear();
+			goto FillComplete;
+		}
+		else if (((CButton *)GetDlgItem(IDC_RADIO13))->GetCheck() == 1)
+		{
+			ss << "update file_form_flags set file_6IfChange=1 where file_id=" << file_id;
+			help->execSQL(ss.str().c_str());
+			ss.str(""); ss.clear();
+		}
+	}
+	{
+		ss << "insert into file_form_6 values(" << file_id << ",";
+
+		GetDlgItem(IDC_EDIT33)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT35)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		GetDlgItem(IDC_DATETIMEPICKER11)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		GetDlgItem(IDC_DATETIMEPICKER12)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT37)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT38)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
+
+		//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
+
+	{
+		GetDlgItem(IDC_EDIT34)->GetWindowTextW(strText);
+		strText.Trim();
+		if (!strText.IsEmpty()) {
+			ss << "insert into file_form_6 values(" << file_id << ",";
+
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_EDIT39)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_DATETIMEPICKER13)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_DATETIMEPICKER14)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_EDIT41)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_EDIT42)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
+
+			//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+			help->execSQL(ss.str().c_str());
+			ss.str(""); ss.clear();
+		} else
+			goto FillComplete;
+
+		GetDlgItem(IDC_EDIT36)->GetWindowTextW(strText);
+		strText.Trim();
+		if (!strText.IsEmpty()) {
+			ss << "insert into file_form_6 values(" << file_id << ",";
+
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_EDIT40)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_DATETIMEPICKER15)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_DATETIMEPICKER14)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_EDIT43)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			GetDlgItem(IDC_EDIT44)->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
+
+			//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+			help->execSQL(ss.str().c_str());
+			ss.str(""); ss.clear();
+		}
+		else
+			goto FillComplete;
+	}
 
 
-	help->closeDB();
-	delete help;
+#pragma endregion
+
+FillComplete:
+	help->closeDB(); delete help;
 	ss.str("");  ss.clear();
 	GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 }
 
-
+const wchar_t *pBookmarks2[] = { _T("护照号"), _T("签发日期"), _T("有效期至"), _T("保管机构"), _T("备注") };
 void PersonalForm03::OnBnClickedCmdPrintForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
@@ -357,13 +460,6 @@ void PersonalForm03::OnBnClickedCmdPrintForm()
 		range = bookmark.get_Range();
 		range.put_Text((CA2W(re[1 * col + i + 1], CP_UTF8)));
 	}
-
-	//插入图片
-	bookmark = bookmarks.Item(&_variant_t(_T("照片")));
-	range = bookmark.get_Range();
-	CnlineShapes shape = docx.get_InlineShapes();
-	//shape.AddPicture(_T("C:\\Projects\\Kiwi.Git\\KiwiSolution\\KiwiSdiExec\\a.jpg"), covFalse, covTrue, &_variant_t(range));
-	shape.AddPicture(m_strPicPathname.GetBuffer(), covFalse, covTrue, &_variant_t(range));
 
 	CString strSavePath = CUtility::GetModuleDirectory() + _T("\\temp.docx");
 	docx.SaveAs(COleVariant(strSavePath), covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional);

@@ -32,22 +32,16 @@ public:
 	   CBitmap m_bmpClose;
 	   afx_msg void OnClickedButtonCloseForm02();
 	   afx_msg void OnClickedFilePicture();
-	   CStatic m_picFile;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 	
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnEnChangeEdit1();
-	afx_msg void OnEnChangeEdit4();
-	afx_msg void OnEnChangeEdit6();
-	afx_msg void OnEnChangeEdit2();
 	afx_msg void OnStnClickedStaticbox1();
 	afx_msg void OnBnClickedCmdSaveForm();
 	afx_msg void OnBnClickedCmdPrintForm();
 	afx_msg void OnBnClickedButtonCloseForm01();
 	afx_msg void OnBnClickedButtonCloseForm02();
-	afx_msg void OnStnClickedFilePicture();
 	// 初始化函数
 	BOOL m_radiobtngroup1;
 };
