@@ -25,12 +25,22 @@ public:
 	CString m_strCurrentFile;
 	CString m_strCurrentFolder;
 	void SetCurrentFile(CString filePath);
+	CFont m_fontEdit;
+	CString m_strPicPathname;
+	CStatic m_picFile;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 
 	DECLARE_MESSAGE_MAP()
 public:
-	void OnInitialUpdate();
+	afx_msg void OnInitialUpdate();
+//	afx_msg void OnBnClickedCmdSaveForm();
+//	afx_msg void OnBnClickedCmdPrintForm();
+//	afx_msg void OnBnClickedButtonCloseForm03();
+	afx_msg void OnStnClickedFilePicture();
+	afx_msg void OnBnClickedButtonCloseForm3();
+	afx_msg void OnBnClickedCmdSaveForm();
+	afx_msg void OnBnClickedCmdPrintForm();
 };
 
 
