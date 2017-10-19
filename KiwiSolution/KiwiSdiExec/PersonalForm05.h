@@ -35,6 +35,11 @@ public:
 	afx_msg void OnBnClickedCmdSaveForm();
 	afx_msg void OnBnClickedCmdPrintForm();
 	afx_msg void OnBnClickedButtonCloseForm3();
+	int m_Radio6_1;
+	int m_Radio6_1_1;
+	int m_Radio6_1_2;
+	int m_Radio6_1_3;
+	int m_Radio6_2;
 };
 
 

@@ -338,9 +338,11 @@
 #define IDC_EDIT57                      1208
 #define IDC_RADIO149                    1208
 #define IDC_EDIT192                     1208
+#define IDC_DATETIMEPICKER45            1208
 #define IDC_EDIT93                      1209
 #define IDC_RADIO150                    1209
 #define IDC_EDIT193                     1209
+#define IDC_DATETIMEPICKER46            1209
 #define IDC_RADIO79                     1210
 #define IDC_RADIO151                    1210
 #define IDC_EDIT194                     1210
