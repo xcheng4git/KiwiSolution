@@ -145,6 +145,7 @@
     <ClInclude Include="PersonalForm04.h" />
     <ClInclude Include="PersonalForm05.h" />
     <ClInclude Include="PersonalForm06.h" />
+    <ClInclude Include="PersonalForm07.h" />
     <ClInclude Include="PersonalSummary.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SQLiteHelper.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="PersonalForm04.cpp" />
     <ClCompile Include="PersonalForm05.cpp" />
     <ClCompile Include="PersonalForm06.cpp" />
+    <ClCompile Include="PersonalForm07.cpp" />
     <ClCompile Include="PersonalSummary.cpp" />
     <ClCompile Include="SQLiteHelper.cpp" />
     <ClCompile Include="stdafx.cpp">
