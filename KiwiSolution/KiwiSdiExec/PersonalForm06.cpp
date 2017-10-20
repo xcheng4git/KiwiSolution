@@ -16,6 +16,19 @@ IMPLEMENT_DYNCREATE(CPersonalForm06, CFormView)
 
 CPersonalForm06::CPersonalForm06()
 : CFormView(CPersonalForm06::IDD)
+, m_Radio7(-1)
+, m_Radio7_1(-1)
+, m_Radio7_2(-1)
+, m_Radio7_3(-1)
+, m_Radio7_4(-1)
+, m_Radio7_5(-1)
+, m_Radio7_6(-1)
+, m_Radio7_7(-1)
+, m_Radio7_8(-1)
+, m_Radio7_9(-1)
+, m_Radio7_4_0(-1)
+, m_Radio7_0(-1)
+, m_Radio7_4_1(-1)
 {
 	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
 	m_fontEdit.CreateFontIndirect(&lf);
@@ -35,6 +48,19 @@ void CPersonalForm06::SetCurrentFile(CString filePath)
 void CPersonalForm06::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
+	DDX_Radio(pDX, IDC_RADIO15, m_Radio7);
+	DDX_Radio(pDX, IDC_RADIO28, m_Radio7_1);
+	DDX_Radio(pDX, IDC_RADIO37, m_Radio7_3);
+	DDX_Radio(pDX, IDC_RADIO39, m_Radio7_2);
+	DDX_Radio(pDX, IDC_RADIO44, m_Radio7_4);
+	DDX_Radio(pDX, IDC_RADIO54, m_Radio7_5);
+	DDX_Radio(pDX, IDC_RADIO52, m_Radio7_6);
+	DDX_Radio(pDX, IDC_RADIO61, m_Radio7_7);
+	DDX_Radio(pDX, IDC_RADIO69, m_Radio7_8);
+	DDX_Radio(pDX, IDC_RADIO67, m_Radio7_9);
+	DDX_Radio(pDX, IDC_RADIO59, m_Radio7_4_1);
+	DDX_Radio(pDX, IDC_RADIO30, m_Radio7_0);
+	DDX_Radio(pDX, IDC_RADIO45, m_Radio7_4_0);
 }
 
 BEGIN_MESSAGE_MAP(CPersonalForm06, CFormView)
@@ -66,6 +92,7 @@ void CPersonalForm06::Dump(CDumpContext& dc) const
 
 void CPersonalForm06::OnBnClickedCmdSaveForm()
 {
+	UpdateData();
 	// TODO:  在此添加控件通知处理程序代码
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
@@ -92,7 +119,61 @@ void CPersonalForm06::OnBnClickedCmdSaveForm()
 	CString strText;
 #pragma region FillForm7_1
 FillForm7_1 :
+	GetDlgItem(IDC_EDIT78)->GetWindowTextW(strText);
+	if (strText == _T("无"))
+	{
+		ss << "update file_form_flags set file_12IfHaveThisSituation=0 where file_id=" << file_id;
 
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+		goto FillComplete;
+	}
+
+	{
+		ss << "update file_form_flags set file_12IfHaveThisSituation=1 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
+
+	{
+		if (m_Radio7 == 1)
+		{
+			ss << "update file_form_flags set file_12IfChange=0 where file_id=" << file_id;
+			help->execSQL(ss.str().c_str());
+			ss.str(""); ss.clear();
+			goto FillComplete;
+		}
+		else if (m_Radio7 == 0)
+		{
+			ss << "update file_form_flags set file_12IfChange=1 where file_id=" << file_id;
+			help->execSQL(ss.str().c_str());
+			ss.str(""); ss.clear();
+		}
+	}
+	{
+		ss << "insert into file_form_12 values(" << file_id << ",";
+
+		ss << m_Radio7_0 << ",";
+
+		GetDlgItem(IDC_EDIT78)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT79)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT85)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		ss << m_Radio7_1 << ",";
+		ss << m_Radio7_2 << ",";
+		ss << m_Radio7_3 << ",";
+		ss << ((CButton *)GetDlgItem(IDC_RADIO1))->GetCheck() << ",";
+		GetDlgItem(IDC_EDIT88)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT89)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
+		//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+
+	}
 #pragma endregion
 
 #pragma region FillForm7_2_1

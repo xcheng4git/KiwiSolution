@@ -754,6 +754,7 @@
 #define IDC_DATETIMEPICKER44            1450
 #define IDC_EDIT21                      1451
 #define IDC_CHANGETIME                  1501
+#define IDC_CHECK1                      1502
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 
@@ -763,7 +764,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        352
 #define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1502
+#define _APS_NEXT_CONTROL_VALUE         1503
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
