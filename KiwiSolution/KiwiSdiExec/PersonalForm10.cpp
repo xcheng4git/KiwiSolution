@@ -17,6 +17,7 @@ IMPLEMENT_DYNCREATE(CPersonalForm10, CFormView)
 
 CPersonalForm10::CPersonalForm10()
 : CFormView(CPersonalForm10::IDD)
+, m_Radio12_1_0(0)
 {
 	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("·ÂËÎÌå"), 3); lf.lfWeight = 400;
 	m_fontEdit.CreateFontIndirect(&lf);
@@ -36,6 +37,7 @@ void CPersonalForm10::SetCurrentFile(CString filePath)
 void CPersonalForm10::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
+	DDX_Radio(pDX, IDC_RADIO15, m_Radio12_1_0);
 }
 
 BEGIN_MESSAGE_MAP(CPersonalForm10, CFormView)
@@ -92,22 +94,58 @@ void CPersonalForm10::OnBnClickedCmdSaveForm()
 	}
 
 	CString strText;
-#pragma region FillForm9_1
-FillForm9 :
+	if (m_Radio12_1_0 == 1)
+	{
+		ss << "update file_form_flags set file_17IfHaveThisSituation=0 where file_id=" << file_id;
 
-#pragma endregion
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+		goto FillComplete;
+	}
 
-#pragma region FillForm10
-FillForm10 :
+	{
+		ss << "update file_form_flags set file_17IfHaveThisSituation=1 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
 
-#pragma endregion
+	int Parameters[18][4] = { { IDC_EDIT47, IDC_EDIT98, IDC_EDIT97, IDC_EDIT99 }, 
+	{ IDC_EDIT48, IDC_EDIT102, IDC_EDIT133, IDC_EDIT110 },
+	{ IDC_EDIT49, IDC_EDIT103, IDC_EDIT134, IDC_EDIT111 } ,
+	{ IDC_EDIT50, IDC_EDIT118, IDC_EDIT135, IDC_EDIT150 } ,
+	{ IDC_EDIT51, IDC_EDIT119, IDC_EDIT136, IDC_EDIT151 } ,
+	{ IDC_EDIT52, IDC_EDIT120, IDC_EDIT137, IDC_EDIT152 },
+	{ IDC_EDIT53, IDC_EDIT121, IDC_EDIT138, IDC_EDIT153 },
+	{ IDC_EDIT54, IDC_EDIT122, IDC_EDIT139, IDC_EDIT154 },
+	{ IDC_EDIT55, IDC_EDIT123, IDC_EDIT140, IDC_EDIT155 },
+	{ IDC_EDIT91, IDC_EDIT124, IDC_EDIT141, IDC_EDIT151 }, 
+	{ IDC_EDIT92, IDC_EDIT125, IDC_EDIT142, IDC_EDIT151 }, 
+	{ IDC_EDIT93, IDC_EDIT126, IDC_EDIT143, IDC_EDIT151 }, 
+	{ IDC_EDIT94, IDC_EDIT127, IDC_EDIT144, IDC_EDIT151 }, 
+	{ IDC_EDIT95, IDC_EDIT128, IDC_EDIT145, IDC_EDIT160 },
+	{ IDC_EDIT104, IDC_EDIT129, IDC_EDIT146, IDC_EDIT161 }, 
+	{ IDC_EDIT106, IDC_EDIT130, IDC_EDIT147, IDC_EDIT162 }, 
+	{ IDC_EDIT112, IDC_EDIT131, IDC_EDIT148, IDC_EDIT163 }, 
+	{ IDC_EDIT113, IDC_EDIT132, IDC_EDIT149, IDC_EDIT164 } };
 
-#pragma region FillForm11
-FillForm11 :
+	for (int i = 0; i < 18; i++) {
+		GetDlgItem(Parameters[i][0])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty())
+			goto FillComplete;
 
-#pragma endregion
+		ss << "insert into file_form_17 values(" << file_id << ",";
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
 
+		GetDlgItem(Parameters[i][1])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		GetDlgItem(Parameters[i][2])->GetWindowTextW(strText); strText.Trim();
+		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+		GetDlgItem(Parameters[i][2])->GetWindowTextW(strText); strText.Trim();
+		ss << wcstod(strText.GetBuffer(), NULL) << ")"; strText.ReleaseBuffer();
 
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
 FillComplete :
 	help->closeDB(); delete help;
 			 ss.str("");  ss.clear();
