@@ -18,6 +18,7 @@
 #include "PersonalForm06.h"
 #include "PersonalForm07.h"
 #include "PersonalForm08.h"
+#include "PersonalForm09.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -239,6 +240,14 @@ afx_msg LRESULT CMainFrame::OnCreatePersonalForm(WPARAM wParam, LPARAM lParam)
 	case 8:
 	{
 		CPersonalForm08* pView = (CPersonalForm08*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm08), IDD_PERSONAL_FORM08);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
+		return 0;
+
+	}
+	case 9:
+	{
+		CPersonalForm09* pView = (CPersonalForm09*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm09), IDD_PERSONAL_FORM08);
 		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
 		pView->OnInitialUpdate();
 		return 0;
