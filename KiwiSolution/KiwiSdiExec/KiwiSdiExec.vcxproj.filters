@@ -177,6 +177,9 @@
     <ClInclude Include="PersonalForm12.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="PersonalForm13.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KiwiSdiExec.cpp">
@@ -255,6 +258,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="PersonalForm12.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PersonalForm13.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
