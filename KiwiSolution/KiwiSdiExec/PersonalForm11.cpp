@@ -92,21 +92,45 @@ void CPersonalForm11::OnBnClickedCmdSaveForm()
 	}
 
 	CString strText;
-#pragma region FillForm9_1
-FillForm9 :
+	int Parameters[12][4] = { { IDC_EDIT47, IDC_EDIT98, IDC_EDIT97, IDC_EDIT99 },
+	{ IDC_EDIT48, IDC_EDIT102, IDC_EDIT133, IDC_EDIT110 },
+	{ IDC_EDIT49, IDC_EDIT103, IDC_EDIT134, IDC_EDIT111 },
+	{ IDC_EDIT50, IDC_EDIT118, IDC_EDIT135, IDC_EDIT150 },
+	{ IDC_EDIT51, IDC_EDIT119, IDC_EDIT136, IDC_EDIT151 },
+	{ IDC_EDIT52, IDC_EDIT120, IDC_EDIT137, IDC_EDIT152 },
+	{ IDC_EDIT53, IDC_EDIT121, IDC_EDIT138, IDC_EDIT153 },
+	{ IDC_EDIT54, IDC_EDIT122, IDC_EDIT139, IDC_EDIT154 },
+	{ IDC_EDIT55, IDC_EDIT123, IDC_EDIT140, IDC_EDIT155 },
+	{ IDC_EDIT96, IDC_EDIT124, IDC_EDIT141, IDC_EDIT156 },
+	{ IDC_EDIT109, IDC_EDIT125, IDC_EDIT142, IDC_EDIT157 },
+	{ IDC_EDIT165, IDC_EDIT126, IDC_EDIT143, IDC_EDIT158 }};
 
-#pragma endregion
+	for (int i = 0; i < 12; i++) {
+		GetDlgItem(Parameters[i][0])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty())
+			break;
 
-#pragma region FillForm11
-FillForm11 :
+		ss << "insert into file_form_17 values(" << file_id << ",";
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
 
-#pragma endregion
+		GetDlgItem(Parameters[i][1])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		GetDlgItem(Parameters[i][2])->GetWindowTextW(strText); strText.Trim();
+		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+		GetDlgItem(Parameters[i][2])->GetWindowTextW(strText); strText.Trim();
+		ss << wcstod(strText.GetBuffer(), NULL) << ")"; strText.ReleaseBuffer();
 
-#pragma region FillForm11
-FillForm11 :
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
 
-#pragma endregion
-
+	ss << "insert into file_form_17_1 values(" << file_id << ",";
+	GetDlgItem(IDC_EDIT159)->GetWindowTextW(strText); strText.Trim();
+	ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+	GetDlgItem(IDC_EDIT160)->GetWindowTextW(strText); strText.Trim();
+	ss << "'" << strText << "')"; strText.ReleaseBuffer();
+	help->execSQL(ss.str().c_str());
+	ss.str(""); ss.clear();
 
 FillComplete :
 	help->closeDB(); delete help;
