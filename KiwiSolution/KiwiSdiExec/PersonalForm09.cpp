@@ -36,6 +36,18 @@ void CPersonalForm09::SetCurrentFile(CString filePath)
 void CPersonalForm09::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
+	DDX_Radio(pDX, IDC_RADIO78, m_Radio11_3_1);
+	DDX_Radio(pDX, IDC_RADIO82, m_Radio11_3_2);
+	DDX_Radio(pDX, IDC_RADIO132, m_Radio11_3_3);
+	DDX_Radio(pDX, IDC_RADIO85, m_Radio11_4_1);
+	DDX_Radio(pDX, IDC_RADIO89, m_Radio11_4_2);
+	DDX_Radio(pDX, IDC_RADIO125, m_Radio11_4_3);
+	DDX_Radio(pDX, IDC_RADIO92, m_Radio11_5_1);
+	DDX_Radio(pDX, IDC_RADIO96, m_Radio11_5_2);
+	DDX_Radio(pDX, IDC_RADIO118, m_Radio11_5_3);
+	DDX_Radio(pDX, IDC_RADIO99, m_Radio11_6_1);
+	DDX_Radio(pDX, IDC_RADIO103, m_Radio11_6_2);
+	DDX_Radio(pDX, IDC_RADIO106, m_Radio11_6_3);
 }
 
 BEGIN_MESSAGE_MAP(CPersonalForm09, CFormView)
@@ -82,30 +94,38 @@ void CPersonalForm09::OnBnClickedCmdSaveForm()
 	int file_id = atoi(re[1 * col + 0]);
 	ss.str(""); ss.clear();
 
-	ss << "select count(*) from file_form_flags where file_id=" << file_id << ";";
-	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
-	int hasRecord = atoi(re[1 * col + 0]);
-	if (!hasRecord) {
-		ss << "insert into file_form_flags(file_id) values(" << file_id << ")";
+
+	CString strText;
+	int Parameters[4][8] = { { IDC_EDIT52, m_Radio11_3_1, m_Radio11_3_2, IDC_EDIT54, IDC_EDIT55, m_Radio11_3_3, IDC_EDIT103, IDC_EDIT105 },
+	{ IDC_EDIT53, m_Radio11_4_1, m_Radio11_4_2, IDC_EDIT63, IDC_EDIT64, m_Radio11_4_3, IDC_EDIT107, IDC_EDIT108 },
+	{ IDC_EDIT96, m_Radio11_5_1, m_Radio11_5_2, IDC_EDIT68, IDC_EDIT110, m_Radio11_5_3, IDC_EDIT114, IDC_EDIT116 },
+	{ IDC_EDIT109, m_Radio11_6_1, m_Radio11_6_2, IDC_EDIT66, IDC_EDIT111, m_Radio11_6_3, IDC_EDIT115, IDC_EDIT117 } };
+
+	for (int i = 0; i < 4; i++) {
+		GetDlgItem(Parameters[i][0])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty())
+			goto FillComplete;
+
+		ss << "insert into file_form_16 values(" << file_id << ",";
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+
+		ss << Parameters[i][1] << ", ";
+		ss << Parameters[i][2] << ", ";
+
+		GetDlgItem(Parameters[i][3])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		GetDlgItem(Parameters[i][4])->GetWindowTextW(strText); strText.Trim();
+		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+
+		ss << Parameters[i][5] << ", ";
+		GetDlgItem(Parameters[i][6])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		GetDlgItem(Parameters[i][7])->GetWindowTextW(strText); strText.Trim();
+		ss << wcstod(strText.GetBuffer(), NULL) << ")"; strText.ReleaseBuffer();
+
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
 	}
-
-	CString strText;
-#pragma region FillForm9_1
-FillForm9 :
-
-#pragma endregion
-
-#pragma region FillForm10
-FillForm10 :
-
-#pragma endregion
-
-#pragma region FillForm11
-FillForm11 :
-
-#pragma endregion
 
 
 FillComplete :

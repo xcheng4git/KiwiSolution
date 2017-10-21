@@ -37,6 +37,12 @@ public:
 	afx_msg void OnBnClickedButtonCloseForm3();
 	int m_Radio10_0;
 	int m_Radio11_0;
+	int m_Radio11_1_1;
+	int m_Radio11_1_2;
+	int m_Radio11_1_3;
+	int m_Radio11_2_1;
+	int m_Radio11_2_2;
+	int m_Radio11_2_3;
 };
 
 
