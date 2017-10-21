@@ -742,4 +742,7 @@ void CPersonalForm01::OnClickedButtonCloseForm01()
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
 	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
+
+	//CloseWindow();
+	//DestroyWindow();
 }

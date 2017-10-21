@@ -151,20 +151,23 @@ FillForm7_1 :
 		}
 	}
 	{
-		ss << "insert into file_form_12 values(" << file_id << ",";
+		ss << "insert into file_form_12_c values(" << file_id << ",";
 
-		ss << m_Radio7_0 << ",";
+		ss << m_Radio7_4_0 << ",";
 
-		GetDlgItem(IDC_EDIT78)->GetWindowTextW(strText);
+		GetDlgItem(IDC_EDIT86)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-		GetDlgItem(IDC_EDIT79)->GetWindowTextW(strText);
+
+		ss << m_Radio7_4_1 << ",";
+
+		GetDlgItem(IDC_EDIT87)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-		GetDlgItem(IDC_EDIT85)->GetWindowTextW(strText);
+		GetDlgItem(IDC_EDIT90)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-		ss << m_Radio7_1 << ",";
-		ss << m_Radio7_2 << ",";
-		ss << m_Radio7_3 << ",";
-		ss << ((CButton *)GetDlgItem(IDC_RADIO1))->GetCheck() << ",";
+		ss << m_Radio7_4 << ",";
+		ss << m_Radio7_5 << ",";
+		ss << m_Radio7_6 << ",";
+		ss << ((CButton *)GetDlgItem(IDC_RADIO58))->GetCheck() << ",";
 		GetDlgItem(IDC_EDIT88)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 		GetDlgItem(IDC_EDIT89)->GetWindowTextW(strText);
@@ -174,15 +177,79 @@ FillForm7_1 :
 		ss.str(""); ss.clear();
 
 	}
+
 #pragma endregion
 
 #pragma region FillForm7_2_1
 FillForm7_2_1 :
+	if (m_Radio7_4_0 == -1)
+		goto FillComplete;
+	{
+		ss << "insert into file_form_12_c values(" << file_id << ",";
+
+		ss << m_Radio7_4_0 << ",";
+
+		GetDlgItem(IDC_EDIT86)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+
+		ss << m_Radio7_4_1 << ",";
+
+		GetDlgItem(IDC_EDIT87)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT90)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		ss << m_Radio7_4 << ",";
+		ss << m_Radio7_5 << ",";
+		ss << m_Radio7_6 << ",";
+		ss << ((CButton *)GetDlgItem(IDC_RADIO58))->GetCheck() << ",";
+		GetDlgItem(IDC_EDIT88)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT89)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
+		//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+
+	}
 
 #pragma endregion
 
+	//////////////////////////////////////////////////////////////////////////
+	// ×ÓÅ®ÅäÅ¼
 #pragma region FillForm7_2_2
 FillForm7_2_2 :
+	GetDlgItem(IDC_EDIT91)->GetWindowTextW(strText);
+	if (strText == _T("ÎÞ"))
+		goto FillComplete;
+
+	{
+		ss << "insert into file_form_12_cl values(" << file_id << ",";
+
+		ss << m_Radio7_4_0 << ",";
+
+		GetDlgItem(IDC_EDIT86)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+
+		GetDlgItem(IDC_EDIT91)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT92)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT95)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		ss << m_Radio7_7 << ",";
+		ss << m_Radio7_8 << ",";
+		ss << m_Radio7_9 << ",";
+		ss << ((CButton *)GetDlgItem(IDC_RADIO73))->GetCheck() << ",";
+		GetDlgItem(IDC_EDIT93)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT94)->GetWindowTextW(strText);
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
+		
+		//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+
+	}
 
 #pragma endregion
 
