@@ -17,6 +17,14 @@ IMPLEMENT_DYNCREATE(CPersonalForm08, CFormView)
 
 CPersonalForm08::CPersonalForm08()
 : CFormView(CPersonalForm08::IDD)
+, m_Radio10_0(-1)
+, m_Radio11_0(-1)
+, m_Radio11_1_1(0)
+, m_Radio11_1_2(0)
+, m_Radio11_1_3(0)
+, m_Radio11_2_1(0)
+, m_Radio11_2_2(0)
+, m_Radio11_2_3(0)
 {
 	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("·ÂËÎÌå"), 3); lf.lfWeight = 400;
 	m_fontEdit.CreateFontIndirect(&lf);
@@ -36,6 +44,14 @@ void CPersonalForm08::SetCurrentFile(CString filePath)
 void CPersonalForm08::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
+	DDX_Radio(pDX, IDC_RADIO15, m_Radio10_0);
+	DDX_Radio(pDX, IDC_RADIO16, m_Radio11_0);
+	DDX_Radio(pDX, IDC_RADIO78, m_Radio11_1_1);
+	DDX_Radio(pDX, IDC_RADIO82, m_Radio11_1_2);
+	DDX_Radio(pDX, IDC_RADIO106, m_Radio11_1_3);
+	DDX_Radio(pDX, IDC_RADIO85, m_Radio11_2_1);
+	DDX_Radio(pDX, IDC_RADIO89, m_Radio11_2_2);
+	DDX_Radio(pDX, IDC_RADIO109, m_Radio11_2_3);
 }
 
 BEGIN_MESSAGE_MAP(CPersonalForm08, CFormView)
@@ -94,16 +110,129 @@ void CPersonalForm08::OnBnClickedCmdSaveForm()
 	CString strText;
 #pragma region FillForm9
 FillForm9:
+	{
+		ss << "insert into file_form_14 values(" << file_id << ",";
 
+		GetDlgItem(IDC_EDIT47)->GetWindowTextW(strText);
+		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT97)->GetWindowTextW(strText);
+		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT98)->GetWindowTextW(strText);
+		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT99)->GetWindowTextW(strText);
+		ss << wcstod(strText.GetBuffer(), NULL) << ")"; strText.ReleaseBuffer();
+
+		//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+
+	}
 #pragma endregion
 
 #pragma region FillForm10
 FillForm10:
+	if (m_Radio10_0 == 1)
+	{
+		ss << "update file_form_flags set file_15IfHaveThisSituation=0 where file_id=" << file_id;
 
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+		goto FillForm11;
+	}
+
+	{
+		ss << "update file_form_flags set file_15IfHaveThisSituation=1 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
+
+	{
+		ss << "insert into file_form_15 values(" << file_id << ",";
+
+		GetDlgItem(IDC_EDIT48)->GetWindowTextW(strText);
+		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT49)->GetWindowTextW(strText);
+		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT50)->GetWindowTextW(strText);
+		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT51)->GetWindowTextW(strText);
+		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT101)->GetWindowTextW(strText);
+		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT100)->GetWindowTextW(strText);
+		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+		GetDlgItem(IDC_EDIT102)->GetWindowTextW(strText);
+		ss << wcstod(strText.GetBuffer(), NULL) << ")"; strText.ReleaseBuffer();
+
+		//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE(_T("\n"));
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+
+	}
 #pragma endregion
 
 #pragma region FillForm11
 FillForm11 :
+	GetDlgItem(IDC_EDIT52)->GetWindowTextW(strText);
+	if (strText == _T("ÎÞ"))
+	{
+		ss << "update file_form_flags set file_16IfHaveThisSituation=0 where file_id=" << file_id;
+
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+		goto FillComplete;
+	}
+
+	{
+		ss << "update file_form_flags set file_16IfHaveThisSituation=1 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
+
+	{
+		if (m_Radio11_0 == 1)
+		{
+			ss << "update file_form_flags set file_16IfChange=0 where file_id=" << file_id;
+			help->execSQL(ss.str().c_str());
+			ss.str(""); ss.clear();
+			goto FillComplete;
+		}
+		else if (m_Radio11_0 == 0)
+		{
+			ss << "update file_form_flags set file_16IfChange=1 where file_id=" << file_id;
+			help->execSQL(ss.str().c_str());
+			ss.str(""); ss.clear();
+		}
+	}
+
+	int Parameters[2][8] = { { IDC_EDIT52, m_Radio11_1_1, m_Radio11_1_2, IDC_EDIT54, IDC_EDIT55, m_Radio11_1_3, IDC_EDIT103, IDC_EDIT105 },
+	{ IDC_EDIT53, m_Radio11_2_1, m_Radio11_2_2, IDC_EDIT63, IDC_EDIT64, m_Radio11_2_3, IDC_EDIT107, IDC_EDIT108 } };
+
+	for (int i = 0; i < 2; i++) {
+		GetDlgItem(Parameters[i][0])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty())
+			goto FillComplete;
+
+		ss << "insert into file_form_16 values(" << file_id << ",";
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+
+		ss << Parameters[i][1] << ", ";
+		ss << Parameters[i][2] << ", ";
+
+		GetDlgItem(Parameters[i][3])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		GetDlgItem(Parameters[i][4])->GetWindowTextW(strText); strText.Trim();
+		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+
+		ss << Parameters[i][5] << ", ";
+		GetDlgItem(Parameters[i][6])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		GetDlgItem(Parameters[i][7])->GetWindowTextW(strText); strText.Trim();
+		ss << wcstod(strText.GetBuffer(), NULL) << ")"; strText.ReleaseBuffer();
+
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
 
 #pragma endregion
 
