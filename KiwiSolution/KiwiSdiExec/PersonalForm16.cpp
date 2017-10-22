@@ -126,7 +126,7 @@ FillForm16 :
 		if (strText.IsEmpty())
 			goto FillComplete;
 
-		ss << "insert into file_form_21 values(" << file_id << ",";
+		ss << "insert into file_form_22 values(" << file_id << ",";
 
 		ss << "'" << strText << "',"; strText.ReleaseBuffer();
 
