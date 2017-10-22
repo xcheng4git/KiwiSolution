@@ -92,31 +92,68 @@ void CPersonalForm18::OnBnClickedCmdSaveForm()
 	}
 
 	CString strText;
-#pragma region FillForm18_1
-FillForm18_1 :
-	GetDlgItem(IDC_EDIT236)->GetWindowTextW(strText); strText.Trim();
-	if (!strText.IsEmpty())
-	{
-		ss << "update file_form_flags set file_24IfHaveThisSituation=0 where file_id=" << file_id;
+#pragma region FillForm18
+FillForm18 :
+
+	int Parameters1[10][5] = { { IDC_DATETIMEPICKER25, IDC_EDIT236, IDC_EDIT237, IDC_EDIT248, IDC_EDIT259 },
+	{ IDC_DATETIMEPICKER27, IDC_EDIT260, IDC_EDIT226, IDC_EDIT238, IDC_EDIT249 },
+	{ IDC_DATETIMEPICKER28, IDC_EDIT261, IDC_EDIT227, IDC_EDIT239, IDC_EDIT250 },
+	{ IDC_DATETIMEPICKER29, IDC_EDIT262, IDC_EDIT228, IDC_EDIT240, IDC_EDIT251 },
+	{ IDC_DATETIMEPICKER30, IDC_EDIT263, IDC_EDIT229, IDC_EDIT241, IDC_EDIT252 },
+	{ IDC_DATETIMEPICKER31, IDC_EDIT264, IDC_EDIT230, IDC_EDIT242, IDC_EDIT253 },
+	{ IDC_DATETIMEPICKER32, IDC_EDIT265, IDC_EDIT231, IDC_EDIT243, IDC_EDIT254 },
+	{ IDC_DATETIMEPICKER33, IDC_EDIT266, IDC_EDIT232, IDC_EDIT244, IDC_EDIT255 },
+	{ IDC_DATETIMEPICKER34, IDC_EDIT267, IDC_EDIT233, IDC_EDIT245, IDC_EDIT256 },
+	{ IDC_DATETIMEPICKER35, IDC_EDIT268, IDC_EDIT234, IDC_EDIT246, IDC_EDIT257 } };
+	for (int i = 0; i < 10; i++) {
+		GetDlgItem(Parameters1[i][0])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty()) {
+			strText.ReleaseBuffer();
+			break;
+		}
+
+		ss << "insert into file_form_24 values(" << file_id << ",";
+		ss << 1 << ",";
+		for (int j = 0; j < 4; j++) {
+			GetDlgItem(Parameters1[i][j])->GetWindowTextW(strText); strText.Trim();
+			ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		}
+		GetDlgItem(Parameters1[i][4])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << strText << "')"; strText.ReleaseBuffer();
 
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
-		goto FillComplete;
 	}
 
-	{
-		ss << "update file_form_flags set file_24IfHaveThisSituation=1 where file_id=" << file_id;
+	int Parameters2[9][5] = { { IDC_DATETIMEPICKER36, IDC_EDIT269, IDC_EDIT235, IDC_EDIT247, IDC_EDIT258 },
+	{ IDC_DATETIMEPICKER37, IDC_EDIT270, IDC_EDIT278, IDC_EDIT286, IDC_EDIT294 },
+	{ IDC_DATETIMEPICKER38, IDC_EDIT271, IDC_EDIT279, IDC_EDIT287, IDC_EDIT295 },
+	{ IDC_DATETIMEPICKER39, IDC_EDIT272, IDC_EDIT280, IDC_EDIT288, IDC_EDIT296 },
+	{ IDC_DATETIMEPICKER40, IDC_EDIT273, IDC_EDIT281, IDC_EDIT289, IDC_EDIT297 },
+	{ IDC_DATETIMEPICKER41, IDC_EDIT274, IDC_EDIT282, IDC_EDIT290, IDC_EDIT298 },
+	{ IDC_DATETIMEPICKER42, IDC_EDIT275, IDC_EDIT283, IDC_EDIT291, IDC_EDIT299 },
+	{ IDC_DATETIMEPICKER43, IDC_EDIT276, IDC_EDIT284, IDC_EDIT292, IDC_EDIT300 },
+	{ IDC_DATETIMEPICKER44, IDC_EDIT277, IDC_EDIT285, IDC_EDIT293, IDC_EDIT301 }};
+	for (int i = 0; i < 9; i++) {
+		GetDlgItem(Parameters2[i][0])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty()) {
+			strText.ReleaseBuffer();
+			break;
+		}
+
+		ss << "insert into file_form_24 values(" << file_id << ",";
+		ss << 0 << ",";
+		for (int j = 0; j < 4; j++) {
+			GetDlgItem(Parameters2[i][j])->GetWindowTextW(strText); strText.Trim();
+			ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		}
+		GetDlgItem(Parameters2[i][4])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << strText << "')"; strText.ReleaseBuffer();
+
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
 	}
-
 #pragma endregion
-
-#pragma region FillForm18_2
-FillForm18_2 :
-
-#pragma endregion
-
 
 FillComplete :
 	help->closeDB(); delete help;
