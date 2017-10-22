@@ -93,6 +93,27 @@ void CPersonalForm17::OnBnClickedCmdSaveForm()
 	}
 
 	CString strText;
+	GetDlgItem(IDC_EDIT58)->GetWindowTextW(strText); strText.Trim();
+	
+	if (!strText.IsEmpty()) {
+		ss << "update file_form_flags set file_23IfHaveThisSituation=0 where file_id=" << file_id;
+
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+		goto FillComplete;
+	}
+
+	{
+		ss << "update file_form_flags set file_23IfHaveThisSituation=1 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
+
+	ss << "insert into file_form_23 values(" << file_id << ",";
+	ss << "'" << strText << "')"; strText.ReleaseBuffer();
+
+	help->execSQL(ss.str().c_str());
+	ss.str(""); ss.clear();
 
 FillComplete:
 	help->closeDB(); delete help;
@@ -113,4 +134,13 @@ void CPersonalForm17::OnBnClickedButtonCloseForm3()
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
 	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
+}
+
+
+void CPersonalForm17::OnInitialUpdate()
+{
+	CFormView::OnInitialUpdate();
+
+	// TODO:  在此添加专用代码和/或调用基类
+	GetDlgItem(IDC_EDIT58)->SetFont(&m_fontEdit);
 }
