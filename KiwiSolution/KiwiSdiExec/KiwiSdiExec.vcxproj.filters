@@ -201,6 +201,18 @@
     <ClInclude Include="PersonalForm20.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="PersonalForm21.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PersonalForm22.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PersonalForm23.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PersonalForm24.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KiwiSdiExec.cpp">
@@ -303,6 +315,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="PersonalForm20.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PersonalForm21.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PersonalForm22.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PersonalForm23.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PersonalForm24.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

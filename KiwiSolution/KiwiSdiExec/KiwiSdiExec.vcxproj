@@ -159,6 +159,10 @@
     <ClInclude Include="PersonalForm18.h" />
     <ClInclude Include="PersonalForm19.h" />
     <ClInclude Include="PersonalForm20.h" />
+    <ClInclude Include="PersonalForm21.h" />
+    <ClInclude Include="PersonalForm22.h" />
+    <ClInclude Include="PersonalForm23.h" />
+    <ClInclude Include="PersonalForm24.h" />
     <ClInclude Include="PersonalSummary.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SQLiteHelper.h" />
@@ -197,6 +201,10 @@
     <ClCompile Include="PersonalForm18.cpp" />
     <ClCompile Include="PersonalForm19.cpp" />
     <ClCompile Include="PersonalForm20.cpp" />
+    <ClCompile Include="PersonalForm21.cpp" />
+    <ClCompile Include="PersonalForm22.cpp" />
+    <ClCompile Include="PersonalForm23.cpp" />
+    <ClCompile Include="PersonalForm24.cpp" />
     <ClCompile Include="PersonalSummary.cpp" />
     <ClCompile Include="SQLiteHelper.cpp" />
     <ClCompile Include="stdafx.cpp">
