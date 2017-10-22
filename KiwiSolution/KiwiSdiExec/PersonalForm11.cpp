@@ -117,7 +117,7 @@ void CPersonalForm11::OnBnClickedCmdSaveForm()
 		ss << "'" << strText << "',"; strText.ReleaseBuffer();
 		GetDlgItem(Parameters[i][2])->GetWindowTextW(strText); strText.Trim();
 		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
-		GetDlgItem(Parameters[i][2])->GetWindowTextW(strText); strText.Trim();
+		GetDlgItem(Parameters[i][3])->GetWindowTextW(strText); strText.Trim();
 		ss << wcstod(strText.GetBuffer(), NULL) << ")"; strText.ReleaseBuffer();
 
 		help->execSQL(ss.str().c_str());
