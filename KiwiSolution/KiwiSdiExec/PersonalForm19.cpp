@@ -85,6 +85,15 @@ void CPersonalForm19::OnBnClickedCmdSaveForm()
 
 	CString strText;
 
+	ss << "insert into file_form_25 values(" << file_id << ",";
+	
+	GetDlgItem(IDC_EDIT237)->GetWindowTextW(strText); strText.Trim();
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_EDIT58)->GetWindowTextW(strText); strText.Trim();
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
+
+	help->execSQL(ss.str().c_str());
+	ss.str(""); ss.clear();
 
 FillComplete:
 	help->closeDB(); delete help;
@@ -113,5 +122,6 @@ void CPersonalForm19::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 
 	// TODO:  在此添加专用代码和/或调用基类
+	GetDlgItem(IDC_EDIT237)->SetFont(&m_fontEdit);
 	GetDlgItem(IDC_EDIT58)->SetFont(&m_fontEdit);
 }
