@@ -85,6 +85,15 @@ void CPersonalForm21::OnBnClickedCmdSaveForm()
 
 	CString strText;
 
+	ss << "insert into file_form_27 values(" << file_id << ",";
+
+	GetDlgItem(IDC_EDIT237)->GetWindowTextW(strText); strText.Trim();
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_EDIT58)->GetWindowTextW(strText); strText.Trim();
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
+
+	help->execSQL(ss.str().c_str());
+	ss.str(""); ss.clear();
 
 FillComplete:
 	help->closeDB(); delete help;
