@@ -109,7 +109,22 @@ void CPersonalForm12::OnBnClickedCmdSaveForm()
 	{ IDC_EDIT94, IDC_EDIT127, IDC_EDIT144, IDC_EDIT159 },
 	{ IDC_EDIT95, IDC_EDIT128, IDC_EDIT145, IDC_EDIT160 }};
 
-	double amount1, amount2=0;
+	if (m_Radio12_2_0 == 1)
+	{
+		ss << "update file_form_flags set file_18IfHaveThisSituation=0 where file_id=" << file_id;
+
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+		goto FillComplete;
+	}
+
+	{
+		ss << "update file_form_flags set file_18IfHaveThisSituation=1 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
+
+	double amount1, amount2 = 0;
 	for (int i = 0; i < 14; i++) {
 		GetDlgItem(Parameters[i][0])->GetWindowTextW(strText); strText.Trim();
 		if (strText.IsEmpty())
@@ -132,15 +147,15 @@ void CPersonalForm12::OnBnClickedCmdSaveForm()
 
 		amount2 += amount1;
 	}
-
+	strText.Format(_T("%f"), amount2);
+	GetDlgItem(IDC_EDIT161)->SetWindowTextW(strText);
 
 FillComplete :
 	help->closeDB(); delete help;
 			 ss.str("");  ss.clear();
 			 GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 
-			 strText.Format(_T("%f"), amount2);
-			 GetDlgItem(IDC_EDIT161)->SetWindowTextW(strText);
+
 }
 
 
