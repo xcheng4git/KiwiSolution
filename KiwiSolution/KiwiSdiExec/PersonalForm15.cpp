@@ -94,19 +94,56 @@ void CPersonalForm15::OnBnClickedCmdSaveForm()
 	}
 
 	CString strText;
-#pragma region FillForm9_1
-FillForm9 :
+#pragma region FillForm14
+	if (m_Radio14_1_0 == 1)
+	{
+		ss << "update file_form_flags set file_21IfHaveThisSituation=0 where file_id=" << file_id;
 
-#pragma endregion
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+		goto FillComplete;
+	}
 
-#pragma region FillForm15
-FillForm15 :
+	{
+		ss << "update file_form_flags set file_21IfHaveThisSituation=1 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
 
-#pragma endregion
+	int Parameters[9][6] = { { IDC_EDIT55, IDC_EDIT56, IDC_EDIT58, IDC_EDIT203, IDC_EDIT212, IDC_EDIT221 },
+	{ IDC_EDIT90, IDC_EDIT92, IDC_EDIT94, IDC_EDIT204, IDC_EDIT213, IDC_EDIT222 },
+	{ IDC_EDIT182, IDC_EDIT189, IDC_EDIT196, IDC_EDIT205, IDC_EDIT214, IDC_EDIT223 },
+	{ IDC_EDIT183, IDC_EDIT190, IDC_EDIT197, IDC_EDIT206, IDC_EDIT215, IDC_EDIT224 },
+	{ IDC_EDIT184, IDC_EDIT191, IDC_EDIT198, IDC_EDIT207, IDC_EDIT216, IDC_EDIT225 },
+	{ IDC_EDIT185, IDC_EDIT192, IDC_EDIT199, IDC_EDIT208, IDC_EDIT217, IDC_EDIT226 },
+	{ IDC_EDIT186, IDC_EDIT193, IDC_EDIT200, IDC_EDIT209, IDC_EDIT218, IDC_EDIT227 },
+	{ IDC_EDIT187, IDC_EDIT194, IDC_EDIT201, IDC_EDIT210, IDC_EDIT219, IDC_EDIT228 },
+	{ IDC_EDIT188, IDC_EDIT195, IDC_EDIT202, IDC_EDIT211, IDC_EDIT220, IDC_EDIT229 }};
 
-#pragma region FillForm15
-FillForm15 :
+	for (int i = 0; i < 9; i++) {
+		GetDlgItem(Parameters[i][0])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty())
+			goto FillComplete;
 
+		ss << "insert into file_form_21 values(" << file_id << ",";
+
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+
+		GetDlgItem(Parameters[i][1])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		GetDlgItem(Parameters[i][2])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		GetDlgItem(Parameters[i][3])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		GetDlgItem(Parameters[i][4])->GetWindowTextW(strText); strText.Trim();
+		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+		GetDlgItem(Parameters[i][5])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << strText << "')"; strText.ReleaseBuffer();
+
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+
+	}
 #pragma endregion
 
 
