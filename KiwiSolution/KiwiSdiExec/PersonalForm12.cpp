@@ -17,7 +17,7 @@ IMPLEMENT_DYNCREATE(CPersonalForm12, CFormView)
 
 CPersonalForm12::CPersonalForm12()
 : CFormView(CPersonalForm12::IDD)
-, m_Radio12_2_0(0)
+, m_Radio12_2_0(-1)
 {
 	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("·ÂËÎÌå"), 3); lf.lfWeight = 400;
 	m_fontEdit.CreateFontIndirect(&lf);
