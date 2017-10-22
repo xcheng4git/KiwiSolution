@@ -24,6 +24,9 @@
 #include "PersonalForm12.h"
 #include "PersonalForm13.h"
 #include "PersonalForm14.h"
+#include "PersonalForm15.h"
+#include "PersonalForm16.h"
+#include "PersonalForm17.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -293,6 +296,30 @@ afx_msg LRESULT CMainFrame::OnCreatePersonalForm(WPARAM wParam, LPARAM lParam)
 	case 14:
 	{
 		CPersonalForm14* pView = (CPersonalForm14*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm14), IDD_PERSONAL_FORM14);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
+		return 0;
+
+	}
+	case 15:
+	{
+		CPersonalForm15* pView = (CPersonalForm15*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm15), IDD_PERSONAL_FORM15);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
+		return 0;
+
+	}
+	case 16:
+	{
+		CPersonalForm16* pView = (CPersonalForm16*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm16), IDD_PERSONAL_FORM16);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
+		return 0;
+
+	}
+	case 17:
+	{
+		CPersonalForm17* pView = (CPersonalForm17*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm17), IDD_PERSONAL_FORM17);
 		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
 		pView->OnInitialUpdate();
 		return 0;
