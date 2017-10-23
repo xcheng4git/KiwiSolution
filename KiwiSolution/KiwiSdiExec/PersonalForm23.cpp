@@ -84,7 +84,31 @@ void CPersonalForm23::OnBnClickedCmdSaveForm()
 	ss.str(""); ss.clear();
 
 	CString strText;
+	GetDlgItem(IDC_EDIT302)->GetWindowTextW(strText); strText.Trim();
+	if (strText.IsEmpty()) {
+		strText.ReleaseBuffer();
+		goto FillComplete;
+	}
 
+	int parameters[8] = { IDC_EDIT302, IDC_DATETIMEPICKER28, IDC_EDIT237, IDC_EDIT238, IDC_EDIT239, IDC_EDIT240, IDC_EDIT241, IDC_EDIT242 };
+
+	ss << "insert into file_form_29 values(" << file_id << ",";
+	for (int i = 0; i < 4; i++){
+		GetDlgItem(parameters[i])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	}
+	GetDlgItem(parameters[4])->GetWindowTextW(strText); strText.Trim();
+	ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+	GetDlgItem(parameters[5])->GetWindowTextW(strText); strText.Trim();
+	ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
+
+	GetDlgItem(parameters[6])->GetWindowTextW(strText); strText.Trim();
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(parameters[7])->GetWindowTextW(strText); strText.Trim();
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
+
+	help->execSQL(ss.str().c_str());
+	ss.str(""); ss.clear();
 
 FillComplete:
 	help->closeDB(); delete help;
