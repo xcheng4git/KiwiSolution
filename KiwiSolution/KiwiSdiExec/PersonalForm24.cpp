@@ -85,7 +85,43 @@ void CPersonalForm24::OnBnClickedCmdSaveForm()
 
 	CString strText;
 
+	ss << "insert into file_form_30_0 values(" << file_id << ",";
+	GetDlgItem(IDC_EDIT342)->GetWindowTextW(strText); strText.Trim();
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_EDIT343)->GetWindowTextW(strText); strText.Trim();
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
+	help->execSQL(ss.str().c_str());
+	ss.str(""); ss.clear();
 
+	GetDlgItem(IDC_EDIT325)->GetWindowTextW(strText); strText.Trim();
+	if (strText.IsEmpty()) {
+		strText.ReleaseBuffer();
+		goto FillComplete;
+	}
+
+	int parameters[6][3] = { { IDC_EDIT325, IDC_EDIT330, IDC_EDIT341 },
+	{ IDC_EDIT302, IDC_EDIT331, IDC_EDIT340 }, 
+	{ IDC_EDIT326, IDC_EDIT332, IDC_EDIT339 }, 
+	{ IDC_EDIT327, IDC_EDIT333, IDC_EDIT338 }, 
+	{ IDC_EDIT328, IDC_EDIT334, IDC_EDIT337 }, 
+	{ IDC_EDIT329, IDC_EDIT335, IDC_EDIT336 }};
+
+	for (int i = 0; i < 6; i++) {
+		ss << "insert into file_form_30 values(" << file_id << ",";
+		for (int j = 0; j < 2; j++) {
+			GetDlgItem(parameters[i][j])->GetWindowTextW(strText); strText.Trim();
+			if (strText.IsEmpty()) {
+				strText.ReleaseBuffer();
+				goto FillComplete;
+			}
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+		}
+		GetDlgItem(parameters[i][2])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
+
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
 FillComplete:
 	help->closeDB(); delete help;
 	ss.str("");  ss.clear();
