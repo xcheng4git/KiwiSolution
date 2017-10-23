@@ -148,11 +148,13 @@ FillForm6_1:
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 		GetDlgItem(IDC_EDIT53)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-		switch (m_Radio6_1_1) {
-		case 0: strText = _T("外国国籍"); break;
-		case 1: strText = _T("永久居留资格"); break;
-		case 2: strText = _T("长期居留许可"); break;
-		}
+
+		ss << m_Radio6_1_1 << ", ";
+		//switch (m_Radio6_1_1) {
+		//case 0: strText = _T("外国国籍"); break;
+		//case 1: strText = _T("永久居留资格"); break;
+		//case 2: strText = _T("长期居留许可"); break;
+		//}
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 		GetDlgItem(IDC_DATETIMEPICKER1)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
@@ -178,11 +180,13 @@ FillForm6_1:
 			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 			GetDlgItem(IDC_EDIT54)->GetWindowTextW(strText);
 			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-			switch (m_Radio6_1_2) {
-			case 0: strText = _T("外国国籍"); break;
-			case 1: strText = _T("永久居留资格"); break;
-			case 2: strText = _T("长期居留许可"); break;
-			}
+
+			ss << m_Radio6_1_2 << ", ";
+			//switch (m_Radio6_1_2) {
+			//case 0: strText = _T("外国国籍"); break;
+			//case 1: strText = _T("永久居留资格"); break;
+			//case 2: strText = _T("长期居留许可"); break;
+			//}
 			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 			GetDlgItem(IDC_DATETIMEPICKER45)->GetWindowTextW(strText);
 			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
@@ -209,11 +213,13 @@ FillForm6_1:
 			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 			GetDlgItem(IDC_EDIT55)->GetWindowTextW(strText);
 			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-			switch (m_Radio6_1_2) {
-			case 0: strText = _T("外国国籍"); break;
-			case 1: strText = _T("永久居留资格"); break;
-			case 2: strText = _T("长期居留许可"); break;
-			}
+
+			ss << m_Radio6_1_3 << ", ";
+			//switch (m_Radio6_1_2) {
+			//case 0: strText = _T("外国国籍"); break;
+			//case 1: strText = _T("永久居留资格"); break;
+			//case 2: strText = _T("长期居留许可"); break;
+			//}
 			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 			GetDlgItem(IDC_DATETIMEPICKER46)->GetWindowTextW(strText);
 			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
