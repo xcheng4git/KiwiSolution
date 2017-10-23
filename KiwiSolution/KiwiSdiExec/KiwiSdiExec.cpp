@@ -11,6 +11,8 @@
 #include "KiwiSdiExecDoc.h"
 #include "KiwiSdiExecView.h"
 
+#include "DlgLogin.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -112,6 +114,11 @@ BOOL CKiwiSdiExecApp::InitInstance()
 	// 用 /RegServer、/Register、/Unregserver 或 /Unregister 启动应用程序，则返回 FALSE。
 	if (!ProcessShellCommand(cmdInfo))
 		return FALSE;
+
+	CDlgLogin dlgLogin;
+	dlgLogin.DoModal();
+	if ( !dlgLogin.m_isLogined)
+		exit(0);
 
 	// 唯一的一个窗口已初始化，因此显示它并对其进行更新
 	m_pMainWnd->ShowWindow(SW_SHOW);

@@ -106,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DatePickerCombo.h" />
+    <ClInclude Include="DlgLogin.h" />
     <ClInclude Include="DlgNewFile.h" />
     <ClInclude Include="DlgNewFolder.h" />
     <ClInclude Include="DlgNewForm.h" />
@@ -172,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DatePickerCombo.cpp" />
+    <ClCompile Include="DlgLogin.cpp" />
     <ClCompile Include="DlgNewFile.cpp" />
     <ClCompile Include="DlgNewFolder.cpp" />
     <ClCompile Include="DlgNewForm.cpp" />

@@ -53,6 +53,7 @@
 #define IDD_PERSONAL_FORM22             349
 #define IDD_PERSONAL_FORM23             350
 #define IDD_PERSONAL_FORM24             351
+#define IDD_DIALOG_LOGIN                352
 #define IDC_EDIT_TEST                   1011
 #define IDC_LIST_SHORTCUT               1012
 #define IDC_TREE_ORGNIZATION            1013
@@ -755,6 +756,8 @@
 #define IDC_EDIT21                      1451
 #define IDC_CHANGETIME                  1501
 #define IDC_CHECK1                      1502
+#define IDC_EDIT2                       1503
+#define IDC_EDIT_PWD                    1503
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 
@@ -762,9 +765,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        352
+#define _APS_NEXT_RESOURCE_VALUE        353
 #define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1503
+#define _APS_NEXT_CONTROL_VALUE         1504
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
