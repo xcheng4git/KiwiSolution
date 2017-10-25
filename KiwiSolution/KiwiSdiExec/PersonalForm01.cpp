@@ -23,7 +23,7 @@ CPersonalForm01::CPersonalForm01()
 //	: CAutoFocusWnd<CFormView>(CPersonalForm01::IDD)
 	: CFormView(CPersonalForm01::IDD)
 {
-	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
+	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 15;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
 	m_fontEdit.CreateFontIndirect(&lf);
 
 	m_strPicPathname = _T("");
@@ -282,6 +282,10 @@ void CPersonalForm01::OnInitialUpdate()
 	// TODO:  在此添加专用代码和/或调用基类
 	//SetScaleToFitSize(CSize(1, 1));
 	//ModifyStyle(0, WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
+	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 30;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 700;
+	CFont font; VERIFY(font.CreateFontIndirect(&lf));
+	GetDlgItem(IDC_STATIC_FORM01_HEADER)->SetFont(&font);
+	font.DeleteObject();
 
 	GetDlgItem(IDC_CMD_SAVE_FORM)->SetFont(&m_fontEdit); 
 
@@ -326,8 +330,17 @@ void CPersonalForm01::OnInitialUpdate()
 void CPersonalForm01::OnDraw(CDC* /*pDC*/)
 {
 	// TODO:  在此添加专用代码和/或调用基类
-	CClientDC dc(this);
+	//CClientDC dc(this);
 
+	//CRect rt; GetClientRect(&rt);
+	////dc.Rectangle(new CRect(rt.left + MARGIN_X, rt.top + MARGIN_Y, rt.right - MARGIN_X, rt.bottom - MARGIN_Y));
+	//DrawFormHeader(&dc, new CRect(rt.left + MARGIN_X + PAGE_START_OFFSET_X + HEADER_START_OFFSET_X,
+	//	rt.top + MARGIN_Y + PAGE_START_OFFSET_Y + HEADER_START_OFFSET_Y,
+	//	rt.right - MARGIN_X - PAGE_START_OFFSET_X - HEADER_START_OFFSET_X,
+	//	rt.top + MARGIN_Y + PAGE_START_OFFSET_Y + HEADER_START_OFFSET_Y + HEADER_HEIGHT));
+	//dc.DeleteDC();
+
+	/*
 	CDC memDC;
 	CBitmap memBitmap;
 	memDC.CreateCompatibleDC(NULL);
@@ -362,7 +375,7 @@ void CPersonalForm01::OnDraw(CDC* /*pDC*/)
 
 	dc.BitBlt(rt.left, rt.top, rt.right - rt.left, rt.bottom - rt.top, &memDC, 0, 0, SRCCOPY);
 	memBitmap.DeleteObject(); memDC.DeleteDC();
-
+	*/
 	if (!m_strPicPathname.IsEmpty()) {
 		CImage  image;
 		image.Load(m_strPicPathname);
@@ -382,8 +395,17 @@ void CPersonalForm01::OnSize(UINT nType, int cx, int cy)
 
 	// TODO:  在此处添加消息处理程序代码
 	CRect rt; GetClientRect(&rt);
-	//////////////////////////////////////////////////////
 	CWnd *pWnd; CRect *pRt;
+	//////////////////////////////////////////////////////
+	if (pWnd = GetDlgItem(IDC_FILE_PICTURE)) {
+		pRt = new CRect(rt.left + 630, rt.top + 120, rt.left + 750, rt.top + 280);
+		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+	}
+	if (pWnd = GetDlgItem(IDC_BUTTON_CLOSE_FORM01)) {
+		((CButton*)pWnd)->SetBitmap(m_bmpClose);
+	}
+	return;
+
 	if (pWnd = GetDlgItem(IDC_BUTTON_CLOSE_FORM01)) {
 		pRt = new CRect(rt.right - MARGIN_X - 17, rt.top + MARGIN_Y, rt.right - MARGIN_X, rt.top + MARGIN_Y + 17);
 		pWnd->MoveWindow(pRt, FALSE); delete pRt;
