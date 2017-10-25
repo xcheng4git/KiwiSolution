@@ -74,14 +74,17 @@ void CDlgLogin::OnOK()
 		//help->execSQL(ss.str().c_str());
 		//ss.str(""); ss.clear();
 	}
-	else
+	else {
 		m_isLogined = false;
+		GetDlgItem(IDC_STATIC_WRONG)->ShowWindow(SW_SHOW);
+	}
 
 LoginEnd:
 	help->closeDB(); delete help;
 	ss.str("");  ss.clear();
 
-	CDialogEx::OnOK();
+	if (m_isLogined)
+		CDialogEx::OnOK();
 }
 
 
