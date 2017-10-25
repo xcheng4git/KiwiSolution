@@ -21,7 +21,8 @@ public:
 #endif
 #endif
 
-	
+	void QueryAndFillFileForm();
+
 public:
 	   CFont m_fontEdit;
 	   CString m_strCurrentFile;
@@ -43,7 +44,10 @@ public:
 	afx_msg void OnBnClickedButtonCloseForm01();
 	afx_msg void OnBnClickedButtonCloseForm02();
 	// ³õÊ¼»¯º¯Êý
-	BOOL m_radiobtngroup1;
+//	BOOL m_radiobtngroup1;
+	int m_Radio2_1;
+	int m_Radio2_2;
+	int m_Radio2_3;
 };
 
 
