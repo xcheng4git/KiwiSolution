@@ -120,7 +120,7 @@ void CPersonalForm06::OnBnClickedCmdSaveForm()
 #pragma region FillForm7_1
 FillForm7_1 :
 	GetDlgItem(IDC_EDIT78)->GetWindowTextW(strText);
-	if (strText == _T("нч"))
+	if (m_Radio7_0==-1 || strText == _T("нч"))
 	{
 		ss << "update file_form_flags set file_12IfHaveThisSituation=0 where file_id=" << file_id;
 
@@ -151,26 +151,23 @@ FillForm7_1 :
 		}
 	}
 	{
-		ss << "insert into file_form_12_c values(" << file_id << ",";
+		ss << "insert into file_form_12 values(" << file_id << ",";
 
-		ss << m_Radio7_4_0 << ",";
+		ss << m_Radio7_0 << ",";
 
-		GetDlgItem(IDC_EDIT86)->GetWindowTextW(strText);
+		GetDlgItem(IDC_EDIT78)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-
-		ss << m_Radio7_4_1 << ",";
-
-		GetDlgItem(IDC_EDIT87)->GetWindowTextW(strText);
+		GetDlgItem(IDC_EDIT79)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-		GetDlgItem(IDC_EDIT90)->GetWindowTextW(strText);
+		GetDlgItem(IDC_EDIT85)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-		ss << m_Radio7_4 << ",";
-		ss << m_Radio7_5 << ",";
-		ss << m_Radio7_6 << ",";
-		ss << ((CButton *)GetDlgItem(IDC_RADIO58))->GetCheck() << ",";
-		GetDlgItem(IDC_EDIT88)->GetWindowTextW(strText);
+		ss << m_Radio7_1 << ",";
+		ss << m_Radio7_2 << ",";
+		ss << m_Radio7_3 << ",";
+		ss << ((CButton *)GetDlgItem(IDC_RADIO43))->GetCheck() << ",";
+		GetDlgItem(IDC_EDIT83)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-		GetDlgItem(IDC_EDIT89)->GetWindowTextW(strText);
+		GetDlgItem(IDC_EDIT84)->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
 		//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
 		help->execSQL(ss.str().c_str());
