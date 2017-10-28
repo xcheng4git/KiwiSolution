@@ -166,6 +166,7 @@
     <ClInclude Include="PersonalForm24.h" />
     <ClInclude Include="PersonalSummary.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SplashWnd.h" />
     <ClInclude Include="SQLiteHelper.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="PersonalForm23.cpp" />
     <ClCompile Include="PersonalForm24.cpp" />
     <ClCompile Include="PersonalSummary.cpp" />
+    <ClCompile Include="SplashWnd.cpp" />
     <ClCompile Include="SQLiteHelper.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -242,6 +244,7 @@
     <Image Include="res\icon8.ico" />
     <Image Include="res\KiwiSdiExec.ico" />
     <Image Include="res\KiwiSdiExecDoc.ico" />
+    <Image Include="res\splash.bmp" />
     <Image Include="res\Toolbar.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

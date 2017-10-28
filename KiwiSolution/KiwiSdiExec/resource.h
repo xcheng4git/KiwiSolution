@@ -54,6 +54,9 @@
 #define IDD_PERSONAL_FORM23             350
 #define IDD_PERSONAL_FORM24             351
 #define IDD_DIALOG_LOGIN                352
+#define IDB_SPLASH                      353
+#define IDB_BITMAP1                     354
+#define IDB_BMP_SPLASH                  354
 #define IDC_EDIT_TEST                   1011
 #define IDC_LIST_SHORTCUT               1012
 #define IDC_TREE_ORGNIZATION            1013
@@ -797,6 +800,7 @@
 #define IDC_STATIC_FORM01_HEADER        1504
 #define IDC_STATIC_FORM02_HEADER1       1505
 #define IDC_STATIC_FORM02_HEADER2       1506
+#define IDC_STATIC_WRONG                1507
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 
@@ -804,9 +808,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        353
+#define _APS_NEXT_RESOURCE_VALUE        355
 #define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1507
+#define _APS_NEXT_CONTROL_VALUE         1508
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

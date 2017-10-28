@@ -35,6 +35,8 @@
 #include "PersonalForm23.h"
 #include "PersonalForm24.h"
 
+#include "SplashWnd.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -115,6 +117,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	paneShortcut->SetOptions(xtpPaneNoCloseable | xtpPaneNoFloatable | xtpPaneNoDockable | xtpPaneNoHideable);
 	paneShortcut->SetMaxTrackSize(CSize(240, 100)); paneShortcut->SetMinTrackSize(CSize(240, 100));
 
+	
 	return 0;
 }
 

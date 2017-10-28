@@ -12,6 +12,7 @@
 #include "KiwiSdiExecView.h"
 
 #include "DlgLogin.h"
+#include "SplashWnd.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -99,12 +100,11 @@ BOOL CKiwiSdiExecApp::InitInstance()
 		return FALSE;
 	AddDocTemplate(pDocTemplate);
 
-
 	// 分析标准 shell 命令、DDE、打开文件操作的命令行
 	CCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
 
-	m_nCmdShow = SW_SHOWMAXIMIZED;
+	//m_nCmdShow = SW_SHOWMAXIMIZED;
 	// 启用“DDE 执行”
 	EnableShellOpen();
 	RegisterShellFileTypes(TRUE);
@@ -115,10 +115,22 @@ BOOL CKiwiSdiExecApp::InitInstance()
 	if (!ProcessShellCommand(cmdInfo))
 		return FALSE;
 
+	m_pMainWnd->ShowWindow(SW_HIDE);
+	//CSplashWnd::EnableSplashScreen(cmdInfo.m_bShowSplash);
+	//CSplashWnd::ShowSplashScreen(m_pMainWnd);
+	
 	CDlgLogin dlgLogin;
 	dlgLogin.DoModal();
-	if ( !dlgLogin.m_isLogined)
+	if (!dlgLogin.m_isLogined)
 		exit(0);
+
+	int width = GetSystemMetrics(SM_CXSCREEN);
+	if (width > 1024) {
+		HWND hWnd = AfxGetApp()->GetMainWnd()->GetSafeHwnd();
+		SetWindowPos(hWnd, HWND_NOTOPMOST, 100, 100, 1130, 900, SWP_NOMOVE);
+	}
+
+
 
 	// 唯一的一个窗口已初始化，因此显示它并对其进行更新
 	m_pMainWnd->ShowWindow(SW_SHOW);
@@ -182,3 +194,15 @@ void CKiwiSdiExecApp::OnAppAbout()
 
 
 
+
+
+BOOL CKiwiSdiExecApp::PreTranslateMessage(MSG* pMsg)
+{
+	// TODO:  在此添加专用代码和/或调用基类
+	if (CSplashWnd::PreTranslateAppMessage(pMsg))
+
+		return TRUE;
+
+
+	return CWinApp::PreTranslateMessage(pMsg);
+}

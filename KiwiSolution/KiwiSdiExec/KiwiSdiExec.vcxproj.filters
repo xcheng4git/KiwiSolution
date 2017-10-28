@@ -216,6 +216,9 @@
     <ClInclude Include="DlgLogin.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="SplashWnd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KiwiSdiExec.cpp">
@@ -335,6 +338,9 @@
     <ClCompile Include="DlgLogin.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="SplashWnd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="KiwiSdiExec.reg" />
@@ -406,6 +412,9 @@
       <Filter>资源文件</Filter>
     </Image>
     <Image Include="res\ico00001.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\splash.bmp">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>
