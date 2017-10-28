@@ -25,6 +25,7 @@ CDlgLogin::CDlgLogin(CWnd* pParent /*=NULL*/)
 
 CDlgLogin::~CDlgLogin()
 {
+	m_bitmap.DeleteObject();
 }
 
 void CDlgLogin::DoDataExchange(CDataExchange* pDX)
@@ -36,6 +37,7 @@ void CDlgLogin::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CDlgLogin, CDialogEx)
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -93,4 +95,37 @@ void CDlgLogin::OnCancel()
 	// TODO:  在此添加专用代码和/或调用基类
 	exit(0);
 	CDialogEx::OnCancel();
+}
+
+
+void CDlgLogin::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+	// TODO:  在此处添加消息处理程序代码
+	// 不为绘图消息调用 CDialogEx::OnPaint()
+	CDC dcImg;
+
+	if (!dcImg.CreateCompatibleDC(&dc))
+		return;
+
+	BITMAP bm;
+	m_bitmap.GetBitmap(&bm);
+	// paint the image
+	CBitmap* pOldBit = dcImg.SelectObject(&m_bitmap);
+	dc.BitBlt(0, 0, bm.bmWidth, bm.bmHeight, &dcImg, 0, 0, SRCCOPY);
+	dcImg.SelectObject(pOldBit);
+
+}
+
+
+BOOL CDlgLogin::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+
+	// TODO:  在此添加额外的初始化
+	if (!m_bitmap.LoadBitmap(IDB_BMP_SPLASH))
+		return FALSE;
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+	// 异常:  OCX 属性页应返回 FALSE
 }

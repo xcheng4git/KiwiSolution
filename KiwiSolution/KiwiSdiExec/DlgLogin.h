@@ -17,6 +17,7 @@ public:
 	bool m_isLogined;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	CBitmap m_bitmap;
 
 	DECLARE_MESSAGE_MAP()
 	virtual void OnOK();
@@ -24,4 +25,6 @@ protected:
 public:
 	CString m_strUsername;
 	CString m_strUserpwd;
+	afx_msg void OnPaint();
+	virtual BOOL OnInitDialog();
 };
