@@ -122,6 +122,44 @@ void CPersonalForm20::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 
 	// TODO:  在此添加专用代码和/或调用基类
-	GetDlgItem(IDC_EDIT237)->SetFont(&m_fontEdit);
-	GetDlgItem(IDC_EDIT58)->SetFont(&m_fontEdit);
+	//GetDlgItem(IDC_EDIT237)->SetFont(&m_fontEdit);
+	//GetDlgItem(IDC_EDIT58)->SetFont(&m_fontEdit);
+
+	/************/
+
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str("");
+
+	GetDlgItem(IDC_EDIT58)->SetWindowTextW(CA2W(re[1 * col + 0], CP_UTF8));
+	ss << "select * from file_form_26 where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		help->closeDB(); delete help;
+		return;
+	}
+
+
+	//GetDlgItem(IDC_EDIT58)->SetWindowTextW(_T("hllo world"));
+	GetDlgItem(IDC_EDIT237)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+	GetDlgItem(IDC_EDIT58)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
+	ss.str(""); ss.clear();
+	help->closeDB();
+	delete help;
+
+	/************/
+
+
+
 }
