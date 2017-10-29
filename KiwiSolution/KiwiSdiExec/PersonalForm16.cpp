@@ -189,7 +189,6 @@ void CPersonalForm16::OnInitialUpdate()
 	int file_id = atoi(re[1 * col + 0]);
 	ss.str("");
 
-	GetDlgItem(IDC_EDIT58)->SetWindowTextW(CA2W(re[1 * col + 0], CP_UTF8));
 	ss << "select * from file_form_22 where file_id=" << file_id << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 
