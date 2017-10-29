@@ -167,6 +167,7 @@ void CPersonalForm17::OnInitialUpdate()
 		return;
 	}
 	
+
 	//GetDlgItem(IDC_EDIT58)->SetWindowTextW(_T("hllo world"));
 	GetDlgItem(IDC_EDIT58)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
 
