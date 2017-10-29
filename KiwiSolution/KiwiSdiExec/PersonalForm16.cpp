@@ -175,7 +175,6 @@ void CPersonalForm16::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 
 	// TODO:  在此添加专用代码和/或调用基类
-	/************/
 
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
@@ -214,33 +213,8 @@ void CPersonalForm16::OnInitialUpdate()
 			GetDlgItem(Parameters[i][j])->SetWindowTextW(CA2W(re[(i+1) * col + (j+1)], CP_UTF8));
 		}
 	}
-	/*
-	//GetDlgItem(IDC_EDIT58)->SetWindowTextW(_T("hllo world"));
-	GetDlgItem(IDC_EDIT55)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
-	GetDlgItem(IDC_EDIT56)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
-	GetDlgItem(IDC_EDIT58)->SetWindowTextW(CA2W(re[1 * col + 3], CP_UTF8));
-	GetDlgItem(IDC_EDIT203)->SetWindowTextW(CA2W(re[1 * col + 4], CP_UTF8));
-	GetDlgItem(IDC_EDIT212)->SetWindowTextW(CA2W(re[1 * col + 5], CP_UTF8));
-	GetDlgItem(IDC_EDIT221)->SetWindowTextW(CA2W(re[1 * col + 6], CP_UTF8));
-
-	GetDlgItem(IDC_EDIT90)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
-	GetDlgItem(IDC_EDIT92)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
-	GetDlgItem(IDC_EDIT94)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
-	GetDlgItem(IDC_EDIT204)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
-	GetDlgItem(IDC_EDIT213)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
-	GetDlgItem(IDC_EDIT222)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
-
-	GetDlgItem(IDC_EDIT182)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
-	GetDlgItem(IDC_EDIT189)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
-	GetDlgItem(IDC_EDIT196)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
-	GetDlgItem(IDC_EDIT205)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
-	GetDlgItem(IDC_EDIT214)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
-	GetDlgItem(IDC_EDIT58)->SetWindowTextW(_T("gaoziteng"));
-	*/
-
+	
 	ss.str(""); ss.clear();
 	help->closeDB();
 	delete help;
-
-	/************/
 }
