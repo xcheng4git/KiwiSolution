@@ -162,6 +162,6 @@ void CPersonalForm19::OnInitialUpdate()
 	GetDlgItem(IDC_EDIT58)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
 
 	help->closeDB();
-	delete help;
+	delete help;//+++++++
 
 }
