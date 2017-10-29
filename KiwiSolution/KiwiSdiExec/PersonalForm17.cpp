@@ -161,6 +161,8 @@ void CPersonalForm17::OnInitialUpdate()
 	ss << "select * from file_form_23 where file_id=" << file_id << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	
+
+
 	if (row < 1) {
 		ss.str(""); ss.clear();
 		help->closeDB(); delete help;
@@ -170,8 +172,6 @@ void CPersonalForm17::OnInitialUpdate()
 	//GetDlgItem(IDC_EDIT58)->SetWindowTextW(_T("hllo world"));
 	GetDlgItem(IDC_EDIT58)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
 
-
-	
 	ss.str(""); ss.clear();
 	help->closeDB();
 	delete help;
