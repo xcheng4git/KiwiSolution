@@ -161,8 +161,6 @@ void CPersonalForm17::OnInitialUpdate()
 	ss << "select * from file_form_23 where file_id=" << file_id << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	
-
-
 	if (row < 1) {
 		ss.str(""); ss.clear();
 		help->closeDB(); delete help;
