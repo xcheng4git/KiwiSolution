@@ -131,15 +131,15 @@ FillForm16 :
 		ss << "'" << strText << "',"; strText.ReleaseBuffer();
 
 		GetDlgItem(Parameters[i][1])->GetWindowTextW(strText); strText.Trim();
-		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 		GetDlgItem(Parameters[i][2])->GetWindowTextW(strText); strText.Trim();
-		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 		GetDlgItem(Parameters[i][3])->GetWindowTextW(strText); strText.Trim();
-		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 		GetDlgItem(Parameters[i][4])->GetWindowTextW(strText); strText.Trim();
 		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
 		GetDlgItem(Parameters[i][5])->GetWindowTextW(strText); strText.Trim();
-		ss << "'" << strText << "')"; strText.ReleaseBuffer();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
 
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
@@ -167,4 +167,80 @@ void CPersonalForm16::OnBnClickedButtonCloseForm3()
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
 	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
+}
+
+
+void CPersonalForm16::OnInitialUpdate()
+{
+	CFormView::OnInitialUpdate();
+
+	// TODO:  在此添加专用代码和/或调用基类
+	/************/
+
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str("");
+
+	GetDlgItem(IDC_EDIT58)->SetWindowTextW(CA2W(re[1 * col + 0], CP_UTF8));
+	ss << "select * from file_form_22 where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		help->closeDB(); delete help;
+		return;
+	}
+
+	int Parameters[9][6] = { { IDC_EDIT55, IDC_EDIT56, IDC_EDIT58, IDC_EDIT203, IDC_EDIT212, IDC_EDIT221 },
+	{ IDC_EDIT90, IDC_EDIT92, IDC_EDIT94, IDC_EDIT204, IDC_EDIT213, IDC_EDIT222 },
+	{ IDC_EDIT182, IDC_EDIT189, IDC_EDIT196, IDC_EDIT205, IDC_EDIT214, IDC_EDIT223 },
+	{ IDC_EDIT183, IDC_EDIT190, IDC_EDIT197, IDC_EDIT206, IDC_EDIT215, IDC_EDIT224 },
+	{ IDC_EDIT184, IDC_EDIT191, IDC_EDIT198, IDC_EDIT207, IDC_EDIT216, IDC_EDIT225 },
+	{ IDC_EDIT185, IDC_EDIT192, IDC_EDIT199, IDC_EDIT208, IDC_EDIT217, IDC_EDIT226 },
+	{ IDC_EDIT186, IDC_EDIT193, IDC_EDIT200, IDC_EDIT209, IDC_EDIT218, IDC_EDIT227 },
+	{ IDC_EDIT187, IDC_EDIT194, IDC_EDIT201, IDC_EDIT210, IDC_EDIT219, IDC_EDIT228 },
+	{ IDC_EDIT188, IDC_EDIT195, IDC_EDIT202, IDC_EDIT211, IDC_EDIT220, IDC_EDIT229 } };
+	for (int i = 0; i < 9; i++){
+		for (int j = 0; j < 6; j++){
+			GetDlgItem(Parameters[i][j])->SetWindowTextW(CA2W(re[(i+1) * col + (j+1)], CP_UTF8));
+		}
+	}
+	/*
+	//GetDlgItem(IDC_EDIT58)->SetWindowTextW(_T("hllo world"));
+	GetDlgItem(IDC_EDIT55)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+	GetDlgItem(IDC_EDIT56)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
+	GetDlgItem(IDC_EDIT58)->SetWindowTextW(CA2W(re[1 * col + 3], CP_UTF8));
+	GetDlgItem(IDC_EDIT203)->SetWindowTextW(CA2W(re[1 * col + 4], CP_UTF8));
+	GetDlgItem(IDC_EDIT212)->SetWindowTextW(CA2W(re[1 * col + 5], CP_UTF8));
+	GetDlgItem(IDC_EDIT221)->SetWindowTextW(CA2W(re[1 * col + 6], CP_UTF8));
+
+	GetDlgItem(IDC_EDIT90)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+	GetDlgItem(IDC_EDIT92)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+	GetDlgItem(IDC_EDIT94)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+	GetDlgItem(IDC_EDIT204)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+	GetDlgItem(IDC_EDIT213)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+	GetDlgItem(IDC_EDIT222)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+
+	GetDlgItem(IDC_EDIT182)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+	GetDlgItem(IDC_EDIT189)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+	GetDlgItem(IDC_EDIT196)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+	GetDlgItem(IDC_EDIT205)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+	GetDlgItem(IDC_EDIT214)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+	GetDlgItem(IDC_EDIT58)->SetWindowTextW(_T("gaoziteng"));
+	*/
+
+	ss.str(""); ss.clear();
+	help->closeDB();
+	delete help;
+
+	/************/
 }
