@@ -21,6 +21,8 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 #endif
+	CFont m_fontText;
+	CBitmap m_bmpClose;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
@@ -32,7 +34,6 @@ public:
 	CString m_strBox2;
 	CString m_strCurrentFile;
 	CString m_strCurrentFolder;
-	CBitmap m_bmpClose;
 protected:
 	
 public:
@@ -40,6 +41,7 @@ public:
 	CXTPListCtrl m_listSummary2;
 	virtual void OnInitialUpdate();
 	afx_msg void OnClickedButtonClose();
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 };
 
 

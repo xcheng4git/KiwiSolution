@@ -17,11 +17,15 @@ CPersonalSummary::CPersonalSummary()
 	: CFormView(CPersonalSummary::IDD)
 	, m_strHeader(_T(""))
 {
+	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 15;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
+	m_fontText.CreateFontIndirect(&lf);
+
 	m_bmpClose.LoadBitmap(IDB_BITMAP_CLOSE);
 }
 
 CPersonalSummary::~CPersonalSummary()
 {
+	m_fontText.DeleteObject();
 	m_bmpClose.DeleteObject();
 }
 
@@ -37,6 +41,7 @@ void CPersonalSummary::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CPersonalSummary, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE, &CPersonalSummary::OnClickedButtonClose)
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
@@ -70,20 +75,28 @@ void CPersonalSummary::OnInitialUpdate()
 	m_strHeader.Format(_T("%s %s 的廉政档案"), m_strCurrentFolder, m_strCurrentFile);
 	m_strBox1.Format(_T("1.基本情况"));
 	m_strBox2.Format(_T("2.廉政电子档案"));
+	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE))->SetBitmap(m_bmpClose);
+	UpdateData(FALSE);
 
-	//表1
+	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 20;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 700;
+	CFont font1; font1.CreateFontIndirect(&lf);
+	GetDlgItem(IDC_STATIC_HEADER)->SetFont(&font1); font1.DeleteObject();
+
+	GetDlgItem(IDC_STATICBOX1)->SetFont(&m_fontText);
+	GetDlgItem(IDC_STATICBOX2)->SetFont(&m_fontText);
+	GetDlgItem(IDC_STATIC_ERROR_MSG)->SetFont(&m_fontText);
+
 	// TODO:  在此添加专用代码和/或调用基类
 	m_listSummary1.DeleteAllItems();
 
-	m_listSummary1.InsertColumn(0, _T("状态"), LVCFMT_LEFT, 100);
-	m_listSummary1.InsertColumn(1, _T("身份证"), LVCFMT_LEFT, 100);
-	m_listSummary1.InsertColumn(2, _T("出身日期"), LVCFMT_LEFT, 100);
-	m_listSummary1.InsertColumn(3, _T("年龄"), LVCFMT_LEFT, 100);
-	m_listSummary1.InsertColumn(4, _T("籍贯"), LVCFMT_LEFT, 100);
-	m_listSummary1.InsertColumn(5, _T("学历"), LVCFMT_LEFT, 100);
-	m_listSummary1.InsertColumn(6, _T("政治面貌"), LVCFMT_LEFT, 100);
-	m_listSummary1.InsertColumn(7, _T("职级"), LVCFMT_LEFT, 100);
-	m_listSummary1.InsertColumn(8, _T("单位及职务"), LVCFMT_LEFT, 100);
+	m_listSummary1.InsertColumn(0, _T("性别"), LVCFMT_CENTER, 40);
+	m_listSummary1.InsertColumn(1, _T("婚姻状态"), LVCFMT_CENTER, 60);
+	m_listSummary1.InsertColumn(2, _T("年龄"), LVCFMT_CENTER, 40);
+	m_listSummary1.InsertColumn(3, _T("籍贯"), LVCFMT_CENTER, 100);
+	m_listSummary1.InsertColumn(4, _T("学历"), LVCFMT_CENTER, 100);
+	m_listSummary1.InsertColumn(5, _T("政治面貌"), LVCFMT_CENTER, 100);
+	m_listSummary1.InsertColumn(6, _T("单位"), LVCFMT_CENTER, 200);
+	m_listSummary1.InsertColumn(7, _T("职务及任现职时间"), LVCFMT_CENTER, 200);
 	//m_listCtrl01.SetExtendedStyle(LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT |
 	//	LVS_EDITLABELS | LVS_EX_SUBITEMIMAGES);
 
@@ -103,12 +116,15 @@ void CPersonalSummary::OnInitialUpdate()
 	int file_id = atoi(re[1 * col + 0]);
 	ss.str("");
 	
-	ss << "select * from list_summary_1 where file_id=" << file_id << ";";
+	ss << "select file_gender,file_birth_date,file_birth_place," << 
+		"file_full_educate_degree,file_part_educate_degree," << 
+		"file_party, file_work_unit, file_current_position from file_form_01 where file_id=" << file_id << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 
 	if (row < 1) {
 		ss.str(""); ss.clear();
 		help->closeDB(); delete help;
+		GetDlgItem(IDC_STATIC_ERROR_MSG)->ShowWindow(SW_SHOW);
 		return;
 	}
 
@@ -116,15 +132,18 @@ void CPersonalSummary::OnInitialUpdate()
 	char *file_state, *file_IDCard, *file_birthday, *file_age, *file_NativePlace, *file_EducationBackground, *file_PoliticalStatus, *file_rank, *file_UnitsAndDuties;
 
 	file_state = re[col + 1]; file_IDCard = re[col + 2]; file_birthday = re[col + 3]; file_age = re[col + 4]; file_NativePlace = re[col + 5]; file_EducationBackground = re[col + 6]; file_PoliticalStatus = re[col + 7]; file_rank = re[col + 8]; file_UnitsAndDuties = re[col + 9];
-	m_listSummary1.InsertItem(iItem, CA2W(file_state, CP_UTF8));
-	m_listSummary1.SetItem(iItem, 1, LVIF_TEXT, CA2W(file_IDCard, CP_UTF8), 0, NULL, NULL, NULL);
-	m_listSummary1.SetItem(iItem, 2, LVIF_TEXT, CA2W(file_birthday, CP_UTF8), 0, NULL, NULL, NULL);
-	m_listSummary1.SetItem(iItem, 3, LVIF_TEXT, CA2W(file_age, CP_UTF8), 0, NULL, NULL, NULL);
-	m_listSummary1.SetItem(iItem, 4, LVIF_TEXT, CA2W(file_NativePlace, CP_UTF8), 0, NULL, NULL, NULL);
-	m_listSummary1.SetItem(iItem, 5, LVIF_TEXT, CA2W(file_EducationBackground, CP_UTF8), 0, NULL, NULL, NULL);
-	m_listSummary1.SetItem(iItem, 6, LVIF_TEXT, CA2W(file_PoliticalStatus, CP_UTF8), 0, NULL, NULL, NULL);
-	m_listSummary1.SetItem(iItem, 7, LVIF_TEXT, CA2W(file_rank, CP_UTF8), 0, NULL, NULL, NULL);
-	m_listSummary1.SetItem(iItem, 8, LVIF_TEXT, CA2W(file_UnitsAndDuties, CP_UTF8), 0, NULL, NULL, NULL);
+	m_listSummary1.InsertItem(iItem, CA2W(re[1*col+0], CP_UTF8));
+
+	//m_listSummary1.SetItem(iItem, 1, LVIF_TEXT, CA2W(file_IDCard, CP_UTF8), 0, NULL, NULL, NULL);
+	//m_listSummary1.SetItem(iItem, 2, LVIF_TEXT, CA2W(file_birthday, CP_UTF8), 0, NULL, NULL, NULL);
+
+	m_listSummary1.SetItem(iItem, 3, LVIF_TEXT, CA2W(re[1 * col + 2], CP_UTF8), 0, NULL, NULL, NULL);
+
+	//m_listSummary1.SetItem(iItem, 4, LVIF_TEXT, CA2W(re[1 * col + 4], CP_UTF8), 0, NULL, NULL, NULL);
+
+	m_listSummary1.SetItem(iItem, 5, LVIF_TEXT, CA2W(re[1 * col + 5], CP_UTF8), 0, NULL, NULL, NULL);
+	m_listSummary1.SetItem(iItem, 6, LVIF_TEXT, CA2W(re[1 * col + 6], CP_UTF8), 0, NULL, NULL, NULL);
+	m_listSummary1.SetItem(iItem, 7, LVIF_TEXT, CA2W(re[1 * col + 7], CP_UTF8), 0, NULL, NULL, NULL);
 
 
 
@@ -142,7 +161,7 @@ void CPersonalSummary::OnInitialUpdate()
 	m_listSummary2.InsertColumn(0, _T("类型"), LVCFMT_LEFT, 100);
 	m_listSummary2.InsertColumn(1, _T("档案名称"), LVCFMT_LEFT, 100);
 	m_listSummary2.InsertColumn(2, _T("备注"), LVCFMT_LEFT, 100);
-	m_listSummary2.InsertColumn(3, _T("建党日期"), LVCFMT_LEFT, 100);
+	m_listSummary2.InsertColumn(3, _T("建档日期"), LVCFMT_LEFT, 100);
 	m_listSummary2.InsertColumn(4, _T("最后修改日期"), LVCFMT_LEFT, 100);
 	m_listSummary2.InsertColumn(5, _T("上报日期"), LVCFMT_LEFT, 100);
 	m_listSummary2.InsertColumn(6, _T("操作"), LVCFMT_LEFT, 100);
@@ -162,9 +181,6 @@ void CPersonalSummary::OnInitialUpdate()
 	//	m_listSummary1.ModifyExtendedStyle(LVS_EX_GRIDLINES, LVS_EX_GRIDLINES);
 	m_listSummary2.ModifyExtendedStyle(LVS_EX_GRIDLINES, LVS_EX_GRIDLINES);
 
-	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE))->SetBitmap(m_bmpClose);
-
-	UpdateData(FALSE);
 }
 
 
@@ -175,4 +191,17 @@ void CPersonalSummary::OnClickedButtonClose()
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
 	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
+}
+
+
+HBRUSH CPersonalSummary::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CFormView::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	// TODO:  在此更改 DC 的任何特性
+	if (pWnd->GetDlgCtrlID() == IDC_STATIC_ERROR_MSG)
+		pDC->SetTextColor(RGB(255, 0, 0));//修改字体的颜色
+
+	// TODO:  如果默认的不是所需画笔，则返回另一个画笔
+	return hbr;
 }
