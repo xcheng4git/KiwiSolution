@@ -22,14 +22,23 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 #endif
-
+	CFont m_fontText;
+	CBitmap m_bmpClose;
 protected:
+	int GetFilledFormNumber(int file_id);
+
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 
 	DECLARE_MESSAGE_MAP()
 public:
 	CListCtrl m_listQuery;
 	CComboBox m_comboFolders;
+	virtual void OnInitialUpdate();
+	afx_msg void OnBnClickedButtonQueryByfolder();
+	afx_msg void OnCbnSelchangeComboFolders();
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	afx_msg void OnCbnDropdownComboFolders();
+	afx_msg void OnBnClickedButtonCloseForm();
 };
 
 
