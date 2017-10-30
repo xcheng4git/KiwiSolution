@@ -809,6 +809,7 @@
 #define IDC_STATIC_ERROR_MSG            1512
 #define IDC_COMBO1                      1513
 #define IDC_COMBO_GENDER                1513
+#define IDC_STATIC_ERR                  1514
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 #define ID_Menu                         32773
@@ -820,7 +821,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        356
 #define _APS_NEXT_COMMAND_VALUE         32775
-#define _APS_NEXT_CONTROL_VALUE         1514
+#define _APS_NEXT_CONTROL_VALUE         1515
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
