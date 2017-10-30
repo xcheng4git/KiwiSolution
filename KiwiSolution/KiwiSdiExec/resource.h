@@ -803,9 +803,12 @@
 #define IDC_STATIC_FORM02_HEADER2       1506
 #define IDC_STATIC_WRONG                1507
 #define IDC_COMBO_FOLDERS               1508
-#define IDC_BUTTON1                     1509
 #define IDC_BUTTON_CLOSE_FORM           1509
 #define IDC_STATIC_QUERY_HEADER         1510
+#define IDC_BUTTON_QUERY_BYFOLDER       1511
+#define IDC_STATIC_ERROR_MSG            1512
+#define IDC_COMBO1                      1513
+#define IDC_COMBO_GENDER                1513
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 #define ID_Menu                         32773
@@ -817,7 +820,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        356
 #define _APS_NEXT_COMMAND_VALUE         32775
-#define _APS_NEXT_CONTROL_VALUE         1511
+#define _APS_NEXT_CONTROL_VALUE         1514
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
