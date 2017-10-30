@@ -95,6 +95,7 @@ public:
 
 	CBitmap m_bmpClose;
 	afx_msg void OnClickedButtonCloseForm01();
+	CComboBox m_comboGender;
 };
 
 #define MARGIN_X 20

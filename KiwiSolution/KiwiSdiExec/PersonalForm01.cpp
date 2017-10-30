@@ -184,7 +184,7 @@ void CPersonalForm01::QueryAndFillFileForm()
 		return;
 	}
 
-	GetDlgItem(IDC_EDIT_GENDER)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
+	GetDlgItem(IDC_COMBO_GENDER)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
 	GetDlgItem(IDC_EDIT_NATION)->SetWindowTextW(CA2W(re[1 * col + 3], CP_UTF8));
 
 	GetDlgItem(IDC_EDIT_BIRTH_PLACE)->SetWindowTextW(CA2W(re[1 * col + 4], CP_UTF8));
@@ -244,6 +244,7 @@ void CPersonalForm01::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO_BIRTHDAY, m_ctrlBirthday);
 	//  DDX_Control(pDX, IDC_FILE_PICTURE, m_picFile);
 	DDX_Control(pDX, IDC_FILE_PICTURE, m_picFile);
+	DDX_Control(pDX, IDC_COMBO_GENDER, m_comboGender);
 }
 
 BEGIN_MESSAGE_MAP(CPersonalForm01, CFormView)
@@ -293,7 +294,10 @@ void CPersonalForm01::OnInitialUpdate()
 	GetDlgItem(IDC_EDIT_NAME)->SetFont(&m_fontEdit);
 	GetDlgItem(IDC_EDIT_NAME)->SetWindowTextW(m_strCurrentFile);
 
-	GetDlgItem(IDC_EDIT_GENDER)->SetFont(&m_fontEdit);
+	GetDlgItem(IDC_COMBO_GENDER)->SetFont(&m_fontEdit);
+	CComboBox *pCombo1 = (CComboBox*)GetDlgItem(IDC_COMBO_GENDER);
+	pCombo1->AddString(_T("ÄÐ")); pCombo1->AddString(_T("Å®"));
+
 	GetDlgItem(IDC_EDIT_NATION)->SetFont(&m_fontEdit);
 	GetDlgItem(IDC_EDIT_BIRTH_PLACE)->SetFont(&m_fontEdit);
 	GetDlgItem(IDC_COMBO_BIRTHDAY)->SetFont(&m_fontEdit);
@@ -555,7 +559,7 @@ void CPersonalForm01::OnClickedCmdSaveForm()
 	ss << "insert into file_form_01 values(" << file_id << ",";
 	GetDlgItem(IDC_EDIT_NAME)->GetWindowTextW(strText);
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_EDIT_GENDER)->GetWindowTextW(strText);
+	GetDlgItem(IDC_COMBO_GENDER)->GetWindowTextW(strText);
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 	GetDlgItem(IDC_EDIT_NATION)->GetWindowTextW(strText);
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
