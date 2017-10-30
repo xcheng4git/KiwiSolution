@@ -37,6 +37,8 @@
 
 #include "SplashWnd.h"
 
+#include "QueryByFolder.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -54,6 +56,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_TOOL_FULLSCREEN, &CMainFrame::OnToolFullscreen)
 	ON_UPDATE_COMMAND_UI(ID_TOOL_FULLSCREEN, &CMainFrame::OnUpdateToolFullscreen)
 	ON_MESSAGE(WM_SHOW_DEFAULT_SUMMARY, &CMainFrame::OnShowDefaultSummary)
+	ON_COMMAND(ID_QUERY_BY_FOLDER, &CMainFrame::OnQueryByFolder)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -391,8 +394,10 @@ afx_msg LRESULT CMainFrame::OnCreatePersonalForm(WPARAM wParam, LPARAM lParam)
 		return 0;
 
 	}
-		return 0;
+		
 	}
+
+	return 0;
 }
 
 
@@ -461,9 +466,10 @@ void CMainFrame::OnUpdateToolFullscreen(CCmdUI *pCmdUI)
 
 afx_msg LRESULT CMainFrame::OnShowDefaultSummary(WPARAM wParam, LPARAM lParam)
 {
-	CString *folder = (CString *)lParam;
-	m_wndPaneShortcut.m_strCurrentFolder.Format(_T("%s"), *folder); //delete folder;
-
+	if (lParam != NULL) {
+		CString *folder = (CString *)lParam;
+		m_wndPaneShortcut.m_strCurrentFolder.Format(_T("%s"), *folder); //delete folder;
+	}
 	CView* pView = CreatePersonalForm(RUNTIME_CLASS(CKiwiSdiExecView), IDD_KIWISDIEXEC_FORM);
 	pView->OnInitialUpdate();
 
@@ -471,4 +477,14 @@ afx_msg LRESULT CMainFrame::OnShowDefaultSummary(WPARAM wParam, LPARAM lParam)
 	//考虑把其他的窗口的关闭,销毁
 
 	return 0;
+}
+
+
+void CMainFrame::OnQueryByFolder()
+{
+	CView* pView = CreatePersonalForm(RUNTIME_CLASS(CQueryByFolder), IDD_DIALOG_QUERY_BYFOLDER);
+	pView->OnInitialUpdate();
+
+	//////////////////////////////////////
+	//考虑把其他的窗口的关闭,销毁
 }
