@@ -165,6 +165,7 @@
     <ClInclude Include="PersonalForm23.h" />
     <ClInclude Include="PersonalForm24.h" />
     <ClInclude Include="PersonalSummary.h" />
+    <ClInclude Include="QueryByFolder.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SplashWnd.h" />
     <ClInclude Include="SQLiteHelper.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="PersonalForm23.cpp" />
     <ClCompile Include="PersonalForm24.cpp" />
     <ClCompile Include="PersonalSummary.cpp" />
+    <ClCompile Include="QueryByFolder.cpp" />
     <ClCompile Include="SplashWnd.cpp" />
     <ClCompile Include="SQLiteHelper.cpp" />
     <ClCompile Include="stdafx.cpp">
