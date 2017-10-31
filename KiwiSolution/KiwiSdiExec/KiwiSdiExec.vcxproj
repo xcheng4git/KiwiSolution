@@ -105,6 +105,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ButtonEx.h" />
     <ClInclude Include="DatePickerCombo.h" />
     <ClInclude Include="DlgLogin.h" />
     <ClInclude Include="DlgNewFile.h" />
@@ -113,6 +114,7 @@
     <ClInclude Include="KiwiSdiExec.h" />
     <ClInclude Include="KiwiSdiExecDoc.h" />
     <ClInclude Include="KiwiSdiExecView.h" />
+    <ClInclude Include="ListCtrlEx.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="msword\CApplication.h" />
     <ClInclude Include="msword\CBookmark0.h" />
@@ -174,6 +176,7 @@
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ButtonEx.cpp" />
     <ClCompile Include="DatePickerCombo.cpp" />
     <ClCompile Include="DlgLogin.cpp" />
     <ClCompile Include="DlgNewFile.cpp" />
@@ -182,6 +185,7 @@
     <ClCompile Include="KiwiSdiExec.cpp" />
     <ClCompile Include="KiwiSdiExecDoc.cpp" />
     <ClCompile Include="KiwiSdiExecView.cpp" />
+    <ClCompile Include="ListCtrlEx.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="PaneOrgnization.cpp" />
     <ClCompile Include="PaneShortcut.cpp" />
