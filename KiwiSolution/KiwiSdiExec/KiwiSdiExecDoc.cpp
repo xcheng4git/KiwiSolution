@@ -13,6 +13,8 @@
 
 #include <propkey.h>
 
+#include "SQLiteHelper.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -30,11 +32,160 @@ END_MESSAGE_MAP()
 CKiwiSdiExecDoc::CKiwiSdiExecDoc()
 {
 	// TODO:  在此添加一次性构造代码
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
 
+	char *sql1 = "select type_serial, type_name from form_type;";
+	int row, col;
+	char *eee = "i";
+	char **result = &eee;
+	char **re = help->rawQuery(sql1, &row, &col, result); //row 是查出多少行记录,col是每条记录多少个字段
+
+
+	std::vector<wchar_t*> vFormByTables;
+	
+	vFormByTables.push_back(_T("表1"));
+	vFormByTables.push_back(CA2W(re[1*col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_01"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+	
+	vFormByTables.push_back(_T("表2-1"));
+	vFormByTables.push_back(CA2W(re[2 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_02"));
+	vFormByTables.push_back(_T("file_form_03"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-2"));
+	vFormByTables.push_back(CA2W(re[3 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_04"));
+	vFormByTables.push_back(_T("file_form_05"));
+	vFormByTables.push_back(_T("file_form_06"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-3"));
+	vFormByTables.push_back(CA2W(re[4 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_07"));
+	vFormByTables.push_back(_T("file_form_08"));
+	vFormByTables.push_back(_T("file_form_09"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-4"));
+	vFormByTables.push_back(CA2W(re[5 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_10"));
+	vFormByTables.push_back(_T("file_form_11"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-5"));
+	vFormByTables.push_back(CA2W(re[6 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_12"));
+	vFormByTables.push_back(_T("file_form_12_c"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-6"));
+	vFormByTables.push_back(CA2W(re[7 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_12_c"));
+	vFormByTables.push_back(_T("file_form_13"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-7"));
+	vFormByTables.push_back(CA2W(re[8 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_14"));
+	vFormByTables.push_back(_T("file_form_15"));
+	vFormByTables.push_back(_T("file_form_16"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-8"));
+	vFormByTables.push_back(CA2W(re[9 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_16"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-9"));
+	vFormByTables.push_back(CA2W(re[10 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_17"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-10"));
+	vFormByTables.push_back(CA2W(re[11 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_17"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-11"));
+	vFormByTables.push_back(CA2W(re[12 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_18"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-12"));
+	vFormByTables.push_back(CA2W(re[13 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_19"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-13"));
+	vFormByTables.push_back(CA2W(re[14 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_20"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-14"));
+	vFormByTables.push_back(CA2W(re[15 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_21"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-15"));
+	vFormByTables.push_back(CA2W(re[16 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_22"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表2-16"));
+	vFormByTables.push_back(CA2W(re[17 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_23"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表3"));
+	vFormByTables.push_back(CA2W(re[18 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_24"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表4"));
+	vFormByTables.push_back(CA2W(re[19 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_25"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表5"));
+	vFormByTables.push_back(CA2W(re[20 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_26"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表6"));
+	vFormByTables.push_back(CA2W(re[21 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_27"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表7"));
+	vFormByTables.push_back(CA2W(re[22* col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_28"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表8"));
+	vFormByTables.push_back(CA2W(re[23 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_29"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	vFormByTables.push_back(_T("表9"));
+	vFormByTables.push_back(CA2W(re[24 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_form_30"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+
+	help->closeDB();
+	delete help;
 }
 
 CKiwiSdiExecDoc::~CKiwiSdiExecDoc()
 {
+	std::vector<std::vector<wchar_t *>>::iterator itForm = m_vvFormByTables.begin();
+	while (itForm != m_vvFormByTables.end()) {
+		itForm->clear();
+		itForm++;
+	}
+	m_vvFormByTables.clear();
 }
 
 BOOL CKiwiSdiExecDoc::OnNewDocument()

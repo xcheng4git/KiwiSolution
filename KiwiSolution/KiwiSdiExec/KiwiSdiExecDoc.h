@@ -4,7 +4,7 @@
 
 
 #pragma once
-
+#include <vector>
 
 class CKiwiSdiExecDoc : public CDocument
 {
@@ -14,6 +14,7 @@ protected: // 仅从序列化创建
 
 // 特性
 public:
+	std::vector<std::vector<wchar_t *>> m_vvFormByTables;
 
 // 操作
 public:
