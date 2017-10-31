@@ -90,7 +90,13 @@ void CPersonalForm21::OnBnClickedCmdSaveForm()
 	GetDlgItem(IDC_EDIT237)->GetWindowTextW(strText); strText.Trim();
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 	GetDlgItem(IDC_EDIT58)->GetWindowTextW(strText); strText.Trim();
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+
+	CTime today = CTime::GetCurrentTime();
+	strText = today.Format("%Y-%m-%d");
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "'); "; strText.ReleaseBuffer();
+
+	TRACE(_T("%s\n"),CA2W(ss.str().c_str(), CP_UTF8));
 
 	help->execSQL(ss.str().c_str());
 	ss.str(""); ss.clear();
