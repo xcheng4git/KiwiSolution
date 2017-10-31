@@ -111,15 +111,16 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_paneManager.SetTheme(xtpPaneThemeOffice2003);
 
 	CXTPDockingPane* paneOrgnization = m_paneManager.CreatePane(
-		IDD_PANE_ORGNIZATION, CRect(0, 0, 240, 300), xtpPaneDockLeft);
+		IDD_PANE_ORGNIZATION, CRect(0, 0, 240, 380), xtpPaneDockLeft);
 	paneOrgnization->SetOptions(xtpPaneNoCloseable | xtpPaneNoFloatable | xtpPaneNoDockable | xtpPaneNoHideable);
-	paneOrgnization->SetMaxTrackSize(CSize(240, 300)); paneOrgnization->SetMinTrackSize(CSize(240, 300));
+	paneOrgnization->SetMaxTrackSize(CSize(240, 380)); paneOrgnization->SetMinTrackSize(CSize(240, 380));
+	paneOrgnization->SetTitle(_T("——组织机构——"));
 
 	CXTPDockingPane* paneShortcut = m_paneManager.CreatePane(
 		IDD_PANE_SHORTCUT, CRect(0, 0, 240, 100), xtpPaneDockBottom, paneOrgnization);
 	paneShortcut->SetOptions(xtpPaneNoCloseable | xtpPaneNoFloatable | xtpPaneNoDockable | xtpPaneNoHideable);
 	paneShortcut->SetMaxTrackSize(CSize(240, 100)); paneShortcut->SetMinTrackSize(CSize(240, 100));
-
+	paneShortcut->SetTitle(_T("——快捷菜单——"));
 	
 	return 0;
 }
