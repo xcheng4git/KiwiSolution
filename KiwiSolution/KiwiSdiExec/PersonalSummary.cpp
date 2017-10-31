@@ -9,6 +9,7 @@
 #include <sstream>
 using namespace std;
 #include "MainFrm.h"
+
 // CPersonalSummary
 
 IMPLEMENT_DYNCREATE(CPersonalSummary, CFormView)
@@ -87,8 +88,9 @@ void CPersonalSummary::OnInitialUpdate()
 	GetDlgItem(IDC_STATIC_ERROR_MSG)->SetFont(&m_fontText);
 
 	// TODO:  在此添加专用代码和/或调用基类
-	m_listSummary1.DeleteAllItems();
+#pragma region ListSummary1
 
+	m_listSummary1.DeleteAllItems();
 	m_listSummary1.InsertColumn(0, _T("性别"), LVCFMT_CENTER, 40);
 	m_listSummary1.InsertColumn(1, _T("婚姻状态"), LVCFMT_CENTER, 60);
 	m_listSummary1.InsertColumn(2, _T("年龄"), LVCFMT_CENTER, 40);
@@ -145,41 +147,78 @@ void CPersonalSummary::OnInitialUpdate()
 	m_listSummary1.SetItem(iItem, 6, LVIF_TEXT, CA2W(re[1 * col + 6], CP_UTF8), 0, NULL, NULL, NULL);
 	m_listSummary1.SetItem(iItem, 7, LVIF_TEXT, CA2W(re[1 * col + 7], CP_UTF8), 0, NULL, NULL, NULL);
 
-
-
-	help->closeDB();
-	delete help;
-
 	m_listSummary1.ModifyExtendedStyle(0, LVS_EX_FULLROWSELECT | LVS_EX_FULLROWSELECT);
 	m_listSummary1.ModifyExtendedStyle(LVS_EX_GRIDLINES, LVS_EX_GRIDLINES);
 
-	//	return TRUE;  // return TRUE unless you set the focus to a control
-	// 异常:  OCX 属性页应返回 FALSE
+#pragma endregion
 
-
+#pragma region ListSummary2
+	
 	//表2
-	m_listSummary2.InsertColumn(0, _T("类型"), LVCFMT_LEFT, 100);
-	m_listSummary2.InsertColumn(1, _T("档案名称"), LVCFMT_LEFT, 100);
-	m_listSummary2.InsertColumn(2, _T("备注"), LVCFMT_LEFT, 100);
-	m_listSummary2.InsertColumn(3, _T("建档日期"), LVCFMT_LEFT, 100);
-	m_listSummary2.InsertColumn(4, _T("最后修改日期"), LVCFMT_LEFT, 100);
-	m_listSummary2.InsertColumn(5, _T("上报日期"), LVCFMT_LEFT, 100);
-	m_listSummary2.InsertColumn(6, _T("操作"), LVCFMT_LEFT, 100);
+	m_listSummary2.InsertColumn(0, _T("类型"), LVCFMT_CENTER, 50);
+	m_listSummary2.InsertColumn(1, _T("档案名称"), LVCFMT_CENTER, 200);
+	m_listSummary2.InsertColumn(2, _T("备注"), LVCFMT_CENTER, 100);
+	m_listSummary2.InsertColumn(3, _T("建档日期"), LVCFMT_CENTER, 100);
+	//m_listSummary2.InsertColumn(4, _T("最后修改日期"), LVCFMT_CENTER, 100);
+	//m_listSummary2.InsertColumn(5, _T("上报日期"), LVCFMT_CENTER, 100);
+	m_listSummary2.InsertColumn(4, _T("操作"), LVCFMT_CENTER, 100);
 
-	//m_listCtrl01.SetExtendedStyle(LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT |
-	//	LVS_EDITLABELS | LVS_EX_SUBITEMIMAGES);
-	/*	m_listSummary2.InsertItem(0, _T("在职"));
-	m_listSummary2.SetItemText(0, 1, _T("123456789012345678"));
-	m_listSummary2.SetItemText(0, 2, _T("7980.12"));
-	m_listSummary2.SetItemText(0, 3, _T("-5877"));
-	m_listSummary2.SetItemText(0, 4, _T(" "));
-	m_listSummary2.SetItemText(0, 5, _T("硕士研究生"));
-	m_listSummary2.SetItemText(0, 6, _T("中共党员"));
-	m_listSummary2.SetItemText(0, 7, _T("乡科级副职"));
-	m_listSummary2.SetItemText(0, 8, _T(" "));
-	*/
-	//	m_listSummary1.ModifyExtendedStyle(LVS_EX_GRIDLINES, LVS_EX_GRIDLINES);
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	CKiwiSdiExecDoc* pDoc = pWnd->GetDocument();
+
+	re = help->rawQuery("select type_serial, type_name from form_type;", &row, &col, result);
+
+	int iRow = 0;
+	std::vector<std::vector<wchar_t *>>::iterator itForm = pDoc->m_vvFormByTables.begin(); 
+	while (itForm != pDoc->m_vvFormByTables.end()) {
+		std::vector<wchar_t *>::const_iterator itcTables = itForm->begin();
+		m_listSummary2.InsertItem(iRow, *itcTables);
+		m_listSummary2.SetItem(iRow, 1, LVIF_TEXT, CA2W(re[(iRow+1) * col + 1], CP_UTF8), 0, NULL, NULL, NULL);
+
+		//while (itcTables != itForm->end()) {
+		//	m_listSummary2.SetItem()
+		//}
+
+		itForm++; iRow++;
+	}
+
+	iRow = 0;
+	itForm = pDoc->m_vvFormByTables.begin();
+	while (itForm != pDoc->m_vvFormByTables.end()) {
+		std::vector<wchar_t *>::const_iterator itcTables = itForm->begin();
+
+		ss.str(""); ss.clear();
+		ss << "select file_id, create_date from " << CW2A(itcTables[2], CP_UTF8) << " where file_id=" << file_id << ";";
+		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		if (row > 0) {
+			m_listSummary2.SetItem(iRow, 3, LVIF_TEXT, CA2W(re[1 * col + 1], CP_UTF8), 0, NULL, NULL, NULL);
+			m_listSummary2.createItemButton(iRow, 4, m_listSummary2, _T("修改"), &file_id);
+		}
+		else
+			m_listSummary2.SetItem(iRow, 2, LVIF_TEXT, _T("未填报"), 0, NULL, NULL, NULL);
+		//while (itcTables != itForm->end()) {
+		//	m_listSummary2.SetItem()
+		//}
+
+		itForm++; iRow++;
+	}
+
+
 	m_listSummary2.ModifyExtendedStyle(LVS_EX_GRIDLINES, LVS_EX_GRIDLINES);
+	
+	//int i = 0;
+	//m_listSummary2.InsertColumn(0, _T(""), LVCFMT_LEFT, 150);
+	//m_listSummary2.InsertColumn(1, _T(""), LVCFMT_LEFT, 150);
+
+	//TCHAR caption[1000] = { 0 };//标题
+	//for (int nRow = 0; nRow < 10; nRow++) {
+	//	m_listSummary2.InsertItem(nRow, _T("tim"));
+	//	m_listSummary2.createItemButton(nRow, 1, m_listSummary2, _T("Button"), "");
+	//}
+#pragma endregion
+
+
+	help->closeDB(); delete help;
 
 }
 

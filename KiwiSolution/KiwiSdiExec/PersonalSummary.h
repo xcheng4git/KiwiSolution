@@ -2,7 +2,7 @@
 #include "afxcmn.h"
 
 
-
+#include "ListCtrlEx.h"
 // CPersonalSummary ¥∞ÃÂ ”Õº
 
 class CPersonalSummary : public CFormView
@@ -38,10 +38,8 @@ protected:
 	
 public:
 	CXTPListCtrl m_listSummary1;
-	CXTPListCtrl m_listSummary2;
+	CListCtrlEx m_listSummary2;
 	virtual void OnInitialUpdate();
 	afx_msg void OnClickedButtonClose();
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 };
-
-

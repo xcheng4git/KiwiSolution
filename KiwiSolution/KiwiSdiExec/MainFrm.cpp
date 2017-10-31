@@ -39,6 +39,11 @@
 
 #include "QueryByFolder.h"
 
+#include "SQLiteHelper.h"
+#include <sstream>
+using namespace std;
+
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -57,6 +62,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_UPDATE_COMMAND_UI(ID_TOOL_FULLSCREEN, &CMainFrame::OnUpdateToolFullscreen)
 	ON_MESSAGE(WM_SHOW_DEFAULT_SUMMARY, &CMainFrame::OnShowDefaultSummary)
 	ON_COMMAND(ID_QUERY_BY_FOLDER, &CMainFrame::OnQueryByFolder)
+	ON_MESSAGE(WM_MODIFY_PERSONAL_FORM, &CMainFrame::OnModifyPersonalForm)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -123,6 +129,16 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	paneShortcut->SetTitle(_T("——快捷菜单——"));
 	
 	return 0;
+}
+
+CKiwiSdiExecDoc* CMainFrame::GetDocument()
+{
+	POSITION pos = theApp.GetFirstDocTemplatePosition();
+	CDocTemplate* pDocTemplate = theApp.GetNextDocTemplate(pos);
+	pos = pDocTemplate->GetFirstDocPosition();
+	CKiwiSdiExecDoc* pDoc = (CKiwiSdiExecDoc*)pDocTemplate->GetNextDoc(pos);
+
+	return pDoc;
 }
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
@@ -488,4 +504,28 @@ void CMainFrame::OnQueryByFolder()
 
 	//////////////////////////////////////
 	//考虑把其他的窗口的关闭,销毁
+}
+
+
+afx_msg LRESULT CMainFrame::OnModifyPersonalForm(WPARAM wParam, LPARAM lParam)
+{
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+
+	stringstream ss;
+	ss << "select file_name, folder_name from orgnization_file where file_id=" << int(lParam) << ";";
+	int row, col;
+	char *eee = "i";
+	char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result); //row 是查出多少行记录,col是每条记录多少个字段
+
+	if (row < 1)
+		return 0;
+
+	CString folder; folder.Format(_T("%s"), CA2W(re[1 * col + 1], CP_UTF8));
+	CString file; file.Format(_T("%s"), CA2W(re[1 * col + 0], CP_UTF8));
+	::PostMessage(this->m_hWnd, WM_CREATE_PERSONAL_FORM, wParam, LPARAM(new CString(folder + _T("/") + file)));
+
+	help->closeDB(); delete help;
+	return 0;
 }
