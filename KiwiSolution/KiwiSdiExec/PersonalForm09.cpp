@@ -182,17 +182,37 @@ void CPersonalForm09::OnInitialUpdate()
 	{ IDC_EDIT96, m_Radio11_5_1, m_Radio11_5_2, IDC_EDIT68, IDC_EDIT110, m_Radio11_5_3, IDC_EDIT114, IDC_EDIT116 },
 	{ IDC_EDIT109, m_Radio11_6_1, m_Radio11_6_2, IDC_EDIT66, IDC_EDIT111, m_Radio11_6_3, IDC_EDIT115, IDC_EDIT117 } };
 	// TODO:  在此添加专用代码和/或调用基类
+	int a = row;
 	if (row > 6) row = 6;
-	for (int i = 3; i < row; i++){
-		Parameters[(i - 3)][1] = *re[ i * col + 2];
-		Parameters[(i - 3)][2] = *re[ i * col + 3];
-		Parameters[(i - 3)][5] = *re[ i * col + 6];
-		GetDlgItem(Parameters[(i - 3)][0])->SetWindowTextW(CA2W(re[ i * col + 1], CP_UTF8));
-		GetDlgItem(Parameters[(i - 3)][3])->SetWindowTextW(CA2W(re[ i * col + 4], CP_UTF8));
-		GetDlgItem(Parameters[(i - 3)][4])->SetWindowTextW(CA2W(re[ i * col + 5], CP_UTF8));
-		GetDlgItem(Parameters[(i - 3)][6])->SetWindowTextW(CA2W(re[ i * col + 7], CP_UTF8));
-		GetDlgItem(Parameters[(i - 3)][7])->SetWindowTextW(CA2W(re[ i * col + 8], CP_UTF8));
+	for (int i = 3; i <= row-1; i++){
+		GetDlgItem(Parameters[i - 3][0])->SetWindowTextW(CA2W(re[ i * col + 1], CP_UTF8));
+		GetDlgItem(Parameters[i - 3][3])->SetWindowTextW(CA2W(re[i * col + 4], CP_UTF8));
+		GetDlgItem(Parameters[i - 3][4])->SetWindowTextW(CA2W(re[i * col + 5], CP_UTF8));
+		GetDlgItem(Parameters[i - 3][6])->SetWindowTextW(CA2W(re[i * col + 7], CP_UTF8));
+		GetDlgItem(Parameters[i - 3][7])->SetWindowTextW(CA2W(re[i * col + 8], CP_UTF8));
 	}
+	if (row >= 3){
+		m_Radio11_3_1 = atoi(re[3 * col + 2]);
+		m_Radio11_3_2 = atoi(re[3 * col + 3]);
+		m_Radio11_3_3 = atoi(re[3 * col + 6]);
+	}
+	if (row >= 4){
+		m_Radio11_4_1 = atoi(re[4 * col + 2]);
+		m_Radio11_4_2 = atoi(re[4 * col + 3]);
+		m_Radio11_4_3 = atoi(re[4 * col + 6]);
+	}
+	if (row >= 5){
+		m_Radio11_5_1 = atoi(re[5 * col + 2]);
+		m_Radio11_5_2 = atoi(re[5 * col + 3]);
+		m_Radio11_5_3 = atoi(re[5 * col + 6]);
+	}
+	/*
+	if (row == 6){
+		m_Radio11_6_1 = atoi(re[6 * col + 2]);
+		m_Radio11_6_2 = atoi(re[6 * col + 3]);
+		m_Radio11_6_3 = atoi(re[6 * col + 6]);
+	}
+	*/
 	help->closeDB();
 	delete help;
 	UpdateData(FALSE);
