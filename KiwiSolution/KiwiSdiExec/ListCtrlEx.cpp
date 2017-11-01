@@ -30,7 +30,7 @@ void CListCtrlEx::createItemButton(int nItem, int nSubItem, HWND hMain, LPCTSTR 
 
     GetSubItemRect(nItem, nSubItem, LVIR_BOUNDS, rect);
    //rect.bottom = rect.top + 30;
-   //rect.right = rect.left + 150;
+	rect.left += 20;  rect.right = rect.left + 60;
 
    DWORD dwStyle = WS_CHILD | WS_VISIBLE | BS_MULTILINE;
     CButtonEx *pButton = new CButtonEx(nItem, nSubItem, rect, hMain, pData);
@@ -95,7 +95,7 @@ void CListCtrlEx::updateListCtrlButtonPos()
        rect = iter->second->m_rect;
 	   rect.top -= posy*lineHeight;
 	   rect.bottom -= posy*lineHeight;
-        if (rect.top > lineHeight)
+        if (rect.top > 15)
         {
             if (rect.bottom > height)
             {
