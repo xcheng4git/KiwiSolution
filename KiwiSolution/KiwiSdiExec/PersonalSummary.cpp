@@ -88,7 +88,11 @@ void CPersonalSummary::OnInitialUpdate()
 	GetDlgItem(IDC_STATIC_ERROR_MSG)->SetFont(&m_fontText);
 
 	// TODO:  在此添加专用代码和/或调用基类
+	CImageList   m_l;
+	m_l.Create(1, 30, TRUE | ILC_COLOR32, 1, 0);
 #pragma region ListSummary1
+	m_listSummary1.SetImageList(&m_l, LVSIL_SMALL);
+	m_listSummary1.SetFont(&m_fontText);
 
 	m_listSummary1.DeleteAllItems();
 	m_listSummary1.InsertColumn(0, _T("性别"), LVCFMT_CENTER, 40);
@@ -153,15 +157,16 @@ void CPersonalSummary::OnInitialUpdate()
 #pragma endregion
 
 #pragma region ListSummary2
-	
+	m_listSummary2.SetImageList(&m_l, LVSIL_SMALL);
+	m_listSummary2.SetFont(&m_fontText);
 	//表2
 	m_listSummary2.InsertColumn(0, _T("类型"), LVCFMT_CENTER, 50);
 	m_listSummary2.InsertColumn(1, _T("档案名称"), LVCFMT_CENTER, 200);
 	m_listSummary2.InsertColumn(2, _T("备注"), LVCFMT_CENTER, 100);
 	m_listSummary2.InsertColumn(3, _T("建档日期"), LVCFMT_CENTER, 100);
-	//m_listSummary2.InsertColumn(4, _T("最后修改日期"), LVCFMT_CENTER, 100);
+	m_listSummary2.InsertColumn(4, _T("最后修改日期"), LVCFMT_CENTER, 100);
 	//m_listSummary2.InsertColumn(5, _T("上报日期"), LVCFMT_CENTER, 100);
-	m_listSummary2.InsertColumn(4, _T("操作"), LVCFMT_CENTER, 100);
+	m_listSummary2.InsertColumn(5, _T("操作"), LVCFMT_CENTER, 100);
 
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 	CKiwiSdiExecDoc* pDoc = pWnd->GetDocument();
@@ -188,11 +193,14 @@ void CPersonalSummary::OnInitialUpdate()
 		std::vector<wchar_t *>::const_iterator itcTables = itForm->begin();
 
 		ss.str(""); ss.clear();
-		ss << "select file_id, create_date from " << CW2A(itcTables[2], CP_UTF8) << " where file_id=" << file_id << ";";
+		ss << "select file_id, create_date, modify_date from personal_form_info where file_id=" << file_id << " and form_serial='";
+		ss << CW2A(*itcTables, CP_UTF8) << "';";
+
 		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 		if (row > 0) {
 			m_listSummary2.SetItem(iRow, 3, LVIF_TEXT, CA2W(re[1 * col + 1], CP_UTF8), 0, NULL, NULL, NULL);
-			m_listSummary2.createItemButton(iRow, 4, m_listSummary2, _T("修改"), &file_id);
+			m_listSummary2.SetItem(iRow, 4, LVIF_TEXT, CA2W(re[1 * col + 2], CP_UTF8), 0, NULL, NULL, NULL);
+			m_listSummary2.createItemButton(iRow, 5, m_listSummary2, _T("修改"), &file_id);
 		}
 		else
 			m_listSummary2.SetItem(iRow, 2, LVIF_TEXT, _T("未填报"), 0, NULL, NULL, NULL);
