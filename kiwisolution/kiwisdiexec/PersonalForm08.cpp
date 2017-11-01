@@ -58,8 +58,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm08, CFormView)
 	ON_BN_CLICKED(IDC_CMD_SAVE_FORM, &CPersonalForm08::OnBnClickedCmdSaveForm)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm08::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm08::OnBnClickedButtonCloseForm3)
-	ON_EN_CHANGE(IDC_EDIT48, &CPersonalForm08::OnEnChangeEdit48)
-	ON_EN_CHANGE(IDC_EDIT52, &CPersonalForm08::OnEnChangeEdit52)
+	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM3, &CPersonalForm08::OnBnClickedCmdUpdateForm3)
 END_MESSAGE_MAP()
 
 
@@ -220,19 +219,19 @@ FillForm11 :
 			goto FillComplete;
 
 		ss << "insert into file_form_16 values(" << file_id << ",";
-		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 
 		ss << Parameters[i][1] << ", ";
 		ss << Parameters[i][2] << ", ";
 
 		GetDlgItem(Parameters[i][3])->GetWindowTextW(strText); strText.Trim();
-		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 		GetDlgItem(Parameters[i][4])->GetWindowTextW(strText); strText.Trim();
 		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
 
 		ss << Parameters[i][5] << ", ";
 		GetDlgItem(Parameters[i][6])->GetWindowTextW(strText); strText.Trim();
-		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 		GetDlgItem(Parameters[i][7])->GetWindowTextW(strText); strText.Trim();
 		ss << wcstod(strText.GetBuffer(), NULL) << ")"; strText.ReleaseBuffer();
 
@@ -363,24 +362,7 @@ FillForm16 :
 	UpdateData(FALSE);
 }
 
-
-void CPersonalForm08::OnEnChangeEdit48()
+void CPersonalForm08::OnBnClickedCmdUpdateForm3()
 {
-	// TODO:  如果该控件是 RICHEDIT 控件，它将不
-	// 发送此通知，除非重写 CFormView::OnInitDialog()
-	// 函数并调用 CRichEditCtrl().SetEventMask()，
-	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
-
-	// TODO:  在此添加控件通知处理程序代码
-}
-
-
-void CPersonalForm08::OnEnChangeEdit52()
-{
-	// TODO:  如果该控件是 RICHEDIT 控件，它将不
-	// 发送此通知，除非重写 CFormView::OnInitDialog()
-	// 函数并调用 CRichEditCtrl().SetEventMask()，
-	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
-
 	// TODO:  在此添加控件通知处理程序代码
 }
