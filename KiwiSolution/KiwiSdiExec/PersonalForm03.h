@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <vector>
 
 // PersonalForm03 窗体视图
 
@@ -29,6 +29,12 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
+	void QueryAndFillFileForm();
+
+	int m_modifiedSubform[3];
+	std::vector<std::vector<CString>> m_vvFormRecid;
+	BOOL m_isModify;
+
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnInitialUpdate();
@@ -39,6 +45,7 @@ public:
 	afx_msg void OnBnClickedButtonCloseForm3();
 	afx_msg void OnBnClickedCmdSaveForm();
 	afx_msg void OnBnClickedCmdPrintForm();
+	afx_msg void OnBnClickedCmdUpdateForm();
 };
 
 
