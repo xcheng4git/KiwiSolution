@@ -43,6 +43,7 @@ public:
 	int m_Radio11_2_1;
 	int m_Radio11_2_2;
 	int m_Radio11_2_3;
+	afx_msg void OnBnClickedCmdUpdateForm3();
 };
 
 
