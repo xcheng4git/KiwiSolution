@@ -20,6 +20,8 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 #endif
+private:
+	std::vector<std::vector<std::vector<int>>> _vvvParameters;
 
 public:
 	CString m_strCurrentFile;

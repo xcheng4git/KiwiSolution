@@ -18,12 +18,50 @@ using namespace std;
 IMPLEMENT_DYNCREATE(PersonalForm03, CFormView)
 
 PersonalForm03::PersonalForm03()
-	: CFormView(PersonalForm03::IDD)
+: CFormView(PersonalForm03::IDD)
 {
 	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 15;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("·ÂËÎÌå"), 3); lf.lfWeight = 400;
 	m_fontEdit.CreateFontIndirect(&lf);
 
 	m_isModify = FALSE; for (int i = 0; i < 3; i++) m_modifiedSubform[i] = -1;
+
+	int parameters1[][5] = { { IDC_EDIT1, IDC_DATETIMEPICKER1, IDC_DATETIMEPICKER3, IDC_EDIT4, IDC_EDIT5 },
+	{ IDC_EDIT6, IDC_DATETIMEPICKER2, IDC_DATETIMEPICKER4, IDC_EDIT9, IDC_EDIT10 } };
+
+	int parameters2[][6] = { { IDC_DATETIMEPICKER5, IDC_DATETIMEPICKER6, IDC_EDIT11, IDC_EDIT24, IDC_EDIT27, IDC_EDIT30 },
+	{ IDC_DATETIMEPICKER7, IDC_DATETIMEPICKER8, IDC_EDIT22, IDC_EDIT25, IDC_EDIT28, IDC_EDIT31 },
+	{ IDC_DATETIMEPICKER9, IDC_DATETIMEPICKER10, IDC_EDIT23, IDC_EDIT26, IDC_EDIT29, IDC_EDIT32 } };
+
+	int parameters3[][6] = { { IDC_EDIT33, IDC_EDIT35, IDC_DATETIMEPICKER11, IDC_DATETIMEPICKER12, IDC_EDIT37, IDC_EDIT38 },
+	{ IDC_EDIT34, IDC_EDIT39, IDC_DATETIMEPICKER13, IDC_DATETIMEPICKER14, IDC_EDIT41, IDC_EDIT42 },
+	{ IDC_EDIT36, IDC_EDIT40, IDC_DATETIMEPICKER15, IDC_DATETIMEPICKER16, IDC_EDIT43, IDC_EDIT44 } };
+
+	std::vector<std::vector<int>> vvPara;
+	for (int i = 0; i < 2; i++) {
+		std::vector<int> vPara;
+		for (int j = 0; j < 5; j++)
+			vPara.push_back(parameters1[i][j]);
+		vvPara.push_back(vPara);
+	}
+	_vvvParameters.push_back(vvPara);
+
+	vvPara.clear();
+	for (int i = 0; i < 3; i++) {
+		std::vector<int> vPara;
+		for (int j = 0; j < 6; j++)
+			vPara.push_back(parameters2[i][j]);
+		vvPara.push_back(vPara);
+	}
+	_vvvParameters.push_back(vvPara);
+
+	vvPara.clear();
+	for (int i = 0; i < 3; i++) {
+		std::vector<int> vPara;
+		for (int j = 0; j < 6; j++)
+			vPara.push_back(parameters3[i][j]);
+		vvPara.push_back(vPara);
+	}
+	_vvvParameters.push_back(vvPara);
 }
 
 PersonalForm03::~PersonalForm03()
@@ -553,25 +591,55 @@ void PersonalForm03::OnBnClickedCmdUpdateForm()
 	int file_id = atoi(re[1 * col + 0]);
 	ss.str(""); ss.clear();
 
-	int parameters1[][5] = { { IDC_EDIT1, IDC_DATETIMEPICKER1, IDC_DATETIMEPICKER3, IDC_EDIT4, IDC_EDIT5 },
-	{ IDC_EDIT6, IDC_DATETIMEPICKER2, IDC_DATETIMEPICKER4, IDC_EDIT9, IDC_EDIT10 } };
+	//int parameters1[][5] = { { IDC_EDIT1, IDC_DATETIMEPICKER1, IDC_DATETIMEPICKER3, IDC_EDIT4, IDC_EDIT5 },
+	//{ IDC_EDIT6, IDC_DATETIMEPICKER2, IDC_DATETIMEPICKER4, IDC_EDIT9, IDC_EDIT10 } };
+	//
+	//int parameters2[][6] = { { IDC_DATETIMEPICKER5, IDC_DATETIMEPICKER6, IDC_EDIT11, IDC_EDIT24, IDC_EDIT27, IDC_EDIT30 },
+	//{ IDC_DATETIMEPICKER7, IDC_DATETIMEPICKER8, IDC_EDIT22, IDC_EDIT25, IDC_EDIT28, IDC_EDIT31 },
+	//{ IDC_DATETIMEPICKER9, IDC_DATETIMEPICKER10, IDC_EDIT23, IDC_EDIT26, IDC_EDIT29, IDC_EDIT32 } };
+	//
+	//int parameters3[][6] = { { IDC_EDIT33, IDC_EDIT35, IDC_DATETIMEPICKER11, IDC_DATETIMEPICKER12, IDC_EDIT37, IDC_EDIT38 },
+	//{ IDC_EDIT34, IDC_EDIT39, IDC_DATETIMEPICKER13, IDC_DATETIMEPICKER14, IDC_EDIT41, IDC_EDIT42 },
+	//{ IDC_EDIT36, IDC_EDIT40, IDC_DATETIMEPICKER15, IDC_DATETIMEPICKER16, IDC_EDIT43, IDC_EDIT44 } };
 
-	int parameters2[][6] = { { IDC_DATETIMEPICKER5, IDC_DATETIMEPICKER6, IDC_EDIT11, IDC_EDIT24, IDC_EDIT27, IDC_EDIT30 },
-	{ IDC_DATETIMEPICKER7, IDC_DATETIMEPICKER8, IDC_EDIT22, IDC_EDIT25, IDC_EDIT28, IDC_EDIT31 },
-	{ IDC_DATETIMEPICKER9, IDC_DATETIMEPICKER10, IDC_EDIT23, IDC_EDIT26, IDC_EDIT29, IDC_EDIT32 } };
-
-	int parameters3[][6] = { { IDC_EDIT33, IDC_EDIT35, IDC_DATETIMEPICKER11, IDC_DATETIMEPICKER12, IDC_EDIT37, IDC_EDIT38 },
-	{ IDC_EDIT34, IDC_EDIT39, IDC_DATETIMEPICKER13, IDC_DATETIMEPICKER14, IDC_EDIT41, IDC_EDIT42 },
-	{ IDC_EDIT36, IDC_EDIT40, IDC_DATETIMEPICKER15, IDC_DATETIMEPICKER16, IDC_EDIT43, IDC_EDIT44 } };
-
-	int**parameters[] = { (int**)parameters1, (int**)parameters2, (int**)parameters3 };
+	std::vector<std::vector<std::vector<int>>>::iterator itVVV = _vvvParameters.begin();
+	
 	int subformFields[] = { 5, 6, 6 };
 	CString strText;
 	std::vector<std::vector<CString>>::iterator itSubformRecids = m_vvFormRecid.begin();
 	for (int i = 0; i < 3; i++) {
-		if (m_modifiedSubform[i] == -1) continue;
+		if (m_modifiedSubform[i] == -1) {
+			itVVV++;
+			continue;
+		}
 		std::vector<CString>::const_iterator itcRecid = itSubformRecids->begin();
+		std::vector<std::vector<int>>::iterator itVV = itVVV->begin();
 
+		ss.str(""); ss.clear();
+		ss << "select * from file_form_" << setfill('0') << setw(2) << m_modifiedSubform[i] << " where file_id=" << file_id << " limit 0,1;";
+		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+
+		int j = 0; 
+		while (itcRecid != itSubformRecids->end()) {
+			std::vector<int>::iterator itV = itVV->begin();
+			ss.str(""); ss.clear();
+			ss << "update file_form_" << setfill('0') << setw(2) << m_modifiedSubform[i] << " set  ";
+			for (int k = 0; k < subformFields[i] - 1; k++) {
+				GetDlgItem(itV[k])->GetWindowTextW(strText); strText.Trim();
+				ss << re[2 + k] << "='" << CW2A(strText.GetBuffer(), CP_UTF8) << "', ";
+			}
+			GetDlgItem(itV[subformFields[i] - 1])->GetWindowTextW(strText); strText.Trim();
+			ss << re[2 + subformFields[i] - 1] << "='" << CW2A(strText.GetBuffer(), CP_UTF8) << "'  ";
+			ss << " where form_recid='" << CW2A(CString(*itcRecid).GetBuffer(), CP_UTF8) << "';";
+
+			TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+			help->execSQL(ss.str().c_str());
+
+			itcRecid++;  j++; itVV++;
+		}
+
+		itVVV++ ;
+		/*
 		if (m_modifiedSubform[i] == 4) {
 			ss.str(""); ss.clear();
 			ss << "select * from file_form_" << setfill('0') << setw(2) << m_modifiedSubform[i] << " where file_id=" << file_id << " limit 0,1;";
@@ -643,7 +711,7 @@ void PersonalForm03::OnBnClickedCmdUpdateForm()
 				itcRecid++;  j++;
 			}
 		}
-
+		*/
 		itSubformRecids++;
 	}
 }
