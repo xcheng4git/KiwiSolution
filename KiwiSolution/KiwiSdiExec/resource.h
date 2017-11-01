@@ -191,6 +191,7 @@
 #define IDC_CMD_SAVE_FORM               1073
 #define IDC_STATICBOX66                 1073
 #define IDC_STATICBOX35                 1074
+#define IDC_CMD_UPDATE_FORM             1074
 #define IDC_STATICBOX30                 1075
 #define IDC_STATICBOX67                 1075
 #define IDC_STATICBOX117                1075
@@ -203,6 +204,7 @@
 #define IDC_STATICBOX119                1078
 #define IDC_FILE_PICTURE                1079
 #define IDC_STATICBOX70                 1079
+#define IDC_CMD_UPDATE_FORM3            1079
 #define IDC_STATICBOX32                 1080
 #define IDC_CMD_SAVE_FORM2              1080
 #define IDC_STATICBOX120                1080
@@ -211,6 +213,7 @@
 #define IDC_STATICBOX121                1081
 #define IDC_EDIT_PIC_PATHNAME           1082
 #define IDC_STATICBOX122                1082
+#define IDC_CMD_UPDATE_FORM2            1082
 #define IDC_STATICBOX37                 1083
 #define IDC_STATICBOX123                1083
 #define IDC_PIC_GROUP1_1                1084
