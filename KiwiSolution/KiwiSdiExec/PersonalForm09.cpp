@@ -204,11 +204,13 @@ void CPersonalForm09::OnInitialUpdate()
 		m_Radio11_5_2 = atoi(re[5 * col + 3]);
 		m_Radio11_5_3 = atoi(re[5 * col + 6]);
 	}
+	/*
 	if (row == 6){
 		m_Radio11_6_1 = atoi(re[6 * col + 2]);
 		m_Radio11_6_2 = atoi(re[6 * col + 3]);
 		m_Radio11_6_3 = atoi(re[6 * col + 6]);
 	}
+	*/
 	help->closeDB();
 	delete help;
 	UpdateData(FALSE);
