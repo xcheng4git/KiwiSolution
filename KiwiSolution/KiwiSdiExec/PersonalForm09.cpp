@@ -54,6 +54,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm09, CFormView)
 	ON_BN_CLICKED(IDC_CMD_SAVE_FORM, &CPersonalForm09::OnBnClickedCmdSaveForm)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm09::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm09::OnBnClickedButtonCloseForm3)
+	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM3, &CPersonalForm09::OnBnClickedCmdUpdateForm3)
 END_MESSAGE_MAP()
 
 
@@ -107,19 +108,19 @@ void CPersonalForm09::OnBnClickedCmdSaveForm()
 			goto FillComplete;
 
 		ss << "insert into file_form_16 values(" << file_id << ",";
-		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 
 		ss << Parameters[i][1] << ", ";
 		ss << Parameters[i][2] << ", ";
 
 		GetDlgItem(Parameters[i][3])->GetWindowTextW(strText); strText.Trim();
-		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 		GetDlgItem(Parameters[i][4])->GetWindowTextW(strText); strText.Trim();
 		ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
 
 		ss << Parameters[i][5] << ", ";
 		GetDlgItem(Parameters[i][6])->GetWindowTextW(strText); strText.Trim();
-		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 		GetDlgItem(Parameters[i][7])->GetWindowTextW(strText); strText.Trim();
 		ss << wcstod(strText.GetBuffer(), NULL) << ")"; strText.ReleaseBuffer();
 
@@ -147,6 +148,7 @@ void CPersonalForm09::OnBnClickedButtonCloseForm3()
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
 	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
+	::PostMessage(this->m_hWnd, WM_DESTROY, 0L, 0L);
 }
 
 
@@ -214,4 +216,9 @@ void CPersonalForm09::OnInitialUpdate()
 	help->closeDB();
 	delete help;
 	UpdateData(FALSE);
+}
+
+void CPersonalForm09::OnBnClickedCmdUpdateForm3()
+{
+	// TODO:  在此添加控件通知处理程序代码
 }
