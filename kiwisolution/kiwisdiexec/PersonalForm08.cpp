@@ -58,6 +58,8 @@ BEGIN_MESSAGE_MAP(CPersonalForm08, CFormView)
 	ON_BN_CLICKED(IDC_CMD_SAVE_FORM, &CPersonalForm08::OnBnClickedCmdSaveForm)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm08::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm08::OnBnClickedButtonCloseForm3)
+	ON_EN_CHANGE(IDC_EDIT48, &CPersonalForm08::OnEnChangeEdit48)
+	ON_EN_CHANGE(IDC_EDIT52, &CPersonalForm08::OnEnChangeEdit52)
 END_MESSAGE_MAP()
 
 
@@ -136,10 +138,14 @@ FillForm10:
 		ss << "update file_form_flags set file_15IfHaveThisSituation=0 where file_id=" << file_id;
 
 		help->execSQL(ss.str().c_str());
+
+		//调试
+		
+
 		ss.str(""); ss.clear();
 		goto FillForm11;
 	}
-
+	
 	{
 		ss << "update file_form_flags set file_15IfHaveThisSituation=1 where file_id=" << file_id;
 		help->execSQL(ss.str().c_str());
@@ -233,7 +239,6 @@ FillForm11 :
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
 	}
-
 #pragma endregion
 
 
@@ -256,4 +261,126 @@ void CPersonalForm08::OnBnClickedButtonCloseForm3()
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
 	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
+}
+
+
+void CPersonalForm08::OnInitialUpdate()
+{
+	CFormView::OnInitialUpdate();
+
+FillForm14 :
+	//第一张表********************************************
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_14 where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		goto FillForm15;
+	}
+
+	GetDlgItem(IDC_EDIT47)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+	GetDlgItem(IDC_EDIT97)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
+	GetDlgItem(IDC_EDIT98)->SetWindowTextW(CA2W(re[1 * col + 3], CP_UTF8));
+	GetDlgItem(IDC_EDIT99)->SetWindowTextW(CA2W(re[1 * col + 4], CP_UTF8));
+FillForm15 :
+	//第二张表********************************************
+	ss.str(""); ss.clear();
+	ss << "select file_15IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		goto FillForm16;
+	}
+	m_Radio10_0 = atoi(re[1 * col + 0]);
+
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_15 where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		goto FillForm16;
+	}
+	GetDlgItem(IDC_EDIT48)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+	GetDlgItem(IDC_EDIT49)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
+	GetDlgItem(IDC_EDIT50)->SetWindowTextW(CA2W(re[1 * col + 3], CP_UTF8));
+	GetDlgItem(IDC_EDIT51)->SetWindowTextW(CA2W(re[1 * col + 4], CP_UTF8));
+	GetDlgItem(IDC_EDIT101)->SetWindowTextW(CA2W(re[1 * col + 5], CP_UTF8));
+	GetDlgItem(IDC_EDIT100)->SetWindowTextW(CA2W(re[1 * col + 6], CP_UTF8));
+	GetDlgItem(IDC_EDIT102)->SetWindowTextW(CA2W(re[1 * col + 7], CP_UTF8));
+
+	
+FillForm16 :
+	//第三张表********************************************
+	ss.str(""); ss.clear();
+	ss << "select file_16IfHaveThisSituation, file_16IfChange from file_form_flags where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		help->closeDB(); delete help;
+		return;
+	}
+	m_Radio11_0 = atoi(re[1 * col + 0]);
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_16 where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		GetDlgItem(IDC_EDIT52)->SetWindowTextW(_T("无"));
+		ss.str(""); ss.clear();
+		help->closeDB(); delete help;
+		return;
+	}
+
+	int Parameters[2][8] = { { IDC_EDIT52, m_Radio11_1_1, m_Radio11_1_2, IDC_EDIT54, IDC_EDIT55, m_Radio11_1_3, IDC_EDIT103, IDC_EDIT105 },
+	{ IDC_EDIT53, m_Radio11_2_1, m_Radio11_2_2, IDC_EDIT63, IDC_EDIT64, m_Radio11_2_3, IDC_EDIT107, IDC_EDIT108 } };
+	if (row > 2) row = 2;
+	for (int i = 0; i < row; i++){
+		GetDlgItem(Parameters[i][0])->SetWindowTextW(CA2W(re[(i + 1) * col + 1], CP_UTF8));
+		GetDlgItem(Parameters[i][3])->SetWindowTextW(CA2W(re[(i + 1) * col + 4], CP_UTF8));
+		GetDlgItem(Parameters[i][4])->SetWindowTextW(CA2W(re[(i + 1) * col + 5], CP_UTF8));
+		GetDlgItem(Parameters[i][6])->SetWindowTextW(CA2W(re[(i + 1) * col + 7], CP_UTF8));
+		GetDlgItem(Parameters[i][7])->SetWindowTextW(CA2W(re[(i + 1) * col + 8], CP_UTF8));
+	}
+	m_Radio11_1_1 = atoi(re[1 * col + 2]);
+	m_Radio11_1_2 = atoi(re[1 * col + 3]);
+	m_Radio11_1_3 = atoi(re[1 * col + 6]);
+	m_Radio11_2_1 = atoi(re[2 * col + 2]);
+	m_Radio11_2_2 = atoi(re[2 * col + 3]);
+	m_Radio11_2_3 = atoi(re[2 * col + 6]);
+
+	help->closeDB();
+	delete help;
+	UpdateData(FALSE);
+}
+
+
+void CPersonalForm08::OnEnChangeEdit48()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CFormView::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
+}
+
+
+void CPersonalForm08::OnEnChangeEdit52()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CFormView::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
 }

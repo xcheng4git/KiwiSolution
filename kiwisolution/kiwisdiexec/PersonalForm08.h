@@ -43,6 +43,9 @@ public:
 	int m_Radio11_2_1;
 	int m_Radio11_2_2;
 	int m_Radio11_2_3;
+	virtual void OnInitialUpdate();
+	afx_msg void OnEnChangeEdit48();
+	afx_msg void OnEnChangeEdit52();
 };
 
 
