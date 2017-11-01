@@ -181,7 +181,7 @@ void CPersonalForm09::OnInitialUpdate()
 	{ IDC_EDIT109, m_Radio11_6_1, m_Radio11_6_2, IDC_EDIT66, IDC_EDIT111, m_Radio11_6_3, IDC_EDIT115, IDC_EDIT117 } };
 	// TODO:  在此添加专用代码和/或调用基类
 	if (row > 6) row = 6;
-	for (int i = 3; i <= row; i++){
+	for (int i = 3; i < row; i++){
 		Parameters[(i - 3)][1] = *re[ i * col + 2];
 		Parameters[(i - 3)][2] = *re[ i * col + 3];
 		Parameters[(i - 3)][5] = *re[ i * col + 6];
