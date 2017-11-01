@@ -12,7 +12,7 @@
 #include "SQLiteHelper.h"
 #include <sstream>
 using namespace std;
-
+#include "Utility.h"
 #include "msword/msword.h"
 
 // CPersonalForm01
@@ -28,6 +28,8 @@ CPersonalForm01::CPersonalForm01()
 
 	m_strPicPathname = _T("");
 	m_bmpClose.LoadBitmap(IDB_BITMAP_CLOSE);
+
+	m_isModify = FALSE;
 }
 
 CPersonalForm01::~CPersonalForm01()
@@ -40,6 +42,8 @@ void CPersonalForm01::SetCurrentFile(CString filePath)
 {
 	m_strCurrentFolder = filePath.Left(filePath.Find(_T("/"), 0));
 	m_strCurrentFile = filePath.Right(filePath.GetLength() - filePath.Find(_T("/"), 0) - 1);
+
+	m_isModify = FALSE;
 }
 
 void CPersonalForm01::DrawFormHeader(CDC* pDC, CRect* pBox)
@@ -166,7 +170,7 @@ void CPersonalForm01::QueryAndFillFileForm()
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
-	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+	//TRACE(CA2W(ss.str().c_str(), CP_UTF8));
 
 	CSQLiteHelper *help = new CSQLiteHelper();
 	help->openDB("kiwi.db3");
@@ -184,40 +188,43 @@ void CPersonalForm01::QueryAndFillFileForm()
 		return;
 	}
 
-	GetDlgItem(IDC_COMBO_GENDER)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
-	GetDlgItem(IDC_EDIT_NATION)->SetWindowTextW(CA2W(re[1 * col + 3], CP_UTF8));
+	GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
 
-	GetDlgItem(IDC_EDIT_BIRTH_PLACE)->SetWindowTextW(CA2W(re[1 * col + 4], CP_UTF8));
-	COleDateTime t; t.ParseDateTime(CA2W(re[1 * col + 5], CP_UTF8));
+	GetDlgItem(IDC_COMBO_GENDER)->SetWindowTextW(CA2W(re[1 * col + 3], CP_UTF8));
+	GetDlgItem(IDC_EDIT_NATION)->SetWindowTextW(CA2W(re[1 * col + 4], CP_UTF8));
+
+	GetDlgItem(IDC_EDIT_BIRTH_PLACE)->SetWindowTextW(CA2W(re[1 * col + 5], CP_UTF8));
+	COleDateTime t; t.ParseDateTime(CA2W(re[1 * col + 6], CP_UTF8));
 	m_ctrlBirthday.SetTime(t);
 	//GetDlgItem(IDC_COMBO_BIRTHDAY)->SetWindowTextW(CA2W(re[1 * col + 5], CP_UTF8));
-	GetDlgItem(IDC_COMBO_PARTY)->SetWindowTextW(CA2W(re[1 * col + 6], CP_UTF8));
+	GetDlgItem(IDC_COMBO_PARTY)->SetWindowTextW(CA2W(re[1 * col + 7], CP_UTF8));
 
-	t.ParseDateTime(CA2W(re[1 * col + 7], CP_UTF8));
-	((CDateTimeCtrl*)GetDlgItem(IDC_PICKER_INPARTY_DATE))->SetTime(t);
 	t.ParseDateTime(CA2W(re[1 * col + 8], CP_UTF8));
+	((CDateTimeCtrl*)GetDlgItem(IDC_PICKER_INPARTY_DATE))->SetTime(t);
+	t.ParseDateTime(CA2W(re[1 * col + 9], CP_UTF8));
 	((CDateTimeCtrl*)GetDlgItem(IDC_PICKER_INWORK_DATE))->SetTime(t);
-	GetDlgItem(IDC_EDIT_PROFESSION)->SetWindowTextW(CA2W(re[1 * col + 9], CP_UTF8));
+	GetDlgItem(IDC_EDIT_PROFESSION)->SetWindowTextW(CA2W(re[1 * col + 10], CP_UTF8));
 
-	GetDlgItem(IDC_EDIT_FULL_EDUCATE_DEGREE)->SetWindowTextW(CA2W(re[1 * col + 10], CP_UTF8));
-	GetDlgItem(IDC_EDIT_FULL_EDUCATE_PLACE)->SetWindowTextW(CA2W(re[1 * col + 11], CP_UTF8));
+	GetDlgItem(IDC_EDIT_FULL_EDUCATE_DEGREE)->SetWindowTextW(CA2W(re[1 * col + 11], CP_UTF8));
+	GetDlgItem(IDC_EDIT_FULL_EDUCATE_PLACE)->SetWindowTextW(CA2W(re[1 * col + 12], CP_UTF8));
 
-	GetDlgItem(IDC_EDIT_PART_EDUCATE_DEGREE)->SetWindowTextW(CA2W(re[1 * col + 12], CP_UTF8));
-	GetDlgItem(IDC_EDIT_PART_EDUCATE_PLACE)->SetWindowTextW(CA2W(re[1 * col + 13], CP_UTF8));
+	GetDlgItem(IDC_EDIT_PART_EDUCATE_DEGREE)->SetWindowTextW(CA2W(re[1 * col + 13], CP_UTF8));
+	GetDlgItem(IDC_EDIT_PART_EDUCATE_PLACE)->SetWindowTextW(CA2W(re[1 * col + 14], CP_UTF8));
 
-	GetDlgItem(IDC_EDIT_PARTY_REP)->SetWindowTextW(CA2W(re[1 * col + 14], CP_UTF8));
-	GetDlgItem(IDC_EDIT_NPC_MEMBER)->SetWindowTextW(CA2W(re[1 * col + 15], CP_UTF8));
-	GetDlgItem(IDC_EDIT_CPPCC_MEMBER)->SetWindowTextW(CA2W(re[1 * col + 16], CP_UTF8));
+	GetDlgItem(IDC_EDIT_PARTY_REP)->SetWindowTextW(CA2W(re[1 * col + 15], CP_UTF8));
+	GetDlgItem(IDC_EDIT_NPC_MEMBER)->SetWindowTextW(CA2W(re[1 * col + 16], CP_UTF8));
+	GetDlgItem(IDC_EDIT_CPPCC_MEMBER)->SetWindowTextW(CA2W(re[1 * col + 17], CP_UTF8));
 
-	GetDlgItem(IDC_EDIT_WORKING_UNIT)->SetWindowTextW(CA2W(re[1 * col + 17], CP_UTF8));
-	GetDlgItem(IDC_EDIT_CURRENT_POSITION)->SetWindowTextW(CA2W(re[1 * col + 18], CP_UTF8));
+	GetDlgItem(IDC_EDIT_WORKING_UNIT)->SetWindowTextW(CA2W(re[1 * col + 18], CP_UTF8));
+	GetDlgItem(IDC_EDIT_CURRENT_POSITION)->SetWindowTextW(CA2W(re[1 * col + 19], CP_UTF8));
 
-	GetDlgItem(IDC_EDIT_HOME_ADDRESS)->SetWindowTextW(CA2W(re[1 * col + 19], CP_UTF8));
-	GetDlgItem(IDC_EDIT_PHONE)->SetWindowTextW(CA2W(re[1 * col + 20], CP_UTF8));
+	GetDlgItem(IDC_EDIT_HOME_ADDRESS)->SetWindowTextW(CA2W(re[1 * col + 20], CP_UTF8));
+	GetDlgItem(IDC_EDIT_PHONE)->SetWindowTextW(CA2W(re[1 * col + 21], CP_UTF8));
 
-	GetDlgItem(IDC_EDIT_RESUME)->SetWindowTextW(CA2W(re[1 * col + 21], CP_UTF8));
+	GetDlgItem(IDC_EDIT_RESUME)->SetWindowTextW(CA2W(re[1 * col + 22], CP_UTF8));
 
-	m_strPicPathname.Format(_T("%s"), CA2W(re[1 * col + 22], CP_UTF8));
+	m_strPicPathname.Format(_T("%s"), CA2W(re[1 * col + 23], CP_UTF8));
 	if (!m_strPicPathname.IsEmpty() && m_strPicPathname != _T("(null)") ) {
 		if (true == (bool)PathFileExists(m_strPicPathname.GetBuffer())) {
 			CImage  image;
@@ -253,6 +260,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm01, CFormView)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm01::OnClickedCmdPrintForm)
 	ON_STN_CLICKED(IDC_FILE_PICTURE, &CPersonalForm01::OnClickedFilePicture)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM01, &CPersonalForm01::OnClickedButtonCloseForm01)
+	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm01::OnBnClickedCmdUpdateForm)
 END_MESSAGE_MAP()
 
 
@@ -534,7 +542,7 @@ void CPersonalForm01::OnClickedCmdSaveForm()
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
-	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+	//TRACE(CA2W(ss.str().c_str(), CP_UTF8));
 
 	CSQLiteHelper *help = new CSQLiteHelper();
 	help->openDB("kiwi.db3");
@@ -557,6 +565,8 @@ void CPersonalForm01::OnClickedCmdSaveForm()
 
 	CString strText;
 	ss << "insert into file_form_01 values(" << file_id << ",";
+	strText = CUtility::GetGuid();
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 	GetDlgItem(IDC_EDIT_NAME)->GetWindowTextW(strText);
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 	GetDlgItem(IDC_COMBO_GENDER)->GetWindowTextW(strText);
@@ -618,13 +628,36 @@ void CPersonalForm01::OnClickedCmdSaveForm()
 	else {
 		ss << "'') ";
 	}
-	
-	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+	//TRACE(CA2W(ss.str().c_str(), CP_UTF8));
 
 	help->execSQL(ss.str().c_str());
 
-	help->closeDB();
-	delete help;
+	if (!m_isModify) {
+		ss.str("");  ss.clear();
+		ss << "insert into personal_form_info values (" << file_id << ",";
+		ss << "1, " << "'" << CW2A(_T("表1"), CP_UTF8) << "',";
+		CTime today = CTime::GetCurrentTime();
+		strText = today.Format("%Y-%m-%d");
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', ";
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "');"; strText.ReleaseBuffer();
+		//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+	}
+	else
+	{
+		ss.str("");  ss.clear();
+		ss << "update personal_form_info set modify_date=";
+		CTime today = CTime::GetCurrentTime();
+		strText = today.Format("%Y-%m-%d");
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', ";
+		ss << " where file_id=" << file_id << " and form_serial=";
+		ss << "'" << CW2A(_T("表1"), CP_UTF8) << "';";
+		//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+
+	}
+
+	help->closeDB(); delete help;
 	ss.str("");  ss.clear();
 	GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 }
@@ -769,6 +802,13 @@ void CPersonalForm01::OnClickedButtonCloseForm01()
 
 	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
 
-	//CloseWindow();
-	//DestroyWindow();
+	::PostMessage(this->m_hWnd, WM_DESTROY, 0L, 0L);
+}
+
+
+void CPersonalForm01::OnBnClickedCmdUpdateForm()
+{
+	//因为数据表中只有一个记录，所以更新可以采用删除原来的，再插入新的
+	m_isModify = TRUE;
+	OnClickedCmdSaveForm();
 }

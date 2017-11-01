@@ -75,6 +75,7 @@ protected:
 	inline void DrawTextCell(CDC* pDC, CRect& box, CString& strText, int enumBorder);
 
 	void QueryAndFillFileForm();
+	BOOL m_isModify;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
@@ -96,6 +97,7 @@ public:
 	CBitmap m_bmpClose;
 	afx_msg void OnClickedButtonCloseForm01();
 	CComboBox m_comboGender;
+	afx_msg void OnBnClickedCmdUpdateForm();
 };
 
 #define MARGIN_X 20
