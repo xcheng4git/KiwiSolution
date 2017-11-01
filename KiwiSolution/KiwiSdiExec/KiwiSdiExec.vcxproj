@@ -105,6 +105,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ButtonEx.h" />
     <ClInclude Include="DatePickerCombo.h" />
     <ClInclude Include="DlgLogin.h" />
     <ClInclude Include="DlgNewFile.h" />
@@ -113,6 +114,7 @@
     <ClInclude Include="KiwiSdiExec.h" />
     <ClInclude Include="KiwiSdiExecDoc.h" />
     <ClInclude Include="KiwiSdiExecView.h" />
+    <ClInclude Include="ListCtrlEx.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="msword\CApplication.h" />
     <ClInclude Include="msword\CBookmark0.h" />
@@ -165,6 +167,7 @@
     <ClInclude Include="PersonalForm23.h" />
     <ClInclude Include="PersonalForm24.h" />
     <ClInclude Include="PersonalSummary.h" />
+    <ClInclude Include="QueryByFolder.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SplashWnd.h" />
     <ClInclude Include="SQLiteHelper.h" />
@@ -173,6 +176,7 @@
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ButtonEx.cpp" />
     <ClCompile Include="DatePickerCombo.cpp" />
     <ClCompile Include="DlgLogin.cpp" />
     <ClCompile Include="DlgNewFile.cpp" />
@@ -181,6 +185,7 @@
     <ClCompile Include="KiwiSdiExec.cpp" />
     <ClCompile Include="KiwiSdiExecDoc.cpp" />
     <ClCompile Include="KiwiSdiExecView.cpp" />
+    <ClCompile Include="ListCtrlEx.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="PaneOrgnization.cpp" />
     <ClCompile Include="PaneShortcut.cpp" />
@@ -209,6 +214,7 @@
     <ClCompile Include="PersonalForm23.cpp" />
     <ClCompile Include="PersonalForm24.cpp" />
     <ClCompile Include="PersonalSummary.cpp" />
+    <ClCompile Include="QueryByFolder.cpp" />
     <ClCompile Include="SplashWnd.cpp" />
     <ClCompile Include="SQLiteHelper.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -5,6 +5,7 @@
 #pragma once
 #include "PaneOrgnization.h"
 #include "PaneShortcut.h"
+#include "KiwiSdiExecDoc.h"
 
 class CMainFrame : public CFrameWnd
 {
@@ -20,6 +21,7 @@ public:
 
 // ²Ù×÷
 public:
+	CKiwiSdiExecDoc* GetDocument();
 
 // ÖØÐ´
 public:
@@ -61,5 +63,9 @@ public:
 	afx_msg void OnUpdateToolFullscreen(CCmdUI *pCmdUI);
 protected:
 	afx_msg LRESULT OnShowDefaultSummary(WPARAM wParam, LPARAM lParam);
+public:
+	afx_msg void OnQueryByFolder();
+protected:
+	afx_msg LRESULT OnModifyPersonalForm(WPARAM wParam, LPARAM lParam);
 };
 

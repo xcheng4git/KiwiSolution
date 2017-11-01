@@ -219,6 +219,15 @@
     <ClInclude Include="SplashWnd.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="QueryByFolder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonEx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ListCtrlEx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KiwiSdiExec.cpp">
@@ -339,6 +348,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SplashWnd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryByFolder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonEx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ListCtrlEx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

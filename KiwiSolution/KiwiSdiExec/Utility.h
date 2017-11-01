@@ -8,5 +8,7 @@ public:
 public:
 	static CString GetModuleDirectory();
 	static CString GetGuid();
+
+	static CString MarriageStatus2String(int marriageStatus);
 };
 

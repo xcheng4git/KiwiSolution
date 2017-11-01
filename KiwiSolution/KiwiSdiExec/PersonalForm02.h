@@ -35,7 +35,8 @@ public:
 	   afx_msg void OnClickedFilePicture();
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
-	
+	BOOL m_isModify;
+
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnStnClickedStaticbox1();
@@ -48,6 +49,7 @@ public:
 	int m_Radio2_1;
 	int m_Radio2_2;
 	int m_Radio2_3;
+	afx_msg void OnBnClickedCmdUpdateForm();
 };
 
 

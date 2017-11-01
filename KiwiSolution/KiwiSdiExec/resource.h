@@ -55,8 +55,8 @@
 #define IDD_PERSONAL_FORM24             351
 #define IDD_DIALOG_LOGIN                352
 #define IDB_SPLASH                      353
-#define IDB_BITMAP1                     354
 #define IDB_BMP_SPLASH                  354
+#define IDD_DIALOG_QUERY_BYFOLDER       355
 #define IDC_EDIT_TEST                   1011
 #define IDC_LIST_SHORTCUT               1012
 #define IDC_TREE_ORGNIZATION            1013
@@ -66,6 +66,7 @@
 #define IDC_EDIT_FILE_NAME              1017
 #define IDC_LIST_FORM_TYPE              1018
 #define IDC_LIST1                       1019
+#define IDC_LIST_QUERY_BYFOLDER         1019
 #define IDC_LIST_SUMMARY_1              1020
 #define IDC_LIST_SUMMARY_2              1021
 #define IDC_STATICBOX1                  1022
@@ -190,6 +191,7 @@
 #define IDC_CMD_SAVE_FORM               1073
 #define IDC_STATICBOX66                 1073
 #define IDC_STATICBOX35                 1074
+#define IDC_CMD_UPDATE_FORM             1074
 #define IDC_STATICBOX30                 1075
 #define IDC_STATICBOX67                 1075
 #define IDC_STATICBOX117                1075
@@ -202,6 +204,7 @@
 #define IDC_STATICBOX119                1078
 #define IDC_FILE_PICTURE                1079
 #define IDC_STATICBOX70                 1079
+#define IDC_CMD_UPDATE_FORM3            1079
 #define IDC_STATICBOX32                 1080
 #define IDC_CMD_SAVE_FORM2              1080
 #define IDC_STATICBOX120                1080
@@ -210,6 +213,7 @@
 #define IDC_STATICBOX121                1081
 #define IDC_EDIT_PIC_PATHNAME           1082
 #define IDC_STATICBOX122                1082
+#define IDC_CMD_UPDATE_FORM2            1082
 #define IDC_STATICBOX37                 1083
 #define IDC_STATICBOX123                1083
 #define IDC_PIC_GROUP1_1                1084
@@ -801,16 +805,26 @@
 #define IDC_STATIC_FORM02_HEADER1       1505
 #define IDC_STATIC_FORM02_HEADER2       1506
 #define IDC_STATIC_WRONG                1507
+#define IDC_COMBO_FOLDERS               1508
+#define IDC_BUTTON_CLOSE_FORM           1509
+#define IDC_STATIC_QUERY_HEADER         1510
+#define IDC_BUTTON_QUERY_BYFOLDER       1511
+#define IDC_STATIC_ERROR_MSG            1512
+#define IDC_COMBO1                      1513
+#define IDC_COMBO_GENDER                1513
+#define IDC_STATIC_ERR                  1514
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
+#define ID_Menu                         32773
+#define ID_QUERY_BY_FOLDER              32774
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        355
-#define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1508
+#define _APS_NEXT_RESOURCE_VALUE        356
+#define _APS_NEXT_COMMAND_VALUE         32775
+#define _APS_NEXT_CONTROL_VALUE         1515
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

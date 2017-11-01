@@ -37,6 +37,13 @@
 
 #include "SplashWnd.h"
 
+#include "QueryByFolder.h"
+
+#include "SQLiteHelper.h"
+#include <sstream>
+using namespace std;
+
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -54,6 +61,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_TOOL_FULLSCREEN, &CMainFrame::OnToolFullscreen)
 	ON_UPDATE_COMMAND_UI(ID_TOOL_FULLSCREEN, &CMainFrame::OnUpdateToolFullscreen)
 	ON_MESSAGE(WM_SHOW_DEFAULT_SUMMARY, &CMainFrame::OnShowDefaultSummary)
+	ON_COMMAND(ID_QUERY_BY_FOLDER, &CMainFrame::OnQueryByFolder)
+	ON_MESSAGE(WM_MODIFY_PERSONAL_FORM, &CMainFrame::OnModifyPersonalForm)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -108,17 +117,28 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_paneManager.SetTheme(xtpPaneThemeOffice2003);
 
 	CXTPDockingPane* paneOrgnization = m_paneManager.CreatePane(
-		IDD_PANE_ORGNIZATION, CRect(0, 0, 240, 300), xtpPaneDockLeft);
+		IDD_PANE_ORGNIZATION, CRect(0, 0, 240, 380), xtpPaneDockLeft);
 	paneOrgnization->SetOptions(xtpPaneNoCloseable | xtpPaneNoFloatable | xtpPaneNoDockable | xtpPaneNoHideable);
-	paneOrgnization->SetMaxTrackSize(CSize(240, 300)); paneOrgnization->SetMinTrackSize(CSize(240, 300));
+	paneOrgnization->SetMaxTrackSize(CSize(240, 380)); paneOrgnization->SetMinTrackSize(CSize(240, 380));
+	paneOrgnization->SetTitle(_T("——组织机构——"));
 
 	CXTPDockingPane* paneShortcut = m_paneManager.CreatePane(
 		IDD_PANE_SHORTCUT, CRect(0, 0, 240, 100), xtpPaneDockBottom, paneOrgnization);
 	paneShortcut->SetOptions(xtpPaneNoCloseable | xtpPaneNoFloatable | xtpPaneNoDockable | xtpPaneNoHideable);
 	paneShortcut->SetMaxTrackSize(CSize(240, 100)); paneShortcut->SetMinTrackSize(CSize(240, 100));
-
+	paneShortcut->SetTitle(_T("——快捷菜单——"));
 	
 	return 0;
+}
+
+CKiwiSdiExecDoc* CMainFrame::GetDocument()
+{
+	POSITION pos = theApp.GetFirstDocTemplatePosition();
+	CDocTemplate* pDocTemplate = theApp.GetNextDocTemplate(pos);
+	pos = pDocTemplate->GetFirstDocPosition();
+	CKiwiSdiExecDoc* pDoc = (CKiwiSdiExecDoc*)pDocTemplate->GetNextDoc(pos);
+
+	return pDoc;
 }
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
@@ -391,8 +411,10 @@ afx_msg LRESULT CMainFrame::OnCreatePersonalForm(WPARAM wParam, LPARAM lParam)
 		return 0;
 
 	}
-		return 0;
+		
 	}
+
+	return 0;
 }
 
 
@@ -461,14 +483,49 @@ void CMainFrame::OnUpdateToolFullscreen(CCmdUI *pCmdUI)
 
 afx_msg LRESULT CMainFrame::OnShowDefaultSummary(WPARAM wParam, LPARAM lParam)
 {
-	CString *folder = (CString *)lParam;
-	m_wndPaneShortcut.m_strCurrentFolder.Format(_T("%s"), *folder); //delete folder;
-
+	if (lParam != NULL) {
+		CString *folder = (CString *)lParam;
+		m_wndPaneShortcut.m_strCurrentFolder.Format(_T("%s"), *folder); //delete folder;
+	}
 	CView* pView = CreatePersonalForm(RUNTIME_CLASS(CKiwiSdiExecView), IDD_KIWISDIEXEC_FORM);
 	pView->OnInitialUpdate();
 
 	//////////////////////////////////////
 	//考虑把其他的窗口的关闭,销毁
 
+	return 0;
+}
+
+
+void CMainFrame::OnQueryByFolder()
+{
+	CView* pView = CreatePersonalForm(RUNTIME_CLASS(CQueryByFolder), IDD_DIALOG_QUERY_BYFOLDER);
+	pView->OnInitialUpdate();
+
+	//////////////////////////////////////
+	//考虑把其他的窗口的关闭,销毁
+}
+
+
+afx_msg LRESULT CMainFrame::OnModifyPersonalForm(WPARAM wParam, LPARAM lParam)
+{
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+
+	stringstream ss;
+	ss << "select file_name, folder_name from orgnization_file where file_id=" << int(lParam) << ";";
+	int row, col;
+	char *eee = "i";
+	char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result); //row 是查出多少行记录,col是每条记录多少个字段
+
+	if (row < 1)
+		return 0;
+
+	CString folder; folder.Format(_T("%s"), CA2W(re[1 * col + 1], CP_UTF8));
+	CString file; file.Format(_T("%s"), CA2W(re[1 * col + 0], CP_UTF8));
+	::PostMessage(this->m_hWnd, WM_CREATE_PERSONAL_FORM, wParam, LPARAM(new CString(folder + _T("/") + file)));
+
+	help->closeDB(); delete help;
 	return 0;
 }

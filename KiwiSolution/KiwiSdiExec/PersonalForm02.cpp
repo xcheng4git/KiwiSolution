@@ -10,6 +10,7 @@ using namespace std;
 #include "SQLiteHelper.h"
 #include "msword/msword.h"
 #include "MainFrm.h"
+#include "Utility.h"
 // CPersonalForm02
 
 IMPLEMENT_DYNCREATE(CPersonalForm02, CFormView)
@@ -24,6 +25,8 @@ CPersonalForm02::CPersonalForm02()
 	m_fontEdit.CreateFontIndirect(&lf);
 
 	m_bmpClose.LoadBitmap(IDB_BITMAP_CLOSE);
+
+	m_isModify = FALSE;
 }
 
 CPersonalForm02::~CPersonalForm02()
@@ -55,6 +58,7 @@ void CPersonalForm02::QueryAndFillFileForm()
 		help->closeDB(); delete help;
 		return;
 	}
+
 	GetDlgItem(parameters1[0])->SetWindowTextW(CA2W(re[1 * col + 0], CP_UTF8));
 	GetDlgItem(parameters1[1])->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
 	GetDlgItem(parameters1[2])->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
@@ -69,9 +73,12 @@ void CPersonalForm02::QueryAndFillFileForm()
 		return;
 	}
 
-	m_Radio2_1 = atoi(re[1 * col + 5]);
+	GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
+
+	m_Radio2_1 = atoi(re[1 * col + 6]);
 	for (int i = 5; i < 10; i++) {
-		GetDlgItem(parameters1[i])->SetWindowTextW(CA2W(re[1 * col + i + 1], CP_UTF8));
+		GetDlgItem(parameters1[i])->SetWindowTextW(CA2W(re[1 * col + i + 2], CP_UTF8));
 	}
 
 	ss.str(""); ss.clear();
@@ -82,16 +89,18 @@ void CPersonalForm02::QueryAndFillFileForm()
 		help->closeDB(); delete help;
 		return;
 	}
-	m_Radio2_2 = atoi(re[1 * col + 1]);
-	int ifChange = atoi(re[1 * col + 2]);
+	m_Radio2_2 = atoi(re[1 * col + 2]);
+	int ifChange = atoi(re[1 * col + 3]);
 	if (ifChange != -1) {
 		((CButton*)GetDlgItem(parameters2[1]))->SetCheck(1);
 
-		m_Radio2_3 = atoi(re[1 * col + 3]);
+		m_Radio2_3 = atoi(re[1 * col + 4]);
 
-		GetDlgItem(parameters2[3])->SetWindowTextW(CA2W(re[1 * col + 4], CP_UTF8));
-		GetDlgItem(parameters2[4])->SetWindowTextW(CA2W(re[1 * col + 5], CP_UTF8));
+		GetDlgItem(parameters2[3])->SetWindowTextW(CA2W(re[1 * col + 5], CP_UTF8));
+		GetDlgItem(parameters2[4])->SetWindowTextW(CA2W(re[1 * col + 6], CP_UTF8));
 	}
+
+	help->closeDB(); delete help;
 
 	UpdateData(FALSE);
 }
@@ -100,6 +109,8 @@ void CPersonalForm02::SetCurrentFile(CString filePath)
 {
 	m_strCurrentFolder = filePath.Left(filePath.Find(_T("/"), 0));
 	m_strCurrentFile = filePath.Right(filePath.GetLength() - filePath.Find(_T("/"), 0) - 1);
+
+	m_isModify = FALSE;
 }
 void CPersonalForm02::DoDataExchange(CDataExchange* pDX)
 {
@@ -117,6 +128,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm02, CFormView)
 	ON_BN_CLICKED(IDC_CMD_SAVE_FORM, &CPersonalForm02::OnBnClickedCmdSaveForm)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm02::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM02, &CPersonalForm02::OnBnClickedButtonCloseForm02)
+	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm02::OnBnClickedCmdUpdateForm)
 END_MESSAGE_MAP()
 
 
@@ -206,15 +218,13 @@ void CPersonalForm02::OnInitialUpdate()
 
 void CPersonalForm02::OnBnClickedCmdSaveForm()
 {
-	int parameters1[] = { IDC_EDIT3, IDC_EDIT5, IDC_EDIT7, IDC_EDIT8, m_Radio2_1, IDC_EDIT14, IDC_EDIT15, IDC_EDIT16, IDC_EDIT18, IDC_EDIT20 };
-	int parameters2[] = { m_Radio2_2, IDC_RADIO7, m_Radio2_3, IDC_DATETIMEPICKER1, IDC_EDIT21 };
-
+	
 	UpdateData();
 	// TODO:  在此添加控件通知处理程序代码
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
-	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+	//TRACE(CA2W(ss.str().c_str(), CP_UTF8));
 
 	CSQLiteHelper *help = new CSQLiteHelper();
 	help->openDB("kiwi.db3");
@@ -228,16 +238,18 @@ void CPersonalForm02::OnBnClickedCmdSaveForm()
 	ss << "select count(*) from file_form_02 where file_id=" << file_id << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result); ss.str(""); ss.clear();
 	int hasRecord = atoi(re[1 * col + 0]);
-
 	if (hasRecord) {
 		ss << "delete from file_form_02 where file_id=" << file_id << ";";
 		help->execSQL(ss.str().c_str()); ss.str(""); ss.clear();
 
 	}
 
+	int parameters1[] = { IDC_EDIT3, IDC_EDIT5, IDC_EDIT7, IDC_EDIT8, m_Radio2_1, IDC_EDIT14, IDC_EDIT15, IDC_EDIT16, IDC_EDIT18, IDC_EDIT20 };
 	CString strText;
 	ss.str(""); ss.clear();
 	ss << "insert into file_form_02 values(" << file_id << ",";
+	strText = CUtility::GetGuid();
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 
 	for (int i = 0; i < 4; i++) {
 		GetDlgItem(parameters1[i])->GetWindowTextW(strText);
@@ -266,9 +278,11 @@ void CPersonalForm02::OnBnClickedCmdSaveForm()
 
 	}
 
+	int parameters2[] = { m_Radio2_2, IDC_RADIO7, m_Radio2_3, IDC_DATETIMEPICKER1, IDC_EDIT21 };
 	ss.str(""); ss.clear();
 	ss << "insert into file_form_03 values(" << file_id << ",";
-
+	strText = CUtility::GetGuid();
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 	ss << parameters2[0] << ", ";
 	if (((CButton *)GetDlgItem(parameters2[1]))->GetCheck() == 1) {
 		ss << "1, ";
@@ -286,6 +300,30 @@ void CPersonalForm02::OnBnClickedCmdSaveForm()
 
 	help->execSQL(ss.str().c_str());
 
+	if (!m_isModify) {
+		ss.str("");  ss.clear();
+		ss << "insert into personal_form_info values (" << file_id << ",";
+		ss << "2, " << "'" << CW2A(_T("表2-1"), CP_UTF8) << "',";
+		CTime today = CTime::GetCurrentTime();
+		strText = today.Format("%Y-%m-%d");
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', ";
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "');"; strText.ReleaseBuffer();
+		//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+	}
+	else
+	{
+		ss.str("");  ss.clear();
+		ss << "update personal_form_info set modify_date=";
+		CTime today = CTime::GetCurrentTime();
+		strText = today.Format("%Y-%m-%d");
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', ";
+		ss << " where file_id=" << file_id << " and form_serial=";
+		ss << "'" << CW2A(_T("表2-1"), CP_UTF8) << "';";
+		//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+
+	}
 
 	help->closeDB();
 	delete help;
@@ -463,4 +501,13 @@ void CPersonalForm02::OnBnClickedButtonCloseForm02()
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
 	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
+	::PostMessage(this->m_hWnd, WM_DESTROY, 0L, 0L);
+}
+
+
+void CPersonalForm02::OnBnClickedCmdUpdateForm()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	m_isModify = TRUE;
+	OnBnClickedCmdSaveForm();
 }

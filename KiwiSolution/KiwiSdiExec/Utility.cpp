@@ -48,3 +48,24 @@ CString CUtility::GetGuid()
 
 	return strGuid;
 }
+
+CString CUtility::MarriageStatus2String(int marriageStatus)
+{
+	CString strText;
+	switch (marriageStatus) {
+	case 0:
+		strText.Format(_T("%s"), _T("Œ¥ªÈ"));
+		break;
+	case 1:
+		strText.Format(_T("%s"), _T("“—ªÈ"));
+		break;
+	case 2:
+		strText.Format(_T("%s"), _T("¿Î“Ï"));
+		break;
+	case 3:
+		strText.Format(_T("%s"), _T("…•≈º"));
+		break;
+	}
+
+	return strText;
+}
