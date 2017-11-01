@@ -47,6 +47,7 @@ void CButtonEx::OnBnClicked()
 {
 	// TODO:  在此添加控件通知处理程序代码
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
-	::PostMessage(pWnd->m_hWnd, WM_MODIFY_PERSONAL_FORM, WPARAM(m_inItem+1), LPARAM(m_file_id));
+	int flag = 1 << 16;
+	::PostMessage(pWnd->m_hWnd, WM_MODIFY_PERSONAL_FORM, WPARAM(flag+m_inItem+1), LPARAM(m_file_id));
 
 }
