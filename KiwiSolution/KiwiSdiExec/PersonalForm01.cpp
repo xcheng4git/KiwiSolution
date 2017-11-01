@@ -613,16 +613,12 @@ void CPersonalForm01::OnClickedCmdSaveForm()
 		image.Load(m_strPicPathname); //把图像保存到特定目录,然后将路径存数据库
 		m_strPicPathname = CUtility::GetModuleDirectory() + _T("\\photo\\") + CUtility::GetGuid() + _T(".jpg");
 		image.Save(m_strPicPathname.GetBuffer());
-		ss << "'" << CW2A(m_strPicPathname.GetBuffer(), CP_UTF8) << "', ";
+		ss << "'" << CW2A(m_strPicPathname.GetBuffer(), CP_UTF8) << "') ";
 	}
 	else {
-		ss << "'', ";
+		ss << "'') ";
 	}
 	
-	CTime today = CTime::GetCurrentTime();
-	strText = today.Format("%Y-%m-%d");
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "'); "; strText.ReleaseBuffer();
-
 	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
 
 	help->execSQL(ss.str().c_str());
