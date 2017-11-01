@@ -49,6 +49,7 @@ public:
 	int m_Radio11_6_1;
 	int m_Radio11_6_2;
 	int m_Radio11_6_3;
+	virtual void OnInitialUpdate();
 };
 
 
