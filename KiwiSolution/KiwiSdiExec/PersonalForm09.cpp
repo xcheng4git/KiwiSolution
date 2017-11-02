@@ -54,7 +54,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm09, CFormView)
 	ON_BN_CLICKED(IDC_CMD_SAVE_FORM, &CPersonalForm09::OnBnClickedCmdSaveForm)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm09::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm09::OnBnClickedButtonCloseForm3)
-	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM3, &CPersonalForm09::OnBnClickedCmdUpdateForm3)
+	//ON_BN_CLICKED(IDC_CMD_UPDATE_FORM3, &CPersonalForm09::OnBnClickedCmdUpdateForm3)
 END_MESSAGE_MAP()
 
 
@@ -206,19 +206,8 @@ void CPersonalForm09::OnInitialUpdate()
 		m_Radio11_5_2 = atoi(re[5 * col + 3]);
 		m_Radio11_5_3 = atoi(re[5 * col + 6]);
 	}
-	/*
-	if (row == 6){
-		m_Radio11_6_1 = atoi(re[6 * col + 2]);
-		m_Radio11_6_2 = atoi(re[6 * col + 3]);
-		m_Radio11_6_3 = atoi(re[6 * col + 6]);
-	}
-	*/
 	help->closeDB();
 	delete help;
 	UpdateData(FALSE);
 }
 
-void CPersonalForm09::OnBnClickedCmdUpdateForm3()
-{
-	// TODO:  在此添加控件通知处理程序代码
-}

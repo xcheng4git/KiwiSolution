@@ -230,13 +230,6 @@ void CPersonalForm10::OnInitialUpdate()
 		}
 		if (i + 1 >= row) break;
 	}
-	/*
-	GetDlgItem(IDC_EDIT97)->SetWindowTextW(CA2W(re[1 * col + 3], CP_UTF8));
-	GetDlgItem(IDC_EDIT133)->SetWindowTextW(CA2W(re[2 * col + 3], CP_UTF8));
-	GetDlgItem(IDC_EDIT134)->SetWindowTextW(CA2W(re[3 * col + 3], CP_UTF8));
-	GetDlgItem(IDC_EDIT135)->SetWindowTextW(CA2W(re[4 * col + 3], CP_UTF8));
-	GetDlgItem(IDC_EDIT136)->SetWindowTextW(CA2W(re[5 * col + 3], CP_UTF8));
-	*/
 	help->closeDB();
 	delete help;
 	UpdateData(FALSE);
