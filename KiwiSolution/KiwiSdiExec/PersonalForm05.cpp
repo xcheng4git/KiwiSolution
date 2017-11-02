@@ -413,13 +413,13 @@ void CPersonalForm05::OnBnClickedCmdPrintForm()
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	if (row >= 1) {
 		for (int r = 1; r <= row; r++){
-			for (int c = 1; c <= 4; c++) {
+			for (int c = 1; c < 5; c++) {
 				swprintf_s(szBookmark, 50, _T("%s%d"), pBookmarks1[c], r);
 				bookmark = bookmarks.Item(&_variant_t(szBookmark));
 				range = bookmark.get_Range();
-				range.put_Text((CA2W(re[r * col + c], CP_UTF8)));
+				range.put_Text((CA2W(re[r * col + c+1], CP_UTF8)));
 			}
-			int yijuleibie = atoi(re[r * col + 5]);
+			int yijuleibie = atoi(re[r * col + 5+1]);
 			for (int j = 0; j < 3; j++) {
 				swprintf_s(szBookmark, 50, _T("%s%d%d"), pBookmarks1[5], r, j + 1);
 				bookmark = bookmarks.Item(&_variant_t(szBookmark));
@@ -433,7 +433,7 @@ void CPersonalForm05::OnBnClickedCmdPrintForm()
 				swprintf_s(szBookmark, 50, _T("%s%d"), pBookmarks1[c], r);
 				bookmark = bookmarks.Item(&_variant_t(szBookmark));
 				range = bookmark.get_Range();
-				range.put_Text((CA2W(re[r * col + c], CP_UTF8)));
+				range.put_Text((CA2W(re[r * col + c+1], CP_UTF8)));
 			}
 		}
 
@@ -489,7 +489,7 @@ PrintForm6_2:
 				swprintf_s(szBookmark, 50, _T("%s%d"), pBookmarks2[c], r+3);
 				bookmark = bookmarks.Item(&_variant_t(szBookmark));
 				range = bookmark.get_Range();
-				range.put_Text((CA2W(re[r * col + c], CP_UTF8)));
+				range.put_Text((CA2W(re[r * col + c+1], CP_UTF8)));
 			}
 		}
 	}
