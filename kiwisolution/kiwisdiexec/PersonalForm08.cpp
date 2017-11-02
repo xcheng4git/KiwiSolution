@@ -26,20 +26,79 @@ CPersonalForm08::CPersonalForm08()
 , m_Radio11_2_2(-1)
 , m_Radio11_2_3(-1)
 {
-	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
-	m_fontEdit.CreateFontIndirect(&lf);
+	//LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
+	//m_fontEdit.CreateFontIndirect(&lf);
+	m_FormID = 8;
+	int parameters1[][4] = { { IDC_EDIT47, IDC_EDIT97, IDC_EDIT98, IDC_EDIT99 } };
+	int structure1[6] = { 1, 4, EDITBX, EDITBX, EDITBX, EDITBX };
+	int parameters2[][7] = { { IDC_EDIT48, IDC_EDIT49, IDC_EDIT50, IDC_EDIT51, IDC_EDIT101, IDC_EDIT100, IDC_EDIT102 } };
+	int structure2[9] = { 1, 7, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX };
+	int parameters3[2][8] = { { IDC_EDIT52, 3 * 256 + 1, 3 * 256 + 2, IDC_EDIT54, IDC_EDIT55, 3 * 256 + 3, IDC_EDIT103, IDC_EDIT105 },
+	{ IDC_EDIT53, 3 * 256 + 4, 3 * 256 + 5, IDC_EDIT63, IDC_EDIT64, 3 * 256 + 6, IDC_EDIT107, IDC_EDIT108 } };
+	int structure3[10] = { 2, 8, EDITBX, RADIOBTN, RADIOBTN, EDITBX, EDITBX, RADIOBTN, EDITBX, EDITBX };
+
+	vector<vector<int>> vvPara;
+	for (int i = 0; i < 1; i++) {
+		vector<int> vPara;
+		for (int j = 0; j < 4; j++)
+			vPara.push_back(parameters1[i][j]);
+		vvPara.push_back(vPara);
+	}
+	_vvvParameters.push_back(vvPara);
+
+	vvPara.clear();
+	for (int i = 0; i < 1; i++) {
+		vector<int> vPara;
+		for (int j = 0; j < 7; j++)
+			vPara.push_back(parameters2[i][j]);
+		vvPara.push_back(vPara);
+	}
+	_vvvParameters.push_back(vvPara);
+
+	vvPara.clear();
+	for (int i = 0; i < 2; i++) {
+		vector<int> vPara;
+		for (int j = 0; j < 8; j++)
+			vPara.push_back(parameters3[i][j]);
+		vvPara.push_back(vPara);
+	}
+	_vvvParameters.push_back(vvPara);
+
+	vector<int> vStr;
+	for (int i = 0; i < 6; i++) {
+		vStr.push_back(structure1[i]);
+	}
+	_vvSubformStructure.push_back(vStr);
+
+	vStr.clear();
+	for (int i = 0; i < 9; i++) {
+		vStr.push_back(structure2[i]);
+	}
+	_vvSubformStructure.push_back(vStr);
+
+	vStr.clear();
+	for (int i = 0; i < 10; i++) {
+		vStr.push_back(structure3[i]);
+	}
+	_vvSubformStructure.push_back(vStr);
+
+	_vHaveDataSubform.push_back(-1); _vHaveDataSubform.push_back(-1); _vHaveDataSubform.push_back(-1);
+
+	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
+	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
+	vStr.clear(); vStr.push_back(0); vStr.push_back(2); _vvSubformRecordRange.push_back(vStr);
 }
 
 CPersonalForm08::~CPersonalForm08()
 {
-	m_fontEdit.DeleteObject();
+	//m_fontEdit.DeleteObject();
 }
 
-void CPersonalForm08::SetCurrentFile(CString filePath)
-{
-	m_strCurrentFolder = filePath.Left(filePath.Find(_T("/"), 0));
-	m_strCurrentFile = filePath.Right(filePath.GetLength() - filePath.Find(_T("/"), 0) - 1);
-}
+//void CPersonalForm08::SetCurrentFile(CString filePath)
+//{
+//	m_strCurrentFolder = filePath.Left(filePath.Find(_T("/"), 0));
+//	m_strCurrentFile = filePath.Right(filePath.GetLength() - filePath.Find(_T("/"), 0) - 1);
+//}
 
 void CPersonalForm08::DoDataExchange(CDataExchange* pDX)
 {
@@ -78,7 +137,106 @@ void CPersonalForm08::Dump(CDumpContext& dc) const
 #endif
 #endif //_DEBUG
 
+void CPersonalForm08::ShowEditbox(int nID, char *data)
+{
+	GetDlgItem(nID)->SetWindowTextW(CA2W(data, CP_UTF8));
+}
 
+void CPersonalForm08::ShowRadiobtn(int nWhich, char *data)
+{
+	int nSub = nWhich & 0xFF00; nSub >>= 8;
+	int nSWhich = nWhich & 0xF;
+
+	if (nSub == 3) {
+		switch (nSWhich) {
+		case 1:
+			m_Radio11_1_1 = atoi(data);
+			break;
+		case 2:
+			m_Radio11_1_2 = atoi(data);
+			break;
+		case 3:
+			m_Radio11_1_3 = atoi(data);
+			break;
+		case 4:
+			m_Radio11_2_1 = atoi(data);
+			break;
+		case 5:
+			m_Radio11_2_2 = atoi(data);
+			break;
+		case 6:
+			m_Radio11_2_3 = atoi(data);
+			break;
+		}
+	}
+
+}
+
+void CPersonalForm08::ShowDatapicker(int nID, char *data)
+{
+	COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
+	((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+}
+
+void CPersonalForm08::GetNumber(int nWhich, int &num)
+{
+	int nSub = nWhich & 0xFF00; nSub >>= 8;
+	int nSWhich = nWhich & 0xF;
+
+	if (nSub == 3) {
+		switch (nSWhich) {
+		case 1:
+			num = m_Radio11_1_1;
+			break;
+		case 2:
+			num = m_Radio11_1_2;
+			break;
+		case 3:
+			num = m_Radio11_1_3;
+			break;
+		case 4:
+			num = m_Radio11_2_1;
+			break;
+		case 5:
+			num = m_Radio11_2_2;
+			break;
+		case 6:
+			num = m_Radio11_2_3;
+			break;
+		}
+	}
+}
+
+void CPersonalForm08::GetString(int nID, CString &str)
+{
+	GetDlgItem(nID)->GetWindowTextW(str); str.Trim();
+}
+
+BOOL CPersonalForm08::hasData(int isub, int irow)
+{
+	CString strText;
+	if (isub == 2) {
+		if (m_Radio10_0 == 1)
+			return FALSE;
+	}
+	else if (isub == 3) {
+		switch (irow) {
+		case 1:
+			GetDlgItem(IDC_EDIT52)->GetWindowTextW(strText);
+			if (strText == _T("无"))
+				return FALSE;
+			break;
+		case 2:
+			GetDlgItem(IDC_EDIT53)->GetWindowTextW(strText);
+			strText.Trim();
+			if (!strText.IsEmpty())
+				return FALSE;
+			break;
+		}
+	}
+
+	return TRUE;
+}
 // CPersonalForm08 消息处理程序
 
 
@@ -111,6 +269,7 @@ void CPersonalForm08::OnBnClickedCmdSaveForm()
 	CString strText;
 #pragma region FillForm9
 FillForm9:
+	/*
 	{
 		ss << "insert into file_form_14 values(" << file_id << ",";
 
@@ -128,29 +287,21 @@ FillForm9:
 		ss.str(""); ss.clear();
 
 	}
+	*/
 #pragma endregion
 
 #pragma region FillForm10
 FillForm10:
-	if (m_Radio10_0 == 1)
-	{
-		ss << "update file_form_flags set file_15IfHaveThisSituation=0 where file_id=" << file_id;
-
-		help->execSQL(ss.str().c_str());
-
-		//调试
-		
-
+	if (m_Radio10_0 == 1) {
 		ss.str(""); ss.clear();
-		goto FillForm11;
-	}
-	
-	{
+		ss << "update file_form_flags set file_15IfHaveThisSituation=0 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+	} else {
+		ss.str(""); ss.clear();
 		ss << "update file_form_flags set file_15IfHaveThisSituation=1 where file_id=" << file_id;
 		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
 	}
-
+	/*
 	{
 		ss << "insert into file_form_15 values(" << file_id << ",";
 
@@ -174,6 +325,7 @@ FillForm10:
 		ss.str(""); ss.clear();
 
 	}
+	*/
 #pragma endregion
 
 #pragma region FillForm11
@@ -181,35 +333,26 @@ FillForm11 :
 	GetDlgItem(IDC_EDIT52)->GetWindowTextW(strText);
 	if (strText == _T("无"))
 	{
-		ss << "update file_form_flags set file_16IfHaveThisSituation=0 where file_id=" << file_id;
-
-		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
-		goto FillComplete;
-	}
-
-	{
+		ss << "update file_form_flags set file_16IfHaveThisSituation=0 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+	} else {
+		ss.str(""); ss.clear();
 		ss << "update file_form_flags set file_16IfHaveThisSituation=1 where file_id=" << file_id;
 		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
 	}
 
-	{
-		if (m_Radio11_0 == 1)
+	if (m_Radio11_0 == 1){
+		ss.str(""); ss.clear();
+		ss << "update file_form_flags set file_16IfChange=0 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+	} else if (m_Radio11_0 == 0)
 		{
-			ss << "update file_form_flags set file_16IfChange=0 where file_id=" << file_id;
-			help->execSQL(ss.str().c_str());
 			ss.str(""); ss.clear();
-			goto FillComplete;
-		}
-		else if (m_Radio11_0 == 0)
-		{
 			ss << "update file_form_flags set file_16IfChange=1 where file_id=" << file_id;
 			help->execSQL(ss.str().c_str());
-			ss.str(""); ss.clear();
 		}
-	}
-
+	/*
 	int Parameters[2][8] = { { IDC_EDIT52, m_Radio11_1_1, m_Radio11_1_2, IDC_EDIT54, IDC_EDIT55, m_Radio11_1_3, IDC_EDIT103, IDC_EDIT105 },
 	{ IDC_EDIT53, m_Radio11_2_1, m_Radio11_2_2, IDC_EDIT63, IDC_EDIT64, m_Radio11_2_3, IDC_EDIT107, IDC_EDIT108 } };
 
@@ -238,13 +381,18 @@ FillForm11 :
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
 	}
+	*/
+
 #pragma endregion
 
 
-FillComplete :
+FillComplete:
+
 	help->closeDB(); delete help;
-			 ss.str("");  ss.clear();
-			 GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
+	ss.str("");  ss.clear();
+
+	DoSaveForm();
+	GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 }
 
 
@@ -260,6 +408,7 @@ void CPersonalForm08::OnBnClickedButtonCloseForm3()
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
 	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
+	::PostMessage(this->m_hWnd, WM_DESTROY, 0l, 0l);
 }
 
 
@@ -267,6 +416,7 @@ void CPersonalForm08::OnInitialUpdate()
 {
 	CFormView::OnInitialUpdate();
 
+#if 0
 FillForm14 :
 	//第一张表********************************************
 	stringstream ss;
@@ -360,9 +510,50 @@ FillForm16 :
 	help->closeDB();
 	delete help;
 	UpdateData(FALSE);
+#endif
+
+	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
+	DoShowForm();
+
+	BOOL hasData = FALSE;
+	vector<int>::iterator itHas = _vHaveDataSubform.begin();
+	while (itHas != _vHaveDataSubform.end()) {
+		if (*itHas != -1) {
+			hasData = TRUE; break;
+		}
+		itHas++;
+	}
+	if (hasData) {
+		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_CMD_UPDATE_FORM3)->ShowWindow(SW_SHOW);
+	}
+
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+
+	ss.str(""); ss.clear();
+	ss << "select file_15IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		m_Radio10_0 = -1;
+	} else 
+		m_Radio10_0 = 1-atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+	help->closeDB(); delete help;
+
+	UpdateData(FALSE);
 }
 
 void CPersonalForm08::OnBnClickedCmdUpdateForm3()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	UpdateData();
+
+	DoUpdateForm();
 }
