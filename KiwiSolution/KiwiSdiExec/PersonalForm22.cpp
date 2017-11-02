@@ -155,11 +155,10 @@ void CPersonalForm22::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 
 	// TODO:  在此添加专用代码和/或调用基类
-
+	
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
-	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
 
 	CSQLiteHelper *help = new CSQLiteHelper();
 	help->openDB("kiwi.db3");
@@ -167,9 +166,16 @@ void CPersonalForm22::OnInitialUpdate()
 	char *eee = "i"; char **result = &eee;
 	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	int file_id = atoi(re[1 * col + 0]);
-	ss.str(""); ss.clear();
 
-	CString strText;
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_28 where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		help->closeDB();
+		delete help;
+		return;
+	}
 
 	int Parameters[16][6] = { { IDC_EDIT264, IDC_EDIT248, IDC_EDIT236, IDC_EDIT237, IDC_DATETIMEPICKER25, IDC_EDIT259 },
 	{ IDC_EDIT253, IDC_EDIT238, IDC_EDIT260, IDC_EDIT226, IDC_DATETIMEPICKER27, IDC_EDIT249 },
@@ -187,23 +193,22 @@ void CPersonalForm22::OnInitialUpdate()
 	{ IDC_EDIT270, IDC_EDIT275, IDC_EDIT305, IDC_EDIT310, IDC_DATETIMEPICKER39, IDC_EDIT321 },
 	{ IDC_EDIT271, IDC_EDIT276, IDC_EDIT306, IDC_EDIT311, IDC_DATETIMEPICKER40, IDC_EDIT322 },
 	{ IDC_EDIT273, IDC_EDIT278, IDC_EDIT307, IDC_EDIT312, IDC_DATETIMEPICKER41, IDC_EDIT324 } };
-
-	ss << "select * from file_form_28 where file_id=" << file_id << ";";
-	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
-	if (row < 1) {
-		ss.str(""); ss.clear();
-		help->closeDB(); delete help;
-		return;
+	COleDateTime t;
+	for (int i = 0; i < 16; i++){
+		for (int j = 0; j < 6; j++){
+			if (j == 4){
+				t.ParseDateTime(CA2W(re[(i + 1) * col + j + 1], CP_UTF8));
+				((CDateTimeCtrl*)GetDlgItem(Parameters[i][j]))->SetTime(t);
+				continue;
+			}
+			GetDlgItem(Parameters[i][j])->SetWindowTextW(CA2W(re[(i + 1) * col + j + 1], CP_UTF8));
+		}
+		if (i + 1 >= row) break;
 	}
 
-	for (int i = 0; i < 16; i++) {
-		for (int k=0; k < 6;k++)
-		GetDlgItem(Parameters[i][k])->SetWindowTextW(CA2W(re[(i+1)*col+(k+1)],CP_UTF8));
-		}
-
-		
 	help->closeDB();
-	delete help;//+++++++
+	delete help;
+	
 
 
 }
