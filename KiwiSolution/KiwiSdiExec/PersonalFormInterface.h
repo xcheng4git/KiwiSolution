@@ -25,7 +25,8 @@ protected:
 	vector<vector<vector<int>>> _vvvParameters;
 	vector<vector<int>> _vvSubformStructure;
 	vector<int> _vHaveDataSubform;
-	std::vector<std::vector<CString>> _vvSubformRecid;
+	vector<vector<CString>> _vvSubformRecid;
+	vector<vector<int>> _vvSubformRecordRange;
 
 protected:
 	CString m_strCurrentFile;
@@ -36,7 +37,7 @@ protected:
 protected:
 	void DoSaveForm();
 	void DoUpdateForm();
-	void DoShowForm(char *wClause=NULL, char *limClause=NULL);
+	void DoShowForm();
 	
 private:
 	void ShowData(int type, int nID, char *data);

@@ -111,7 +111,7 @@ void CPersonalFormInterface::DoSaveForm()
 
 }
 
-void CPersonalFormInterface::DoShowForm(char *wClause, char *limClause)
+void CPersonalFormInterface::DoShowForm()
 {
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 	CKiwiSdiExecDoc* pDoc = pWnd->GetDocument();
@@ -134,23 +134,12 @@ void CPersonalFormInterface::DoShowForm(char *wClause, char *limClause)
 	vector<wchar_t *> vFormByTables = pDoc->m_vvFormByTables[m_FormID-1];
 	for (int i = 0; i < numSubform; i++) {
 		vector<vector<int>>::iterator itVVparameter = itVVVparameter->begin();
+
 		ss.str(""); ss.clear();
-		
-		if (i == 0) {
-			ss << "select * from " << CW2A(vFormByTables[2 + i], CP_UTF8);
-			if (wClause == NULL)
-				ss << " where file_id=" << file_id;
-			else
-				ss << " " << wClause;
-			if (limClause == NULL)
-				ss << ";";
-			else
-				ss << " " << limClause << ";";
-		}
-		else {
-			ss << "select * from " << CW2A(vFormByTables[2 + i], CP_UTF8) << " where file_id=" << file_id << ";";
-		}
+		ss << "select * from " << CW2A(vFormByTables[2 + i], CP_UTF8) << " where file_id=" << file_id;
+		ss << " limit " << _vvSubformRecordRange[i][0] << "," << _vvSubformRecordRange[i][1] << ";";
 		TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+
 		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 		if (row < 1) {
 			itVVVparameter++;  continue;
