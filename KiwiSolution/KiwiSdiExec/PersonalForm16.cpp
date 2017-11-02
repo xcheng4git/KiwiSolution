@@ -179,7 +179,6 @@ void CPersonalForm16::OnInitialUpdate()
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
-	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
 
 	CSQLiteHelper *help = new CSQLiteHelper();
 	help->openDB("kiwi.db3");
@@ -187,14 +186,25 @@ void CPersonalForm16::OnInitialUpdate()
 	char *eee = "i"; char **result = &eee;
 	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	int file_id = atoi(re[1 * col + 0]);
-	ss.str("");
 
-	ss << "select * from file_form_22 where file_id=" << file_id << ";";
+	ss.str(""); ss.clear();
+	ss << "select file_22IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
-
 	if (row < 1) {
 		ss.str(""); ss.clear();
-		help->closeDB(); delete help;
+		help->closeDB();
+		delete help;
+		return;
+	}
+	m_Radio14_2_0 = atoi(re[1 * col + 0]);
+
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_22 where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		help->closeDB();
+		delete help;
 		return;
 	}
 
@@ -209,11 +219,10 @@ void CPersonalForm16::OnInitialUpdate()
 	{ IDC_EDIT188, IDC_EDIT195, IDC_EDIT202, IDC_EDIT211, IDC_EDIT220, IDC_EDIT229 } };
 	for (int i = 0; i < 9; i++){
 		for (int j = 0; j < 6; j++){
-			GetDlgItem(Parameters[i][j])->SetWindowTextW(CA2W(re[(i+1) * col + (j+1)], CP_UTF8));
+			GetDlgItem(Parameters[i][j])->SetWindowTextW(CA2W(re[(i + 1) * col + j + 1], CP_UTF8));
 		}
+		if (i + 1 >= row) break;
 	}
-	
-	ss.str(""); ss.clear();
 	help->closeDB();
 	delete help;
 }
