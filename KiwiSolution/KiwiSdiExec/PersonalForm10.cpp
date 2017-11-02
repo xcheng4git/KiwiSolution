@@ -44,6 +44,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm10, CFormView)
 	ON_BN_CLICKED(IDC_CMD_SAVE_FORM, &CPersonalForm10::OnBnClickedCmdSaveForm)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm10::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm10::OnBnClickedButtonCloseForm3)
+	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm10::OnBnClickedCmdUpdateForm)
 END_MESSAGE_MAP()
 
 
@@ -233,4 +234,9 @@ void CPersonalForm10::OnInitialUpdate()
 	help->closeDB();
 	delete help;
 	UpdateData(FALSE);
+}
+
+void CPersonalForm10::OnBnClickedCmdUpdateForm()
+{
+	// TODO:  在此添加控件通知处理程序代码
 }

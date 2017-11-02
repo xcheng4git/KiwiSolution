@@ -28,6 +28,7 @@ public:
 	CString m_strCurrentFolder;
 	void SetCurrentFile(CString filePath);
 	CFont m_fontEdit;
+	CBitmap m_bmpClose;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 

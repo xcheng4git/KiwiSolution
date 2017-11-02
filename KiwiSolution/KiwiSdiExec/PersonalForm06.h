@@ -1,10 +1,10 @@
 #pragma once
 
 
-
+#include "PersonalFormInterface.h"
 // CPersonalForm06 窗体视图
 
-class CPersonalForm06 : public CFormView
+class CPersonalForm06 : public CFormView, public CPersonalFormInterface
 {
 	DECLARE_DYNCREATE(CPersonalForm06)
 
@@ -22,11 +22,18 @@ public:
 #endif
 
 public:
-	CString m_strCurrentFile;
-	CString m_strCurrentFolder;
-	void SetCurrentFile(CString filePath);
-	CFont m_fontEdit;
+	//CString m_strCurrentFile;
+	//CString m_strCurrentFolder;
+	//void SetCurrentFile(CString filePath);
+	//CFont m_fontEdit;
+	virtual void ShowEditbox(int nID, char *data);
+	virtual void ShowRadiobtn(int nWhich, char *data);
+	virtual void ShowDatapicker(int nID, char *data);
 
+	virtual void GetNumber(int nWhich, int &num);
+	virtual void GetString(int nID, CString &str);
+
+	virtual BOOL hasData(int isub, int irow);
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
@@ -48,6 +55,8 @@ public:
 	int m_Radio7_4_0;
 	int m_Radio7_0;
 	int m_Radio7_4_1;
+	afx_msg void OnBnClickedCmdUpdateForm3();
+	virtual void OnInitialUpdate();
 };
 
 

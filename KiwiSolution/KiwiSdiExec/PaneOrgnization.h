@@ -1,7 +1,7 @@
 #pragma once
 #include "afxcmn.h"
 
-
+#include "resource.h"
 // CPaneOrgnization ¶Ô»°¿ò
 
 class CPaneOrgnization : public CDialogEx

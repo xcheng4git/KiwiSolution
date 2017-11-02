@@ -166,6 +166,7 @@
     <ClInclude Include="PersonalForm22.h" />
     <ClInclude Include="PersonalForm23.h" />
     <ClInclude Include="PersonalForm24.h" />
+    <ClInclude Include="PersonalFormInterface.h" />
     <ClInclude Include="PersonalSummary.h" />
     <ClInclude Include="QueryByFolder.h" />
     <ClInclude Include="Resource.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="PersonalForm22.cpp" />
     <ClCompile Include="PersonalForm23.cpp" />
     <ClCompile Include="PersonalForm24.cpp" />
+    <ClCompile Include="PersonalFormInterface.cpp" />
     <ClCompile Include="PersonalSummary.cpp" />
     <ClCompile Include="QueryByFolder.cpp" />
     <ClCompile Include="SplashWnd.cpp" />

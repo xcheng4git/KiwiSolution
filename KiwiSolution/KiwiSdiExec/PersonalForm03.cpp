@@ -11,7 +11,6 @@ using namespace std;
 #include "SQLiteHelper.h"
 #include "msword/msword.h"
 #include "MainFrm.h"
-#include "Utility.h"
 
 // PersonalForm03
 
@@ -22,6 +21,7 @@ PersonalForm03::PersonalForm03()
 {
 	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 15;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("·ÂËÎÌå"), 3); lf.lfWeight = 400;
 	m_fontEdit.CreateFontIndirect(&lf);
+	m_bmpClose.LoadBitmap(IDB_BITMAP_CLOSE);
 
 	m_isModify = FALSE; for (int i = 0; i < 3; i++) m_modifiedSubform[i] = -1;
 
@@ -67,6 +67,7 @@ PersonalForm03::PersonalForm03()
 PersonalForm03::~PersonalForm03()
 {
 	m_fontEdit.DeleteObject();
+	m_bmpClose.DeleteObject();
 }
 void PersonalForm03::SetCurrentFile(CString filePath)
 {
@@ -253,10 +254,10 @@ void PersonalForm03::OnInitialUpdate()
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
 	}
+
+	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
+
 }
-
-
-
 
 void PersonalForm03::OnBnClickedButtonCloseForm3()
 {
@@ -619,7 +620,6 @@ void PersonalForm03::OnBnClickedCmdUpdateForm()
 		ss << "select * from file_form_" << setfill('0') << setw(2) << m_modifiedSubform[i] << " where file_id=" << file_id << " limit 0,1;";
 		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 
-		int j = 0; 
 		while (itcRecid != itSubformRecids->end()) {
 			std::vector<int>::iterator itV = itVV->begin();
 			ss.str(""); ss.clear();
@@ -635,7 +635,7 @@ void PersonalForm03::OnBnClickedCmdUpdateForm()
 			TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
 			help->execSQL(ss.str().c_str());
 
-			itcRecid++;  j++; itVV++;
+			itcRecid++;  itVV++;
 		}
 
 		itVVV++ ;
@@ -714,4 +714,18 @@ void PersonalForm03::OnBnClickedCmdUpdateForm()
 		*/
 		itSubformRecids++;
 	}
+
+	ss.str("");  ss.clear();
+	ss << "update personal_form_info set modify_date=";
+	CTime today = CTime::GetCurrentTime();
+	strText = today.Format("%Y-%m-%d");
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', ";
+	ss << " where file_id=" << file_id << " and form_serial=";
+	ss << "'" << CW2A(_T("±í2-2"), CP_UTF8) << "';";
+	//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+	help->execSQL(ss.str().c_str());
+
+	help->closeDB();
+	delete help;
+	ss.str("");  ss.clear();
 }

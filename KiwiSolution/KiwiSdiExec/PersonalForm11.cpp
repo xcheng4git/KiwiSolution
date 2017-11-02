@@ -42,6 +42,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm11, CFormView)
 	ON_BN_CLICKED(IDC_CMD_SAVE_FORM, &CPersonalForm11::OnBnClickedCmdSaveForm)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm11::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm11::OnBnClickedButtonCloseForm3)
+	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm11::OnBnClickedCmdUpdateForm)
 END_MESSAGE_MAP()
 
 
@@ -153,7 +154,6 @@ void CPersonalForm11::OnBnClickedButtonCloseForm3()
 	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
 }
 
-
 void CPersonalForm11::OnInitialUpdate()
 {
 	CFormView::OnInitialUpdate();
@@ -214,4 +214,9 @@ void CPersonalForm11::OnInitialUpdate()
 
 	help->closeDB();
 	delete help;
+}
+
+void CPersonalForm11::OnBnClickedCmdUpdateForm()
+{
+	// TODO:  在此添加控件通知处理程序代码
 }

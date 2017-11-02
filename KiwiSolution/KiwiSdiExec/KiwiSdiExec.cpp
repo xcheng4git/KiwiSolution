@@ -119,10 +119,13 @@ BOOL CKiwiSdiExecApp::InitInstance()
 	//CSplashWnd::EnableSplashScreen(cmdInfo.m_bShowSplash);
 	//CSplashWnd::ShowSplashScreen(m_pMainWnd);
 	
+	/*
+	¶Ô»°¿ò
 	CDlgLogin dlgLogin;
 	dlgLogin.DoModal();
 	if (!dlgLogin.m_isLogined)
 		exit(0);
+	*/
 
 	int width = GetSystemMetrics(SM_CXSCREEN);
 	if (width > 1024) {

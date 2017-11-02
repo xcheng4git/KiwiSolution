@@ -36,7 +36,10 @@ public:
 	afx_msg void OnBnClickedCmdPrintForm();
 	afx_msg void OnBnClickedButtonCloseForm3();
 	int m_Radio12_2_0;
+	afx_msg void OnBnClickedCmdUpdateForm();
+
 	virtual void OnInitialUpdate();
+
 };
 
 
