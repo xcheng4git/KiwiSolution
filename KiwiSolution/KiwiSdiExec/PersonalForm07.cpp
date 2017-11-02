@@ -201,7 +201,7 @@ void CPersonalForm07::ShowRadiobtn(int nWhich, char *data)
 		}
 	}
 	else if (nSub == 3) {
-		switch (nWhich) {
+		switch (nSWhich) {
 		case 1:
 			m_Radio8_1 = atoi(data);
 			break;
@@ -260,7 +260,7 @@ void CPersonalForm07::GetNumber(int nWhich, int &num)
 			break;
 		}
 	} else if (nSub == 3) {
-		switch (nWhich) {
+		switch (nSWhich) {
 		case 1:
 			num = m_Radio8_1;
 			break;
