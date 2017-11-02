@@ -11,7 +11,6 @@ using namespace std;
 #include "SQLiteHelper.h"
 #include "msword/msword.h"
 #include "MainFrm.h"
-#include "Utility.h"
 
 // PersonalForm03
 
