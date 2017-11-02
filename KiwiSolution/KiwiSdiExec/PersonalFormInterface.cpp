@@ -280,6 +280,7 @@ void CPersonalFormInterface::ShowData(int type, int nID, char *data)
 {
 	switch (type) {
 	case EDITBX:
+	case EDITNUM:
 		ShowEditbox(nID, data);
 		break;
 	case DATEPKR:
