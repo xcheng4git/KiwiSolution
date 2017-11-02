@@ -19,12 +19,12 @@ CPersonalForm08::CPersonalForm08()
 : CFormView(CPersonalForm08::IDD)
 , m_Radio10_0(-1)
 , m_Radio11_0(-1)
-, m_Radio11_1_1(0)
-, m_Radio11_1_2(0)
-, m_Radio11_1_3(0)
-, m_Radio11_2_1(0)
-, m_Radio11_2_2(0)
-, m_Radio11_2_3(0)
+, m_Radio11_1_1(-1)
+, m_Radio11_1_2(-1)
+, m_Radio11_1_3(-1)
+, m_Radio11_2_1(-1)
+, m_Radio11_2_2(-1)
+, m_Radio11_2_3(-1)
 {
 	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("·ÂËÎÌå"), 3); lf.lfWeight = 400;
 	m_fontEdit.CreateFontIndirect(&lf);
