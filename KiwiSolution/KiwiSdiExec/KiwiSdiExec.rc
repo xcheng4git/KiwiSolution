@@ -2817,13 +2817,6 @@ BEGIN
     LTEXT           "请选择部门后再单击查询按钮！",IDC_STATIC_ERROR_MSG,347,49,113,8,NOT WS_VISIBLE
 END
 
-IDD_PERSONALFORM DIALOG 0, 0, 320, 200
-STYLE DS_SETFONT | WS_CHILD
-FONT 9, "MS Shell Dlg"
-BEGIN
-    LTEXT           "TODO:  将窗体控件放置在此对话框上。",IDC_STATIC,24,42,280,8
-END
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2874,196 +2867,205 @@ GUIDELINES DESIGNINFO
 BEGIN
     IDD_ABOUTBOX, DIALOG
     BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 220
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 99
+        , 50
+        , 4521984
     END
 
     IDD_KIWISDIEXEC_FORM, DIALOG
     BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 485
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 339
+        , 50
+        , 4653056
     END
 
     IDD_PERSONAL_FORM01, DIALOG
     BEGIN
-        RIGHTMARGIN, 528
+        , 50
+        , 4521984
     END
 
     IDD_PERSONAL_FORM02, DIALOG
     BEGIN
-        LEFTMARGIN, 6
-        RIGHTMARGIN, 505
-        BOTTOMMARGIN, 614
+        , 50
+        , 4521984
     END
 
     IDD_PANE_ORGNIZATION, DIALOG
     BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 147
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 225
+        , 50
     END
 
     IDD_PANE_SHORTCUT, DIALOG
     BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 158
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 146
+        , 50
+        , 4521984
     END
 
     IDD_PERSONAL_SUMMARY, DIALOG
     BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 527
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 326
+        , 50
+        , 4521984, 1264517120
     END
 
     IDD_DIALOG_NEW_FOLDER, DIALOG
     BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 302
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 170
+        , 50
+        , 4521984, 1399390208
     END
 
     IDD_DIALOG_NEW_FILE, DIALOG
     BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 302
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 170
+        , 50
+        , 4521984, 1128857600
     END
 
     IDD_DIALOG_NEW_FORM, DIALOG
     BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 328
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 197
+        , 50
+        , 4521984, 4259840
     END
 
     IDD_PERSONAL_FORM03, DIALOG
     BEGIN
-        LEFTMARGIN, 7
-        BOTTOMMARGIN, 709
+        , 50
+        , 268435456
     END
 
     IDD_PERSONAL_FORM04, DIALOG
     BEGIN
+        , 50
+        , 67567616, 827326464
     END
 
     IDD_PERSONAL_FORM05, DIALOG
     BEGIN
-        BOTTOMMARGIN, 561
+        , 50
+        , 67567616, 1330774016
     END
 
     IDD_PERSONAL_FORM06, DIALOG
     BEGIN
-        BOTTOMMARGIN, 601
+        , 50
+        , 4653056, 1128857600
     END
 
     IDD_PERSONAL_FORM07, DIALOG
     BEGIN
-        RIGHTMARGIN, 497
+        , 50
+        , 4653056, 1398734848
     END
 
     IDD_PERSONAL_FORM08, DIALOG
     BEGIN
-        RIGHTMARGIN, 494
+        , 50
+        , 67567616, 1415512064
     END
 
     IDD_PERSONAL_FORM09, DIALOG
     BEGIN
-        BOTTOMMARGIN, 512
+        , 50
+        , 268435456, 1128529920
     END
 
     IDD_PERSONAL_FORM10, DIALOG
     BEGIN
+        , 50
+        , 268435456, 1597177856
     END
 
     IDD_PERSONAL_FORM11, DIALOG
     BEGIN
+        , 50
+        , 268435456, 1543503872
     END
 
     IDD_PERSONAL_FORM12, DIALOG
     BEGIN
+        , 50
+        , 268435456, 1577058304
     END
 
     IDD_PERSONAL_FORM13, DIALOG
     BEGIN
+        , 50
+        , 268435456, 1398734848
     END
 
     IDD_PERSONAL_FORM14, DIALOG
     BEGIN
+        , 50
+        , 268435456, 1380384768
     END
 
     IDD_PERSONAL_FORM15, DIALOG
     BEGIN
+        , 50
+        , 268435456, 1598226432
     END
 
     IDD_PERSONAL_FORM16, DIALOG
     BEGIN
+        , 50
+        , 268435456, 1128857600
     END
 
     IDD_PERSONAL_FORM17, DIALOG
     BEGIN
+        , 50
+        , 268435456, 1128529920
     END
 
     IDD_PERSONAL_FORM18, DIALOG
     BEGIN
+        , 50
+        , 268435456, 1413545984
     END
 
     IDD_PERSONAL_FORM19, DIALOG
     BEGIN
+        , 50
+        , 268435456, 74121216
     END
 
     IDD_PERSONAL_FORM20, DIALOG
     BEGIN
+        , 50
+        , 268435456, 1398734848
     END
 
     IDD_PERSONAL_FORM21, DIALOG
     BEGIN
+        , 50
+        , 268435456, 1180631040
     END
 
     IDD_PERSONAL_FORM22, DIALOG
     BEGIN
+        , 50
+        , 268435456, 1399390208
     END
 
     IDD_PERSONAL_FORM23, DIALOG
     BEGIN
+        , 50
+        , 4653056, 1667563520
     END
 
     IDD_PERSONAL_FORM24, DIALOG
     BEGIN
-        RIGHTMARGIN, 497
+        , 50
+        , 4521984, 1314848768
     END
 
     IDD_DIALOG_LOGIN, DIALOG
     BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 548
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 360
+        , 50
+        , 4653056, 1280049152
     END
 
     IDD_DIALOG_QUERY_BYFOLDER, DIALOG
     BEGIN
-        RIGHTMARGIN, 551
-        TOPMARGIN, 1
-    END
-
-    IDD_PERSONALFORM, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 313
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 193
+        , 50
+        , 4521984, 1414070272
     END
 END
 #endif    // APSTUDIO_INVOKED

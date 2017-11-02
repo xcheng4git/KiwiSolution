@@ -1,6 +1,7 @@
 #pragma once
 #include "afxcmn.h"
 
+#include "resource.h"
 
 // CPaneShortcut ¶Ô»°¿ò
 

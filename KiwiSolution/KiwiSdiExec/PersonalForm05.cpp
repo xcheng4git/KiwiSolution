@@ -69,6 +69,8 @@ CPersonalForm05::CPersonalForm05()
 
 	_vHaveDataSubform.push_back(-1); _vHaveDataSubform.push_back(-1);
 
+	vStr.clear(); vStr.push_back(0); vStr.push_back(3); _vvSubformRecordRange.push_back(vStr);
+	vStr.clear(); vStr.push_back(0); vStr.push_back(3); _vvSubformRecordRange.push_back(vStr);
 }
 
 CPersonalForm05::~CPersonalForm05()

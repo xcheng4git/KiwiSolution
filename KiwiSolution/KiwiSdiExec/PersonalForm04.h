@@ -47,6 +47,7 @@ public:
 	int m_Radio7_0;
 	int m_Radio8_0;
 	int m_Radio9_0;
+
 };
 
 

@@ -164,7 +164,8 @@ void CPersonalFormInterface::DoShowForm()
 		itVVVparameter++;
 	}
 
-	help->closeDB(); delete help;
+	help->closeDB(); 
+	delete help;
 	ss.str(""); ss.clear();
 }
 
