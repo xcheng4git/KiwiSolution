@@ -215,31 +215,10 @@ BOOL CPersonalForm09::hasData(int isub, int irow)
 {
 	CString strText;
 	if (isub == 1) {
-		switch (irow) {
-		case 1:
-			GetDlgItem(IDC_EDIT52)->GetWindowTextW(strText);
-			if (strText == _T("нч"))
-				return FALSE;
-			break;
-		case 2:
-			GetDlgItem(IDC_EDIT53)->GetWindowTextW(strText);
-			strText.Trim();
-			if (!strText.IsEmpty())
-				return FALSE;
-			break;
-		case 3:
-			GetDlgItem(IDC_EDIT96)->GetWindowTextW(strText);
-			strText.Trim();
-			if (!strText.IsEmpty())
-				return FALSE;
-			break;
-		case 4:
-			GetDlgItem(IDC_EDIT109)->GetWindowTextW(strText);
-			strText.Trim();
-			if (!strText.IsEmpty())
-				return FALSE;
-			break;
-		}
+		vector<vector<int>> vvParam = _vvvParameters[isub - 1];
+		GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty())
+			return FALSE;
 	}
 
 	return TRUE;
