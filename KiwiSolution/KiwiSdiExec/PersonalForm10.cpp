@@ -40,7 +40,7 @@ CPersonalForm10::CPersonalForm10()
 	{ IDC_EDIT106, IDC_EDIT130, IDC_EDIT147, IDC_EDIT162 },
 	{ IDC_EDIT112, IDC_EDIT131, IDC_EDIT148, IDC_EDIT163 },
 	{ IDC_EDIT113, IDC_EDIT132, IDC_EDIT149, IDC_EDIT164 } };
-	int structure1[6] = { 1, 4, EDITBX, EDITBX, EDITNUM, EDITNUM };
+	int structure1[6] = { 18, 4, EDITBX, EDITBX, EDITNUM, EDITNUM };
 
 	vector<vector<int>> vvPara;
 	for (int i = 0; i < 18; i++) {

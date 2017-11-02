@@ -33,7 +33,7 @@ CPersonalForm11::CPersonalForm11()
 	{ IDC_EDIT96, IDC_EDIT124, IDC_EDIT141, IDC_EDIT156 },
 	{ IDC_EDIT109, IDC_EDIT125, IDC_EDIT142, IDC_EDIT157 },
 	{ IDC_EDIT165, IDC_EDIT126, IDC_EDIT143, IDC_EDIT158 } };
-	int structure1[6] = { 1, 4, EDITBX, EDITBX, EDITNUM, EDITNUM };
+	int structure1[6] = { 12, 4, EDITBX, EDITBX, EDITNUM, EDITNUM };
 	int parameters2[1][2] = { { IDC_EDIT159, IDC_EDIT160 } };
 	int structure2[4] = { 1, 2, EDITNUM, EDITBX };
 
