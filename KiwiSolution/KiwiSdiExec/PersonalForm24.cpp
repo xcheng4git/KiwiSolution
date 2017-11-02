@@ -43,6 +43,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm24, CFormView)
 	ON_BN_CLICKED(IDC_CMD_SAVE_FORM, &CPersonalForm24::OnBnClickedCmdSaveForm)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm24::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm24::OnBnClickedButtonCloseForm3)
+	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm24::OnBnClickedCmdUpdateForm)
 END_MESSAGE_MAP()
 
 
@@ -151,4 +152,10 @@ void CPersonalForm24::OnInitialUpdate()
 	// TODO:  在此添加专用代码和/或调用基类
 	GetDlgItem(IDC_EDIT237)->SetFont(&m_fontEdit);
 	GetDlgItem(IDC_EDIT58)->SetFont(&m_fontEdit);
+}
+
+
+void CPersonalForm24::OnBnClickedCmdUpdateForm()
+{
+	// TODO:  在此添加控件通知处理程序代码
 }

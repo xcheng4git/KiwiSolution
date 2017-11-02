@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <vector>
 
 // CPersonalForm21 窗体视图
 
@@ -25,10 +25,14 @@ public:
 	CString m_strCurrentFile;
 	CString m_strCurrentFolder;
 	void SetCurrentFile(CString filePath);
+	void SetModifyFlag(int flag);
+
 	CFont m_fontEdit;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
+	BOOL m_isCurrentModify;
+	std::vector<CString> m_vFormRecid;
 
 	DECLARE_MESSAGE_MAP()
 public:
@@ -36,6 +40,7 @@ public:
 	afx_msg void OnBnClickedCmdPrintForm();
 	afx_msg void OnBnClickedButtonCloseForm3();
 	virtual void OnInitialUpdate();
+	afx_msg void OnBnClickedCmdUpdateForm();
 };
 
 

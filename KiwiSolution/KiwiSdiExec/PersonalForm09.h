@@ -50,6 +50,7 @@ public:
 	int m_Radio11_6_2;
 	int m_Radio11_6_3;
 	virtual void OnInitialUpdate();
+	afx_msg void OnBnClickedCmdUpdateForm3();
 };
 
 
