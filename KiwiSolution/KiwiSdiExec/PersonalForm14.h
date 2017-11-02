@@ -38,7 +38,11 @@ public:
 	int m_Radio13_0;
 	int m_Radio13_1;
 	int m_Radio13_2;
+
 	afx_msg void OnBnClickedCmdUpdateForm2();
+
+	virtual void OnInitialUpdate();
+
 };
 
 

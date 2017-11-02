@@ -187,7 +187,62 @@ void CPersonalForm14::OnBnClickedButtonCloseForm4()
 }
 
 
+void CPersonalForm14::OnInitialUpdate()
+{
+	CFormView::OnInitialUpdate();
+
+	// TODO:  在此添加专用代码和/或调用基类
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+
+	ss.str(""); ss.clear();
+	ss << "select file_20IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		help->closeDB();
+		delete help;
+		return;
+	}
+
+	m_Radio13_0 = atoi(re[1 * col + 0]);
+
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_20 where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		help->closeDB();
+		delete help;
+		return;
+	}
+
+	int Parameters[2][12] = { { IDC_EDIT47, IDC_EDIT48, IDC_EDIT79, IDC_EDIT83, IDC_EDIT166, IDC_EDIT167, IDC_EDIT168, m_Radio13_1, IDC_EDIT169, IDC_EDIT170, IDC_EDIT172, IDC_EDIT171 },
+	{ IDC_EDIT50, IDC_EDIT174, IDC_EDIT87, IDC_EDIT175, IDC_EDIT173, IDC_EDIT176, IDC_EDIT177, m_Radio13_2, IDC_EDIT178, IDC_EDIT179, IDC_EDIT181, IDC_EDIT180 } };
+	m_Radio13_1 = atoi(re[1 * col + 8]);
+	m_Radio13_2 = atoi(re[2 * col + 8]);
+	for (int i = 0; i < 2; i++){
+		for (int j = 0; j < 12; j++){
+			if (j == 7) continue;
+			GetDlgItem(Parameters[i][j])->SetWindowTextW(CA2W(re[(i + 1) * col + j + 1], CP_UTF8));
+		}
+		if (i + 1 >= row) break;
+	}	
+	help->closeDB();
+	delete help;
+	UpdateData(FALSE);
+}
+
 void CPersonalForm14::OnBnClickedCmdUpdateForm2()
 {
 	// TODO:  在此添加控件通知处理程序代码
+
 }

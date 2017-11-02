@@ -36,6 +36,7 @@ public:
 	afx_msg void OnBnClickedCmdPrintForm();
 	afx_msg void OnBnClickedButtonCloseForm3();
 	afx_msg void OnBnClickedCmdUpdateForm();
+	virtual void OnInitialUpdate();
 };
 
 

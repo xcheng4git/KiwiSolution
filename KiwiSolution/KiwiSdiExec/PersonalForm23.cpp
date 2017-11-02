@@ -148,48 +148,40 @@ void CPersonalForm23::OnInitialUpdate()
 	GetDlgItem(IDC_EDIT241)->SetFont(&m_fontEdit);
 	GetDlgItem(IDC_EDIT242)->SetFont(&m_fontEdit);
 
-
-
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
-	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
-	//根据界面中文本内容得到对应的特定ID
+
 	CSQLiteHelper *help = new CSQLiteHelper();
 	help->openDB("kiwi.db3");
-
 	int row, col;
-
-	char *eee = "i"; char **result = &eee;//未使用
-	//sql条件限制所以取到一条记录
+	char *eee = "i"; char **result = &eee;
 	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
-	int file_id = atoi(re[1 * col + 0]);//取结果集中file_id字段 
+	int file_id = atoi(re[1 * col + 0]);
 
-	//GetDlgItem(IDC_EDIT58)->SetWindowTextW(CA2W(re[1 * col + 0], CP_UTF8)) ;
-
-	ss.str("");
-
+	ss.str(""); ss.clear();
 	ss << "select * from file_form_29 where file_id=" << file_id << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	if (row < 1) {
 		ss.str(""); ss.clear();
-		help->closeDB(); delete help;
+		help->closeDB();
+		delete help;
 		return;
 	}
 
-	GetDlgItem(IDC_EDIT302)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));//从数据取到数据根据对应ID填入界面
-	GetDlgItem(IDC_DATETIMEPICKER28)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
-	GetDlgItem(IDC_EDIT237)->SetWindowTextW(CA2W(re[1 * col + 3], CP_UTF8));
-	GetDlgItem(IDC_EDIT238)->SetWindowTextW(CA2W(re[1 * col + 4], CP_UTF8));
-	GetDlgItem(IDC_EDIT239)->SetWindowTextW(CA2W(re[1 * col + 5], CP_UTF8));
-	GetDlgItem(IDC_EDIT240)->SetWindowTextW(CA2W(re[1 * col + 6], CP_UTF8));
-	GetDlgItem(IDC_EDIT241)->SetWindowTextW(CA2W(re[1 * col + 7], CP_UTF8));
-	GetDlgItem(IDC_EDIT242)->SetWindowTextW(CA2W(re[1 * col + 8], CP_UTF8));
-
+	int parameters[8] = { IDC_EDIT302, IDC_DATETIMEPICKER28, IDC_EDIT237, IDC_EDIT238, IDC_EDIT239, IDC_EDIT240, IDC_EDIT241, IDC_EDIT242 };
+	COleDateTime t;
+	for (int i = 0; i < 8; i++){
+			if (i == 1){
+				t.ParseDateTime(CA2W(re[ 1 * col + i + 1], CP_UTF8));
+				((CDateTimeCtrl*)GetDlgItem(parameters[i]))->SetTime(t);
+				continue;
+			}
+			GetDlgItem(parameters[i])->SetWindowTextW(CA2W(re[1 * col + i + 1], CP_UTF8));
+	}
 
 	help->closeDB();
-	delete help;//+++++++
-
+	delete help;
 }
 
 
