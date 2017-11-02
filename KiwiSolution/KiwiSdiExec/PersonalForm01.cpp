@@ -12,7 +12,6 @@
 #include "SQLiteHelper.h"
 #include <sstream>
 using namespace std;
-#include "Utility.h"
 #include "msword/msword.h"
 
 // CPersonalForm01

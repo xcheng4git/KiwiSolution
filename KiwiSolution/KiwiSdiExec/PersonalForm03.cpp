@@ -260,9 +260,6 @@ void PersonalForm03::OnInitialUpdate()
 
 }
 
-
-
-
 void PersonalForm03::OnBnClickedButtonCloseForm3()
 {
 	// TODO:  在此添加控件通知处理程序代码
@@ -624,7 +621,6 @@ void PersonalForm03::OnBnClickedCmdUpdateForm()
 		ss << "select * from file_form_" << setfill('0') << setw(2) << m_modifiedSubform[i] << " where file_id=" << file_id << " limit 0,1;";
 		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 
-		int j = 0; 
 		while (itcRecid != itSubformRecids->end()) {
 			std::vector<int>::iterator itV = itVV->begin();
 			ss.str(""); ss.clear();
@@ -640,7 +636,7 @@ void PersonalForm03::OnBnClickedCmdUpdateForm()
 			TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
 			help->execSQL(ss.str().c_str());
 
-			itcRecid++;  j++; itVV++;
+			itcRecid++;  itVV++;
 		}
 
 		itVVV++ ;
