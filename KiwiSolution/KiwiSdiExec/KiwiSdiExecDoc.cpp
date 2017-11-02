@@ -119,6 +119,7 @@ CKiwiSdiExecDoc::CKiwiSdiExecDoc()
 	vFormByTables.push_back(_T("±í2-10"));
 	vFormByTables.push_back(CA2W(re[11 * col + 1], CP_UTF8));
 	vFormByTables.push_back(_T("file_form_17"));
+	vFormByTables.push_back(_T("file_form_17_1"));
 	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
 	vFormBySubform.clear(); vFormBySubform.push_back(17); m_vvFormBySubform.push_back(vFormBySubform);
 
