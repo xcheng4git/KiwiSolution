@@ -38,6 +38,7 @@ public:
 	int m_Radio13_0;
 	int m_Radio13_1;
 	int m_Radio13_2;
+	virtual void OnInitialUpdate();
 };
 
 
