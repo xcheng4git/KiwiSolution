@@ -168,6 +168,113 @@ void CPersonalFormInterface::DoShowForm()
 	ss.str(""); ss.clear();
 }
 
+void CPersonalFormInterface::DoPrintForm(CString &templateName)
+{
+#if 0
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	CKiwiSdiExecDoc* pDoc = pWnd->GetDocument();
+
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+
+
+	COleVariant covZero((short)0), covTrue((short)TRUE), covFalse((short)FALSE), covOptional((long)DISP_E_PARAMNOTFOUND, VT_ERROR),
+		covDocxType((short)0), start_line, end_line, dot(CUtility::GetModuleDirectory() + _T("\\template\\表2-4.dotx"));
+
+	CApplication wordApp;
+	CDocuments docs;
+	CDocument0 docx;
+	CBookmarks bookmarks;
+	CBookmark0 bookmark;
+	CRange range;
+	CCell cell;
+
+	if (!wordApp.CreateDispatch(_T("Word.Application"))) {
+		AfxMessageBox(_T("no word product."));
+		return;
+	}
+
+	wordApp.put_Visible(FALSE);
+	CString wordVersion = wordApp.get_Version();
+	docs = wordApp.get_Documents();
+	docx = docs.Add(dot, covOptional, covOptional, covOptional);
+	bookmarks = docx.get_Bookmarks();
+
+	wchar_t szBookmark[50];
+
+
+	vector<vector<vector<CString>>>::iterator itVVVbookmark = _vvvBookmarks.begin();
+
+	int numSubform = _vvSubformStructure.size();
+	vector<CString> vSubformRecid;
+	vector<wchar_t *> vFormByTables = pDoc->m_vvFormByTables[m_FormID - 1];
+	vector<int> vFormBySubform = pDoc->m_vvFormBySubform[m_FormID - 1];
+
+	for (int i = 0; i < numSubform; i++) {
+		vector<vector<CString>>::iterator itVVbookmark = itVVVbookmark->begin();
+
+#pragma region 打印子表头边的勾选框
+
+		int has_or_no = -1;
+		ss << "select ";
+		ss << "file_" << vFormBySubform[i] << "IfHaveThisSituation, ";
+		ss << "file_" << vFormBySubform[i] << "IfChange" << " from file_form_flags where file_id = " << file_id << "; ";
+		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		if (row >= 1) {
+			has_or_no = atoi(re[1 * col + _vSubformFlags[i]]);
+		}
+		std::vector<CString>::iterator itVbookmark = itVVbookmark->begin();
+		for (int j = 0; j < 2; j++) {
+			swprintf_s(szBookmark, 50, _T("%s%d"), itVbookmark[0], i + 1);
+			bookmark = bookmarks.Item(&_variant_t(szBookmark));
+			range = bookmark.get_Range();
+			if (i == has_or_no)
+				range.put_Text(_T("R"));
+			else
+				range.put_Text(_T("\x00A3"));
+		}
+#pragma endregion
+
+
+		ss.str(""); ss.clear();
+		ss << "select * from " << CW2A(vFormByTables[2 + i], CP_UTF8) << " where file_id=" << file_id;
+		ss << " limit " << _vvSubformRecordRange[i][0] << "," << _vvSubformRecordRange[i][1] << ";";
+		TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+
+		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		if (row < 1) {
+			itVVVbookmark++;  continue;
+		}
+
+		int numSubformRow = _vvSubformStructure[i][0], numSubformColumn = _vvSubformStructure[i][1];
+		for (int r = 0; r < (row>numSubformRow ? numSubformRow : row); r++) {
+
+			for (int j = 0; j < numSubformColumn; j++) {
+				ShowData(_vvSubformStructure[i][2 + j], itV[j], re[(r + 1) * col + j + 2]);
+			}
+
+
+			itVVbookmark++;
+		}
+		_vvSubformRecid.push_back(vSubformRecid); vSubformRecid.clear();
+		_vHaveDataSubform[i] = 1;
+
+		itVVVparameter++;
+	}
+
+	help->closeDB(); delete help;
+	ss.str(""); ss.clear();
+#endif
+}
+
 void CPersonalFormInterface::ShowData(int type, int nID, char *data)
 {
 	switch (type) {
