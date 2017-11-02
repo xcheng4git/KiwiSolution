@@ -200,6 +200,16 @@ void CPersonalForm07::ShowRadiobtn(int nWhich, char *data)
 			break;
 		}
 	}
+	else if (nSub == 3) {
+		switch (nWhich) {
+		case 1:
+			m_Radio8_1 = atoi(data);
+			break;
+		case 2:
+			m_Radio8_2 = atoi(data);
+			break;
+		}
+	}
 }
 
 void CPersonalForm07::ShowDatapicker(int nID, char *data)
@@ -247,6 +257,15 @@ void CPersonalForm07::GetNumber(int nWhich, int &num)
 			break;
 		case 5:
 			((CButton *)GetDlgItem(IDC_RADIO73))->GetCheck();
+			break;
+		}
+	} else if (nSub == 3) {
+		switch (nWhich) {
+		case 1:
+			num = m_Radio8_1;
+			break;
+		case 2:
+			num = m_Radio8_2;
 			break;
 		}
 	}
