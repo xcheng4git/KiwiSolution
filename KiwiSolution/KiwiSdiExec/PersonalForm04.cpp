@@ -414,3 +414,143 @@ void CPersonalForm04::OnBnClickedButtonCloseForm3()
 
 	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
 }
+
+
+void CPersonalForm04::OnInitialUpdate()
+{
+	CFormView::OnInitialUpdate();
+
+	// TODO:  在此添加专用代码和/或调用基类
+
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+
+	#pragma region FillForm3_2
+	{
+		
+	}
+	#pragma endregion
+
+	#pragma region FillForm4
+	FillForm4 :
+	{
+		
+
+		ss.str(""); ss.clear();
+		ss << "select file_8IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
+		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		if (row < 1) {
+			ss.str(""); ss.clear();
+			help->closeDB();
+			delete help;
+			return;
+		}
+		//m_Radio14_1_0 = atoi(re[1 * col + 0]);
+
+		ss.str(""); ss.clear();
+		ss << "select * from file_form_08 where file_id=" << file_id << ";";
+		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		if (row < 1) {
+			goto FillForm5;
+			ss.str(""); ss.clear();
+			help->closeDB();
+			delete help;
+			return;
+		}
+
+		COleDateTime t;
+
+		GetDlgItem(IDC_EDIT45)->SetWindowTextW(CA2W(re[ 1 * col + 1], CP_UTF8));
+		GetDlgItem(IDC_EDIT47)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
+		GetDlgItem(IDC_EDIT50)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
+		GetDlgItem(IDC_EDIT53)->SetWindowTextW(CA2W(re[1 * col + 4], CP_UTF8));
+		GetDlgItem(IDC_EDIT56)->SetWindowTextW(CA2W(re[1 * col + 5], CP_UTF8));
+		//t.ParseDateTime(CA2W(re[1 * col + 6], CP_UTF8));
+		//((CDateTimeCtrl*)GetDlgItem(IDC_DATETIMEPICKER3)->SetTime(t);
+
+		GetDlgItem(IDC_EDIT33)->SetWindowTextW(CA2W(re[2 * col + 1], CP_UTF8));
+		GetDlgItem(IDC_EDIT48)->SetWindowTextW(CA2W(re[2 * col + 2], CP_UTF8));
+		GetDlgItem(IDC_EDIT51)->SetWindowTextW(CA2W(re[2 * col + 2], CP_UTF8));
+		GetDlgItem(IDC_EDIT54)->SetWindowTextW(CA2W(re[2 * col + 4], CP_UTF8));
+		GetDlgItem(IDC_EDIT57)->SetWindowTextW(CA2W(re[2 * col + 5], CP_UTF8));
+		//t.ParseDateTime(CA2W(re[2 * col + 6], CP_UTF8));
+		//((CDateTimeCtrl*)GetDlgItem(IDC_DATETIMEPICKER17)->SetTime(t);
+
+		GetDlgItem(IDC_EDIT46)->SetWindowTextW(CA2W(re[3 * col + 1], CP_UTF8));
+		GetDlgItem(IDC_EDIT49)->SetWindowTextW(CA2W(re[3 * col + 2], CP_UTF8));
+		GetDlgItem(IDC_EDIT52)->SetWindowTextW(CA2W(re[3 * col + 2], CP_UTF8));
+		GetDlgItem(IDC_EDIT55)->SetWindowTextW(CA2W(re[3 * col + 4], CP_UTF8));
+		GetDlgItem(IDC_EDIT58)->SetWindowTextW(CA2W(re[3 * col + 5], CP_UTF8));
+		//t.ParseDateTime(CA2W(re[3 * col + 6], CP_UTF8));
+		//((CDateTimeCtrl*)GetDlgItem(IDC_DATETIMEPICKER18)->SetTime(t);
+	}
+	#pragma endregion
+
+	#pragma region FillForm5
+	FillForm5 :
+	{
+		ss.str(""); ss.clear();
+		ss << "select file_9IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
+		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		if (row < 1) {
+			ss.str(""); ss.clear();
+			help->closeDB();
+			delete help;
+			return;
+		}
+		//m_Radio14_1_0 = atoi(re[1 * col + 0]);
+
+		ss.str(""); ss.clear();
+		ss << "select * from file_form_09 where file_id=" << file_id << ";";
+		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		if (row < 1) {
+			goto FillComplete;
+			ss.str(""); ss.clear();
+			help->closeDB();
+			delete help;
+			return;
+		}
+
+		COleDateTime t;
+
+		GetDlgItem(IDC_EDIT60)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+		GetDlgItem(IDC_EDIT62)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
+		GetDlgItem(IDC_EDIT65)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
+		GetDlgItem(IDC_EDIT68)->SetWindowTextW(CA2W(re[1 * col + 4], CP_UTF8));
+		GetDlgItem(IDC_EDIT71)->SetWindowTextW(CA2W(re[1 * col + 5], CP_UTF8));
+		//t.ParseDateTime(CA2W(re[1 * col + 6], CP_UTF8));
+		//((CDateTimeCtrl*)GetDlgItem(IDC_DATETIMEPICKER19)->SetTime(t);
+
+		GetDlgItem(IDC_EDIT59)->SetWindowTextW(CA2W(re[2 * col + 1], CP_UTF8));
+		GetDlgItem(IDC_EDIT63)->SetWindowTextW(CA2W(re[2 * col + 2], CP_UTF8));
+		GetDlgItem(IDC_EDIT66)->SetWindowTextW(CA2W(re[2 * col + 2], CP_UTF8));
+		GetDlgItem(IDC_EDIT69)->SetWindowTextW(CA2W(re[2 * col + 4], CP_UTF8));
+		GetDlgItem(IDC_EDIT72)->SetWindowTextW(CA2W(re[2 * col + 5], CP_UTF8));
+		//t.ParseDateTime(CA2W(re[2 * col + 6], CP_UTF8));
+		//((CDateTimeCtrl*)GetDlgItem(IDC_DATETIMEPICKER20)->SetTime(t);
+			
+		GetDlgItem(IDC_EDIT61)->SetWindowTextW(CA2W(re[3 * col + 1], CP_UTF8));
+		GetDlgItem(IDC_EDIT64)->SetWindowTextW(CA2W(re[3 * col + 2], CP_UTF8));
+		GetDlgItem(IDC_EDIT67)->SetWindowTextW(CA2W(re[3 * col + 2], CP_UTF8));
+		GetDlgItem(IDC_EDIT70)->SetWindowTextW(CA2W(re[3 * col + 4], CP_UTF8));
+		GetDlgItem(IDC_EDIT73)->SetWindowTextW(CA2W(re[3 * col + 5], CP_UTF8));
+		//t.ParseDateTime(CA2W(re[3 * col + 6], CP_UTF8));
+		//((CDateTimeCtrl*)GetDlgItem(IDC_DATETIMEPICKER21)->SetTime(t);
+	}
+	#pragma endregion
+
+
+	FillComplete:
+	help->closeDB(); delete help;
+	ss.str("");  ss.clear();
+
+
+}
