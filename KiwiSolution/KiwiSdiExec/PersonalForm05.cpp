@@ -71,6 +71,38 @@ CPersonalForm05::CPersonalForm05()
 
 	vStr.clear(); vStr.push_back(0); vStr.push_back(3); _vvSubformRecordRange.push_back(vStr);
 	vStr.clear(); vStr.push_back(0); vStr.push_back(3); _vvSubformRecordRange.push_back(vStr);
+
+	//以下是为了打印的预设
+	const wchar_t *pBookmarks1[8] = { _T("有无"), _T("姓名"), _T("移居国家"), _T("现居住城市"), _T("移居证件号码"), _T("移居类别"), _T("移居时间"), _T("备注") };
+	int structure10[8] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX};
+	int structure11[3+8] = { 1,3,7, 2, 1, 1, 1, 1, 3, 1, 1 };
+	const wchar_t *pBookmarks2[6] = { _T("有无"), _T("姓名"), _T("移居国家"), _T("现居住城市"), _T("移居时间"), _T("备注") };
+	int structure20[6] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure21[3 + 6] = { 1, 3, 5, 2, 1, 1, 1, 1,1 };
+
+	vector<CBookmarkEx> vBke;
+	for (int i = 0; i < 8; i++) {
+		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[3 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+	vBke.clear();
+	for (int i = 0; i < 6; i++) {
+		CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[3 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+
+	vStr.clear();
+	for (int i = 0; i < 3; i++)
+		vStr.push_back(structure11[i]);
+	_vvSubformFlags.push_back(vStr);
+
+	vStr.clear();
+	for (int i = 0; i < 3; i++)
+		vStr.push_back(structure21[i]);
+	_vvSubformFlags.push_back(vStr);
+
 }
 
 CPersonalForm05::~CPersonalForm05()
@@ -339,6 +371,7 @@ FillComplete :
 
 void CPersonalForm05::OnBnClickedCmdPrintForm()
 {
+#if 0
 	const wchar_t *pBookmarks1[] = { _T("有无"), _T("姓名"), _T("移居国家"), _T("现居住城市"), _T("移居证件号码"), _T("移居类别"), _T("移居时间"), _T("备注") };
 	const wchar_t *pBookmarks2[] = { _T("有无"), _T("姓名"), _T("移居国家"), _T("现居住城市"), _T("移居时间"), _T("备注") };
 
@@ -532,6 +565,9 @@ PrintFinish:
 	docx.Close(covFalse, covOptional, covOptional);
 	wordApp.Quit(covOptional, covOptional, covOptional);
 	range.ReleaseDispatch(); bookmarks.ReleaseDispatch(); wordApp.ReleaseDispatch();
+#endif
+
+	DoPrintForm(CString(_T("表2-4.dotx")));
 }
 
 
