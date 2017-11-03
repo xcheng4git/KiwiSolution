@@ -164,6 +164,7 @@ void CPersonalForm11::OnBnClickedCmdSaveForm()
 {
 	UpdateData();
 	// TODO:  在此添加控件通知处理程序代码
+#if 0
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
@@ -206,8 +207,11 @@ void CPersonalForm11::OnBnClickedCmdSaveForm()
 			break;
 
 		ss << "insert into file_form_17 values(" << file_id << ",";
-		ss << "'" << strText << "',"; strText.ReleaseBuffer();
+		strText.ReleaseBuffer(); strText = CUtility::GetGuid();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 
+		GetDlgItem(Parameters[i][0])->GetWindowTextW(strText); strText.Trim();
+		ss << "'" << strText << "',"; strText.ReleaseBuffer();
 		GetDlgItem(Parameters[i][1])->GetWindowTextW(strText); strText.Trim();
 		ss << "'" << strText << "',"; strText.ReleaseBuffer();
 		GetDlgItem(Parameters[i][2])->GetWindowTextW(strText); strText.Trim();
@@ -220,6 +224,9 @@ void CPersonalForm11::OnBnClickedCmdSaveForm()
 	}
 
 	ss << "insert into file_form_17_1 values(" << file_id << ",";
+	strText.ReleaseBuffer(); strText = CUtility::GetGuid();
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+
 	GetDlgItem(IDC_EDIT159)->GetWindowTextW(strText); strText.Trim();
 	ss << wcstod(strText.GetBuffer(), NULL) << ","; strText.ReleaseBuffer();
 	GetDlgItem(IDC_EDIT160)->GetWindowTextW(strText); strText.Trim();
@@ -230,6 +237,9 @@ void CPersonalForm11::OnBnClickedCmdSaveForm()
 FillComplete :
 	help->closeDB(); delete help;
 			 ss.str("");  ss.clear();
+#endif
+			 DoSaveForm();
+
 			 GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 }
 

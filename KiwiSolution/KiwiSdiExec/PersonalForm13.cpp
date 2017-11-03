@@ -187,6 +187,7 @@ void CPersonalForm13::OnBnClickedCmdSaveForm()
 		ss.str(""); ss.clear();
 	}
 
+#if 0
 	int Parameters[10][5] = { { IDC_EDIT47, IDC_EDIT98, IDC_EDIT97, IDC_EDIT99, IDC_EDIT100 },
 	{ IDC_EDIT48, IDC_EDIT102, IDC_EDIT133, IDC_EDIT110, IDC_EDIT101 },
 	{ IDC_EDIT49, IDC_EDIT103, IDC_EDIT134, IDC_EDIT111, IDC_EDIT129 },
@@ -205,7 +206,10 @@ void CPersonalForm13::OnBnClickedCmdSaveForm()
 			goto FillAmount;
 
 		ss << "insert into file_form_19 values(" << file_id << ",";
+		strText.ReleaseBuffer(); strText = CUtility::GetGuid();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 
+		GetDlgItem(Parameters[i][0])->GetWindowTextW(strText); strText.Trim();
 		ss << "'" << strText << "',"; strText.ReleaseBuffer();
 
 		GetDlgItem(Parameters[i][1])->GetWindowTextW(strText); strText.Trim();
@@ -227,10 +231,13 @@ void CPersonalForm13::OnBnClickedCmdSaveForm()
 FillAmount:
 	strText.Format(_T("%f"), amount2);
 	GetDlgItem(IDC_EDIT161)->SetWindowTextW(strText);
+#endif
 
 FillComplete :
 	help->closeDB(); delete help;
 			 ss.str("");  ss.clear();
+
+			 DoSaveForm();
 			 GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 }
 
