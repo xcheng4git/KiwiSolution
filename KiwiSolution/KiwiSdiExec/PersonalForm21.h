@@ -1,10 +1,9 @@
 #pragma once
 
-#include <vector>
-
+#include "PersonalFormInterface.h"
 // CPersonalForm21 窗体视图
 
-class CPersonalForm21 : public CFormView
+class CPersonalForm21 : public CFormView, public CPersonalFormInterface
 {
 	DECLARE_DYNCREATE(CPersonalForm21)
 
@@ -22,17 +21,25 @@ public:
 #endif
 
 public:
-	CString m_strCurrentFile;
-	CString m_strCurrentFolder;
-	void SetCurrentFile(CString filePath);
-	void SetModifyFlag(int flag);
+	//CString m_strCurrentFile;
+	//CString m_strCurrentFolder;
+	//void SetCurrentFile(CString filePath);
+	//void SetModifyFlag(int flag);
+	//CFont m_fontEdit;
+	virtual void ShowEditbox(int nID, char *data);
+	virtual void ShowRadiobtn(int nWhich, char *data);
+	virtual void ShowDatapicker(int nID, char *data);
 
-	CFont m_fontEdit;
+	virtual void GetNumber(int nWhich, int &num);
+	virtual void GetString(int nID, CString &str);
+
+	virtual BOOL hasData(int isub, int irow);
+
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-	BOOL m_isCurrentModify;
-	std::vector<CString> m_vFormRecid;
+	//BOOL m_isCurrentModify;
+	//std::vector<CString> m_vFormRecid;
 
 	DECLARE_MESSAGE_MAP()
 public:

@@ -19,32 +19,54 @@ IMPLEMENT_DYNCREATE(CPersonalForm21, CFormView)
 CPersonalForm21::CPersonalForm21()
 : CFormView(CPersonalForm21::IDD)
 {
-	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
-	m_fontEdit.CreateFontIndirect(&lf);
+	//LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
+	//m_fontEdit.CreateFontIndirect(&lf);
 
-	m_isCurrentModify = FALSE;
+	//m_isCurrentModify = FALSE;
+	m_FormID = 21;
+	int parameters1[1][2] = { { IDC_EDIT237, IDC_EDIT58 } };
+	int structure1[4] = { 1, 2, EDITBX, EDITBX };
+
+	vector<vector<int>> vvPara;
+	for (int i = 0; i < 1; i++) {
+		vector<int> vPara;
+		for (int j = 0; j < 2; j++)
+			vPara.push_back(parameters1[i][j]);
+		vvPara.push_back(vPara);
+	}
+	_vvvParameters.push_back(vvPara);
+
+	vector<int> vStr;
+	for (int i = 0; i < 4; i++) {
+		vStr.push_back(structure1[i]);
+	}
+	_vvSubformStructure.push_back(vStr);
+
+	_vHaveDataSubform.push_back(-1);
+
+	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
 }
 
 CPersonalForm21::~CPersonalForm21()
 {
-	m_fontEdit.DeleteObject();
+	//m_fontEdit.DeleteObject();
 
-	for (int i = 0; i < m_vFormRecid.size(); i++)
-		CString(m_vFormRecid[i]).ReleaseBuffer();
+	//for (int i = 0; i < m_vFormRecid.size(); i++)
+	//	CString(m_vFormRecid[i]).ReleaseBuffer();
 }
 
-void CPersonalForm21::SetCurrentFile(CString filePath)
-{
-	m_strCurrentFolder = filePath.Left(filePath.Find(_T("/"), 0));
-	m_strCurrentFile = filePath.Right(filePath.GetLength() - filePath.Find(_T("/"), 0) - 1);
-}
+//void CPersonalForm21::SetCurrentFile(CString filePath)
+//{
+//	m_strCurrentFolder = filePath.Left(filePath.Find(_T("/"), 0));
+//	m_strCurrentFile = filePath.Right(filePath.GetLength() - filePath.Find(_T("/"), 0) - 1);
+//}
 
 
-void CPersonalForm21::SetModifyFlag(int flag)
-{
-	if (flag)
-		m_isCurrentModify = TRUE;
-}
+//void CPersonalForm21::SetModifyFlag(int flag)
+//{
+//	if (flag)
+//		m_isCurrentModify = TRUE;
+//}
 
 void CPersonalForm21::DoDataExchange(CDataExchange* pDX)
 {
@@ -75,7 +97,49 @@ void CPersonalForm21::Dump(CDumpContext& dc) const
 #endif
 #endif //_DEBUG
 
+void CPersonalForm21::ShowEditbox(int nID, char *data)
+{
+	GetDlgItem(nID)->SetWindowTextW(CA2W(data, CP_UTF8));
+}
 
+void CPersonalForm21::ShowRadiobtn(int nWhich, char *data)
+{
+	int nSub = nWhich & 0xFF00; nSub >>= 8;
+	int nSWhich = nWhich & 0xF;
+
+}
+
+void CPersonalForm21::ShowDatapicker(int nID, char *data)
+{
+	COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
+	((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+}
+
+void CPersonalForm21::GetNumber(int nWhich, int &num)
+{
+	int nSub = nWhich & 0xFF00; nSub >>= 8;
+	int nSWhich = nWhich & 0xF;
+
+}
+
+void CPersonalForm21::GetString(int nID, CString &str)
+{
+	GetDlgItem(nID)->GetWindowTextW(str); str.Trim();
+}
+
+BOOL CPersonalForm21::hasData(int isub, int irow)
+{
+	CString strText;
+
+	if (isub == 1) {
+		vector<vector<int>> vvParam = _vvvParameters[isub - 1];
+		GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty())
+			return FALSE;
+	}
+
+	return TRUE;
+}
 // CPersonalForm21 消息处理程序
 
 
@@ -83,6 +147,7 @@ void CPersonalForm21::OnBnClickedCmdSaveForm()
 {
 	UpdateData();
 	// TODO:  在此添加控件通知处理程序代码
+#if 0
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
@@ -122,6 +187,10 @@ FillComplete:
 
 	help->closeDB(); delete help;
 	ss.str("");  ss.clear();
+#endif
+	DoSaveForm();
+	//保存盖章原件图片
+
 	GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 }
 
@@ -138,7 +207,6 @@ void CPersonalForm21::OnBnClickedButtonCloseForm3()
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
 	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
-
 	::PostMessage(this->m_hWnd, WM_DESTROY, 0L, 0L);
 }
 
@@ -151,6 +219,7 @@ void CPersonalForm21::OnInitialUpdate()
 	GetDlgItem(IDC_EDIT237)->SetFont(&m_fontEdit);
 	GetDlgItem(IDC_EDIT58)->SetFont(&m_fontEdit);
 
+#if 0
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
@@ -193,6 +262,25 @@ void CPersonalForm21::OnInitialUpdate()
 	GetDlgItem(IDC_EDIT58)->SetWindowTextW(CA2W(re[1 * col + 3], CP_UTF8));
 
 	help->closeDB(); delete help;
+#endif
+
+	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
+	DoShowForm();
+
+	BOOL hasData = FALSE;
+	vector<int>::iterator itHas = _vHaveDataSubform.begin();
+	while (itHas != _vHaveDataSubform.end()) {
+		if (*itHas != -1) {
+			hasData = TRUE; break;
+		}
+		itHas++;
+	}
+	if (hasData) {
+		//显示图片
+
+		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_CMD_UPDATE_FORM3)->ShowWindow(SW_SHOW);
+	}
 }
 
 
@@ -200,6 +288,7 @@ void CPersonalForm21::OnBnClickedCmdUpdateForm()
 {
 	UpdateData();
 	// TODO:  在此添加控件通知处理程序代码
+#if 0
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
@@ -244,4 +333,8 @@ FillComplete:
 
 	help->closeDB(); delete help;
 	ss.str("");  ss.clear();
+#endif
+	DoUpdateForm();
+
+	//更新图片地址
 }

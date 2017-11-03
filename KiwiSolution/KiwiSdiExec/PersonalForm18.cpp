@@ -18,20 +18,77 @@ IMPLEMENT_DYNCREATE(CPersonalForm18, CFormView)
 CPersonalForm18::CPersonalForm18()
 : CFormView(CPersonalForm18::IDD)
 {
-	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
-	m_fontEdit.CreateFontIndirect(&lf);
+	//LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
+	//m_fontEdit.CreateFontIndirect(&lf);
+	m_FormID = 18;
+	int parameters1[10][6] = { {IDC_DATETIMEPICKER25, IDC_EDIT236, IDC_EDIT237, IDC_EDIT248, IDC_EDIT259 },
+	{ IDC_DATETIMEPICKER27, IDC_EDIT260, IDC_EDIT226, IDC_EDIT238, IDC_EDIT249 },
+	{ IDC_DATETIMEPICKER28, IDC_EDIT261, IDC_EDIT227, IDC_EDIT239, IDC_EDIT250 },
+	{ IDC_DATETIMEPICKER29, IDC_EDIT262, IDC_EDIT228, IDC_EDIT240, IDC_EDIT251 },
+	{ IDC_DATETIMEPICKER30, IDC_EDIT263, IDC_EDIT229, IDC_EDIT241, IDC_EDIT252 },
+	{ IDC_DATETIMEPICKER31, IDC_EDIT264, IDC_EDIT230, IDC_EDIT242, IDC_EDIT253 },
+	{ IDC_DATETIMEPICKER32, IDC_EDIT265, IDC_EDIT231, IDC_EDIT243, IDC_EDIT254 },
+	{ IDC_DATETIMEPICKER33, IDC_EDIT266, IDC_EDIT232, IDC_EDIT244, IDC_EDIT255 },
+	{ IDC_DATETIMEPICKER34, IDC_EDIT267, IDC_EDIT233, IDC_EDIT245, IDC_EDIT256 },
+	{ IDC_DATETIMEPICKER35, IDC_EDIT268, IDC_EDIT234, IDC_EDIT246, IDC_EDIT257 } };
+	int structure1[7] = { 10, 5, DATEPKR, EDITBX, EDITBX, EDITBX, EDITBX };
+	int parameters2[9][5] = { { IDC_DATETIMEPICKER36, IDC_EDIT269, IDC_EDIT235, IDC_EDIT247, IDC_EDIT258 },
+	{ IDC_DATETIMEPICKER37, IDC_EDIT270, IDC_EDIT278, IDC_EDIT286, IDC_EDIT294 },
+	{ IDC_DATETIMEPICKER38, IDC_EDIT271, IDC_EDIT279, IDC_EDIT287, IDC_EDIT295 },
+	{ IDC_DATETIMEPICKER39, IDC_EDIT272, IDC_EDIT280, IDC_EDIT288, IDC_EDIT296 },
+	{ IDC_DATETIMEPICKER40, IDC_EDIT273, IDC_EDIT281, IDC_EDIT289, IDC_EDIT297 },
+	{ IDC_DATETIMEPICKER41, IDC_EDIT274, IDC_EDIT282, IDC_EDIT290, IDC_EDIT298 },
+	{ IDC_DATETIMEPICKER42, IDC_EDIT275, IDC_EDIT283, IDC_EDIT291, IDC_EDIT299 },
+	{ IDC_DATETIMEPICKER43, IDC_EDIT276, IDC_EDIT284, IDC_EDIT292, IDC_EDIT300 },
+	{ IDC_DATETIMEPICKER44, IDC_EDIT277, IDC_EDIT285, IDC_EDIT293, IDC_EDIT301 } };
+	int structure2[7] = { 9, 5, DATEPKR, EDITBX, EDITBX, EDITBX, EDITBX };
+
+	vector<vector<int>> vvPara;
+	for (int i = 0; i < 10; i++) {
+		vector<int> vPara;
+		for (int j = 0; j < 5; j++)
+			vPara.push_back(parameters1[i][j]);
+		vvPara.push_back(vPara);
+	}
+	_vvvParameters.push_back(vvPara);
+
+	vvPara.clear();
+	for (int i = 0; i < 9; i++) {
+		vector<int> vPara;
+		for (int j = 0; j < 5; j++)
+			vPara.push_back(parameters2[i][j]);
+		vvPara.push_back(vPara);
+	}
+	_vvvParameters.push_back(vvPara);
+
+	vector<int> vStr;
+	for (int i = 0; i < 7; i++) {
+		vStr.push_back(structure1[i]);
+	}
+	_vvSubformStructure.push_back(vStr);
+
+	vStr.clear();
+	for (int i = 0; i < 7; i++) {
+		vStr.push_back(structure2[i]);
+	}
+	_vvSubformStructure.push_back(vStr);
+
+	_vHaveDataSubform.push_back(-1); _vHaveDataSubform.push_back(-1);
+
+	vStr.clear(); vStr.push_back(0); vStr.push_back(10); _vvSubformRecordRange.push_back(vStr);
+	vStr.clear(); vStr.push_back(0); vStr.push_back(9); _vvSubformRecordRange.push_back(vStr);
 }
 
 CPersonalForm18::~CPersonalForm18()
 {
-	m_fontEdit.DeleteObject();
+	//m_fontEdit.DeleteObject();
 }
 
-void CPersonalForm18::SetCurrentFile(CString filePath)
-{
-	m_strCurrentFolder = filePath.Left(filePath.Find(_T("/"), 0));
-	m_strCurrentFile = filePath.Right(filePath.GetLength() - filePath.Find(_T("/"), 0) - 1);
-}
+//void CPersonalForm18::SetCurrentFile(CString filePath)
+//{
+//	m_strCurrentFolder = filePath.Left(filePath.Find(_T("/"), 0));
+//	m_strCurrentFile = filePath.Right(filePath.GetLength() - filePath.Find(_T("/"), 0) - 1);
+//}
 
 void CPersonalForm18::DoDataExchange(CDataExchange* pDX)
 {
@@ -63,6 +120,49 @@ void CPersonalForm18::Dump(CDumpContext& dc) const
 #endif //_DEBUG
 
 
+void CPersonalForm18::ShowEditbox(int nID, char *data)
+{
+	GetDlgItem(nID)->SetWindowTextW(CA2W(data, CP_UTF8));
+}
+
+void CPersonalForm18::ShowRadiobtn(int nWhich, char *data)
+{
+	int nSub = nWhich & 0xFF00; nSub >>= 8;
+	int nSWhich = nWhich & 0xF;
+
+}
+
+void CPersonalForm18::ShowDatapicker(int nID, char *data)
+{
+	COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
+	((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+}
+
+void CPersonalForm18::GetNumber(int nWhich, int &num)
+{
+	int nSub = nWhich & 0xFF00; nSub >>= 8;
+	int nSWhich = nWhich & 0xF;
+
+}
+
+void CPersonalForm18::GetString(int nID, CString &str)
+{
+	GetDlgItem(nID)->GetWindowTextW(str); str.Trim();
+}
+
+BOOL CPersonalForm18::hasData(int isub, int irow)
+{
+	CString strText;
+
+	if ((isub == 1) || (isub == 2)) {
+		vector<vector<int>> vvParam = _vvvParameters[isub - 1];
+		GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty())
+			return FALSE;
+	}
+
+	return TRUE;
+}
 // CPersonalForm18 消息处理程序
 
 
@@ -70,6 +170,7 @@ void CPersonalForm18::OnBnClickedCmdSaveForm()
 {
 	UpdateData();
 	// TODO:  在此添加控件通知处理程序代码
+#if 0
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
@@ -159,6 +260,8 @@ FillForm18 :
 FillComplete :
 	help->closeDB(); delete help;
 	ss.str("");  ss.clear();
+#endif
+	DoSaveForm();
 	GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 }
 
@@ -175,6 +278,7 @@ void CPersonalForm18::OnBnClickedButtonCloseForm3()
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
 	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
+	::PostMessage(this->m_hWnd, WM_DESTROY, 0l, 0l);
 }
 
 
@@ -183,6 +287,7 @@ void CPersonalForm18::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 
 	// TODO:  在此添加专用代码和/或调用基类
+#if 0
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
@@ -251,9 +356,28 @@ void CPersonalForm18::OnInitialUpdate()
 
 	help->closeDB();
 	delete help;
+#endif
+	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
+	DoShowForm();
+
+	BOOL hasData = FALSE;
+	vector<int>::iterator itHas = _vHaveDataSubform.begin();
+	while (itHas != _vHaveDataSubform.end()) {
+		if (*itHas != -1) {
+			hasData = TRUE; break;
+		}
+		itHas++;
+	}
+	if (hasData) {
+		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_CMD_UPDATE_FORM3)->ShowWindow(SW_SHOW);
+	}
 }
 
 void CPersonalForm18::OnBnClickedCmdUpdateForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	UpdateData();
+
+	DoUpdateForm();
 }
