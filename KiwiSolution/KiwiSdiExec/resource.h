@@ -127,6 +127,7 @@
 #define IDC_STATICBOX105                1051
 #define IDC_EDIT_NPC_MEMBER             1052
 #define IDC_STATICBOX51                 1052
+#define IDC_STATICBOX126                1052
 #define IDC_STATICBOX19                 1053
 #define IDC_STATICBOX106                1053
 #define IDC_EDIT_CPPCC_MEMBER           1054
@@ -134,6 +135,7 @@
 #define IDC_STATICBOX20                 1055
 #define IDC_STATICBOX71                 1055
 #define IDC_STATICBOX107                1055
+#define IDC_STATICBOX127                1055
 #define IDC_EDIT_WORKING_UNIT           1056
 #define IDC_STATICBOX53                 1056
 #define IDC_STATICBOX21                 1057
