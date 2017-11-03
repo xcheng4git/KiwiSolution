@@ -92,6 +92,34 @@ CPersonalForm06::CPersonalForm06()
 	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
 	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
 
+	//以下是为了打印的预设
+	const wchar_t *pBookmarks1[11] = { _T("有无"), _T("配偶"), _T("姓名"), _T("单位"), _T("现任职务"), _T("单位性质1"), _T("单位性质2"), _T("单位性质3"), _T("单位性质4"), _T("证件名称"), _T("证件号码") };
+	int structure10[11] = { CBookmarkEx::CHKBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, 
+		CBookmarkEx::CHKBOX, CBookmarkEx::CHKBOX, CBookmarkEx::CHKBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX};
+	int structure11[3 + 11] = { 1, 1, 10, 2, 2, 1, 1, 1, 6, 4, 2,1,1,1 };
+
+	vector<CBookmarkEx> vBke;
+	for (int i = 0; i < 11; i++) {
+		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[3 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+	//vBke.clear();
+	//for (int i = 0; i < 6; i++) {
+	//	CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[3 + i]);
+	//	vBke.push_back(bookmark);
+	//}
+	//_vvBookmarks.push_back(vBke);
+
+	vStr.clear();
+	for (int i = 0; i < 3; i++)
+		vStr.push_back(structure11[i]);
+	_vvSubformFlags.push_back(vStr);
+
+	//vStr.clear();
+	//for (int i = 0; i < 3; i++)
+	//	vStr.push_back(structure21[i]);
+	//_vvSubformFlags.push_back(vStr);
 }
 
 CPersonalForm06::~CPersonalForm06()
@@ -498,6 +526,7 @@ FillComplete :
 void CPersonalForm06::OnBnClickedCmdPrintForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	DoPrintForm(CString(_T("表2-5.dotx")));
 }
 
 void CPersonalForm06::OnBnClickedButtonCloseForm3()
