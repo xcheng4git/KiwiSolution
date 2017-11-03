@@ -42,7 +42,15 @@ BOOL CDlgNewForm::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	// TODO:  在此添加额外的初始化
+	CImageList   m_l;
+	m_l.Create(1, 30, TRUE | ILC_COLOR32, 1, 0);
+	m_listFormType.SetImageList(&m_l, LVSIL_SMALL);
+	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 20;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
+	CFont font1; font1.CreateFontIndirect(&lf);
+	m_listFormType.SetFont(&font1); font1.DeleteObject();
+
 	m_listFormType.DeleteAllItems();
+
 
 	m_listFormType.InsertColumn(0, _T("序号"), LVCFMT_LEFT, 50);
 	m_listFormType.InsertColumn(1, _T("廉政档案名称"), LVCFMT_LEFT, 250);
@@ -82,9 +90,12 @@ BOOL CDlgNewForm::OnInitDialog()
 	m_header.FreezeColumn(3);
 	m_header.SetTheme(new CXTPHeaderCtrlThemeOffice2003());
 
-	//UpdateData(false);
-	CString title; title.Format(_T("%s    -    \t新建廉政档案"), m_strCurrentFile);
-	SetWindowText(title.GetBuffer());
+	CString title; title.Format(_T("为 %s 的 %s 同志新建廉政档案"), m_strCurrentFolder, m_strCurrentFile);
+	SetWindowTextW(title.GetBuffer());
+	//CString title; title.Format(_T("%s    -    \t新建廉政档案"), m_strCurrentFile);
+	//SetWindowText(title.GetBuffer());
+
+	UpdateData(false);
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常:  OCX 属性页应返回 FALSE
 }
