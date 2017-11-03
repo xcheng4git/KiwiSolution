@@ -157,10 +157,26 @@ afx_msg LRESULT CPaneOrgnization::OnUpdateOrgnization(WPARAM wParam, LPARAM lPar
 
 void CPaneOrgnization::OnClickTreeOrgnization(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	// TODO:  在此添加控件通知处理程序代码
 	*pResult = 0;
 
 	m_bClicked = true;
+
+	CRect rt;
+	HTREEITEM hItem = m_treeOrignization.GetSelectedItem();
+	HTREEITEM hItemParent = m_treeOrignization.GetParentItem(hItem);
+	if (hItemParent != NULL) {
+		m_treeOrignization.GetItemRect(hItem, &rt, FALSE);
+		CPoint pt; GetCursorPos(&pt); m_treeOrignization.ScreenToClient(&pt);
+		//UINT uFlags;  HTREEITEM hClickedItem = m_treeOrignization.HitTest(pt, &uFlags);
+		if (rt.PtInRect(pt)) {
+			m_strCurrentFolder = m_treeOrignization.GetItemText(hItemParent);
+			m_strCurrentFile = m_treeOrignization.GetItemText(hItem); m_bClicked = false;
+			CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+			::PostMessage(pWnd->m_hWnd, WM_SHOW_PERSONAL_SUMMARY, WPARAM(&m_strCurrentFolder), LPARAM(&m_strCurrentFile));
+		}
+	}
 }
 
 
