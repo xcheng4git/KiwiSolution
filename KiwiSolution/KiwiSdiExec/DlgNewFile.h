@@ -28,4 +28,5 @@ public:
 	CComboBox m_comboFolderName;
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
+	CString m_strFilePhone;
 };

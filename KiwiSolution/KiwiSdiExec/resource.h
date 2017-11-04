@@ -68,6 +68,8 @@
 #define IDC_COMBO_FOLDER_NAME           1016
 #define IDC_EDIT_FILE_NAME              1017
 #define IDC_LIST_FORM_TYPE              1018
+#define IDC_EDIT_FILE_NAME2             1018
+#define IDC_EDIT_FILE_PHONE             1018
 #define IDC_LIST1                       1019
 #define IDC_LIST_QUERY_BYFOLDER         1019
 #define IDC_LIST_SUMMARY_1              1020
@@ -823,6 +825,9 @@
 #define IDC_EDIT_NEW_USER_PWD2          1517
 #define IDC_EDIT_NAME_BACKUP            1517
 #define IDC_STATIC_CURSELECTION         1518
+#define IDC_EDIT_TEL                    1519
+#define IDC_EDIT_CONTACT_NAME           1520
+#define IDC_EDIT_CONTACT_PHONE          1521
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 #define ID_Menu                         32773
@@ -840,7 +845,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        358
 #define _APS_NEXT_COMMAND_VALUE         32781
-#define _APS_NEXT_CONTROL_VALUE         1519
+#define _APS_NEXT_CONTROL_VALUE         1520
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

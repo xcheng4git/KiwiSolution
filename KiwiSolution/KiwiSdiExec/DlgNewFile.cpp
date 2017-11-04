@@ -6,8 +6,13 @@
 #include "DlgNewFile.h"
 #include "afxdialogex.h"
 
+#include <sstream>
+using namespace std;
+#include "Utility.h"
 #include "SQLiteHelper.h"
+#include "msword/msword.h"
 #include "MainFrm.h"
+
 
 // CDlgNewFile 对话框
 
@@ -16,6 +21,7 @@ IMPLEMENT_DYNAMIC(CDlgNewFile, CDialogEx)
 CDlgNewFile::CDlgNewFile(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CDlgNewFile::IDD, pParent)
 	, m_strFileName(_T(""))
+	, m_strFilePhone(_T(""))
 {
 
 }
@@ -34,6 +40,7 @@ void CDlgNewFile::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT_FILE_NAME, m_strFileName);
 	DDX_Control(pDX, IDC_COMBO_FOLDER_NAME, m_comboFolderName);
+	DDX_Text(pDX, IDC_EDIT_FILE_PHONE, m_strFilePhone);
 }
 
 
@@ -66,17 +73,24 @@ void CDlgNewFile::OnOK()
 	// TODO:  在此添加专用代码和/或调用基类
 	UpdateData();
 
-	m_strFileName.Trim();
+	m_strFileName.Trim(); m_strFilePhone.Trim();
 	if (m_strFileName.GetLength() > 1) {
 		CSQLiteHelper *help = new CSQLiteHelper();
 		help->openDB("kiwi.db3");
-		char value[500];
-		//sprintf_s(value, 500, "insert into orgnization_file(file_id, file_name, folder_name) values (null, '%s', '%s')", CW2A(m_strFileName.GetBuffer(0), CP_UTF8), CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8));
-		USES_CONVERSION;
-		sprintf_s(value, 500, "insert into orgnization_file(file_id, file_name, folder_name) values (null, '%s', '%s')", G2U(W2A(m_strFileName.GetBuffer())), G2U(W2A(m_strCurrentFolder.GetBuffer())));
-		help->execSQL(value);
-		help->closeDB();
-		delete help;
+		stringstream ss;
+		ss << "insert into orgnization_file values (null, ";
+		ss << "'" << CW2A(m_strFileName.GetBuffer(0), CP_UTF8) << "', ";
+		ss << "'" << CW2A(m_strFilePhone.GetBuffer(0), CP_UTF8) << "', ";
+		ss << "'" << CW2A(m_strCurrentFolder.GetBuffer(0), CP_UTF8) << "'); ";
+		//char value[500];
+		////sprintf_s(value, 500, "insert into orgnization_file(file_id, file_name, folder_name) values (null, '%s', '%s')", CW2A(m_strFileName.GetBuffer(0), CP_UTF8), CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8));
+		//USES_CONVERSION;
+		//sprintf_s(value, 500, "insert into orgnization_file(file_id, file_name, folder_name) values (null, '%s', '%s')", G2U(W2A(m_strFileName.GetBuffer())), G2U(W2A(m_strCurrentFolder.GetBuffer())));
+		//help->execSQL(value);
+		help->execSQL(ss.str().c_str());
+
+		help->closeDB(); delete help;
+		ss.str(""); ss.clear();
 
 		//更新组织结构
 		CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;

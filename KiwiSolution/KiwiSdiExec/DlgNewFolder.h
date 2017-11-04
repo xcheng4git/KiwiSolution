@@ -21,4 +21,7 @@ protected:
 public:
 	CString m_strFolderName;
 	virtual void OnOK();
+	CString m_strContactTel;
+	CString m_strContactPhone;
+	CString m_strContactName;
 };
