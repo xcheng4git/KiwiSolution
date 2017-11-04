@@ -7,7 +7,13 @@
 #include "PaneShortcut.h"
 #include "afxdialogex.h"
 
+#include <sstream>
+using namespace std;
+#include "Utility.h"
+#include "SQLiteHelper.h"
+#include "msword/msword.h"
 #include "MainFrm.h"
+
 #include "DlgNewFolder.h"
 #include "DlgNewFile.h"
 #include "DlgNewForm.h"
@@ -72,6 +78,122 @@ void CPaneShortcut::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST_SHORTCUT, m_listShortcut);
 }
 
+
+void CPaneShortcut::DoDeleteFile()
+{
+	//AfxMessageBox(_T("delete file")); return;
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	//TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+
+#if 0
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	CKiwiSdiExecDoc* pDoc = pWnd->GetDocument();
+	vector<vector<wchar_t*>>::iterator itFormByTables = pDoc->m_vvFormByTables.begin();
+
+	while (itFormByTables != pDoc->m_vvFormByTables.end()) {
+		vector<wchar_t*>::const_iterator itcFormByTables = itFormByTables->begin();
+
+		itcFormByTables++; itcFormByTables++;
+		while (itcFormByTables != itFormByTables->end()) {
+			ss.str(""); ss.clear();
+			ss << "delete from " << CW2A((wchar_t*)*itcFormByTables, CP_UTF8) << "where file_id=" << file_id << ";";
+			help->execSQL(ss.str().c_str());
+
+			itcFormByTables++;
+		}
+
+		itFormByTables++;
+	}
+	ss.str(""); ss.clear();
+	ss << "delete from orgnization_file where file_id=" << file_id << "';";
+	help->execSQL(ss.str().c_str());
+#else
+	ss.str(""); ss.clear();
+	ss << "update orgnization_file set del_status=1 where file_id=" << file_id << "';";
+	help->execSQL(ss.str().c_str());
+#endif
+
+	help->closeDB(); delete help;
+	ss.str(""); ss.clear();
+
+}
+
+void CPaneShortcut::DoDeleteFolder()
+{
+	//AfxMessageBox(_T("delete folder."));  return;
+
+	stringstream ss;
+	ss << "select file_id from orgnization_file where folder_name='" <<	CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		ss << "delete from orgnization_folder where folder_name='" << CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+		TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+		help->closeDB(); delete help;
+		ss.str(""); ss.clear();
+		return;
+	}
+
+#if 0
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	CKiwiSdiExecDoc* pDoc = pWnd->GetDocument();
+	vector<vector<wchar_t*>>::iterator itFormByTables = pDoc->m_vvFormByTables.begin();
+
+	while (itFormByTables != pDoc->m_vvFormByTables.end()) {
+		vector<wchar_t*>::const_iterator itcFormByTables = itFormByTables->begin();
+
+		itcFormByTables++; itcFormByTables++;
+		while (itcFormByTables != itFormByTables->end()) {
+			for (int r = 0; r < row; r++) {
+				int file_id = atoi(re[(r + 1)*col + 0]);
+
+				ss.str(""); ss.clear();
+				ss << "delete from " << CW2A((wchar_t*)*itcFormByTables, CP_UTF8) << "where file_id=" << file_id << ";";
+				help->execSQL(ss.str().c_str());
+			}
+
+			itcFormByTables++;
+		}
+
+		itFormByTables++;
+	}
+
+	ss.str(""); ss.clear();
+	ss << "delete from orgnization_file where folder_name='" << CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	help->execSQL(ss.str().c_str());
+
+	ss.str(""); ss.clear();
+	ss << "delete from orgnization_folder where folder_name='" << CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	help->execSQL(ss.str().c_str());
+#else
+	ss.str(""); ss.clear();
+	ss << "update orgnization_file set del_status=1 where folder_name='" << CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	help->execSQL(ss.str().c_str());
+
+	ss.str(""); ss.clear();
+	ss << "update orgnization_folder set del_status=1 where folder_name='" << CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	help->execSQL(ss.str().c_str());
+#endif
+
+	help->closeDB(); delete help;
+	ss.str(""); ss.clear();
+}
 
 BEGIN_MESSAGE_MAP(CPaneShortcut, CDialogEx)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_SHORTCUT, &CPaneShortcut::OnItemchangedListShortcut)
@@ -185,12 +307,34 @@ void CPaneShortcut::OnClickListShortcut(NMHDR *pNMHDR, LRESULT *pResult)
 			case 2:
 				if (!m_strCurrentFolder.IsEmpty())
 					InvokeNewFileDialog();
+				else
+					MessageBox(_T("请先选中单位，再新建人员"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION);
 				break;
 			case 3:
 				if (!m_strCurrentFile.IsEmpty())
 					InvokeNewFormDialog();
 				else
 					MessageBox(_T("请先选中人员，再新建档案"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION);
+				break;
+			case 4:
+				if (!m_strCurrentFile.IsEmpty()) {
+					int ok1 = MessageBox(_T("删除人员：") + m_strCurrentFile + _T(" 将同时删除其所有廉政档案！"), _T("《廉政档案管理系统》"), MB_ICONWARNING | IDOK);
+					if (ok1 == IDOK) {
+						DoDeleteFile();
+
+						CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+						::PostMessage(pWnd->m_hWnd, WM_UPDATE_ORGNIZATION, 0l, 0l);
+					}
+				}
+				else if (!m_strCurrentFolder.IsEmpty()){
+					int ok1 = MessageBox(_T("删除部门：") + m_strCurrentFolder + _T(" 将同时删除该部门所有人员及其廉政档案！"), _T("《廉政档案管理系统》"), MB_ICONWARNING | IDOK );
+					if (ok1 == IDOK) {
+						DoDeleteFolder();
+
+						CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+						::PostMessage(pWnd->m_hWnd, WM_UPDATE_ORGNIZATION, 0l, 0l);
+					}
+				}
 				break;
 			}
 

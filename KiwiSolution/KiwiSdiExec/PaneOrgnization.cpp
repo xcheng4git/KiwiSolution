@@ -122,7 +122,7 @@ afx_msg LRESULT CPaneOrgnization::OnUpdateOrgnization(WPARAM wParam, LPARAM lPar
 	CSQLiteHelper *help = new CSQLiteHelper();
 	help->openDB("kiwi.db3");
 
-	char *sql1 = "select * from orgnization_folder";
+	char *sql1 = "select * from orgnization_folder where del_status=0";
 	int row, col;
 	char *eee = "i";
 	char **result = &eee;
@@ -139,7 +139,7 @@ afx_msg LRESULT CPaneOrgnization::OnUpdateOrgnization(WPARAM wParam, LPARAM lPar
 	HTREEITEM hItemParent = m_treeOrignization.GetFirstVisibleItem();
 	while (hItemParent != NULL) {
 		USES_CONVERSION;
-		sprintf_s(sql2, 500, "select * from orgnization_file where folder_name='%s'", G2U(W2A(m_treeOrignization.GetItemText(hItemParent))));
+		sprintf_s(sql2, 500, "select * from orgnization_file where folder_name='%s' and del_status=0", G2U(W2A(m_treeOrignization.GetItemText(hItemParent))));
 		re = help->rawQuery(sql2, &row, &col, result); //row 是查出多少行记录,col是每条记录多少个字段
 		char *file_id, *file_name;
 		for (int r = 1; r <= row; r++) {
