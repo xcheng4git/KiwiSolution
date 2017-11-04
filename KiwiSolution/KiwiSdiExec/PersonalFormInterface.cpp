@@ -135,12 +135,17 @@ void CPersonalFormInterface::DoShowForm()
 	for (int i = 0; i < numSubform; i++) {
 		vector<vector<int>>::iterator itVVparameter = itVVVparameter->begin();
 
-		ss.str(""); ss.clear();
-		ss << "select * from " << CW2A(vFormByTables[2 + i], CP_UTF8) << " where file_id=" << file_id;
-		ss << " limit " << _vvSubformRecordRange[i][0] << "," << _vvSubformRecordRange[i][1] << ";";
-		//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
-
-		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		//if (_vSubformQueryString.size() >= numSubform) {
+		//	TRACE(_T("%s\n"), CA2W(_vSubformQueryString[i].c_str(), CP_UTF8));
+		//	re = help->rawQuery(_vSubformQueryString[i].c_str(), &row, &col, result);
+		//}
+		//else {
+			ss.str(""); ss.clear();
+			ss << "select * from " << CW2A(vFormByTables[2 + i], CP_UTF8) << " where file_id=" << file_id;
+			ss << " limit " << _vvSubformRecordRange[i][0] << "," << _vvSubformRecordRange[i][1] << ";";
+			//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+			re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		//}
 		if (row < 1) {
 			itVVVparameter++;  continue;
 		}
@@ -217,83 +222,96 @@ void CPersonalFormInterface::DoPrintForm(CString &templateName)
 	vector<wchar_t *> vFormByTables = pDoc->m_vvFormByTables[m_FormID - 1];
 	vector<int> vFormBySubform = pDoc->m_vvFormBySubform[m_FormID - 1];
 
-	for (int i = 0; i < numSubform; i++) {
-		vector<CBookmarkEx>::iterator itVbookmark = itVVbookmark->begin();
-
-		if (_vvSubformFlags[i][0] != -1) { //-1表示没有
-#pragma region 打印子表头边的勾选框
-
-			int has_or_no = -1;
-			ss.str(""); ss.clear();
-			ss << "select ";
-			ss << "file_" << vFormBySubform[i] << "IfHaveThisSituation, ";
-			ss << "file_" << vFormBySubform[i] << "IfChange" << " from file_form_flags where file_id = " << file_id << "; ";
-			TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
-			re = help->rawQuery(ss.str().c_str(), &row, &col, result);
-			if (row >= 1) {
-				has_or_no = atoi(re[1 * col + _vvSubformFlags[i][0]]);
+	TRY 
+	{
+		for (int i = 0; i < numSubform; i++) {
+			vector<CBookmarkEx>::iterator itVbookmark = itVVbookmark->begin();
+	
+			if (_vvSubformFlags[i][0] != -1) { //-1表示没有
+	#pragma region 打印子表头边的勾选框
+	
+				int has_or_no = -1;
+				ss.str(""); ss.clear();
+				ss << "select ";
+				ss << "file_" << vFormBySubform[i] << "IfHaveThisSituation, ";
+				ss << "file_" << vFormBySubform[i] << "IfChange" << " from file_form_flags where file_id = " << file_id << "; ";
+				TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+				re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+				if (row >= 1) {
+					has_or_no = atoi(re[1 * col + _vvSubformFlags[i][0]]);
+				}
+				
+				for (int j = 0; j < itVbookmark[0].nsub; j++) {
+					swprintf_s(szBookmark, 50, _T("%s%d%d"), itVbookmark[0].bookmark, i + 1,j+1);
+					bookmark = bookmarks.Item(&_variant_t(szBookmark));
+					range = bookmark.get_Range();
+					if (j == has_or_no)
+						range.put_Text(_T("R"));
+					else
+						range.put_Text(_T("\x00A3"));
+				}
+	#pragma endregion
 			}
-			
-			for (int j = 0; j < itVbookmark[0].nsub; j++) {
-				swprintf_s(szBookmark, 50, _T("%s%d%d"), itVbookmark[0].bookmark, i + 1,j+1);
-				bookmark = bookmarks.Item(&_variant_t(szBookmark));
-				range = bookmark.get_Range();
-				if (j == has_or_no)
-					range.put_Text(_T("R"));
-				else
-					range.put_Text(_T("\x00A3"));
+	
+	#pragma region 打印表体
+	
+			//ss.str(""); ss.clear();
+			//ss << "select * from " << CW2A(vFormByTables[2 + i], CP_UTF8) << " where file_id=" << file_id;
+			//ss << " limit " << _vvSubformRecordRange[i][0] << "," << _vvSubformRecordRange[i][1] << ";";
+			//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+			//re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+			TRACE(_T("%s\n"), CA2W(_vSubformQueryString[i].c_str(), CP_UTF8));
+			re = help->rawQuery(_vSubformQueryString[i].c_str(), &row, &col, result);
+			if (row < 1) {
+				itVVbookmark++;  continue;
 			}
-#pragma endregion
+	
+			int numSubformRow = _vvSubformFlags[i][1], numSubformColumn = _vvSubformFlags[i][2];
+			for (int r = 0; r < (row>numSubformRow ? numSubformRow : row); r++) {
+	
+				for (int c = 0; c < numSubformColumn; c++) {
+					PrintData(itVbookmark[c + 1], i, r, re[(r + 1) * col + c + _vvSubformFlags[i][3]], bookmarks);
+				}
+			}
+	#pragma endregion
+	
+			itVVbookmark++;
 		}
-
-#pragma region 打印表体
-
+	
+		help->closeDB(); delete help;
 		ss.str(""); ss.clear();
-		ss << "select * from " << CW2A(vFormByTables[2 + i], CP_UTF8) << " where file_id=" << file_id;
-		ss << " limit " << _vvSubformRecordRange[i][0] << "," << _vvSubformRecordRange[i][1] << ";";
-		TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
-
-		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
-		if (row < 1) {
-			itVVbookmark++;  continue;
-		}
-
-		int numSubformRow = _vvSubformFlags[i][1], numSubformColumn = _vvSubformFlags[i][2];
-		for (int r = 0; r < (row>numSubformRow ? numSubformRow : row); r++) {
-
-			for (int c = 0; c < numSubformColumn; c++) {
-				PrintData(itVbookmark[c + 1], i, r, re[(r + 1) * col + c + 2], bookmarks);
-			}
-		}
-#pragma endregion
-
-		itVVbookmark++;
+	
+		CString strSavePath = CUtility::GetModuleDirectory() + _T("\\temp.docx");
+		docx.SaveAs(COleVariant(strSavePath), covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional);
+	
+		docx.PrintOut(covFalse,              // Background.
+			covOptional,           // Append.
+			covOptional,           // Range.
+			covOptional,           // OutputFileName.
+			covOptional,           // From.
+			covOptional,           // To.
+			covOptional,           // Item.
+			COleVariant((long)1),  // Copies.
+			covOptional,           // Pages.
+			covOptional,           // PageType.
+			covOptional,           // PrintToFile.
+			covOptional,           // Collate.
+			covOptional,           // ActivePrinterMacGX.
+			covOptional,           // ManualDuplexPrint.
+			covOptional,           // PrintZoomColumn  New with Word 2002
+			covOptional,           // PrintZoomRow          ditto
+			covOptional,           // PrintZoomPaperWidth   ditto
+			covOptional);          // PrintZoomPaperHeight  ditto*/
 	}
-
-	help->closeDB(); delete help;
-	ss.str(""); ss.clear();
-
-	CString strSavePath = CUtility::GetModuleDirectory() + _T("\\temp.docx");
-	docx.SaveAs(COleVariant(strSavePath), covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional);
-
-	docx.PrintOut(covFalse,              // Background.
-		covOptional,           // Append.
-		covOptional,           // Range.
-		covOptional,           // OutputFileName.
-		covOptional,           // From.
-		covOptional,           // To.
-		covOptional,           // Item.
-		COleVariant((long)1),  // Copies.
-		covOptional,           // Pages.
-		covOptional,           // PageType.
-		covOptional,           // PrintToFile.
-		covOptional,           // Collate.
-		covOptional,           // ActivePrinterMacGX.
-		covOptional,           // ManualDuplexPrint.
-		covOptional,           // PrintZoomColumn  New with Word 2002
-		covOptional,           // PrintZoomRow          ditto
-		covOptional,           // PrintZoomPaperWidth   ditto
-		covOptional);          // PrintZoomPaperHeight  ditto*/
+	CATCH (CException, e)
+	{
+		AfxMessageBox(_T("打印失败！"));
+		docx.Close(covFalse, covOptional, covOptional);
+		wordApp.Quit(covOptional, covOptional, covOptional);
+		range.ReleaseDispatch(); bookmarks.ReleaseDispatch(); wordApp.ReleaseDispatch();
+		return;
+	}
+	END_CATCH
 
 	docx.Close(covFalse, covOptional, covOptional);
 	wordApp.Quit(covOptional, covOptional, covOptional);
@@ -349,7 +367,7 @@ void CPersonalFormInterface::PrintData(CBookmarkEx &theBookmark, int subform, in
 	else if (theBookmark.type == CBookmarkEx::CHKBOX) {
 		int value = atoi(data);
 		for (int j = 0; j < theBookmark.nsub; j++) {
-			swprintf_s(szBookmark, 50, _T("%s%d%d"), theBookmark.bookmark, row+1, j+1);
+			swprintf_s(szBookmark, 50, _T("%s%d%d%d"), theBookmark.bookmark, subform+1,row+1, j+1);
 			bookmark = bookmarks.Item(&_variant_t(szBookmark));
 			range = bookmark.get_Range();
 			if (j == value)

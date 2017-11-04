@@ -46,6 +46,7 @@ protected:
 
 	vector<vector<CBookmarkEx>> _vvBookmarks;  //预设，<若干子表<每行中的若干单元格的WORD文档中的书签类>>>
 	vector<vector<int>> _vvSubformFlags;				//预设，<若干子表<每行标记单选框是哪种有无，子表的行，列>
+	vector<string> _vSubformQueryString;
 	
 protected:
 	CString m_strCurrentFile;
