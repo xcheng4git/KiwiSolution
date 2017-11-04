@@ -67,5 +67,9 @@ public:
 	afx_msg void OnQueryByFolder();
 protected:
 	afx_msg LRESULT OnModifyPersonalForm(WPARAM wParam, LPARAM lParam);
+public:
+	afx_msg void OnDatabaseInitial();
+	afx_msg void OnDatabaseBackup();
+	afx_msg void OnToolNewUser();
 };
 

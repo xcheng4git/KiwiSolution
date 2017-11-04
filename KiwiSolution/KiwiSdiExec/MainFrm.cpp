@@ -38,6 +38,8 @@
 #include "SplashWnd.h"
 
 #include "QueryByFolder.h"
+#include "DlgBackupDatabase.h"
+#include "DlgNewUser.h"
 
 #include "SQLiteHelper.h"
 #include <sstream>
@@ -63,6 +65,9 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_SHOW_DEFAULT_SUMMARY, &CMainFrame::OnShowDefaultSummary)
 	ON_COMMAND(ID_QUERY_BY_FOLDER, &CMainFrame::OnQueryByFolder)
 	ON_MESSAGE(WM_MODIFY_PERSONAL_FORM, &CMainFrame::OnModifyPersonalForm)
+	ON_COMMAND(ID_DATABASE_INITIAL, &CMainFrame::OnDatabaseInitial)
+	ON_COMMAND(ID_DATABASE_BACKUP, &CMainFrame::OnDatabaseBackup)
+	ON_COMMAND(ID_TOOL_NEW_USER, &CMainFrame::OnToolNewUser)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -528,4 +533,49 @@ afx_msg LRESULT CMainFrame::OnModifyPersonalForm(WPARAM wParam, LPARAM lParam)
 
 	help->closeDB(); delete help;
 	return 0;
+}
+
+
+void CMainFrame::OnDatabaseInitial()
+{
+	// TODO:  在此添加命令处理程序代码
+	CKiwiSdiExecDoc* pDoc = GetDocument();
+	if (pDoc->m_currentUserGroup != 0) {
+		MessageBox(_T("对不起，你不是管理员，不能使用该命令！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+		return;
+	}
+
+	int ok1 = MessageBox(_T("请确认初始化数据库前，已经备份当前数据库！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION | IDOK);
+	if (ok1 = IDOK) {
+		int ok2 = MessageBox(_T("请再次确认初始化数据库前，已经备份当前数据库！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION | IDOK);
+		if (ok2 != IDOK)
+			return;
+	}
+	else
+		return;
+
+
+	MessageBox(_T("数据库已经初始化！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION);
+}
+
+
+void CMainFrame::OnDatabaseBackup()
+{
+	// TODO:  在此添加命令处理程序代码
+	CDlgBackupDatabase dlgBackup;
+	dlgBackup.DoModal();
+}
+
+
+void CMainFrame::OnToolNewUser()
+{
+	// TODO:  在此添加命令处理程序代码
+	CKiwiSdiExecDoc* pDoc = GetDocument();
+	if (pDoc->m_currentUserGroup != 0) {
+		MessageBox(_T("对不起，你不是管理员，不能使用该命令！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+		return;
+	}
+
+	CDlgNewUser dlgUser;
+	dlgUser.DoModal();
 }
