@@ -75,31 +75,31 @@ CPersonalForm05::CPersonalForm05()
 	//以下是为了打印的预设
 	const wchar_t *pBookmarks1[8] = { _T("有无"), _T("姓名"), _T("移居国家"), _T("现居住城市"), _T("移居证件号码"), _T("移居类别"), _T("移居时间"), _T("备注") };
 	int structure10[8] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX};
-	int structure11[3+8] = { 1,3,7, 2, 1, 1, 1, 1, 3, 1, 1 };
+	int structure11[3+1+8] = { 1,3,7, 2,2, 1, 1, 1, 1, 3, 1, 1 };
 	const wchar_t *pBookmarks2[6] = { _T("有无"), _T("姓名"), _T("移居国家"), _T("现居住城市"), _T("移居时间"), _T("备注") };
 	int structure20[6] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
-	int structure21[3 + 6] = { 1, 3, 5, 2, 1, 1, 1, 1,1 };
+	int structure21[3+1 + 6] = { 1, 3, 5, 2,2, 1, 1, 1, 1,1 };
 
 	vector<CBookmarkEx> vBke;
 	for (int i = 0; i < 8; i++) {
-		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[3 + i]);
+		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[4 + i]);
 		vBke.push_back(bookmark);
 	}
 	_vvBookmarks.push_back(vBke);
 	vBke.clear();
 	for (int i = 0; i < 6; i++) {
-		CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[3 + i]);
+		CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[4 + i]);
 		vBke.push_back(bookmark);
 	}
 	_vvBookmarks.push_back(vBke);
 
 	vStr.clear();
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 		vStr.push_back(structure11[i]);
 	_vvSubformFlags.push_back(vStr);
 
 	vStr.clear();
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 		vStr.push_back(structure21[i]);
 	_vvSubformFlags.push_back(vStr);
 
@@ -566,6 +566,29 @@ PrintFinish:
 	wordApp.Quit(covOptional, covOptional, covOptional);
 	range.ReleaseDispatch(); bookmarks.ReleaseDispatch(); wordApp.ReleaseDispatch();
 #endif
+
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str(""); ss.clear();
+
+	help->closeDB(); delete help;
+	
+	ss.str("");  ss.clear();
+	ss << "select * from file_form_10 where file_id=" << file_id << " limit 0,3;";
+	_vSubformQueryString.push_back(ss.str());
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_11 where file_id=" << file_id << " limit 0,3;";
+	_vSubformQueryString.push_back(ss.str());
+	ss.str(""); ss.clear();
 
 	DoPrintForm(CString(_T("表2-4.dotx")));
 }
