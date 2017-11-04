@@ -273,6 +273,14 @@ void CPersonalFormInterface::DoPrintForm(CString &templateName)
 					PrintData(itVbookmark[c + 1], i, r, re[(r + 1) * col + c + _vvSubformFlags[i][3]], bookmarks);
 				}
 			}
+			/////////////////////////////////////////////
+			//没有数据的行中打印列的复选框，
+			for (int r = row; r < numSubformRow; r++) {
+				for (int c = 0; c < numSubformColumn; c++) {
+					if (itVbookmark[c + 1].type == itVbookmark->CHKBOX )
+						PrintData(itVbookmark[c + 1], i, r, "-1", bookmarks);
+				}
+			}
 	#pragma endregion
 	
 			itVVbookmark++;
@@ -404,8 +412,10 @@ void CPersonalFormInterface::DoUpdateForm()
 	int numSubform = _vvSubformStructure.size();
 	vector<vector<CString>>::iterator itSubformRecids = _vvSubformRecid.begin();
 	vector<wchar_t *> vFormByTables = pDoc->m_vvFormByTables[m_FormID - 1];
+	vector<int> vSubformUpdatedRow;
 	for (int i = 0; i < numSubform; i++) {
 		if (_vHaveDataSubform[i] == -1) {
+			vSubformUpdatedRow.push_back(0);
 			itVVVparameter++; continue;
 		}
 		vector<CString>::const_iterator itcRecid = itSubformRecids->begin();
@@ -415,7 +425,8 @@ void CPersonalFormInterface::DoUpdateForm()
 		//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
 		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 
-		int numSubformColumn = _vvSubformStructure[i][1];
+		int updatedRows = 0; 
+		int numSubformRow = _vvSubformStructure[i][0]; int numSubformColumn = _vvSubformStructure[i][1];
 		while (itcRecid != itSubformRecids->end()) {
 			std::vector<int>::iterator itV = itVVparameter->begin();
 			ss.str(""); ss.clear();
@@ -448,13 +459,63 @@ void CPersonalFormInterface::DoUpdateForm()
 			TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
 			help->execSQL(ss.str().c_str());
 
-			itcRecid++; itVVparameter++;
+			itcRecid++; itVVparameter++; updatedRows++;
+		}
+		vSubformUpdatedRow.push_back(updatedRows);
+		itSubformRecids++;
+
+		itVVVparameter++;
+	}
+
+	//////////////////////////////////////////////////////////
+#pragma region 子表新增加了行
+	itVVVparameter = _vvvParameters.begin();
+	for (int i = 0; i < numSubform; i++) {
+		vector<vector<int>>::iterator itVVparameter = itVVVparameter->begin();
+
+		int numSubformRow = _vvSubformStructure[i][0]; int numSubformColumn = _vvSubformStructure[i][1];
+		for (int r = vSubformUpdatedRow[i]; r < numSubformRow; r++) {
+			if (!hasData(i + 1, r)) break;
+			std::vector<int>::iterator itV = itVVparameter->begin();
+
+			ss.str(""); ss.clear();
+			ss << "insert into " << CW2A(vFormByTables[2 + i], CP_UTF8) << " values(" << file_id << ", ";
+			strText.ReleaseBuffer(); strText = CUtility::GetGuid();
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+
+			for (int j = 0; j < numSubformColumn; j++) {
+				if (_vvSubformStructure[i][2 + j] == RADIOBTN) {
+					int iData;
+					GetData(_vvSubformStructure[i][2 + j], itV[j], iData);
+					ss << iData;
+
+				}
+				else if (_vvSubformStructure[i][2 + j] == EDITNUM) {
+					double dData;
+					GetData(_vvSubformStructure[i][2 + j], itV[j], dData);
+					ss << dData;
+
+				}
+				else if ((_vvSubformStructure[i][2 + j] == EDITBX) || (_vvSubformStructure[i][2 + j] == DATEPKR)){
+					CString strText;
+					GetData(_vvSubformStructure[i][2 + j], itV[j], strText);
+					ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+				}
+				if (j != numSubformColumn - 1)
+					ss << ", ";
+			}
+			ss << ");";
+
+			TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+			help->execSQL(ss.str().c_str());
+
+			itVVparameter++;
 		}
 
 		itVVVparameter++;
-
-		itSubformRecids++;
 	}
+#pragma endregion
+	/////////////////////////////////////////////////////////
 
 	ss.str("");  ss.clear();
 	ss << "update personal_form_info set modify_date=";
