@@ -43,12 +43,13 @@ public:
 	CBitmap m_bmpTip;
 
 protected:
-
+	enum {DateTimeTimer=1};
 // 生成的消息映射函数
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_picGroup1_2;
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 #ifndef _DEBUG  // KiwiSdiExecView.cpp 中的调试版本

@@ -21,7 +21,7 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 #endif
-	CFont m_fontText;
+	CFont m_fontText, m_fontTitle;
 	CBitmap m_bmpClose;
 
 protected:
@@ -35,11 +35,13 @@ public:
 	CString m_strCurrentFile;
 	CString m_strCurrentFolder;
 protected:
-	
+	enum {DateTimeTimer=1};
+
 public:
 	CXTPListCtrl m_listSummary1;
 	CListCtrlEx m_listSummary2;
 	virtual void OnInitialUpdate();
 	afx_msg void OnClickedButtonClose();
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

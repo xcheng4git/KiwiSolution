@@ -19,7 +19,7 @@ class CKiwiSdiExecApp : public CWinApp
 public:
 	CKiwiSdiExecApp();
 
-
+	enum { DateTimeTimer=1 };
 // ÖØÐ´
 public:
 	virtual BOOL InitInstance();

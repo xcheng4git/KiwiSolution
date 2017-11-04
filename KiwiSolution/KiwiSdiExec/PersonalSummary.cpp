@@ -20,13 +20,15 @@ CPersonalSummary::CPersonalSummary()
 {
 	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 15;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
 	m_fontText.CreateFontIndirect(&lf);
+	lf.lfHeight = 30;
+	m_fontTitle.CreateFontIndirect(&lf);
 
 	m_bmpClose.LoadBitmap(IDB_BITMAP_CLOSE);
 }
 
 CPersonalSummary::~CPersonalSummary()
 {
-	m_fontText.DeleteObject();
+	m_fontText.DeleteObject(); m_fontTitle.DeleteObject();
 	m_bmpClose.DeleteObject();
 }
 
@@ -43,6 +45,7 @@ void CPersonalSummary::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CPersonalSummary, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE, &CPersonalSummary::OnClickedButtonClose)
 	ON_WM_CTLCOLOR()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -180,10 +183,6 @@ void CPersonalSummary::OnInitialUpdate()
 		m_listSummary2.InsertItem(iRow, *itcTables);
 		m_listSummary2.SetItem(iRow, 1, LVIF_TEXT, CA2W(re[(iRow+1) * col + 1], CP_UTF8), 0, NULL, NULL, NULL);
 
-		//while (itcTables != itForm->end()) {
-		//	m_listSummary2.SetItem()
-		//}
-
 		itForm++; iRow++;
 	}
 
@@ -204,9 +203,6 @@ void CPersonalSummary::OnInitialUpdate()
 		}
 		else
 			m_listSummary2.SetItem(iRow, 2, LVIF_TEXT, _T("未填报"), 0, NULL, NULL, NULL);
-		//while (itcTables != itForm->end()) {
-		//	m_listSummary2.SetItem()
-		//}
 
 		itForm++; iRow++;
 	}
@@ -214,20 +210,18 @@ void CPersonalSummary::OnInitialUpdate()
 
 	m_listSummary2.ModifyExtendedStyle(LVS_EX_GRIDLINES, LVS_EX_GRIDLINES);
 	
-	//int i = 0;
-	//m_listSummary2.InsertColumn(0, _T(""), LVCFMT_LEFT, 150);
-	//m_listSummary2.InsertColumn(1, _T(""), LVCFMT_LEFT, 150);
-
-	//TCHAR caption[1000] = { 0 };//标题
-	//for (int nRow = 0; nRow < 10; nRow++) {
-	//	m_listSummary2.InsertItem(nRow, _T("tim"));
-	//	m_listSummary2.createItemButton(nRow, 1, m_listSummary2, _T("Button"), "");
-	//}
 #pragma endregion
-
-
 	help->closeDB(); delete help;
 
+	GetDlgItem(IDC_STATIC_DEFULAT_TITLE)->SetFont(&m_fontTitle);
+	GetDlgItem(IDC_STATIC_CURRENT_DATETIME)->SetFont(&m_fontTitle);
+	CTime today = CTime::GetCurrentTime();
+	CString str;
+	str.Format(_T("现在是：%4d年%02d月%02d日 %02d时%02d分%02d秒"), today.GetYear(), today.GetMonth(), today.GetDay(),
+		today.GetHour(), today.GetMinute(), today.GetSecond());
+	GetDlgItem(IDC_STATIC_CURRENT_DATETIME)->SetWindowTextW(str);
+
+	SetTimer(DateTimeTimer, 1000, NULL);
 }
 
 
@@ -252,4 +246,22 @@ HBRUSH CPersonalSummary::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 	// TODO:  如果默认的不是所需画笔，则返回另一个画笔
 	return hbr;
+}
+
+
+void CPersonalSummary::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	if (nIDEvent == DateTimeTimer) {
+		KillTimer(DateTimeTimer);
+
+		CTime today = CTime::GetCurrentTime();
+		CString str;
+		str.Format(_T("现在是：%4d年%02d月%02d日 %02d时%02d分%02d秒"),today.GetYear(),today.GetMonth(),today.GetDay(),
+			today.GetHour(), today.GetMinute(), today.GetSecond()); 
+		GetDlgItem(IDC_STATIC_CURRENT_DATETIME)->SetWindowTextW(str);
+
+		SetTimer(DateTimeTimer, 1000, NULL);
+	}
+	CFormView::OnTimer(nIDEvent);
 }

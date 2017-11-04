@@ -22,6 +22,7 @@
 IMPLEMENT_DYNCREATE(CKiwiSdiExecView, CFormView)
 
 BEGIN_MESSAGE_MAP(CKiwiSdiExecView, CFormView)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 // CKiwiSdiExecView 构造/析构
@@ -108,6 +109,14 @@ void CKiwiSdiExecView::OnInitialUpdate()
 
 
 	GetDlgItem(IDC_STATIC_DEFULAT_TITLE)->SetFont(&m_fontTitle);
+	GetDlgItem(IDC_STATIC_CURRENT_DATETIME)->SetFont(&m_fontGroup);
+	CTime today = CTime::GetCurrentTime();
+	CString str;
+	str.Format(_T("现在是：%4d年%02d月%02d日 %02d时%02d分%02d秒"), today.GetYear(), today.GetMonth(), today.GetDay(),
+		today.GetHour(), today.GetMinute(), today.GetSecond());
+	GetDlgItem(IDC_STATIC_CURRENT_DATETIME)->SetWindowTextW(str);
+
+	SetTimer(DateTimeTimer, 1000, NULL);
 
 }
 
@@ -134,3 +143,22 @@ CKiwiSdiExecDoc* CKiwiSdiExecView::GetDocument() const // 非调试版本是内联的
 
 
 // CKiwiSdiExecView 消息处理程序
+
+
+void CKiwiSdiExecView::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	if (nIDEvent == DateTimeTimer) {
+		KillTimer(DateTimeTimer);
+
+		CTime today = CTime::GetCurrentTime();
+		CString str;
+		str.Format(_T("现在是：%4d年%02d月%02d日 %02d时%02d分%02d秒"), today.GetYear(), today.GetMonth(), today.GetDay(),
+			today.GetHour(), today.GetMinute(), today.GetSecond());
+		GetDlgItem(IDC_STATIC_CURRENT_DATETIME)->SetWindowTextW(str);
+
+		SetTimer(DateTimeTimer, 1000, NULL);
+	}
+
+	CFormView::OnTimer(nIDEvent);
+}
