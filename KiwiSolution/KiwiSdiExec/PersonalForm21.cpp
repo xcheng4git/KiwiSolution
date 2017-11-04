@@ -279,7 +279,7 @@ void CPersonalForm21::OnInitialUpdate()
 		//ÏÔÊ¾Í¼Æ¬
 
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
-		GetDlgItem(IDC_CMD_UPDATE_FORM3)->ShowWindow(SW_SHOW);
+		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
 	}
 }
 

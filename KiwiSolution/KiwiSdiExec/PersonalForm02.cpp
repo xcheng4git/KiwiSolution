@@ -388,9 +388,9 @@ void CPersonalForm02::OnBnClickedCmdPrintForm()
 			for (int c = 0; c < 4; c++) {
 				bookmark = bookmarks.Item(&_variant_t(pBookmarks1[c]));
 				range = bookmark.get_Range();
-				range.put_Text((CA2W(re[r * col + c + 1], CP_UTF8)));
+				range.put_Text((CA2W(re[r * col + c + 2], CP_UTF8)));
 			}
-			int zaizhizhuangtai = atoi(re[r * col + 5]);
+			int zaizhizhuangtai = atoi(re[r * col + 6]);
 			for (int j = 0; j < 2; j++) {
 				swprintf_s(szBookmark, 50, _T("%s%d"), pBookmarks1[4], j + 1);
 				bookmark = bookmarks.Item(&_variant_t(szBookmark));
@@ -403,7 +403,7 @@ void CPersonalForm02::OnBnClickedCmdPrintForm()
 			for (int c = 5; c <10; c++) {
 				bookmark = bookmarks.Item(&_variant_t(pBookmarks1[c]));
 				range = bookmark.get_Range();
-				range.put_Text((CA2W(re[r * col + c +1], CP_UTF8)));
+				range.put_Text((CA2W(re[r * col + c +2], CP_UTF8)));
 			}
 		}
 	}
@@ -423,7 +423,7 @@ PrintMarige:
 	}
 	else {
 		for (int r = 1; r <= 1; r++){
-			int hyxz = atoi(re[r * col + 1]);
+			int hyxz = atoi(re[r * col + 2]);
 			for (int j = 0; j < 4; j++) {
 				swprintf_s(szBookmark, 50, _T("%s%d"), pBookmarks2[0], j + 1);
 				bookmark = bookmarks.Item(&_variant_t(szBookmark));
@@ -434,7 +434,7 @@ PrintMarige:
 					range.put_Text(_T("\x00A3"));
 			}
 
-			int wbh = atoi(re[r * col + 2]);
+			int wbh = atoi(re[r * col + 3]);
 			bookmark = bookmarks.Item(&_variant_t(pBookmarks2[1]));
 			range = bookmark.get_Range();
 			if (wbh == -1)
@@ -442,7 +442,7 @@ PrintMarige:
 			else
 				range.put_Text(_T("R"));
 
-			int ybh = atoi(re[r * col + 3]);
+			int ybh = atoi(re[r * col + 4]);
 			for (int j = 0; j < 4; j++) {
 				swprintf_s(szBookmark, 50, _T("%s%d"), pBookmarks2[2], j + 1);
 				bookmark = bookmarks.Item(&_variant_t(szBookmark));
@@ -456,7 +456,7 @@ PrintMarige:
 			for (int c = 3; c < 5; c++) {
 				bookmark = bookmarks.Item(&_variant_t(pBookmarks2[c]));
 				range = bookmark.get_Range();
-				range.put_Text((CA2W(re[r * col + c + 1], CP_UTF8)));
+				range.put_Text((CA2W(re[r * col + c + 2], CP_UTF8)));
 
 			}
 		}

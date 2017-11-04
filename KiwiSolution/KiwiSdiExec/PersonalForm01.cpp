@@ -714,7 +714,7 @@ void CPersonalForm01::OnClickedCmdPrintForm()
 	for (int i = 0; i < 21; i++) {
 		bookmark = bookmarks.Item(&_variant_t(pBookmarks[i]));
 		range = bookmark.get_Range();
-		range.put_Text((CA2W(re[1 * col + i+1], CP_UTF8)));
+		range.put_Text((CA2W(re[1 * col + i+2], CP_UTF8)));
 	}
 	
 	//²åÈëÍ¼Æ¬
