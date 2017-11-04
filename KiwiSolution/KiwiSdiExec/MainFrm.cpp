@@ -491,6 +491,8 @@ afx_msg LRESULT CMainFrame::OnShowDefaultSummary(WPARAM wParam, LPARAM lParam)
 	if (lParam != NULL) {
 		CString *folder = (CString *)lParam;
 		m_wndPaneShortcut.m_strCurrentFolder.Format(_T("%s"), *folder); //delete folder;
+		m_wndPaneShortcut.m_strCurrentFile.ReleaseBuffer();
+		m_wndPaneShortcut.m_strCurrentFile = _T("");
 	}
 	CView* pView = CreatePersonalForm(RUNTIME_CLASS(CKiwiSdiExecView), IDD_KIWISDIEXEC_FORM);
 	pView->OnInitialUpdate();

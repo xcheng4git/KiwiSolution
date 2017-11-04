@@ -189,6 +189,8 @@ void CPaneShortcut::OnClickListShortcut(NMHDR *pNMHDR, LRESULT *pResult)
 			case 3:
 				if (!m_strCurrentFile.IsEmpty())
 					InvokeNewFormDialog();
+				else
+					MessageBox(_T("请先选中人员，再新建档案"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION);
 				break;
 			}
 

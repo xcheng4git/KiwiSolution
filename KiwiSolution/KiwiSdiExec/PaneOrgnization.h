@@ -12,7 +12,7 @@ public:
 	CPaneOrgnization(CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CPaneOrgnization();
 
-// 对话框数据
+	// 对话框数据
 	enum { IDD = IDD_PANE_ORGNIZATION };
 
 protected:

@@ -76,7 +76,10 @@ BOOL CPaneOrgnization::OnInitDialog()
 
 	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 20;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("黑体"), 3); lf.lfWeight = 400;
 	CFont font1; font1.CreateFontIndirect(&lf);
-	m_treeOrignization.SetFont(&font1); font1.DeleteObject();
+	m_treeOrignization.SetFont(&font1); 
+	
+	GetDlgItem(IDC_STATIC_CURSELECTION)->SetFont(&font1);
+	font1.DeleteObject();
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常:  OCX 属性页应返回 FALSE
@@ -97,6 +100,8 @@ void CPaneOrgnization::OnSelchangedTreeOrgnization(NMHDR *pNMHDR, LRESULT *pResu
 		m_strCurrentFile = m_treeOrignization.GetItemText(hItem); m_bClicked = false;
 		CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 		::PostMessage(pWnd->m_hWnd, WM_SHOW_PERSONAL_SUMMARY, WPARAM(&m_strCurrentFolder), LPARAM(&m_strCurrentFile));
+
+		GetDlgItem(IDC_STATIC_CURSELECTION)->SetWindowText(m_strCurrentFolder + _T("\\") + m_strCurrentFile);
 	}
 	else
 	{
@@ -104,6 +109,8 @@ void CPaneOrgnization::OnSelchangedTreeOrgnization(NMHDR *pNMHDR, LRESULT *pResu
 		m_strCurrentFile.Empty(); m_bClicked = false;
 		CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 		::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
+
+		GetDlgItem(IDC_STATIC_CURSELECTION)->SetWindowText(m_strCurrentFolder + _T("\\*"));
 	}
 }
 

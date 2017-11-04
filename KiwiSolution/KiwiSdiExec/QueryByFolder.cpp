@@ -287,6 +287,6 @@ void CQueryByFolder::OnBnClickedButtonCloseForm()
 {
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
-	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(NULL));
-
+	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, 0l);
+	::PostMessage(this->m_hWnd, WM_DESTROY, 0l, 0l);
 }

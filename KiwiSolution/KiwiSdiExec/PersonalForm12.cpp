@@ -266,7 +266,7 @@ void CPersonalForm12::OnBnClickedButtonCloseForm3()
 	// TODO:  在此添加控件通知处理程序代码
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
-	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
+	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, 0l);
 	::PostMessage(this->m_hWnd, WM_DESTROY, 0l, 0l);
 }
 
