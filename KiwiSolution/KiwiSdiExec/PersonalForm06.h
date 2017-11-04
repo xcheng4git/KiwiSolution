@@ -57,6 +57,7 @@ public:
 	int m_Radio7_4_1;
 	afx_msg void OnBnClickedCmdUpdateForm3();
 	virtual void OnInitialUpdate();
+	afx_msg void OnBnClickedRadio43();
 };
 
 
