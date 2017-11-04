@@ -199,6 +199,14 @@ void CPersonalForm05::GetString(int nID, CString &str)
 
 BOOL CPersonalForm05::hasData(int isub, int irow)
 {
+	CString strText;
+	if ((isub == 1) || (isub == 2)) {
+		vector<vector<int>> vvParam = _vvvParameters[isub - 1];
+		GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty())
+			return FALSE;
+	}
+
 	return TRUE;
 }
 
