@@ -9,6 +9,7 @@
 using namespace std;
 #include "Utility.h"
 #include "SQLiteHelper.h"
+#include "MainFrm.h"
 
 
 // CDlgLogin 对话框
@@ -38,6 +39,7 @@ void CDlgLogin::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CDlgLogin, CDialogEx)
 	ON_WM_PAINT()
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
@@ -62,19 +64,25 @@ void CDlgLogin::OnOK()
 		goto LoginEnd;
 	}
 
-	ss << "select count(*) from kiwi_users where user_name='" << CW2A(m_strUsername.GetBuffer(), CP_UTF8) << "' and ";
+	ss << "select user_group from kiwi_users where user_name='" << CW2A(m_strUsername.GetBuffer(), CP_UTF8) << "' and ";
 	ss << "user_pwd='" << CW2A(m_strUserpwd.GetBuffer(), CP_UTF8) << "';";
 	
 	OutputDebugString(CA2W(ss.str().c_str(), CP_UTF8));
 
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
-	int hasRecord = atoi(re[1 * col + 0]);
-	if (hasRecord) {
+	if (row>0) {
+		CString strText;
+		CTime today = CTime::GetCurrentTime();
+		strText = today.Format("%Y-%m-%d");
+		ss << "update kiwi_users set last_login_date='" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+		ss << " where user_name='" << m_strUsername << "'";
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+
+		CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+		CKiwiSdiExecDoc* pDoc = pWnd->GetDocument();
 		m_isLogined = true;
-		//ss << "update kiwi_users set last_login_date='" << strTime << "' ";
-		//ss << " where user_name='" << m_strUsername << "'";
-		//help->execSQL(ss.str().c_str());
-		//ss.str(""); ss.clear();
+		pDoc->m_currentUserGroup = atoi(re[1 * col + 0]);
 	}
 	else {
 		m_isLogined = false;
@@ -128,4 +136,17 @@ BOOL CDlgLogin::OnInitDialog()
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常:  OCX 属性页应返回 FALSE
+}
+
+
+HBRUSH CDlgLogin::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	// TODO:  在此更改 DC 的任何特性
+	if (pWnd->GetDlgCtrlID() == IDC_STATIC_WRONG)
+		pDC->SetTextColor(RGB(255, 0, 0));//修改字体的颜色
+
+	// TODO:  如果默认的不是所需画笔，则返回另一个画笔
+	return hbr;
 }

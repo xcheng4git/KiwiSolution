@@ -52,9 +52,9 @@ BOOL CDlgNewForm::OnInitDialog()
 	m_listFormType.DeleteAllItems();
 
 
-	m_listFormType.InsertColumn(0, _T("序号"), LVCFMT_LEFT, 50);
-	m_listFormType.InsertColumn(1, _T("廉政档案名称"), LVCFMT_LEFT, 250);
-	m_listFormType.InsertColumn(2, _T("说明"), LVCFMT_LEFT, 100);
+	m_listFormType.InsertColumn(0, _T("序号"), LVCFMT_CENTER, 80);
+	m_listFormType.InsertColumn(1, _T("廉政档案名称"), LVCFMT_CENTER, 250);
+	m_listFormType.InsertColumn(2, _T("说明"), LVCFMT_CENTER, 100);
 	m_listFormType.InsertColumn(3, _T("ID"), LVCFMT_LEFT, 0);
 
 

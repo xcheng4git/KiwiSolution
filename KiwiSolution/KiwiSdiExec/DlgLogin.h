@@ -27,4 +27,5 @@ public:
 	CString m_strUserpwd;
 	afx_msg void OnPaint();
 	virtual BOOL OnInitDialog();
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 };

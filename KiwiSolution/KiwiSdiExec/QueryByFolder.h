@@ -15,7 +15,7 @@ protected:
 	virtual ~CQueryByFolder();
 
 public:
-	enum { IDD = IDD_DIALOG_QUERY_BYFOLDER };
+	enum { IDD = IDD_FORM_QUERY_BYFOLDER };
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 #ifndef _WIN32_WCE

@@ -141,6 +141,10 @@ BOOL CPaneShortcut::OnInitDialog()
 		m_listShortcut.InsertItem(&lvitem);
 		iItem++;
 	}
+	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 20;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
+	CFont font1; font1.CreateFontIndirect(&lf);
+	m_listShortcut.SetFont(&font1); font1.DeleteObject();
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常:  OCX 属性页应返回 FALSE
 }
