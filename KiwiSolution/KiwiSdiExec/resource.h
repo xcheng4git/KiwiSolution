@@ -57,6 +57,9 @@
 #define IDB_SPLASH                      353
 #define IDB_BMP_SPLASH                  354
 #define IDD_DIALOG_QUERY_BYFOLDER       355
+#define IDD_FORM_QUERY_BYFOLDER         355
+#define IDD_DIALOG_NEW_USER             356
+#define IDD_DIALOG_DATABASE_BACKUP      357
 #define IDC_EDIT_TEST                   1011
 #define IDC_LIST_SHORTCUT               1012
 #define IDC_TREE_ORGNIZATION            1013
@@ -815,18 +818,28 @@
 #define IDC_COMBO1                      1513
 #define IDC_COMBO_GENDER                1513
 #define IDC_STATIC_ERR                  1514
+#define IDC_EDIT_NEW_USER_NAME          1515
+#define IDC_EDIT_NEW_USER_PWD           1516
+#define IDC_EDIT_NEW_USER_PWD2          1517
+#define IDC_EDIT_NAME_BACKUP            1517
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 #define ID_Menu                         32773
 #define ID_QUERY_BY_FOLDER              32774
+#define ID_32775                        32775
+#define ID_32776                        32776
+#define ID_32777                        32777
+#define ID_TOOL_NEW_USER                32778
+#define ID_DATABASE_BACKUP              32779
+#define ID_DATABASE_INITIAL             32780
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        356
-#define _APS_NEXT_COMMAND_VALUE         32775
-#define _APS_NEXT_CONTROL_VALUE         1515
+#define _APS_NEXT_RESOURCE_VALUE        358
+#define _APS_NEXT_COMMAND_VALUE         32781
+#define _APS_NEXT_CONTROL_VALUE         1518
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
