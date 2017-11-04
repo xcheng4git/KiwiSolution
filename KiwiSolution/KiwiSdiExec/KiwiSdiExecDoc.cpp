@@ -205,6 +205,8 @@ CKiwiSdiExecDoc::CKiwiSdiExecDoc()
 
 	help->closeDB();
 	delete help;
+
+	m_currentUserGroup = 0;
 }
 
 CKiwiSdiExecDoc::~CKiwiSdiExecDoc()

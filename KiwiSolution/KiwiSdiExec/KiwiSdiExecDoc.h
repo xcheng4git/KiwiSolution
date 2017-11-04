@@ -16,6 +16,8 @@ protected: // 仅从序列化创建
 public:
 	std::vector<std::vector<wchar_t *>> m_vvFormByTables;
 	std::vector<std::vector<int>> m_vvFormBySubform;
+
+	int m_currentUserGroup;
 // 操作
 public:
 
