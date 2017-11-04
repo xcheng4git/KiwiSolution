@@ -107,10 +107,12 @@
   <ItemGroup>
     <ClInclude Include="ButtonEx.h" />
     <ClInclude Include="DatePickerCombo.h" />
+    <ClInclude Include="DlgBackupDatabase.h" />
     <ClInclude Include="DlgLogin.h" />
     <ClInclude Include="DlgNewFile.h" />
     <ClInclude Include="DlgNewFolder.h" />
     <ClInclude Include="DlgNewForm.h" />
+    <ClInclude Include="DlgNewUser.h" />
     <ClInclude Include="KiwiSdiExec.h" />
     <ClInclude Include="KiwiSdiExecDoc.h" />
     <ClInclude Include="KiwiSdiExecView.h" />
@@ -179,10 +181,12 @@
   <ItemGroup>
     <ClCompile Include="ButtonEx.cpp" />
     <ClCompile Include="DatePickerCombo.cpp" />
+    <ClCompile Include="DlgBackupDatabase.cpp" />
     <ClCompile Include="DlgLogin.cpp" />
     <ClCompile Include="DlgNewFile.cpp" />
     <ClCompile Include="DlgNewFolder.cpp" />
     <ClCompile Include="DlgNewForm.cpp" />
+    <ClCompile Include="DlgNewUser.cpp" />
     <ClCompile Include="KiwiSdiExec.cpp" />
     <ClCompile Include="KiwiSdiExecDoc.cpp" />
     <ClCompile Include="KiwiSdiExecView.cpp" />
