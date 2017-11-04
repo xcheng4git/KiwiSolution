@@ -170,7 +170,7 @@ void CQueryByFolder::OnInitialUpdate()
 	CSQLiteHelper *help = new CSQLiteHelper();
 	help->openDB("kiwi.db3");
 
-	char *sql1 = "select * from orgnization_folder";
+	char *sql1 = "select * from orgnization_folder where del_status=0";
 	int row, col;
 	char *eee = "i";
 	char **result = &eee;
@@ -208,7 +208,7 @@ void CQueryByFolder::OnBnClickedButtonQueryByfolder()
 	CString strText;
 	m_comboFolders.GetLBText(m_comboFolders.GetCurSel(), strText);
 	stringstream ss;
-	ss << "select file_id, file_name from orgnization_file where folder_name='" << CW2A(strText.GetBuffer(), CP_UTF8) << "';";
+	ss << "select file_id, file_name from orgnization_file where folder_name='" << CW2A(strText.GetBuffer(), CP_UTF8) << "' and del_status=0;";
 
 	CSQLiteHelper *help = new CSQLiteHelper();
 	help->openDB("kiwi.db3");
