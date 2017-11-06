@@ -60,6 +60,7 @@
 #define IDD_FORM_QUERY_BYFOLDER         355
 #define IDD_DIALOG_NEW_USER             356
 #define IDD_DIALOG_DATABASE_BACKUP      357
+#define IDD_DIALOG_QUERY                358
 #define IDC_EDIT_TEST                   1011
 #define IDC_LIST_SHORTCUT               1012
 #define IDC_TREE_ORGNIZATION            1013
@@ -818,6 +819,7 @@
 #define IDC_STATIC_ERROR_MSG            1512
 #define IDC_COMBO1                      1513
 #define IDC_COMBO_GENDER                1513
+#define IDC_COMBO_FOLDER                1513
 #define IDC_STATIC_ERR                  1514
 #define IDC_EDIT_NEW_USER_NAME          1515
 #define IDC_EDIT_NEW_USER_PWD           1516
@@ -828,6 +830,10 @@
 #define IDC_EDIT_CONTACT_NAME           1520
 #define IDC_STATIC_CURRENT_DATETIME     1520
 #define IDC_EDIT_CONTACT_PHONE          1521
+#define IDC_LIST_QUERY_SUMMARY          1529
+#define IDC_LIST_QUERY_DETAIL           1530
+#define IDC_LIST8                       1532
+#define IDC_LIST_QUERY_TYPE             1533
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 #define ID_Menu                         32773
@@ -838,14 +844,24 @@
 #define ID_TOOL_NEW_USER                32778
 #define ID_DATABASE_BACKUP              32779
 #define ID_DATABASE_INITIAL             32780
+#define ID_QUERY_BYPOSITION             32781
+#define ID_QUERY_BY_POSITION            32782
+#define ID_QUERY_BY_AGE                 32783
+#define ID_32784                        32784
+#define ID_QUERY_BY_DEGREE              32785
+#define ID_QUERY_BY_PARTY               32786
+#define ID_QUERY_BY_FORM                32787
+#define ID_32788                        32788
+#define ID_QUERY_BY_PUNISH              32789
+#define ID_QUERY_BY_HANDIN_FORM         32790
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        358
-#define _APS_NEXT_COMMAND_VALUE         32781
-#define _APS_NEXT_CONTROL_VALUE         1521
+#define _APS_NEXT_RESOURCE_VALUE        360
+#define _APS_NEXT_COMMAND_VALUE         32791
+#define _APS_NEXT_CONTROL_VALUE         1534
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

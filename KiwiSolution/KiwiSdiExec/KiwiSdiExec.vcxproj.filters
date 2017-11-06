@@ -237,6 +237,9 @@
     <ClInclude Include="DlgNewUser.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DlgQueryBy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KiwiSdiExec.cpp">
@@ -375,6 +378,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DlgNewUser.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgQueryBy.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -113,6 +113,7 @@
     <ClInclude Include="DlgNewFolder.h" />
     <ClInclude Include="DlgNewForm.h" />
     <ClInclude Include="DlgNewUser.h" />
+    <ClInclude Include="DlgQueryBy.h" />
     <ClInclude Include="KiwiSdiExec.h" />
     <ClInclude Include="KiwiSdiExecDoc.h" />
     <ClInclude Include="KiwiSdiExecView.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="DlgNewFolder.cpp" />
     <ClCompile Include="DlgNewForm.cpp" />
     <ClCompile Include="DlgNewUser.cpp" />
+    <ClCompile Include="DlgQueryBy.cpp" />
     <ClCompile Include="KiwiSdiExec.cpp" />
     <ClCompile Include="KiwiSdiExecDoc.cpp" />
     <ClCompile Include="KiwiSdiExecView.cpp" />
