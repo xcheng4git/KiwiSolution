@@ -37,6 +37,7 @@
 
 #include "SplashWnd.h"
 
+#include "DlgQueryBy.h"
 #include "QueryByFolder.h"
 #include "DlgBackupDatabase.h"
 #include "DlgNewUser.h"
@@ -63,11 +64,18 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_TOOL_FULLSCREEN, &CMainFrame::OnToolFullscreen)
 	ON_UPDATE_COMMAND_UI(ID_TOOL_FULLSCREEN, &CMainFrame::OnUpdateToolFullscreen)
 	ON_MESSAGE(WM_SHOW_DEFAULT_SUMMARY, &CMainFrame::OnShowDefaultSummary)
-	ON_COMMAND(ID_QUERY_BY_FOLDER, &CMainFrame::OnQueryByFolder)
+	//ON_COMMAND(ID_QUERY_BY_FOLDER, &CMainFrame::OnQueryByFolder)
 	ON_MESSAGE(WM_MODIFY_PERSONAL_FORM, &CMainFrame::OnModifyPersonalForm)
 	ON_COMMAND(ID_DATABASE_INITIAL, &CMainFrame::OnDatabaseInitial)
 	ON_COMMAND(ID_DATABASE_BACKUP, &CMainFrame::OnDatabaseBackup)
 	ON_COMMAND(ID_TOOL_NEW_USER, &CMainFrame::OnToolNewUser)
+	ON_COMMAND(ID_QUERY_BY_POSITION, &CMainFrame::OnQueryByPosition)
+	ON_COMMAND(ID_QUERY_BY_PARTY, &CMainFrame::OnQueryByParty)
+	ON_COMMAND(ID_QUERY_BY_HANDIN_FORM, &CMainFrame::OnQueryByHandinForm)
+	ON_COMMAND(ID_QUERY_BY_FORM, &CMainFrame::OnQueryByForm)
+	ON_COMMAND(ID_QUERY_BY_PUNISH, &CMainFrame::OnQueryByPunish)
+	ON_COMMAND(ID_QUERY_BY_DEGREE, &CMainFrame::OnQueryByDegree)
+	ON_COMMAND(ID_QUERY_BY_AGE, &CMainFrame::OnQueryByAge)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -506,8 +514,8 @@ afx_msg LRESULT CMainFrame::OnShowDefaultSummary(WPARAM wParam, LPARAM lParam)
 
 void CMainFrame::OnQueryByFolder()
 {
-	CView* pView = CreatePersonalForm(RUNTIME_CLASS(CQueryByFolder), IDD_DIALOG_QUERY_BYFOLDER);
-	pView->OnInitialUpdate();
+	//CView* pView = CreatePersonalForm(RUNTIME_CLASS(CQueryByFolder), IDD_DIALOG_QUERY_BYFOLDER);
+	//pView->OnInitialUpdate();
 
 	//////////////////////////////////////
 	//考虑把其他的窗口的关闭,销毁
@@ -580,4 +588,71 @@ void CMainFrame::OnToolNewUser()
 
 	CDlgNewUser dlgUser;
 	dlgUser.DoModal();
+}
+
+
+void CMainFrame::OnQueryByPosition()
+{
+	// TODO:  在此添加命令处理程序代码
+	CDlgQueryBy dlgQuery;
+	dlgQuery.m_queryType = CDlgQueryBy::QUERY_BY_RANK;
+
+	dlgQuery.DoModal();
+}
+
+
+void CMainFrame::OnQueryByParty()
+{
+	// TODO:  在此添加命令处理程序代码
+	CDlgQueryBy dlgQuery;
+	dlgQuery.m_queryType = CDlgQueryBy::QUERY_BY_PARTY;
+
+	dlgQuery.DoModal();
+}
+
+
+void CMainFrame::OnQueryByHandinForm()
+{
+	// TODO:  在此添加命令处理程序代码
+	CDlgQueryBy dlgQuery;
+	dlgQuery.m_queryType = CDlgQueryBy::QUERY_BY_HANDIN_FORM;
+
+	dlgQuery.DoModal();
+}
+
+
+void CMainFrame::OnQueryByForm()
+{
+	// TODO:  在此添加命令处理程序代码
+	CDlgQueryBy dlgQuery;
+	dlgQuery.m_queryType = CDlgQueryBy::QUERY_BY_FORM;
+
+	dlgQuery.DoModal();
+}
+
+
+void CMainFrame::OnQueryByPunish()
+{
+	// TODO:  在此添加命令处理程序代码
+
+}
+
+
+void CMainFrame::OnQueryByDegree()
+{
+	// TODO:  在此添加命令处理程序代码
+	CDlgQueryBy dlgQuery;
+	dlgQuery.m_queryType = CDlgQueryBy::QUERY_BY_DEGREE;
+
+	dlgQuery.DoModal();
+}
+
+
+void CMainFrame::OnQueryByAge()
+{
+	// TODO:  在此添加命令处理程序代码
+	CDlgQueryBy dlgQuery;
+	dlgQuery.m_queryType = CDlgQueryBy::QUERY_BY_AGE;
+
+	dlgQuery.DoModal();
 }

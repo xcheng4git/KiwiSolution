@@ -71,5 +71,12 @@ public:
 	afx_msg void OnDatabaseInitial();
 	afx_msg void OnDatabaseBackup();
 	afx_msg void OnToolNewUser();
+	afx_msg void OnQueryByPosition();
+	afx_msg void OnQueryByParty();
+	afx_msg void OnQueryByHandinForm();
+	afx_msg void OnQueryByForm();
+	afx_msg void OnQueryByPunish();
+	afx_msg void OnQueryByDegree();
+	afx_msg void OnQueryByAge();
 };
 
