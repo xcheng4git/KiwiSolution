@@ -221,8 +221,10 @@
 #define IDC_EDIT_PIC_PATHNAME           1082
 #define IDC_STATICBOX122                1082
 #define IDC_CMD_UPDATE_FORM2            1082
+#define IDC_EDIT12                      1082
 #define IDC_STATICBOX37                 1083
 #define IDC_STATICBOX123                1083
+#define IDC_EDIT13                      1083
 #define IDC_PIC_GROUP1_1                1084
 #define IDC_STATICBOX124                1084
 #define IDC_STATICBOX33                 1085
@@ -832,7 +834,6 @@
 #define IDC_EDIT_CONTACT_PHONE          1521
 #define IDC_LIST_QUERY_SUMMARY          1529
 #define IDC_LIST_QUERY_DETAIL           1530
-#define IDC_LIST8                       1532
 #define IDC_LIST_QUERY_TYPE             1533
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
