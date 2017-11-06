@@ -59,5 +59,6 @@ public:
 	afx_msg void OnItemchangedListQueryType(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnClickListQueryType(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnClickListQuerySummary(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnCustomdrawListQueryType(NMHDR *pNMHDR, LRESULT *pResult);
 };
 

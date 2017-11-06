@@ -447,6 +447,7 @@ BEGIN_MESSAGE_MAP(CDlgQueryBy, CDialogEx)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_QUERY_TYPE, &CDlgQueryBy::OnItemchangedListQueryType)
 	ON_NOTIFY(NM_CLICK, IDC_LIST_QUERY_TYPE, &CDlgQueryBy::OnClickListQueryType)
 	ON_NOTIFY(NM_CLICK, IDC_LIST_QUERY_SUMMARY, &CDlgQueryBy::OnClickListQuerySummary)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_LIST_QUERY_TYPE, &CDlgQueryBy::OnCustomdrawListQueryType)
 END_MESSAGE_MAP()
 
 
@@ -481,7 +482,12 @@ BOOL CDlgQueryBy::OnInitDialog()
 
 	InitQueryByList();
 
-	return TRUE;  // return TRUE unless you set the focus to a control
+	if (m_queryType != -1) {
+		m_listQueryBy.SetFocus();
+		m_listQueryBy.SetItemState(m_queryType, LVNI_FOCUSED | LVIS_SELECTED, LVNI_FOCUSED | LVIS_SELECTED);
+		DoQueryBy();
+	}
+	return FALSE;  // return TRUE unless you set the focus to a control
 	// 异常:  OCX 属性页应返回 FALSE
 }
 
@@ -525,4 +531,51 @@ void CDlgQueryBy::OnClickListQuerySummary(NMHDR *pNMHDR, LRESULT *pResult)
 		DoQueryByDetail();
 	}
 	*pResult = 0;
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+// report 模式下的list ctrl才有这消息
+void CDlgQueryBy::OnCustomdrawListQueryType(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	//LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	NMLVCUSTOMDRAW* pLVCD = reinterpret_cast<NMLVCUSTOMDRAW*>(pNMHDR);
+	// TODO:  在此添加控件通知处理程序代码
+	//*pResult = 0;
+	*pResult = CDRF_DODEFAULT;
+
+	if (CDDS_PREPAINT == pLVCD->nmcd.dwDrawStage)
+	{
+		*pResult = CDRF_NOTIFYITEMDRAW;
+	}
+	else if (CDDS_ITEMPREPAINT == pLVCD->nmcd.dwDrawStage)
+	{
+		*pResult = CDRF_NOTIFYSUBITEMDRAW;
+	}
+	else if ((CDDS_ITEMPREPAINT | CDDS_SUBITEM) == pLVCD->nmcd.dwDrawStage)
+	{
+
+		COLORREF clrNewTextColor, clrNewBkColor;
+
+		int nItem = static_cast<int>(pLVCD->nmcd.dwItemSpec);
+
+		POSITION pos = m_listQueryBy.GetFirstSelectedItemPosition();
+		int index = m_listQueryBy.GetNextSelectedItem(pos);
+
+		if (index == nItem)//如果要刷新的项为当前选择的项，则将文字设为白色，背景色设为蓝色
+		{
+			clrNewTextColor = RGB(255, 255, 255);        //Set the text to white
+			clrNewBkColor = RGB(49, 106, 197);        //Set the background color to blue
+		}
+		else
+		{
+			clrNewTextColor = RGB(0, 0, 0);        //set the text black
+			clrNewBkColor = RGB(255, 255, 255);    //leave the background color white
+		}
+
+		pLVCD->clrText = clrNewTextColor;
+		pLVCD->clrTextBk = clrNewBkColor;
+
+		*pResult = CDRF_DODEFAULT;
+	}
 }
