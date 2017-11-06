@@ -109,7 +109,7 @@ void CKiwiSdiExecView::OnInitialUpdate()
 
 
 	GetDlgItem(IDC_STATIC_DEFULAT_TITLE)->SetFont(&m_fontTitle);
-	GetDlgItem(IDC_STATIC_CURRENT_DATETIME)->SetFont(&m_fontGroup);
+	GetDlgItem(IDC_STATIC_CURRENT_DATETIME)->SetFont(&m_fontTip);
 	CTime today = CTime::GetCurrentTime();
 	CString str;
 	str.Format(_T("现在是：%4d年%02d月%02d日 %02d时%02d分%02d秒"), today.GetYear(), today.GetMonth(), today.GetDay(),

@@ -78,6 +78,8 @@ BOOL CPaneOrgnization::OnInitDialog()
 	CFont font1; font1.CreateFontIndirect(&lf);
 	m_treeOrignization.SetFont(&font1); 
 	
+	//m_treeOrignization.ModifyStyle(0, WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
+
 	GetDlgItem(IDC_STATIC_CURSELECTION)->SetFont(&font1);
 	font1.DeleteObject();
 
