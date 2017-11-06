@@ -10,5 +10,6 @@ public:
 	static CString GetGuid();
 
 	static CString MarriageStatus2String(int marriageStatus);
+	static CString WorkingStatus2String(int workingStatus);
 };
 

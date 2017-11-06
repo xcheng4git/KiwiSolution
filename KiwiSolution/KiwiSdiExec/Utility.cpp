@@ -69,3 +69,19 @@ CString CUtility::MarriageStatus2String(int marriageStatus)
 
 	return strText;
 }
+
+CString CUtility::WorkingStatus2String(int workingStatus)
+{
+	CString strText;
+
+	switch (workingStatus) {
+	case 0:
+		strText.Format(_T("%s"), _T("ÔÚÖ°"));
+		break;
+	case 1:
+		strText.Format(_T("%s"), _T("ÄÚÍË"));
+		break;
+	}
+
+	return strText;
+}
