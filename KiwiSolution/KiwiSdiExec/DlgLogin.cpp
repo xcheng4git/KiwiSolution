@@ -61,11 +61,13 @@ void CDlgLogin::OnOK()
 	m_strUsername.Trim(); m_strUserpwd.Trim();
 	if (m_strUsername.IsEmpty() || m_strUserpwd.IsEmpty()) {
 		m_isLogined = false;
-		goto LoginEnd;
+		help->closeDB(); delete help;
+		return;
 	}
 
+	CString cpwd = CUtility::Crypt(m_strUserpwd);
 	ss << "select user_group from kiwi_users where user_name='" << CW2A(m_strUsername.GetBuffer(), CP_UTF8) << "' and ";
-	ss << "user_pwd='" << CW2A(m_strUserpwd.GetBuffer(), CP_UTF8) << "';";
+	ss << "user_pwd='" << CW2A(cpwd.GetBuffer(), CP_UTF8) << "';";
 	
 	OutputDebugString(CA2W(ss.str().c_str(), CP_UTF8));
 
@@ -89,7 +91,6 @@ void CDlgLogin::OnOK()
 		GetDlgItem(IDC_STATIC_WRONG)->ShowWindow(SW_SHOW);
 	}
 
-LoginEnd:
 	help->closeDB(); delete help;
 	ss.str("");  ss.clear();
 
