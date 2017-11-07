@@ -560,12 +560,29 @@ void CMainFrame::OnDatabaseInitial()
 		int ok2 = MessageBox(_T("请再次确认初始化数据库前，已经备份当前数据库！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION | IDOK);
 		if (ok2 != IDOK)
 			return;
+		BOOL bRtc1 = DeleteFile(_T("kiwi.db3.temp")); BOOL bRtc2 = CopyFile(_T("kiwi.db3"), _T("kiwi.db3.temp"), FALSE);
+		BOOL bRtc3 = DeleteFile(_T("kiwi.db3"));
+		if (CopyFile(_T("kiwi.db3.init"), _T("kiwi.db3"), FALSE)) {
+			MessageBox(_T("数据库已经初始化！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION);
+
+			::PostMessage(this->m_hWnd, WM_UPDATE_ORGNIZATION, 0l, 0l);
+		}
+		else {
+			if (bRtc3 && bRtc2) {
+				MessageBox(_T("数据库初始化失败，确认恢复数据库！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION);
+				if (CopyFile(_T("kiwi.db3.temp"), _T("kiwi.db3"), FALSE)) {
+					MessageBox(_T("数据库恢复成功！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION);
+				} else
+					MessageBox(_T("数据库恢复失败，请手工恢复数据库，或咨询管理员！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION);
+			}
+		}
+
 	}
 	else
 		return;
 
 
-	MessageBox(_T("数据库已经初始化！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION);
+	
 }
 
 
