@@ -34,6 +34,13 @@
 #include "PersonalForm22.h"
 #include "PersonalForm23.h"
 #include "PersonalForm24.h"
+#include "PersonalForm25.h"
+#include "PersonalForm26.h"
+#include "PersonalForm27.h"
+#include "PersonalForm28.h"
+#include "PersonalForm29.h"
+#include "PersonalForm30.h"
+#include "PersonalForm31.h"
 
 #include "SplashWnd.h"
 
@@ -424,7 +431,56 @@ afx_msg LRESULT CMainFrame::OnCreatePersonalForm(WPARAM wParam, LPARAM lParam)
 		return 0;
 
 	}
-		
+	case 25:
+	{
+		CPersonalForm25* pView = (CPersonalForm25*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm25), IDD_PERSONAL_FORM25);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
+		return 0;
+
+	}	case 26:
+	{
+		CPersonalForm26* pView = (CPersonalForm26*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm26), IDD_PERSONAL_FORM26);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
+		return 0;
+
+	}	case 27:
+	{
+		CPersonalForm27* pView = (CPersonalForm27*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm27), IDD_PERSONAL_FORM27);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
+		return 0;
+
+	}	case 28:
+	{
+		CPersonalForm28* pView = (CPersonalForm28*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm28), IDD_PERSONAL_FORM28);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
+		return 0;
+
+	}	case 29:
+	{
+		CPersonalForm29* pView = (CPersonalForm29*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm29), IDD_PERSONAL_FORM29);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
+		return 0;
+
+	}	case 30:
+	{
+		CPersonalForm30* pView = (CPersonalForm30*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm30), IDD_PERSONAL_FORM30);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
+		return 0;
+
+	}	case 31:
+	{
+		CPersonalForm31* pView = (CPersonalForm31*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm31), IDD_PERSONAL_FORM31);
+		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
+		pView->OnInitialUpdate();
+		return 0;
+
+	}
 	}
 
 	return 0;
