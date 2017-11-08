@@ -10,15 +10,18 @@ using namespace std;
 
 CPersonalFormInterface::CPersonalFormInterface()
 {
-	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("·ÂËÎÌå"), 3); lf.lfWeight = 400;
+	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 20;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("·ÂËÎÌå"), 3); lf.lfWeight = 400;
 	m_fontEdit.CreateFontIndirect(&lf);
 	m_bmpClose.LoadBitmap(IDB_BITMAP_CLOSE);
+	memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 30;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("·ÂËÎÌå"), 3); lf.lfWeight = 700;
+	m_fontHeader.CreateFontIndirect(&lf);
 }
 
 
 CPersonalFormInterface::~CPersonalFormInterface()
 {
 	m_fontEdit.DeleteObject();
+	m_fontHeader.DeleteObject();
 	m_bmpClose.DeleteObject();
 }
 
@@ -85,10 +88,13 @@ void CPersonalFormInterface::DoSaveForm()
 					GetData(_vvSubformStructure[i][2 + j], itV[j], strText);
 					ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
 				}
-				if (j != numSubformColumn - 1)
+				else if (_vvSubformStructure[i][2 + j] == ATTACHMENTBX)
+					ss << itV[j] << " ";
+
+				//if (j != numSubformColumn - 1)
 					ss << ", ";
 			}
-			ss << ");";
+			ss << "date(), date()); ";
 
 			TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
 			help->execSQL(ss.str().c_str());
@@ -157,7 +163,12 @@ void CPersonalFormInterface::DoShowForm()
 			vSubformRecid.push_back(str);
 
 			for (int j = 0; j < numSubformColumn; j++) {
-				ShowData(_vvSubformStructure[i][2 + j], itV[j], re[(r + 1) * col + j + 2]);
+				if (_vvSubformStructure[i][2 + j] == ATTACHMENTBX) {
+					continue;
+				}
+				else {
+					ShowData(_vvSubformStructure[i][2 + j], itV[j], re[(r + 1) * col + j + 2]);
+				}
 			}
 
 
@@ -445,15 +456,19 @@ void CPersonalFormInterface::DoUpdateForm()
 					GetData(_vvSubformStructure[i][2 + j], itV[j], dData);
 					ss << "=" << dData;
 
-				} else if ((_vvSubformStructure[i][2 + j] == EDITBX) || (_vvSubformStructure[i][2 + j] == DATEPKR)){
+				}
+				else if ((_vvSubformStructure[i][2 + j] == EDITBX) || (_vvSubformStructure[i][2 + j] == DATEPKR)){
 					CString strText;
 					GetData(_vvSubformStructure[i][2 + j], itV[j], strText);
 					ss << "='" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
 				}
+				else if (_vvSubformStructure[i][2 + j] == ATTACHMENTBX)
+					ss << "=" << itV[j];
 
-				if (j != numSubformColumn - 1)
+				//if (j != numSubformColumn - 1)
 					ss << ", ";
 			}
+			ss << " modify_date=date() ";
 			ss << " where form_recid='" << CW2A(CString(*itcRecid).GetBuffer(), CP_UTF8) << "';";
 
 			TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
@@ -501,10 +516,13 @@ void CPersonalFormInterface::DoUpdateForm()
 					GetData(_vvSubformStructure[i][2 + j], itV[j], strText);
 					ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
 				}
-				if (j != numSubformColumn - 1)
-					ss << ", ";
+				else if (_vvSubformStructure[i][2 + j] == ATTACHMENTBX)
+					ss << itV[j] << " ";
+
+				//if (j != numSubformColumn - 1)
+				ss << ", ";
 			}
-			ss << ");";
+			ss << "date(), date()); ";
 
 			TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
 			help->execSQL(ss.str().c_str());
