@@ -203,6 +203,48 @@ CKiwiSdiExecDoc::CKiwiSdiExecDoc()
 	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
 	vFormBySubform.clear(); vFormBySubform.push_back(30); m_vvFormBySubform.push_back(vFormBySubform);
 
+	vFormByTables.push_back(_T("表10"));
+	vFormByTables.push_back(CA2W(re[25 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_invertigated_form_10"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+	vFormBySubform.clear(); vFormBySubform.push_back(31); m_vvFormBySubform.push_back(vFormBySubform);
+
+	vFormByTables.push_back(_T("表11"));
+	vFormByTables.push_back(CA2W(re[26 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_invertigated_form_11"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+	vFormBySubform.clear(); vFormBySubform.push_back(32); m_vvFormBySubform.push_back(vFormBySubform);
+
+	vFormByTables.push_back(_T("表12"));
+	vFormByTables.push_back(CA2W(re[27 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_invertigated_form_12"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+	vFormBySubform.clear(); vFormBySubform.push_back(33); m_vvFormBySubform.push_back(vFormBySubform);
+
+	vFormByTables.push_back(_T("表13"));
+	vFormByTables.push_back(CA2W(re[28 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_invertigated_form_13"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+	vFormBySubform.clear(); vFormBySubform.push_back(34); m_vvFormBySubform.push_back(vFormBySubform);
+
+	vFormByTables.push_back(_T("表14"));
+	vFormByTables.push_back(CA2W(re[29 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_invertigated_form_14"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+	vFormBySubform.clear(); vFormBySubform.push_back(35); m_vvFormBySubform.push_back(vFormBySubform);
+
+	vFormByTables.push_back(_T("表15"));
+	vFormByTables.push_back(CA2W(re[30 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_invertigated_form_15"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+	vFormBySubform.clear(); vFormBySubform.push_back(36); m_vvFormBySubform.push_back(vFormBySubform);
+
+	vFormByTables.push_back(_T("表16"));
+	vFormByTables.push_back(CA2W(re[31 * col + 1], CP_UTF8));
+	vFormByTables.push_back(_T("file_invertigated_form_16"));
+	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
+	vFormBySubform.clear(); vFormBySubform.push_back(37); m_vvFormBySubform.push_back(vFormBySubform);
+
 	help->closeDB();
 	delete help;
 
