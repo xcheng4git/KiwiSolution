@@ -24,7 +24,7 @@ public:
 	CPersonalFormInterface();
 	~CPersonalFormInterface();
 
-	enum { EDITBX, DATEPKR, RADIOBTN, EDITNUM };
+	enum { EDITBX, DATEPKR, RADIOBTN, EDITNUM, ATTACHMENTBX };
 public:
 	void SetCurrentFile(CString filePath);
 	int m_FormID;
@@ -52,6 +52,7 @@ protected:
 	CString m_strCurrentFile;
 	CString m_strCurrentFolder;
 	CFont m_fontEdit;
+	CFont m_fontHeader;
 	CBitmap m_bmpClose;
 
 protected:

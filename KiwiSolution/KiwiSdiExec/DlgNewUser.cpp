@@ -73,9 +73,10 @@ void CDlgNewUser::OnOK()
 		return;
 	}
 
+	CString cpwd = CUtility::Crypt(m_strUserPwd);
 	ss << "insert into kiwi_users values( ";
 	ss << "'" << CW2A(m_strUserName.GetBuffer(), CP_UTF8) << "', ";
-	ss << "'" << CW2A(m_strUserName.GetBuffer(), CP_UTF8) << "', ";
+	ss << "'" << CW2A(cpwd.GetBuffer(), CP_UTF8) << "', ";
 	ss << "3, ";
 	CString strText;
 	CTime today = CTime::GetCurrentTime();
