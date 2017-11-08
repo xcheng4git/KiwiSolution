@@ -19,9 +19,9 @@ CPersonalForm27::CPersonalForm27()
 	: CFormView(CPersonalForm27::IDD)
 {
 	m_FormID = 27;
-	int parameters1[1][14] = { { IDC_EDIT1, IDC_EDIT12, IDC_EDIT13, IDC_EDIT345, IDC_EDIT344, IDC_EDIT346, IDC_EDIT347, 
+	int parameters1[1][14] = { { IDC_EDIT1, IDC_DATETIMEPICKER1, IDC_EDIT13, IDC_EDIT345, IDC_EDIT344, IDC_EDIT346, IDC_EDIT347,
 		IDC_EDIT370, IDC_EDIT371, IDC_EDIT350, IDC_EDIT351, IDC_EDIT372, IDC_EDIT373, IDC_EDIT374 } };
-	int structure1[16] = { 1, 6, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX };
+	int structure1[16] = { 1, 14, EDITBX, DATEPKR, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX };
 
 	vector<vector<int>> vvPara;
 	for (int i = 0; i < 1; i++) {
@@ -112,7 +112,7 @@ BOOL CPersonalForm27::hasData(int isub, int irow)
 
 	if ((isub == 1) || (isub == 2)){
 		vector<vector<int>> vvParam = _vvvParameters[isub - 1];
-		GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
+		GetDlgItem(vvParam[irow][3])->GetWindowTextW(strText); strText.Trim();
 		if (strText.IsEmpty())
 			return FALSE;
 	}
