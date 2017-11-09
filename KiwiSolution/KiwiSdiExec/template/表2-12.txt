@@ -1,0 +1,5 @@
+CHKBOX
+
+const wchar_t *pBookmarks1={_T(“姓名”),_T(“保险全称”),_T("保单号"),_T("保险公司"),_T("保费"),_T("总额")};
+int structure10 = {TXTBX,TXTBX,TXTBX,TXTBX,TXTBX,TXTBX};
+int structure11={1,1,1,1,1,1};
