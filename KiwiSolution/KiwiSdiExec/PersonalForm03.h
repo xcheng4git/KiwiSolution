@@ -1,10 +1,9 @@
 #pragma once
 
-#include <vector>
+#include "PersonalFormInterface.h"
+// CPersonalForm03 窗体视图
 
-// PersonalForm03 窗体视图
-
-class PersonalForm03 : public CFormView
+class PersonalForm03 : public CFormView, public CPersonalFormInterface
 {
 	DECLARE_DYNCREATE(PersonalForm03)
 
@@ -20,23 +19,32 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 #endif
-private:
-	std::vector<std::vector<std::vector<int>>> _vvvParameters;
+//private:
+//	std::vector<std::vector<std::vector<int>>> _vvvParameters;
 
 public:
-	CString m_strCurrentFile;
-	CString m_strCurrentFolder;
-	void SetCurrentFile(CString filePath);
-	CFont m_fontEdit;
-	CBitmap m_bmpClose;
+	//CString m_strCurrentFile;
+	//CString m_strCurrentFolder;
+	//void SetCurrentFile(CString filePath);
+	//CFont m_fontEdit;
+	//CBitmap m_bmpClose;
+	virtual void ShowEditbox(int nID, char *data);
+	virtual void ShowRadiobtn(int nWhich, char *data);
+	virtual void ShowDatapicker(int nID, char *data);
+
+	virtual void GetNumber(int nWhich, int &num);
+	virtual void GetString(int nID, CString &str);
+
+	virtual BOOL hasData(int isub, int irow);
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
-	void QueryAndFillFileForm();
-
-	int m_modifiedSubform[3];
-	std::vector<std::vector<CString>> m_vvFormRecid;
-	BOOL m_isModify;
+	//void QueryAndFillFileForm();
+	//
+	//int m_modifiedSubform[3];
+	//std::vector<std::vector<CString>> m_vvFormRecid;
+	//BOOL m_isModify;
 
 	DECLARE_MESSAGE_MAP()
 public:
@@ -49,6 +57,9 @@ public:
 	afx_msg void OnBnClickedCmdSaveForm();
 	afx_msg void OnBnClickedCmdPrintForm();
 	afx_msg void OnBnClickedCmdUpdateForm();
+	int m_Radio1_0;
+	int m_Radio2_0;
+	int m_Radio3_0;
 };
 
 
