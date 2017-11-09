@@ -383,25 +383,34 @@ void CPersonalFormInterface::PrintData(CBookmarkEx &theBookmark, int subform, in
 	CBookmark0 bookmark;
 	CRange range;
 
-	if (theBookmark.type == CBookmarkEx::TXTBOX) {
-		swprintf_s(szBookmark, 50, _T("%s%d%d"), theBookmark.bookmark, subform+1, row+1);
-		bookmark = bookmarks.Item(&_variant_t(szBookmark));
-		range = bookmark.get_Range();
-		range.put_Text((CA2W(data, CP_UTF8)));
-	}
-	else if (theBookmark.type == CBookmarkEx::CHKBOX) {
-		int value = atoi(data);
-		for (int j = 0; j < theBookmark.nsub; j++) {
-			swprintf_s(szBookmark, 50, _T("%s%d%d%d"), theBookmark.bookmark, subform+1,row+1, j+1);
+	TRY{
+		if (theBookmark.type == CBookmarkEx::TXTBOX) {
+			swprintf_s(szBookmark, 50, _T("%s%d%d"), theBookmark.bookmark, subform+1, row+1);
 			bookmark = bookmarks.Item(&_variant_t(szBookmark));
 			range = bookmark.get_Range();
-			if (j == value)
-				range.put_Text(_T("R"));
-			else
-				range.put_Text(_T("\x00A3"));
+			range.put_Text((CA2W(data, CP_UTF8)));
 		}
+		else if (theBookmark.type == CBookmarkEx::CHKBOX) {
+			int value = atoi(data);
+			for (int j = 0; j < theBookmark.nsub; j++) {
+				swprintf_s(szBookmark, 50, _T("%s%d%d%d"), theBookmark.bookmark, subform+1,row+1, j+1);
+				bookmark = bookmarks.Item(&_variant_t(szBookmark));
+				range = bookmark.get_Range();
+				if (j == value)
+					range.put_Text(_T("R"));
+				else
+					range.put_Text(_T("\x00A3"));
+			}
 
+		}
 	}
+	CATCH(CException, e)
+	{
+		
+		TRACE(_T("\nPrint fault: s:%d - r:%d -t:%d, %s, %s"), subform, row, theBookmark.type, theBookmark.bookmark, data);
+		throw(e);
+	}
+	END_CATCH
 }
 
 void CPersonalFormInterface::DoUpdateForm()

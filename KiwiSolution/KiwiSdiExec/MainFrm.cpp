@@ -637,8 +637,6 @@ void CMainFrame::OnDatabaseInitial()
 	}
 	else
 		return;
-
-
 	
 }
 
