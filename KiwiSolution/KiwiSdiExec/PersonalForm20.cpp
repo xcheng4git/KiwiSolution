@@ -209,7 +209,7 @@ void CPersonalForm20::OnBnClickedCmdPrintForm()
 	help->closeDB(); delete help;
 
 	ss.str("");  ss.clear();
-	ss << "select * from file_form_25 where file_id=" << file_id << " limit 0,1;";
+	ss << "select * from file_form_26 where file_id=" << file_id << " limit 0,1;";
 	_vSubformQueryString.push_back(ss.str());
 	ss.str(""); ss.clear();
 

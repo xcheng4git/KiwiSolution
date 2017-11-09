@@ -79,27 +79,27 @@ CPersonalForm18::CPersonalForm18()
 	vStr.clear(); vStr.push_back(0); vStr.push_back(9); _vvSubformRecordRange.push_back(vStr);
 
 	//以下是为了打印的预设
-	const wchar_t *pBookmarks1[6] = { _T("有无"), _T("时间"), _T("获奖名称"), _T("资历机关"), _T("文号"), _T("备注")};
-	int structure10[6] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX,
+	const wchar_t *pBookmarks1[9] = { _T("有无"), _T("姓名"), _T("单位"), _T("职务"), _T("时间"), _T("获奖名称"), _T("资历机关"), _T("文号"), _T("备注") };
+	int structure10[9] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX,
 		CBookmarkEx::TXTBOX };
-	int structure11[3 + 1 + 5] = { -1, 9, 5, 2,       1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	int structure11[3 + 1 + 8] = { -1, 9, 5, 2,  1, 1, 1, 1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 	//
-	const wchar_t *pBookmarks2[6] = { _T("有无"), _T("时间"), _T("获奖名称"), _T("资历机关"), _T("文号"), _T("备注") };
-	int structure20[6] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX,
+	const wchar_t *pBookmarks2[9] = { _T("有无"), _T("姓名"), _T("单位"), _T("职务"), _T("时间"), _T("获奖名称"), _T("资历机关"), _T("文号"), _T("备注") };
+	int structure20[9] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX,
 		CBookmarkEx::TXTBOX };
-	int structure21[3 + 1 + 5] = { -1, 9, 5, 2,      1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	int structure21[3 + 1 + 8] = { -1, 9, 5, 2, 1, 1, 1, 1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 	//
 	
 
 
 	vector<CBookmarkEx> vBke;
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < 9; i++) {
 		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[4 + i]);
 		vBke.push_back(bookmark);
 	}
 	_vvBookmarks.push_back(vBke);
 	vBke.clear();
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < 9; i++) {
 		CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[4 + i]);
 		vBke.push_back(bookmark);
 	}
