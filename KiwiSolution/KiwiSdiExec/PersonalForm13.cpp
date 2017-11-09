@@ -53,6 +53,27 @@ CPersonalForm13::CPersonalForm13()
 
 	vStr.clear(); vStr.push_back(0); vStr.push_back(10); _vvSubformRecordRange.push_back(vStr);
 
+	//以下是为了打印的预设
+	const wchar_t *pBookmarks1[7] = { _T("有无"), _T("姓名"), _T("保险全称"), _T("保单号"), _T("保险公司"), _T("保费"),_T("总额") };
+	int structure10[7] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure11[3 + 1 + 7] = { 0, 9, 5, 2,  2, 1, 1 ,1, 1, 1,1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	
+
+
+	vector<CBookmarkEx> vBke;
+	for (int i = 0; i < 7; i++) {
+		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+	
+
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure11[i]);
+	_vvSubformFlags.push_back(vStr);
+	
+
 }
 
 CPersonalForm13::~CPersonalForm13()
@@ -245,6 +266,27 @@ FillComplete :
 void CPersonalForm13::OnBnClickedCmdPrintForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str(""); ss.clear();
+
+	help->closeDB(); delete help;
+
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_19 where file_id=" << file_id << " limit 0,10;";
+	_vSubformQueryString.push_back(ss.str());
+	
+
+	DoPrintForm(CString(_T("表2-12.dotx")));
 }
 
 

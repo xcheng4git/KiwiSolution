@@ -46,6 +46,42 @@ CPersonalForm14::CPersonalForm14()
 	_vHaveDataSubform.push_back(-1);
 
 	vStr.clear(); vStr.push_back(0); vStr.push_back(2); _vvSubformRecordRange.push_back(vStr);
+
+	//以下是为了打印的预设
+	const wchar_t *pBookmarks1[13] = { _T("有无"), _T("姓名"), _T("统一社会信用"), _T("企业或其他"), _T("成立日期"), _T("经营范围"), _T("注册地"), _T("经营地"), _T("企业或其他市场类型主体"), _T("注册资本"), _T("个人认缴出资额"), _T("个人认缴出资比例或个人出资比例"), _T("备注") };
+	int structure10[13] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, };
+	int structure11[3 + 1 + 13] = { 1, 1, 10, 2, 2, 1, 1, 1, 1, 1, 1, 1,  7, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	//
+	const wchar_t *pBookmarks2[13] = { _T("有无"), _T("姓名"), _T("统一社会信用"), _T("企业或其他"), _T("成立日期"), _T("经营范围"), _T("注册地"), _T("经营地"), _T("企业或其他市场类型主体"), _T("注册资本"), _T("个人认缴出资额"), _T("个人认缴出资比例或个人出资比例"), _T("备注") };
+	int structure20[13] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, };
+	int structure21[3 + 1 + 12] = { -1, 1, 10, 2,  1, 1, 1, 1, 1, 1, 1, 7, 1, 1, 1, 1 };
+	//
+	
+
+
+	vector<CBookmarkEx> vBke;
+	for (int i = 0; i < 13; i++) {
+		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+	vBke.clear();
+	for (int i = 0; i < 12; i++) {
+		CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+	
+
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure11[i]);
+	_vvSubformFlags.push_back(vStr);
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure21[i]);
+	_vvSubformFlags.push_back(vStr);
+	
 }
 
 CPersonalForm14::~CPersonalForm14()
@@ -281,6 +317,33 @@ FillComplete :
 void CPersonalForm14::OnBnClickedCmdPrintForm2()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str(""); ss.clear();
+
+	help->closeDB(); delete help;
+
+	
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_20 where file_id=" << file_id << " limit 0,1;";
+	_vSubformQueryString.push_back(ss.str());
+
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_20 where file_id=" << file_id << " limit 1,2;";
+	_vSubformQueryString.push_back(ss.str());
+	
+	ss.str(""); ss.clear();
+
+	DoPrintForm(CString(_T("表2-13.dotx")));
 }
 
 

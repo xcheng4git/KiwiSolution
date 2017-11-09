@@ -43,7 +43,7 @@ CPersonalForm17::CPersonalForm17()
 
 	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
 
-	/*
+	
 	//以下是为了打印的预设
 	const wchar_t *pBookmarks1[2] = { _T("有无"), _T("报告内容") };
 	int structure10[2] = { CBookmarkEx::CHKBOX,  CBookmarkEx::TXTBOX };
@@ -64,7 +64,7 @@ CPersonalForm17::CPersonalForm17()
 	for (int i = 0; i < 4; i++)
 		vStr.push_back(structure11[i]);
 	_vvSubformFlags.push_back(vStr);
-	*/
+	
 	
 }
 
