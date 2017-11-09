@@ -32,6 +32,9 @@ public:
 
 	virtual BOOL hasData(int isub, int irow);
 
+private:
+	void InitFourType();
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 
@@ -42,6 +45,8 @@ public:
 	afx_msg void OnBnClickedButtonCloseForm3();
 	afx_msg void OnBnClickedCmdUpdateForm();
 	virtual void OnInitialUpdate();
+	afx_msg void OnSetfocusCombo3();
+	afx_msg void OnBnClickedButton1();
 };
 
 

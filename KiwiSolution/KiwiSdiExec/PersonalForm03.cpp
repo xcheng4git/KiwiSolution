@@ -18,27 +18,28 @@ IMPLEMENT_DYNCREATE(PersonalForm03, CFormView)
 
 PersonalForm03::PersonalForm03()
 : CFormView(PersonalForm03::IDD)
+, m_Radio1_0(-1)
+, m_Radio2_0(-1)
+, m_Radio3_0(-1)
 {
-	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 15;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
-	m_fontEdit.CreateFontIndirect(&lf);
-	m_bmpClose.LoadBitmap(IDB_BITMAP_CLOSE);
-
-	m_isModify = FALSE; for (int i = 0; i < 3; i++) m_modifiedSubform[i] = -1;
-
+	m_FormID = 3;
 	int parameters1[][5] = { { IDC_EDIT1, IDC_DATETIMEPICKER1, IDC_DATETIMEPICKER3, IDC_EDIT4, IDC_EDIT5 },
 	{ IDC_EDIT6, IDC_DATETIMEPICKER2, IDC_DATETIMEPICKER4, IDC_EDIT9, IDC_EDIT10 } };
+	int structure1[7] = { 2, 5, EDITBX, DATEPKR, DATEPKR, EDITBX, EDITBX };
 
 	int parameters2[][6] = { { IDC_DATETIMEPICKER5, IDC_DATETIMEPICKER6, IDC_EDIT11, IDC_EDIT24, IDC_EDIT27, IDC_EDIT30 },
 	{ IDC_DATETIMEPICKER7, IDC_DATETIMEPICKER8, IDC_EDIT22, IDC_EDIT25, IDC_EDIT28, IDC_EDIT31 },
 	{ IDC_DATETIMEPICKER9, IDC_DATETIMEPICKER10, IDC_EDIT23, IDC_EDIT26, IDC_EDIT29, IDC_EDIT32 } };
+	int structure2[8] = { 3, 6, DATEPKR, DATEPKR, EDITBX, EDITBX, EDITBX, EDITBX };
 
 	int parameters3[][6] = { { IDC_EDIT33, IDC_EDIT35, IDC_DATETIMEPICKER11, IDC_DATETIMEPICKER12, IDC_EDIT37, IDC_EDIT38 },
 	{ IDC_EDIT34, IDC_EDIT39, IDC_DATETIMEPICKER13, IDC_DATETIMEPICKER14, IDC_EDIT41, IDC_EDIT42 },
 	{ IDC_EDIT36, IDC_EDIT40, IDC_DATETIMEPICKER15, IDC_DATETIMEPICKER16, IDC_EDIT43, IDC_EDIT44 } };
+	int structure3[8] = { 3, 6, EDITBX, EDITBX, DATEPKR, DATEPKR, EDITBX, EDITBX };
 
-	std::vector<std::vector<int>> vvPara;
+	vector<vector<int>> vvPara;
 	for (int i = 0; i < 2; i++) {
-		std::vector<int> vPara;
+		vector<int> vPara;
 		for (int j = 0; j < 5; j++)
 			vPara.push_back(parameters1[i][j]);
 		vvPara.push_back(vPara);
@@ -47,7 +48,7 @@ PersonalForm03::PersonalForm03()
 
 	vvPara.clear();
 	for (int i = 0; i < 3; i++) {
-		std::vector<int> vPara;
+		vector<int> vPara;
 		for (int j = 0; j < 6; j++)
 			vPara.push_back(parameters2[i][j]);
 		vvPara.push_back(vPara);
@@ -56,30 +57,103 @@ PersonalForm03::PersonalForm03()
 
 	vvPara.clear();
 	for (int i = 0; i < 3; i++) {
-		std::vector<int> vPara;
+		vector<int> vPara;
 		for (int j = 0; j < 6; j++)
 			vPara.push_back(parameters3[i][j]);
 		vvPara.push_back(vPara);
 	}
 	_vvvParameters.push_back(vvPara);
+
+	vector<int> vStr;
+	for (int i = 0; i < 7; i++) {
+		vStr.push_back(structure1[i]);
+	}
+	_vvSubformStructure.push_back(vStr);
+
+	vStr.clear();
+	for (int i = 0; i < 8; i++) {
+		vStr.push_back(structure2[i]);
+	}
+	_vvSubformStructure.push_back(vStr);
+
+	vStr.clear();
+	for (int i = 0; i < 8; i++) {
+		vStr.push_back(structure3[i]);
+	}
+	_vvSubformStructure.push_back(vStr);
+
+	_vHaveDataSubform.push_back(-1); _vHaveDataSubform.push_back(-1); _vHaveDataSubform.push_back(-1);
+
+	vStr.clear(); vStr.push_back(0); vStr.push_back(2); _vvSubformRecordRange.push_back(vStr);
+	vStr.clear(); vStr.push_back(0); vStr.push_back(3); _vvSubformRecordRange.push_back(vStr);
+	vStr.clear(); vStr.push_back(0); vStr.push_back(3); _vvSubformRecordRange.push_back(vStr);
+
+	//以下是为了打印的预设
+	const wchar_t *pBookmarks1[6] = { _T("有无"), _T("护照号"), _T("签发日期"), _T("有效期至"), _T("保管机构"), _T("备注") };
+	int structure10[6] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure11[4+6] = { 1,2,5,2, 2,1, 1, 1, 1, 1 };
+
+	const wchar_t *pBookmarks2[7] = { _T("有无"), _T("起止时间起"), _T("起止时间止"), _T("所到国家"), _T("事由"), _T("审批机构"), _T("所用护照号") };
+	int structure20[7] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure21[4+7] = { 0,3,6,2, 2,1,1, 1, 1, 1, 1 };
+
+	const wchar_t *pBookmarks3[7] = { _T("有无"), _T("证件名称"), _T("证件号码"), _T("起止时间起"), _T("起止时间止"), _T("保管机构"), _T("备注") };
+	int structure30[7] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure31[4+7] = { 1,3,6,2, 2, 1,1, 1, 1, 1, 1 };
+
+	vector<CBookmarkEx> vBke;
+	for (int i = 0; i < 6; i++) {
+		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+	vBke.clear();
+	for (int i = 0; i < 7; i++) {
+		CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+	vBke.clear();
+	for (int i = 0; i < 7; i++) {
+		CBookmarkEx bookmark(structure30[i], pBookmarks3[i], structure31[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure11[i]);
+	_vvSubformFlags.push_back(vStr);
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure21[i]);
+	_vvSubformFlags.push_back(vStr);
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure31[i]);
+	_vvSubformFlags.push_back(vStr);
 }
 
 PersonalForm03::~PersonalForm03()
 {
-	m_fontEdit.DeleteObject();
-	m_bmpClose.DeleteObject();
+	//m_fontEdit.DeleteObject();
+	//m_bmpClose.DeleteObject();
 }
-void PersonalForm03::SetCurrentFile(CString filePath)
-{
-	m_strCurrentFolder = filePath.Left(filePath.Find(_T("/"), 0));
-	m_strCurrentFile = filePath.Right(filePath.GetLength() - filePath.Find(_T("/"), 0) - 1);
-
-	m_isModify = FALSE; for (int i = 0; i < 3; i++) m_modifiedSubform[i] = -1;
-}
+//void PersonalForm03::SetCurrentFile(CString filePath)
+//{
+//	m_strCurrentFolder = filePath.Left(filePath.Find(_T("/"), 0));
+//	m_strCurrentFile = filePath.Right(filePath.GetLength() - filePath.Find(_T("/"), 0) - 1);
+//
+//	m_isModify = FALSE; for (int i = 0; i < 3; i++) m_modifiedSubform[i] = -1;
+//}
 void PersonalForm03::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
+	DDX_Radio(pDX, IDC_RADIO1, m_Radio1_0);
+	DDX_Radio(pDX, IDC_RADIO12, m_Radio2_0);
+	DDX_Radio(pDX, IDC_RADIO13, m_Radio3_0);
 }
+#if 0
 
 void PersonalForm03::QueryAndFillFileForm()
 {
@@ -191,6 +265,7 @@ ShowEnd:
 	help->closeDB(); delete help;
 	ss.str(""); ss.clear();
 }
+#endif
 
 BEGIN_MESSAGE_MAP(PersonalForm03, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &PersonalForm03::OnBnClickedButtonCloseForm3)
@@ -216,6 +291,48 @@ void PersonalForm03::Dump(CDumpContext& dc) const
 #endif
 #endif //_DEBUG
 
+void PersonalForm03::ShowEditbox(int nID, char *data)
+{
+	GetDlgItem(nID)->SetWindowTextW(CA2W(data, CP_UTF8));
+}
+
+void PersonalForm03::ShowRadiobtn(int nWhich, char *data)
+{
+
+}
+
+void PersonalForm03::ShowDatapicker(int nID, char *data)
+{
+	COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
+	((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+}
+
+void PersonalForm03::GetNumber(int nWhich, int &num)
+{
+
+}
+
+void PersonalForm03::GetString(int nID, CString &str)
+{
+	GetDlgItem(nID)->GetWindowTextW(str); str.Trim();
+}
+
+BOOL PersonalForm03::hasData(int isub, int irow)
+{
+	CString strText;
+	if ((isub == 1) || (isub == 3)) {
+		vector<vector<int>> vvParam = _vvvParameters[isub - 1];
+		GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty())
+			return FALSE;
+	}
+	else if (isub == 2) {
+		if (m_Radio2_0 == -1 || m_Radio2_0 == 1)
+			return FALSE;
+	}
+
+	return TRUE;
+}
 
 // PersonalForm03 消息处理程序
 
@@ -225,6 +342,7 @@ void PersonalForm03::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 
 	// TODO:  在此添加专用代码和/或调用基类
+#if 0
 	int parameters1[][5] = { { IDC_EDIT1, IDC_DATETIMEPICKER1, IDC_DATETIMEPICKER3, IDC_EDIT4, IDC_EDIT5 },
 	{ IDC_EDIT6, IDC_DATETIMEPICKER2, IDC_DATETIMEPICKER4, IDC_EDIT9, IDC_EDIT10 } };
 
@@ -256,6 +374,44 @@ void PersonalForm03::OnInitialUpdate()
 	}
 
 	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
+#endif
+	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
+	DoShowForm();
+
+	BOOL hasData = FALSE;
+	vector<int>::iterator itHas = _vHaveDataSubform.begin();
+	while (itHas != _vHaveDataSubform.end()) {
+		if (*itHas != -1) {
+			hasData = TRUE; break;
+		}
+		itHas++;
+	}
+	if (hasData) {
+		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
+	}
+
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+
+	ss.str(""); ss.clear();
+	ss << "select file_5IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		m_Radio2_0 = -1;
+	}
+	else
+		m_Radio2_0 = 1 - atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+	help->closeDB(); delete help;
+
+	UpdateData(FALSE);
 
 }
 
@@ -296,16 +452,16 @@ void PersonalForm03::OnBnClickedCmdSaveForm()
 		ss.str(""); ss.clear();
 	}
 
-	int parameters1[][5] = { { IDC_EDIT1, IDC_DATETIMEPICKER1, IDC_DATETIMEPICKER3, IDC_EDIT4, IDC_EDIT5 },
-	{ IDC_EDIT6, IDC_DATETIMEPICKER2, IDC_DATETIMEPICKER4, IDC_EDIT9, IDC_EDIT10 } };
+	//int parameters1[][5] = { { IDC_EDIT1, IDC_DATETIMEPICKER1, IDC_DATETIMEPICKER3, IDC_EDIT4, IDC_EDIT5 },
+	//{ IDC_EDIT6, IDC_DATETIMEPICKER2, IDC_DATETIMEPICKER4, IDC_EDIT9, IDC_EDIT10 } };
 
-	int parameters2[][6] = { { IDC_DATETIMEPICKER5, IDC_DATETIMEPICKER6, IDC_EDIT11, IDC_EDIT24, IDC_EDIT27, IDC_EDIT30 },
-	{ IDC_DATETIMEPICKER7, IDC_DATETIMEPICKER8, IDC_EDIT22, IDC_EDIT25, IDC_EDIT28, IDC_EDIT31 },
-	{ IDC_DATETIMEPICKER9, IDC_DATETIMEPICKER10, IDC_EDIT23, IDC_EDIT26, IDC_EDIT29, IDC_EDIT32 } };
+	//int parameters2[][6] = { { IDC_DATETIMEPICKER5, IDC_DATETIMEPICKER6, IDC_EDIT11, IDC_EDIT24, IDC_EDIT27, IDC_EDIT30 },
+	//{ IDC_DATETIMEPICKER7, IDC_DATETIMEPICKER8, IDC_EDIT22, IDC_EDIT25, IDC_EDIT28, IDC_EDIT31 },
+	//{ IDC_DATETIMEPICKER9, IDC_DATETIMEPICKER10, IDC_EDIT23, IDC_EDIT26, IDC_EDIT29, IDC_EDIT32 } };
 
-	int parameters3[][6] = { { IDC_EDIT33, IDC_EDIT35, IDC_DATETIMEPICKER11, IDC_DATETIMEPICKER12, IDC_EDIT37, IDC_EDIT38 },
-	{ IDC_EDIT34, IDC_EDIT39, IDC_DATETIMEPICKER13, IDC_DATETIMEPICKER14, IDC_EDIT41, IDC_EDIT42 },
-	{ IDC_EDIT36, IDC_EDIT40, IDC_DATETIMEPICKER15, IDC_DATETIMEPICKER16, IDC_EDIT43, IDC_EDIT44 } };
+	//int parameters3[][6] = { { IDC_EDIT33, IDC_EDIT35, IDC_DATETIMEPICKER11, IDC_DATETIMEPICKER12, IDC_EDIT37, IDC_EDIT38 },
+	//{ IDC_EDIT34, IDC_EDIT39, IDC_DATETIMEPICKER13, IDC_DATETIMEPICKER14, IDC_EDIT41, IDC_EDIT42 },
+	//{ IDC_EDIT36, IDC_EDIT40, IDC_DATETIMEPICKER15, IDC_DATETIMEPICKER16, IDC_EDIT43, IDC_EDIT44 } };
 
 	CString strText;
 	/////////////////////////////////////////////////////////////////////////////
@@ -342,6 +498,7 @@ void PersonalForm03::OnBnClickedCmdSaveForm()
 			ss.str(""); ss.clear();
 		}
 	}
+#if 0
 	{
 		for (int i = 0; i < 2; i++) {
 			GetDlgItem(parameters1[i][0])->GetWindowTextW(strText);
@@ -367,6 +524,7 @@ void PersonalForm03::OnBnClickedCmdSaveForm()
 			else break;
 		}
 	}
+#endif
 #pragma endregion
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -387,6 +545,7 @@ FillForm2_2:
 		ss.str(""); ss.clear();
 	}
 
+#if 0
 	{
 		for (int i = 0; i < 3; i++) {
 			GetDlgItem(parameters2[i][0])->GetWindowTextW(strText);
@@ -412,6 +571,7 @@ FillForm2_2:
 			else break;
 		}
 	}
+#endif
 
 #pragma endregion
 
@@ -451,6 +611,7 @@ FillForm2_3 :
 		}
 	}
 
+#if 0
 	{
 		for (int i = 0; i < 3; i++) {
 			GetDlgItem(parameters3[i][0])->GetWindowTextW(strText);
@@ -476,10 +637,12 @@ FillForm2_3 :
 			else break;
 		}
 	}
+#endif
 	
 #pragma endregion
 
 FillComplete:
+#if 0
 	ss.str("");  ss.clear();
 	ss << "insert into personal_form_info values (" << file_id << ",";
 	ss << "3, " << "'" << CW2A(_T("表2-2"), CP_UTF8) << "',";
@@ -492,10 +655,15 @@ FillComplete:
 
 	help->closeDB(); delete help;
 	ss.str("");  ss.clear();
+#endif
+	help->closeDB(); delete help;
+	ss.str("");  ss.clear();
+
+	DoSaveForm();
+
 	GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 }
 
-const wchar_t *pBookmarks2[] = { _T("护照号"), _T("签发日期"), _T("有效期至"), _T("保管机构"), _T("备注") };
 void PersonalForm03::OnBnClickedCmdPrintForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
@@ -510,75 +678,28 @@ void PersonalForm03::OnBnClickedCmdPrintForm()
 	char *eee = "i"; char **result = &eee;
 	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	int file_id = atoi(re[1 * col + 0]);
-	ss.str("");
+	ss.str(""); ss.clear();
 
-	ss << "select * from file_form_01 where file_id=" << file_id << ";";
-	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
-	if (row < 1) {
-		ss.str(""); ss.clear();
-		help->closeDB(); delete help;
-		AfxMessageBox(_T("没有从数据库检索到 " + m_strCurrentFolder + m_strCurrentFile + " 的数据"));
-		return;
-	}
+	help->closeDB(); delete help;
 
-	COleVariant covZero((short)0), covTrue((short)TRUE), covFalse((short)FALSE), covOptional((long)DISP_E_PARAMNOTFOUND, VT_ERROR),
-		covDocxType((short)0), start_line, end_line, dot(CUtility::GetModuleDirectory() + _T("\\template\\表1.dotx")); //dot(_T("template1.dot")); // 
+	ss.str("");  ss.clear();
+	ss << "select * from file_form_04 where file_id=" << file_id << " limit 0,2;";
+	_vSubformQueryString.push_back(ss.str());
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_05 where file_id=" << file_id << " limit 0,3;";
+	_vSubformQueryString.push_back(ss.str());
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_06 where file_id=" << file_id << " limit 0,3;";
+	_vSubformQueryString.push_back(ss.str());
+	ss.str(""); ss.clear();
 
-	CApplication wordApp;
-	CDocuments docs;
-	CDocument0 docx;
-	CBookmarks bookmarks;
-	CBookmark0 bookmark;
-	CRange range;
-	CCell cell;
-
-	if (!wordApp.CreateDispatch(_T("Word.Application"))) {
-		AfxMessageBox(_T("no word product."));
-		return;
-	}
-
-	wordApp.put_Visible(FALSE);
-	CString wordVersion = wordApp.get_Version();
-	docs = wordApp.get_Documents();
-	docx = docs.Add(dot, covOptional, covOptional, covOptional);
-	bookmarks = docx.get_Bookmarks();
-
-	for (int i = 0; i < 21; i++) {
-		bookmark = bookmarks.Item(&_variant_t(pBookmarks2[i]));
-		range = bookmark.get_Range();
-		range.put_Text((CA2W(re[1 * col + i + 1], CP_UTF8)));
-	}
-
-	CString strSavePath = CUtility::GetModuleDirectory() + _T("\\temp.docx");
-	docx.SaveAs(COleVariant(strSavePath), covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional);
-
-	docx.PrintOut(covFalse,              // Background.
-		covOptional,           // Append.
-		covOptional,           // Range.
-		covOptional,           // OutputFileName.
-		covOptional,           // From.
-		covOptional,           // To.
-		covOptional,           // Item.
-		COleVariant((long)1),  // Copies.
-		covOptional,           // Pages.
-		covOptional,           // PageType.
-		covOptional,           // PrintToFile.
-		covOptional,           // Collate.
-		covOptional,           // ActivePrinterMacGX.
-		covOptional,           // ManualDuplexPrint.
-		covOptional,           // PrintZoomColumn  New with Word 2002
-		covOptional,           // PrintZoomRow          ditto
-		covOptional,           // PrintZoomPaperWidth   ditto
-		covOptional);          // PrintZoomPaperHeight  ditto*/
-
-	docx.Close(covFalse, covOptional, covOptional);
-	wordApp.Quit(covOptional, covOptional, covOptional);
-	range.ReleaseDispatch(); bookmarks.ReleaseDispatch(); wordApp.ReleaseDispatch();
+	DoPrintForm(CString(_T("表2-2.dotx")));
 }
 
 
 void PersonalForm03::OnBnClickedCmdUpdateForm()
 {
+#if 0
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
@@ -728,4 +849,8 @@ void PersonalForm03::OnBnClickedCmdUpdateForm()
 	help->closeDB();
 	delete help;
 	ss.str("");  ss.clear();
+#endif
+	UpdateData();
+
+	DoUpdateForm();
 }

@@ -110,6 +110,11 @@ void CDlgQueryBy::InitQueryByList()
 	m_listQueryDetail.SetExtendedStyle(LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
 	m_listQueryDetail.SetFont(&font1); font1.DeleteObject();
 
+	CImageList   m_l2;
+	m_l2.Create(1, 20, TRUE | ILC_COLOR32, 1, 0);
+	m_listQuerySummary.SetImageList(&m_l, LVSIL_SMALL);
+	m_listQueryDetail.SetImageList(&m_l, LVSIL_SMALL);
+
 }
 
 void CDlgQueryBy::DoQueryBy()

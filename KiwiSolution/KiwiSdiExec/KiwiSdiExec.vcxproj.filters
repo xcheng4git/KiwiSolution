@@ -261,6 +261,9 @@
     <ClInclude Include="PersonalForm31.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DlgQueryPunishment.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KiwiSdiExec.cpp">
@@ -425,6 +428,9 @@
     <ClCompile Include="PersonalForm31.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="DlgQueryPunishment.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="KiwiSdiExec.reg" />
@@ -499,6 +505,15 @@
       <Filter>资源文件</Filter>
     </Image>
     <Image Include="res\splash.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\bmp00005.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\bmp_four_xt.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\bmreport.bmp">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

@@ -114,6 +114,7 @@
     <ClInclude Include="DlgNewForm.h" />
     <ClInclude Include="DlgNewUser.h" />
     <ClInclude Include="DlgQueryBy.h" />
+    <ClInclude Include="DlgQueryPunishment.h" />
     <ClInclude Include="KiwiSdiExec.h" />
     <ClInclude Include="KiwiSdiExecDoc.h" />
     <ClInclude Include="KiwiSdiExecView.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="DlgNewForm.cpp" />
     <ClCompile Include="DlgNewUser.cpp" />
     <ClCompile Include="DlgQueryBy.cpp" />
+    <ClCompile Include="DlgQueryPunishment.cpp" />
     <ClCompile Include="KiwiSdiExec.cpp" />
     <ClCompile Include="KiwiSdiExecDoc.cpp" />
     <ClCompile Include="KiwiSdiExecView.cpp" />
@@ -261,6 +263,9 @@
     <Image Include="res\bmp00002.bmp" />
     <Image Include="res\bmp00003.bmp" />
     <Image Include="res\bmp00004.bmp" />
+    <Image Include="res\bmp00005.bmp" />
+    <Image Include="res\bmp_four_xt.bmp" />
+    <Image Include="res\bmreport.bmp" />
     <Image Include="res\ico00001.ico" />
     <Image Include="res\icon1.ico" />
     <Image Include="res\icon11.ico" />

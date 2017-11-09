@@ -48,6 +48,7 @@
 #include "QueryByFolder.h"
 #include "DlgBackupDatabase.h"
 #include "DlgNewUser.h"
+#include "DlgQueryPunishment.h"
 
 #include "SQLiteHelper.h"
 #include <sstream>
@@ -707,7 +708,8 @@ void CMainFrame::OnQueryByForm()
 void CMainFrame::OnQueryByPunish()
 {
 	// TODO:  在此添加命令处理程序代码
-
+	CDlgQueryPunishment dlgQuery;
+	dlgQuery.DoModal();
 }
 
 
