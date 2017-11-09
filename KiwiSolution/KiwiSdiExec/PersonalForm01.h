@@ -70,9 +70,9 @@ public:
 
 protected:
 	enum { BorderLeft = 1, BorderTop = 2, BorderRight = 4, BorderBottom = 8 };
-	void DrawFormHeader(CDC* pDC, CRect* pBox);
-	void DrawForm(CDC* pDC, CRect* pBox);
-	inline void DrawTextCell(CDC* pDC, CRect& box, CString& strText, int enumBorder);
+	//void DrawFormHeader(CDC* pDC, CRect* pBox);
+	//void DrawForm(CDC* pDC, CRect* pBox);
+	//inline void DrawTextCell(CDC* pDC, CRect& box, CString& strText, int enumBorder);
 
 	void QueryAndFillFileForm();
 	BOOL m_isModify;

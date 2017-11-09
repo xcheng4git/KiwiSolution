@@ -263,7 +263,9 @@ void CPersonalForm02::OnBnClickedCmdSaveForm()
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 	}
 	GetDlgItem(parameters1[9])->GetWindowTextW(strText);
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) <<  "') "; strText.ReleaseBuffer();
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) <<  "', "; strText.ReleaseBuffer();
+
+	ss << "date(),date());";
 
 	OutputDebugString(CA2W(ss.str().c_str(), CP_UTF8)); 
 	help->execSQL(ss.str().c_str());
@@ -290,11 +292,12 @@ void CPersonalForm02::OnBnClickedCmdSaveForm()
 		GetDlgItem(parameters2[3])->GetWindowTextW(strText);
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', "; strText.ReleaseBuffer();
 		GetDlgItem(parameters2[4])->GetWindowTextW(strText);
-		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "') "; strText.ReleaseBuffer();
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', "; strText.ReleaseBuffer();
 	} 
 	else {
-		ss << "-1, -1, '',''); ";
+		ss << "-1, -1, '','', ";
 	}
+	ss << "date(),date());";
 
 	OutputDebugString(CA2W(ss.str().c_str(), CP_UTF8));
 

@@ -44,6 +44,7 @@ void CPersonalForm01::SetCurrentFile(CString filePath)
 
 	m_isModify = FALSE;
 }
+#if 0
 
 void CPersonalForm01::DrawFormHeader(CDC* pDC, CRect* pBox)
 {
@@ -163,6 +164,7 @@ void CPersonalForm01::DrawTextCell(CDC* pDC, CRect& box, CString& strText, int e
 		pDC->MoveTo(box.BottomRight()); pDC->LineTo(box.left, box.bottom);
 	}
 }
+#endif
 
 void CPersonalForm01::QueryAndFillFileForm()
 {
@@ -218,12 +220,15 @@ void CPersonalForm01::QueryAndFillFileForm()
 	GetDlgItem(IDC_EDIT_WORKING_UNIT)->SetWindowTextW(CA2W(re[1 * col + 18], CP_UTF8));
 	GetDlgItem(IDC_EDIT_CURRENT_POSITION)->SetWindowTextW(CA2W(re[1 * col + 19], CP_UTF8));
 
-	GetDlgItem(IDC_EDIT_HOME_ADDRESS)->SetWindowTextW(CA2W(re[1 * col + 20], CP_UTF8));
-	GetDlgItem(IDC_EDIT_PHONE)->SetWindowTextW(CA2W(re[1 * col + 21], CP_UTF8));
+	t.ParseDateTime(CA2W(re[1 * col + 20], CP_UTF8));
+	((CDateTimeCtrl*)GetDlgItem(IDC_DATE_4_CURPOSITION))->SetTime(t);
 
-	GetDlgItem(IDC_EDIT_RESUME)->SetWindowTextW(CA2W(re[1 * col + 22], CP_UTF8));
+	GetDlgItem(IDC_EDIT_HOME_ADDRESS)->SetWindowTextW(CA2W(re[1 * col + 21], CP_UTF8));
+	GetDlgItem(IDC_EDIT_PHONE)->SetWindowTextW(CA2W(re[1 * col + 22], CP_UTF8));
 
-	m_strPicPathname.Format(_T("%s"), CA2W(re[1 * col + 23], CP_UTF8));
+	GetDlgItem(IDC_EDIT_RESUME)->SetWindowTextW(CA2W(re[1 * col + 23], CP_UTF8));
+
+	m_strPicPathname.Format(_T("%s"), CA2W(re[1 * col + 24], CP_UTF8));
 	if (!m_strPicPathname.IsEmpty() && m_strPicPathname != _T("(null)") ) {
 		if (true == (bool)PathFileExists(m_strPicPathname.GetBuffer())) {
 			CImage  image;
@@ -329,6 +334,8 @@ void CPersonalForm01::OnInitialUpdate()
 	GetDlgItem(IDC_EDIT_WORKING_UNIT)->SetFont(&m_fontEdit);
 	GetDlgItem(IDC_EDIT_CURRENT_POSITION)->SetFont(&m_fontEdit);
 
+	GetDlgItem(IDC_DATE_4_CURPOSITION)->SetFont(&m_fontEdit);
+
 	GetDlgItem(IDC_EDIT_HOME_ADDRESS)->SetFont(&m_fontEdit);
 	GetDlgItem(IDC_EDIT_PHONE)->SetFont(&m_fontEdit);
 
@@ -417,6 +424,7 @@ void CPersonalForm01::OnSize(UINT nType, int cx, int cy)
 	}
 	return;
 
+#if 0
 	if (pWnd = GetDlgItem(IDC_BUTTON_CLOSE_FORM01)) {
 		pRt = new CRect(rt.right - MARGIN_X - 17, rt.top + MARGIN_Y, rt.right - MARGIN_X, rt.top + MARGIN_Y + 17);
 		pWnd->MoveWindow(pRt, FALSE); delete pRt;
@@ -528,7 +536,7 @@ void CPersonalForm01::OnSize(UINT nType, int cx, int cy)
 		pRt = new CRect(rt.left + 1 * len*CELL_WIDTH_RATIO + 5, rt.top + 9 * CELL_HEIGHT + 5, rt.right - 5, rt.bottom - 5);
 		pWnd->MoveWindow(pRt, FALSE); delete pRt;
 	}
-
+#endif
 
 
 	//InvalidateRect(NULL);
@@ -608,6 +616,9 @@ void CPersonalForm01::OnClickedCmdSaveForm()
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 	GetDlgItem(IDC_EDIT_CURRENT_POSITION)->GetWindowTextW(strText);
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	GetDlgItem(IDC_DATE_4_CURPOSITION)->GetWindowTextW(strText);
+	strText.Replace(_T("/"), _T("-"));
+	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 
 	GetDlgItem(IDC_EDIT_HOME_ADDRESS)->GetWindowTextW(strText);
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
@@ -622,11 +633,12 @@ void CPersonalForm01::OnClickedCmdSaveForm()
 		image.Load(m_strPicPathname); //把图像保存到特定目录,然后将路径存数据库
 		m_strPicPathname = CUtility::GetModuleDirectory() + _T("\\photo\\") + CUtility::GetGuid() + _T(".jpg");
 		image.Save(m_strPicPathname.GetBuffer());
-		ss << "'" << CW2A(m_strPicPathname.GetBuffer(), CP_UTF8) << "') ";
+		ss << "'" << CW2A(m_strPicPathname.GetBuffer(), CP_UTF8) << "', ";
 	}
 	else {
-		ss << "'') ";
+		ss << "'', ";
 	}
+	ss << "date(), date());";
 	//TRACE(CA2W(ss.str().c_str(), CP_UTF8));
 
 	help->execSQL(ss.str().c_str());
@@ -711,12 +723,25 @@ void CPersonalForm01::OnClickedCmdPrintForm()
 	docx = docs.Add(dot, covOptional, covOptional, covOptional);
 	bookmarks = docx.get_Bookmarks();
 
-	for (int i = 0; i < 21; i++) {
+	for (int i = 0; i < 17; i++) {
 		bookmark = bookmarks.Item(&_variant_t(pBookmarks[i]));
 		range = bookmark.get_Range();
 		range.put_Text((CA2W(re[1 * col + i+2], CP_UTF8)));
 	}
-	
+	{
+		int i = 17;
+		bookmark = bookmarks.Item(&_variant_t(pBookmarks[i]));
+		range = bookmark.get_Range();
+		CString strText; strText.Format(_T("%s %s"), strlen(re[1 * col + i+2]) < 1 ? _T("") : CA2W(re[1 * col + 2], CP_UTF8),
+			strlen(re[1 * col + i + 3]) < 1 ? _T("") : CA2W(re[1 * col + i + 3], CP_UTF8));
+		range.put_Text(strText);
+	}
+	for (int i = 18; i < 21; i++) {
+		bookmark = bookmarks.Item(&_variant_t(pBookmarks[i]));
+		range = bookmark.get_Range();
+		range.put_Text((CA2W(re[1 * col + i + 3], CP_UTF8)));
+	}
+
 	//插入图片
 	bookmark = bookmarks.Item(&_variant_t(_T("照片")));
 	range = bookmark.get_Range();
