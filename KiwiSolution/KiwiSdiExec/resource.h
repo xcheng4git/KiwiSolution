@@ -66,8 +66,10 @@
 #define IDD_PERSONAL_FORM27             361
 #define IDD_PERSONAL_FORM28             362
 #define IDD_PERSONAL_FORM29             363
+#define IDD_DIALOG_QUERY_PUNISHMENT     364
 #define IDD_PERSONAL_FORM31             365
 #define IDD_PERSONAL_FORM30             366
+#define IDB_BITMAP_FOUR_XT              366
 #define IDC_EDIT_TEST                   1011
 #define IDC_LIST_SHORTCUT               1012
 #define IDC_TREE_ORGNIZATION            1013
@@ -860,10 +862,13 @@
 #define IDC_EDIT21                      1451
 #define IDC_CHANGETIME                  1501
 #define IDC_CHECK1                      1502
+#define IDC_CHECK_START                 1502
 #define IDC_EDIT2                       1503
 #define IDC_EDIT_PWD                    1503
+#define IDC_CHECK_END                   1503
 #define IDC_STATIC_FORM01_HEADER        1504
 #define IDC_EDIT348                     1504
+#define IDC_CHECK_NOTFULL               1504
 #define IDC_STATIC_FORM02_HEADER1       1505
 #define IDC_EDIT349                     1505
 #define IDC_STATIC_FORM02_HEADER2       1506
@@ -885,6 +890,7 @@
 #define IDC_EDIT360                     1513
 #define IDC_STATIC_ERR                  1514
 #define IDC_EDIT361                     1514
+#define IDC_COMBO_FILE                  1514
 #define IDC_EDIT_NEW_USER_NAME          1515
 #define IDC_EDIT362                     1515
 #define IDC_EDIT_NEW_USER_PWD           1516
@@ -902,11 +908,21 @@
 #define IDC_EDIT_CONTACT_PHONE          1521
 #define IDC_EDIT368                     1521
 #define IDC_EDIT369                     1522
+#define IDC_EDIT375                     1523
+#define IDC_EDIT_FOUR_XT_SHOW           1523
 #define IDC_LIST_QUERY_SUMMARY          1529
 #define IDC_LIST_QUERY_DETAIL           1530
 #define IDC_LIST_QUERY_TYPE             1533
 #define IDC_COMBO4                      1536
 #define IDC_STATIC_FORM_HEADER          1541
+#define IDC_TREE1                       1542
+#define IDC_DATETIMEPICKER_START        1543
+#define IDC_DATETIMEPICKER_END          1544
+#define IDC_BUTTON_SEARCH               1545
+#define IDC_DATE_4_CURPOSITION          1546
+#define IDC_COMBO2                      1547
+#define IDC_COMBO3                      1548
+#define IDC_BUTTON1                     1549
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 #define ID_Menu                         32773
@@ -932,9 +948,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        360
+#define _APS_NEXT_RESOURCE_VALUE        368
 #define _APS_NEXT_COMMAND_VALUE         32791
-#define _APS_NEXT_CONTROL_VALUE         1542
+#define _APS_NEXT_CONTROL_VALUE         1550
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
