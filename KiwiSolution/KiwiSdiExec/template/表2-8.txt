@@ -1,0 +1,3 @@
+const wchar_t *pBookmarks1={_T(“姓名”),_T(“来源”),_T("去向"),_T("地址"),_T("面积"),_T("房产性质"),_T("交易时间"),_T("交易价格")};
+int structure10 = {TXTBX,CHKBOX,CHKBOX,TXTBX,TXTBX,CHKBOX,TXTBX,TXTBX};
+int structure11={1,4,3,1,1,7,1，1};
