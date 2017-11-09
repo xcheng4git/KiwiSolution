@@ -83,7 +83,6 @@ IDB_BITMAP_XINGTAI3     BITMAP                  "res\\bmp00002.bmp"
 IDB_BITMAP_XINGTAI4     BITMAP                  "res\\bmp00003.bmp"
 IDB_BITMAP_TIP          BITMAP                  "res\\bmp00004.bmp"
 IDB_BITMAP_CLOSE        BITMAP                  "res\\bitmap2.bmp"
-IDB_SPLASH              BITMAP                  "res\\bitmap1.bmp"
 IDB_BMP_SPLASH          BITMAP                  "res\\splash.bmp"
 IDB_BITMAP_FOUR_XT      BITMAP                  "res\\bmp_four_xt.bmp"
 

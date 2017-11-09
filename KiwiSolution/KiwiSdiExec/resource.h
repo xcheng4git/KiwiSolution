@@ -54,7 +54,6 @@
 #define IDD_PERSONAL_FORM23             350
 #define IDD_PERSONAL_FORM24             351
 #define IDD_DIALOG_LOGIN                352
-#define IDB_SPLASH                      353
 #define IDB_BMP_SPLASH                  354
 #define IDD_DIALOG_QUERY_BYFOLDER       355
 #define IDD_FORM_QUERY_BYFOLDER         355
@@ -908,7 +907,6 @@
 #define IDC_EDIT_CONTACT_PHONE          1521
 #define IDC_EDIT368                     1521
 #define IDC_EDIT369                     1522
-#define IDC_EDIT375                     1523
 #define IDC_EDIT_FOUR_XT_SHOW           1523
 #define IDC_LIST_QUERY_SUMMARY          1529
 #define IDC_LIST_QUERY_DETAIL           1530
