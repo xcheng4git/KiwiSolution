@@ -50,6 +50,10 @@ CPersonalForm25::~CPersonalForm25()
 void CPersonalForm25::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_EDIT2, m_editCheckImage);
+	DDX_Control(pDX, IDC_EDIT348, m_editRegisterImage);
+	DDX_Control(pDX, IDC_STATIC_CHECK_ATTACHMENT, m_checkImage);
+	DDX_Control(pDX, IDC_STATIC_REGISTER_ATTACHMENT, m_registerImage);
 }
 
 BEGIN_MESSAGE_MAP(CPersonalForm25, CFormView)
@@ -57,6 +61,9 @@ BEGIN_MESSAGE_MAP(CPersonalForm25, CFormView)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm25::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm25::OnBnClickedButtonCloseForm3)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm25::OnBnClickedCmdUpdateForm)
+	ON_EN_CHANGE(IDC_EDIT2, &CPersonalForm25::OnEnChangeEdit2)
+	ON_EN_CHANGE(IDC_EDIT348, &CPersonalForm25::OnEnChangeEdit348)
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -158,6 +165,8 @@ void CPersonalForm25::OnInitialUpdate()
 
 	// TODO:  在此添加专用代码和/或调用基类
 	GetDlgItem(IDC_STATIC_FORM_HEADER)->SetFont(&m_fontHeader);
+	m_editCheckImage.Initialize(this, BES_XTP_CHOOSEFILE);
+	m_editRegisterImage.Initialize(this, BES_XTP_CHOOSEFILE);
 
 	vector<vector<vector<int>>>::iterator itVVVparameter = _vvvParameters.begin();
 	int i = 0;
@@ -220,4 +229,69 @@ void CPersonalForm25::OnInitialUpdate()
 		help->closeDB(); delete help;
 	}
 
+}
+
+
+void CPersonalForm25::OnEnChangeEdit2()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 __super::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	m_editCheckImage.GetWindowTextW(m_strCheckImage);
+	m_strCheckImage.Trim();
+	if (!m_strCheckImage.IsEmpty()) {
+		CImage  image;
+		image.Load(m_strCheckImage); //把图像保存到特定目录,然后将路径存数据库
+		CRect   rect; m_checkImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+		CDC *pDc = m_checkImage.GetDC();//获取picture的DC  
+		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+		ReleaseDC(pDc);
+	}
+}
+
+
+void CPersonalForm25::OnEnChangeEdit348()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 __super::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	m_editRegisterImage.GetWindowTextW(m_strRegisterImage);
+	m_strRegisterImage.Trim();
+	if (!m_strRegisterImage.IsEmpty()) {
+		CImage  image;
+		image.Load(m_strRegisterImage); //把图像保存到特定目录,然后将路径存数据库
+		CRect   rect; m_registerImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+		CDC *pDc = m_registerImage.GetDC();//获取picture的DC  
+		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+		ReleaseDC(pDc);
+	}
+}
+
+
+void CPersonalForm25::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+	// TODO:  在此处添加消息处理程序代码
+	// 不为绘图消息调用 __super::OnPaint()
+	if (!m_strCheckImage.IsEmpty()) {
+		CImage  image;
+		image.Load(m_strCheckImage); //把图像保存到特定目录,然后将路径存数据库
+		CRect   rect; m_checkImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+		CDC *pDc = m_checkImage.GetDC();//获取picture的DC  
+		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+		ReleaseDC(pDc);
+	}
+
+	if (!m_strRegisterImage.IsEmpty()) {
+		CImage  image;
+		image.Load(m_strRegisterImage); //把图像保存到特定目录,然后将路径存数据库
+		CRect   rect; m_registerImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+		CDC *pDc = m_registerImage.GetDC();//获取picture的DC  
+		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+		ReleaseDC(pDc);
+	}
 }

@@ -3,6 +3,7 @@
 
 
 #include "PersonalFormInterface.h"
+#include "afxwin.h"
 // CPersonalForm25 窗体视图
 
 class CPersonalForm25 : public CFormView, public CPersonalFormInterface
@@ -32,6 +33,10 @@ public:
 
 	virtual BOOL hasData(int isub, int irow);
 
+private:
+	CString m_strCheckImage;
+	CString m_strRegisterImage;
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
@@ -42,6 +47,13 @@ public:
 	afx_msg void OnBnClickedButtonCloseForm3();
 	afx_msg void OnBnClickedCmdUpdateForm();
 	virtual void OnInitialUpdate();
+	CXTPBrowseEdit m_editCheckImage;
+	CXTPBrowseEdit m_editRegisterImage;
+	CStatic m_checkImage;
+	CStatic m_registerImage;
+	afx_msg void OnEnChangeEdit2();
+	afx_msg void OnEnChangeEdit348();
+	afx_msg void OnPaint();
 };
 
 
