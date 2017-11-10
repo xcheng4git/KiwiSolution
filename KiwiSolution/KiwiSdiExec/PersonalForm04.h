@@ -1,10 +1,9 @@
 #pragma once
 
-#include <vector>
-
+#include "PersonalFormInterface.h"
 // CPersonalForm04 窗体视图
 
-class CPersonalForm04 : public CFormView
+class CPersonalForm04 : public CFormView, public CPersonalFormInterface
 {
 	DECLARE_DYNCREATE(CPersonalForm04)
 
@@ -20,22 +19,29 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 #endif
-private:
-	std::vector<std::vector<std::vector<int>>> _vvvParameters;
-	int m_modifiedSubform[3];
-	std::vector<std::vector<CString>> m_vvFormRecid;
-	BOOL m_isModify;
+//private:
+//	std::vector<std::vector<std::vector<int>>> _vvvParameters;
+//	int m_modifiedSubform[3];
+//	std::vector<std::vector<CString>> m_vvFormRecid;
+//	BOOL m_isModify;
 
 public:
-	CString m_strCurrentFile;
-	CString m_strCurrentFolder;
-	void SetCurrentFile(CString filePath);
-	CFont m_fontEdit;
-	CBitmap m_bmpClose;
+//	CString m_strCurrentFile;
+//	CString m_strCurrentFolder;
+//	void SetCurrentFile(CString filePath);
+//	CFont m_fontEdit;
+//	CBitmap m_bmpClose;
+	virtual void ShowEditbox(int nID, char *data);
+	virtual void ShowRadiobtn(int nWhich, char *data);
+	virtual void ShowDatapicker(int nID, char *data);
 
+	virtual void GetNumber(int nWhich, int &num);
+	virtual void GetString(int nID, CString &str);
+
+	virtual BOOL hasData(int isub, int irow);
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-	void QueryAndFillFileForm();
+	//void QueryAndFillFileForm();
 
 	DECLARE_MESSAGE_MAP()
 public:

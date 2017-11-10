@@ -21,25 +21,29 @@ CPersonalForm04::CPersonalForm04()
 	, m_Radio8_0(-1)
 	, m_Radio9_0(-1)
 {
-	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
-	m_fontEdit.CreateFontIndirect(&lf);
-	m_bmpClose.LoadBitmap(IDB_BITMAP_CLOSE);
+	//LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
+	//m_fontEdit.CreateFontIndirect(&lf);
+	//m_bmpClose.LoadBitmap(IDB_BITMAP_CLOSE);
 
+	m_FormID = 4;
 	int parameters1[][6] = { { IDC_DATETIMEPICKER5, IDC_DATETIMEPICKER6, IDC_EDIT11, IDC_EDIT24, IDC_EDIT27, IDC_EDIT30 },
 	{ IDC_DATETIMEPICKER7, IDC_DATETIMEPICKER8, IDC_EDIT22, IDC_EDIT25, IDC_EDIT28, IDC_EDIT31 },
 	{ IDC_DATETIMEPICKER9, IDC_DATETIMEPICKER10, IDC_EDIT23, IDC_EDIT26, IDC_EDIT29, IDC_EDIT32 } };
+	int structure1[8] = { 3, 6, DATEPKR, DATEPKR, EDITBX, EDITBX, EDITBX, EDITBX };
 
 	int parameters2[][6] = { { IDC_EDIT45, IDC_EDIT47, IDC_EDIT50, IDC_EDIT53, IDC_EDIT56, IDC_DATETIMEPICKER3 },
 	{ IDC_EDIT33, IDC_EDIT48, IDC_EDIT51, IDC_EDIT54, IDC_EDIT57, IDC_DATETIMEPICKER17 },
 	{ IDC_EDIT46, IDC_EDIT49, IDC_EDIT52, IDC_EDIT55, IDC_EDIT58, IDC_DATETIMEPICKER18 }};
+	int structure2[8] = { 3, 6, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, DATEPKR };
 
 	int parameters3[][6] = { { IDC_EDIT60, IDC_EDIT62, IDC_EDIT65, IDC_EDIT68, IDC_EDIT71, IDC_DATETIMEPICKER19 },
 	{ IDC_EDIT59, IDC_EDIT63, IDC_EDIT66, IDC_EDIT69, IDC_EDIT72, IDC_DATETIMEPICKER20 },
 	{ IDC_EDIT61, IDC_EDIT64, IDC_EDIT67, IDC_EDIT70, IDC_EDIT73, IDC_DATETIMEPICKER21 } };
+	int structure3[8] = { 3, 6, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, DATEPKR };
 
-	std::vector<std::vector<int>> vvPara;
+	vector<vector<int>> vvPara;
 	for (int i = 0; i < 3; i++) {
-		std::vector<int> vPara;
+		vector<int> vPara;
 		for (int j = 0; j < 6; j++)
 			vPara.push_back(parameters1[i][j]);
 		vvPara.push_back(vPara);
@@ -48,7 +52,7 @@ CPersonalForm04::CPersonalForm04()
 
 	vvPara.clear();
 	for (int i = 0; i < 3; i++) {
-		std::vector<int> vPara;
+		vector<int> vPara;
 		for (int j = 0; j < 6; j++)
 			vPara.push_back(parameters2[i][j]);
 		vvPara.push_back(vPara);
@@ -57,29 +61,96 @@ CPersonalForm04::CPersonalForm04()
 
 	vvPara.clear();
 	for (int i = 0; i < 3; i++) {
-		std::vector<int> vPara;
+		vector<int> vPara;
 		for (int j = 0; j < 6; j++)
 			vPara.push_back(parameters3[i][j]);
 		vvPara.push_back(vPara);
 	}
 	_vvvParameters.push_back(vvPara);
 
-	m_isModify = FALSE; for (int i = 0; i < 3; i++) m_modifiedSubform[i] = -1;
+	vector<int> vStr;
+	for (int i = 0; i < 8; i++) {
+		vStr.push_back(structure1[i]);
+	}
+	_vvSubformStructure.push_back(vStr);
+
+	vStr.clear();
+	for (int i = 0; i < 8; i++) {
+		vStr.push_back(structure2[i]);
+	}
+	_vvSubformStructure.push_back(vStr);
+
+	vStr.clear();
+	for (int i = 0; i < 8; i++) {
+		vStr.push_back(structure3[i]);
+	}
+	_vvSubformStructure.push_back(vStr);
+
+	_vHaveDataSubform.push_back(-1); _vHaveDataSubform.push_back(-1); _vHaveDataSubform.push_back(-1);
+
+	vStr.clear(); vStr.push_back(0); vStr.push_back(3); _vvSubformRecordRange.push_back(vStr);
+	vStr.clear(); vStr.push_back(0); vStr.push_back(3); _vvSubformRecordRange.push_back(vStr);
+	vStr.clear(); vStr.push_back(0); vStr.push_back(3); _vvSubformRecordRange.push_back(vStr);
+
+	//以下是为了打印的预设
+	const wchar_t *pBookmarks1[7] = { _T("有无"), _T("起始日期"), _T("截止日期"), _T("所到地区"), _T("事由"), _T("审批机构"), _T("所用证件号码") };
+	int structure10[7] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure11[4 + 7] = { 0, 3, 6, 2, 2, 1,1, 1, 1, 1, 1 };
+
+	const wchar_t *pBookmarks2[7] = { _T("有无"), _T("子女姓名"), _T("配偶姓名"), _T("配偶国家"), _T("配偶单位"), _T("配偶职务"), _T("配偶登记时间") };
+	int structure20[7] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure21[4 + 7] = { 1, 3, 6, 2, 2, 1, 1, 1, 1, 1, 1 };
+
+	const wchar_t *pBookmarks3[7] = { _T("有无"), _T("子女姓名"), _T("配偶姓名"), _T("配偶地区"), _T("配偶单位"), _T("配偶职务"), _T("配偶登记时间") };
+	int structure30[7] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure31[4 + 7] = { 1, 3, 6, 2, 2, 1, 1, 1, 1, 1, 1 };
+
+	vector<CBookmarkEx> vBke;
+	for (int i = 0; i < 7; i++) {
+		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+	vBke.clear();
+	for (int i = 0; i < 7; i++) {
+		CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+	vBke.clear();
+	for (int i = 0; i < 7; i++) {
+		CBookmarkEx bookmark(structure30[i], pBookmarks3[i], structure31[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure11[i]);
+	_vvSubformFlags.push_back(vStr);
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure21[i]);
+	_vvSubformFlags.push_back(vStr);
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure31[i]);
+	_vvSubformFlags.push_back(vStr);
 }
 
 CPersonalForm04::~CPersonalForm04()
 {
-	m_fontEdit.DeleteObject();
-	m_bmpClose.DeleteObject();
+	//m_fontEdit.DeleteObject();
+	//m_bmpClose.DeleteObject();
 }
 
-void CPersonalForm04::SetCurrentFile(CString filePath)
-{
-	m_strCurrentFolder = filePath.Left(filePath.Find(_T("/"), 0));
-	m_strCurrentFile = filePath.Right(filePath.GetLength() - filePath.Find(_T("/"), 0) - 1);
-
-	m_isModify = FALSE; for (int i = 0; i < 3; i++) m_modifiedSubform[i] = -1;
-}
+//void CPersonalForm04::SetCurrentFile(CString filePath)
+//{
+//	m_strCurrentFolder = filePath.Left(filePath.Find(_T("/"), 0));
+//	m_strCurrentFile = filePath.Right(filePath.GetLength() - filePath.Find(_T("/"), 0) - 1);
+//
+//	m_isModify = FALSE; for (int i = 0; i < 3; i++) m_modifiedSubform[i] = -1;
+//}
 
 void CPersonalForm04::DoDataExchange(CDataExchange* pDX)
 {
@@ -89,6 +160,7 @@ void CPersonalForm04::DoDataExchange(CDataExchange* pDX)
 	DDX_Radio(pDX, IDC_RADIO17, m_Radio9_0);
 }
 
+#if 0
 void CPersonalForm04::QueryAndFillFileForm()
 {
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
@@ -163,6 +235,7 @@ void CPersonalForm04::QueryAndFillFileForm()
 
 	UpdateData(FALSE);
 }
+#endif
 
 BEGIN_MESSAGE_MAP(CPersonalForm04, CFormView)
 	ON_BN_CLICKED(IDC_CMD_SAVE_FORM, &CPersonalForm04::OnBnClickedCmdSaveForm)
@@ -189,12 +262,56 @@ void CPersonalForm04::Dump(CDumpContext& dc) const
 #endif //_DEBUG
 
 
+void CPersonalForm04::ShowEditbox(int nID, char *data)
+{
+	GetDlgItem(nID)->SetWindowTextW(CA2W(data, CP_UTF8));
+}
+
+void CPersonalForm04::ShowRadiobtn(int nWhich, char *data)
+{
+
+}
+
+void CPersonalForm04::ShowDatapicker(int nID, char *data)
+{
+	COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
+	((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+}
+
+void CPersonalForm04::GetNumber(int nWhich, int &num)
+{
+
+}
+
+void CPersonalForm04::GetString(int nID, CString &str)
+{
+	GetDlgItem(nID)->GetWindowTextW(str); str.Trim();
+}
+
+BOOL CPersonalForm04::hasData(int isub, int irow)
+{
+	CString strText;
+	if ((isub == 2) || (isub == 3)) {
+		vector<vector<int>> vvParam = _vvvParameters[isub - 1];
+		GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty())
+			return FALSE;
+	}
+	else if (isub == 1) {
+		if (m_Radio7_0 == -1 || m_Radio7_0 == 1)
+			return FALSE;
+	}
+
+	return TRUE;
+}
 // CPersonalForm04 消息处理程序
 
 
 void CPersonalForm04::OnBnClickedCmdSaveForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	UpdateData();
+
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
@@ -217,12 +334,26 @@ void CPersonalForm04::OnBnClickedCmdSaveForm()
 		ss.str(""); ss.clear();
 	}
 
-	std::vector<std::vector<std::vector<int>>>::iterator itVVV = _vvvParameters.begin();
-	std::vector<std::vector<int>>::iterator itVV;
-	std::vector<int>::iterator itV;
-	int subformFields[] = { 6, 6, 6 };
+	//std::vector<std::vector<std::vector<int>>>::iterator itVVV = _vvvParameters.begin();
+	//std::vector<std::vector<int>>::iterator itVV;
+	//std::vector<int>::iterator itV;
+	//int subformFields[] = { 6, 6, 6 };
 
 	CString strText;
+
+	if (m_Radio7_0 == -1) {
+		MessageBox(_T("请选择是否存在 3-2 本人因私往来港澳、台湾的情况 ！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+		help->closeDB(); delete help;
+		ss.str("");  ss.clear();
+		return;
+	}
+	else {
+		ss.str(""); ss.clear();
+		ss << "update file_form_flags set file_7IfHaveThisSituation=";
+		ss << m_Radio7_0 << " where file_id = " << file_id;
+		help->execSQL(ss.str().c_str());
+	}
+#if 0
 #pragma region FillForm3_2
 	{
 		if (((CButton *)GetDlgItem(IDC_RADIO3))->GetCheck() == 1)
@@ -237,6 +368,7 @@ void CPersonalForm04::OnBnClickedCmdSaveForm()
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
 	}
+
 
 	itVV = itVVV->begin();
 	for (int i = 0; i < 3; i++)
@@ -340,8 +472,29 @@ void CPersonalForm04::OnBnClickedCmdSaveForm()
 		}
 	}
 	*/
+
 #pragma endregion
-	itVVV++;
+	//itVVV++;
+#endif
+
+
+	GetDlgItem(IDC_EDIT45)->GetWindowTextW(strText);
+	ss.str(""); ss.clear();
+	if (strText == _T("无"))
+		ss << "update file_form_flags set file_8IfHaveThisSituation=0 where file_id=" << file_id;
+	else 
+		ss << "update file_form_flags set file_8IfHaveThisSituation=1 where file_id=" << file_id;
+
+	help->execSQL(ss.str().c_str());
+
+	if (m_Radio8_0 != -1) {
+		ss.str(""); ss.clear();
+		ss << "update file_form_flags set file_8IfChange=";
+		ss << m_Radio8_0 << " where file_id = " << file_id;
+		help->execSQL(ss.str().c_str());
+	}
+
+#if 0
 #pragma region FillForm4
 FillForm4:
 	GetDlgItem(IDC_EDIT45)->GetWindowTextW(strText);
@@ -375,6 +528,7 @@ FillForm4:
 			ss.str(""); ss.clear();
 		}
 	}
+
 	itVV = itVVV->begin();
 	for (int i = 0; i < 3; i++)
 	{
@@ -481,8 +635,29 @@ FillForm4:
 			goto FillForm5;
 	}
 	*/
+
 #pragma endregion
-	itVVV++;
+	//itVVV++;
+#endif
+
+	GetDlgItem(IDC_EDIT60)->GetWindowTextW(strText);
+	ss.str(""); ss.clear();
+	if (strText == _T("无"))
+		ss << "update file_form_flags set file_9IfHaveThisSituation=0 where file_id=" << file_id;
+	else
+		ss << "update file_form_flags set file_9IfHaveThisSituation=1 where file_id=" << file_id;
+
+	help->execSQL(ss.str().c_str());
+
+	if (m_Radio9_0 != -1) {
+		ss.str(""); ss.clear();
+		ss << "update file_form_flags set file_9IfChange=";
+		ss << m_Radio8_0 << " where file_id = " << file_id;
+		help->execSQL(ss.str().c_str());
+	}
+
+#if 0
+
 #pragma region FillForm5
 FillForm5:
 	GetDlgItem(IDC_EDIT60)->GetWindowTextW(strText);
@@ -624,9 +799,11 @@ FillForm5:
 	}
 	*/
 #pragma endregion
+#endif
 
 
 FillComplete:
+#if 0
 	ss.str("");  ss.clear();
 	ss << "insert into personal_form_info values (" << file_id << ",";
 	ss << "4, " << "'" << CW2A(_T("表2-3"), CP_UTF8) << "',";
@@ -636,9 +813,13 @@ FillComplete:
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "');"; strText.ReleaseBuffer();
 	//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
 	help->execSQL(ss.str().c_str());
+#endif
 
 	help->closeDB(); delete help;
 	ss.str("");  ss.clear();
+
+
+	DoSaveForm();
 	GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 }
 
@@ -646,6 +827,33 @@ FillComplete:
 void CPersonalForm04::OnBnClickedCmdPrintForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str(""); ss.clear();
+
+	help->closeDB(); delete help;
+
+	ss.str("");  ss.clear();
+	ss << "select * from file_form_07 where file_id=" << file_id << " limit 0,3;";
+	_vSubformQueryString.push_back(ss.str());
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_08 where file_id=" << file_id << " limit 0,3;";
+	_vSubformQueryString.push_back(ss.str());
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_09 where file_id=" << file_id << " limit 0,3;";
+	_vSubformQueryString.push_back(ss.str());
+	ss.str(""); ss.clear();
+
+	DoPrintForm(CString(_T("表2-3.dotx")));
 }
 
 
@@ -664,6 +872,7 @@ void CPersonalForm04::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 
 	// TODO:  在此添加专用代码和/或调用基类
+#if 0
 	QueryAndFillFileForm();
 
 	if (m_isModify) {
@@ -672,6 +881,45 @@ void CPersonalForm04::OnInitialUpdate()
 	}
 
 	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
+#endif
+	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
+	DoShowForm();
+
+	BOOL hasData = FALSE;
+	vector<int>::iterator itHas = _vHaveDataSubform.begin();
+	while (itHas != _vHaveDataSubform.end()) {
+		if (*itHas != -1) {
+			hasData = TRUE; break;
+		}
+		itHas++;
+	}
+	if (hasData) {
+		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_CMD_UPDATE_FORM3)->ShowWindow(SW_SHOW);
+	}
+
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+
+	ss.str(""); ss.clear();
+	ss << "select file_7IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		m_Radio7_0 = -1;
+	}
+	else
+		m_Radio7_0 = 1 - atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+	help->closeDB(); delete help;
+
+	UpdateData(FALSE);
+
 }
 
 #if 0
@@ -812,6 +1060,7 @@ void CPersonalForm04::OnInitialUpdate()
 
 void CPersonalForm04::OnBnClickedCmdUpdateForm3()
 {
+#if 0
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 	CKiwiSdiExecDoc* pDoc = pWnd->GetDocument();
 
@@ -884,4 +1133,8 @@ void CPersonalForm04::OnBnClickedCmdUpdateForm3()
 	help->closeDB();
 	delete help;
 	ss.str("");  ss.clear();
+#endif
+	UpdateData();
+
+	DoUpdateForm();
 }
