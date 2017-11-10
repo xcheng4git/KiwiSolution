@@ -2,7 +2,7 @@
 #include "afxcmn.h"
 #include "afxwin.h"
 
-
+#include <string>
 // CDlgQueryPunishment ¶Ô»°¿ò
 
 class CDlgQueryPunishment : public CDialogEx
@@ -17,6 +17,11 @@ public:
 	enum { IDD = IDD_DIALOG_QUERY_PUNISHMENT };
 private:
 	void InitFourType();
+
+	void ConsistentChildCheck(HTREEITEM hItem);
+	void ConsistentParentCheck(HTREEITEM hItem);
+
+	std::string GenerateXingTaiWhere();
 
 protected:
 	CImageList m_ilIcons;
@@ -33,4 +38,5 @@ public:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSetfocusComboFile();
 	afx_msg void OnDropdownComboFolder();
+	afx_msg void OnClickTree1(NMHDR *pNMHDR, LRESULT *pResult);
 };

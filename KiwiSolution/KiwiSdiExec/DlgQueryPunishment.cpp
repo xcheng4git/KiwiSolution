@@ -59,7 +59,8 @@ void CDlgQueryPunishment::InitFourType()
 		sprintf_s(sql2, 500, "select * from four_punish_category where first_category=%d", m_treeFourType.GetItemData(hItemParent));
 		re = help->rawQuery(sql2, &row, &col, result); //row 是查出多少行记录,col是每条记录多少个字段
 		for (int r = 1; r <= row; r++) {
-			m_treeFourType.InsertItem(CA2W(re[r*col + 2], CP_UTF8), atoi(re[r*col + 3]), atoi(re[r*col + 3]), hItemParent);
+			HTREEITEM hItem = m_treeFourType.InsertItem(CA2W(re[r*col + 2], CP_UTF8), atoi(re[r*col + 3]), atoi(re[r*col + 3]), hItemParent);
+			m_treeFourType.SetItemData(hItem, (DWORD)atoi(re[r*col + 0]));
 		}
 		m_treeFourType.Expand(hItemParent, TVE_EXPAND);
 
@@ -71,6 +72,72 @@ void CDlgQueryPunishment::InitFourType()
 
 	
 
+}
+
+void CDlgQueryPunishment::ConsistentChildCheck(HTREEITEM hItem)
+{
+	BOOL bCheck = m_treeFourType.GetCheck(hItem);
+
+	if (m_treeFourType.ItemHasChildren(hItem)) {
+		HTREEITEM hChildItem = m_treeFourType.GetChildItem(hItem);
+		while (hChildItem != NULL) {
+			m_treeFourType.SetCheck(hChildItem, bCheck);
+
+			hChildItem = m_treeFourType.GetNextItem(hChildItem, TVGN_NEXT);
+		}
+
+	}
+}
+
+void CDlgQueryPunishment::ConsistentParentCheck(HTREEITEM hItem)
+{
+	HTREEITEM hParentItem = m_treeFourType.GetParentItem(hItem);
+	if (hParentItem != NULL) {
+		m_treeFourType.SetCheck(hParentItem, TRUE);
+		HTREEITEM hChildItem = m_treeFourType.GetChildItem(hParentItem);
+		while (hChildItem != NULL) {
+			if (m_treeFourType.GetCheck(hChildItem) == FALSE) {
+				m_treeFourType.SetCheck(hParentItem, FALSE);
+				break;
+			}
+
+			hChildItem = m_treeFourType.GetNextItem(hChildItem, TVGN_NEXT);
+		}
+	}
+}
+
+string CDlgQueryPunishment::GenerateXingTaiWhere()
+{
+	stringstream ss;
+	BOOL bChecked = FALSE;
+
+	ss << " and file_id in (select file_id from file_invertigated_form_13 where clearing_four_xt in ( -1";
+
+	HTREEITEM hParentItem = m_treeFourType.GetRootItem();
+	//HTREEITEM hParentItem = m_treeFourType.GetFirstVisibleItem();
+	while (hParentItem != NULL) {
+		if (m_treeFourType.ItemHasChildren(hParentItem)) {
+			HTREEITEM hChildItem = m_treeFourType.GetChildItem(hParentItem);
+			while (hChildItem != NULL) {
+				if (m_treeFourType.GetCheck(hChildItem) == TRUE) {
+					bChecked = TRUE;
+					ss << "," << m_treeFourType.GetItemData(hChildItem);
+				}
+
+				hChildItem = m_treeFourType.GetNextItem(hChildItem, TVGN_NEXT);
+			}
+		}
+
+		//hParentItem = m_treeFourType.GetNextVisibleItem(hParentItem);
+		hParentItem = m_treeFourType.GetNextSiblingItem(hParentItem);
+	}
+
+	if (bChecked)
+		ss << ")) ";
+	else
+		ss.str("");
+
+	return ss.str();
 }
 
 void CDlgQueryPunishment::DoDataExchange(CDataExchange* pDX)
@@ -88,6 +155,7 @@ BEGIN_MESSAGE_MAP(CDlgQueryPunishment, CDialogEx)
 	ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CDlgQueryPunishment::OnSelchangedTree1)
 	ON_CBN_SETFOCUS(IDC_COMBO_FILE, &CDlgQueryPunishment::OnSetfocusComboFile)
 	ON_CBN_DROPDOWN(IDC_COMBO_FOLDER, &CDlgQueryPunishment::OnDropdownComboFolder)
+	ON_NOTIFY(NM_CLICK, IDC_TREE1, &CDlgQueryPunishment::OnClickTree1)
 END_MESSAGE_MAP()
 
 
@@ -132,7 +200,9 @@ void CDlgQueryPunishment::OnClickedButtonSearch()
 
 	//////////////////////////////////////////////
 	//加入四种形态条件
+	ss << GenerateXingTaiWhere();
 
+	ss << ";";
 	TRACE(_T("\n%s"), CA2W(ss.str().c_str(), CP_UTF8));
 
 	CSQLiteHelper *help = new CSQLiteHelper();
@@ -286,4 +356,31 @@ void CDlgQueryPunishment::OnDropdownComboFolder()
 	// TODO:  在此添加控件通知处理程序代码
 	m_comboFiles.SetWindowTextW(_T(""));
 	while (m_comboFiles.GetCount()) m_comboFiles.DeleteString(0);
+}
+
+
+void CDlgQueryPunishment::OnClickTree1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	// TODO:  在此添加控件通知处理程序代码
+	CPoint oPoint;
+	UINT nFlag;
+	GetCursorPos(&oPoint);
+	m_treeFourType.ScreenToClient(&oPoint);
+	HTREEITEM oSelectItem = m_treeFourType.HitTest(oPoint, &nFlag);
+	if (oSelectItem == NULL)
+		return;
+
+	m_treeFourType.SelectItem(oSelectItem);
+
+	if (nFlag& TVHT_ONITEMSTATEICON) {
+		BOOL bCheck = !m_treeFourType.GetCheck(oSelectItem);
+		m_treeFourType.SetCheck(oSelectItem, bCheck);
+
+		ConsistentChildCheck(oSelectItem);
+		ConsistentParentCheck(oSelectItem);
+
+		m_treeFourType.SetCheck(oSelectItem, !bCheck);
+	}
+
+	*pResult = 0;
 }
