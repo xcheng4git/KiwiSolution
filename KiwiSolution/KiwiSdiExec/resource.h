@@ -921,6 +921,7 @@
 #define IDC_COMBO2                      1547
 #define IDC_COMBO3                      1548
 #define IDC_BUTTON1                     1549
+#define IDC_STATIC_HEALTH_REPORT        1550
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 #define ID_Menu                         32773
@@ -948,7 +949,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        368
 #define _APS_NEXT_COMMAND_VALUE         32791
-#define _APS_NEXT_CONTROL_VALUE         1550
+#define _APS_NEXT_CONTROL_VALUE         1551
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
