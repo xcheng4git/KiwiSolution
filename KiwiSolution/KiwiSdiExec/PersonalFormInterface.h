@@ -56,7 +56,7 @@ protected:
 	CBitmap m_bmpClose;
 
 protected:
-	void DoSaveForm();
+	CString DoSaveForm();
 	void DoUpdateForm();
 	void DoShowForm();
 	void DoPrintForm(CString &templateName);

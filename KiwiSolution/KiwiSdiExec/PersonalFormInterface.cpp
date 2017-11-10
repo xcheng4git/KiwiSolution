@@ -31,8 +31,9 @@ void CPersonalFormInterface::SetCurrentFile(CString filePath)
 	m_strCurrentFile = filePath.Right(filePath.GetLength() - filePath.Find(_T("/"), 0) - 1);
 }
 
-void CPersonalFormInterface::DoSaveForm()
+CString CPersonalFormInterface::DoSaveForm()
 {
+	CString form_recid;
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 	CKiwiSdiExecDoc* pDoc = pWnd->GetDocument();
 
@@ -67,8 +68,8 @@ void CPersonalFormInterface::DoSaveForm()
 
 			ss.str(""); ss.clear();
 			ss << "insert into " << CW2A(vFormByTables[2 + i], CP_UTF8) << " values(" << file_id << ", ";
-			strText.ReleaseBuffer(); strText = CUtility::GetGuid();
-			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+			form_recid = CUtility::GetGuid();
+			ss << "'" << CW2A(form_recid.GetBuffer(), CP_UTF8) << "',"; 
 
 			for (int j = 0; j < numSubformColumn; j++) {
 				if (_vvSubformStructure[i][2 + j] == RADIOBTN) {
@@ -121,6 +122,7 @@ void CPersonalFormInterface::DoSaveForm()
 	//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
 	help->execSQL(ss.str().c_str());
 
+	return form_recid;
 }
 
 void CPersonalFormInterface::DoShowForm()
