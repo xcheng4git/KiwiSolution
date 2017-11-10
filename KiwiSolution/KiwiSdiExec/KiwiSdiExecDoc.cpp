@@ -86,7 +86,7 @@ CKiwiSdiExecDoc::CKiwiSdiExecDoc()
 	vFormByTables.push_back(_T("file_form_12_c"));
 	vFormByTables.push_back(_T("file_form_12_cl"));
 	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
-	vFormBySubform.clear(); vFormBySubform.push_back(12); m_vvFormBySubform.push_back(vFormBySubform);
+	vFormBySubform.clear(); vFormBySubform.push_back(12); vFormBySubform.push_back(-1); vFormBySubform.push_back(-1); m_vvFormBySubform.push_back(vFormBySubform);
 
 	vFormByTables.push_back(_T("表2-6"));
 	vFormByTables.push_back(CA2W(re[7 * col + 1], CP_UTF8));
@@ -94,7 +94,7 @@ CKiwiSdiExecDoc::CKiwiSdiExecDoc()
 	vFormByTables.push_back(_T("file_form_12_cl"));
 	vFormByTables.push_back(_T("file_form_13"));
 	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
-	vFormBySubform.clear(); vFormBySubform.push_back(13); m_vvFormBySubform.push_back(vFormBySubform);
+	vFormBySubform.clear(); vFormBySubform.push_back(-1); vFormBySubform.push_back(-1); vFormBySubform.push_back(13); m_vvFormBySubform.push_back(vFormBySubform);
 
 	vFormByTables.push_back(_T("表2-7"));
 	vFormByTables.push_back(CA2W(re[8 * col + 1], CP_UTF8));
@@ -121,7 +121,7 @@ CKiwiSdiExecDoc::CKiwiSdiExecDoc()
 	vFormByTables.push_back(_T("file_form_17"));
 	vFormByTables.push_back(_T("file_form_17_1"));
 	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
-	vFormBySubform.clear(); vFormBySubform.push_back(17); m_vvFormBySubform.push_back(vFormBySubform);
+	vFormBySubform.clear(); vFormBySubform.push_back(17); vFormBySubform.push_back(-1); m_vvFormBySubform.push_back(vFormBySubform);
 
 	vFormByTables.push_back(_T("表2-11"));
 	vFormByTables.push_back(CA2W(re[12 * col + 1], CP_UTF8));
@@ -164,7 +164,7 @@ CKiwiSdiExecDoc::CKiwiSdiExecDoc()
 	vFormByTables.push_back(_T("file_form_24_1"));
 	vFormByTables.push_back(_T("file_form_24_2"));
 	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
-	vFormBySubform.clear(); vFormBySubform.push_back(24); m_vvFormBySubform.push_back(vFormBySubform);
+	vFormBySubform.clear(); vFormBySubform.push_back(24); vFormBySubform.push_back(-1); m_vvFormBySubform.push_back(vFormBySubform);
 
 	vFormByTables.push_back(_T("表4"));
 	vFormByTables.push_back(CA2W(re[19 * col + 1], CP_UTF8));
@@ -201,7 +201,7 @@ CKiwiSdiExecDoc::CKiwiSdiExecDoc()
 	vFormByTables.push_back(_T("file_form_30_0"));
 	vFormByTables.push_back(_T("file_form_30"));
 	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
-	vFormBySubform.clear(); vFormBySubform.push_back(30); m_vvFormBySubform.push_back(vFormBySubform);
+	vFormBySubform.clear(); vFormBySubform.push_back(30); vFormBySubform.push_back(-1); m_vvFormBySubform.push_back(vFormBySubform);
 
 	vFormByTables.push_back(_T("表10"));
 	vFormByTables.push_back(CA2W(re[25 * col + 1], CP_UTF8));

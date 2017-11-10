@@ -92,6 +92,54 @@ CPersonalForm07::CPersonalForm07()
 	vStr.clear(); vStr.push_back(1); vStr.push_back(2); _vvSubformRecordRange.push_back(vStr);
 	vStr.clear(); vStr.push_back(0); vStr.push_back(2); _vvSubformRecordRange.push_back(vStr);
 
+	//以下是为了打印的预设
+	const wchar_t *pBookmarks2[12] = { _T("有无"), _T("子女"), _T("姓名"), _T("共同生活子女"), _T("单位"), _T("现任职务"), _T("单位性质1"), _T("单位性质2"), _T("单位性质3"), _T("单位性质4"), _T("证件名称"), _T("证件号码") };
+	int structure20[12] = { CBookmarkEx::CHKBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX,
+		CBookmarkEx::CHKBOX, CBookmarkEx::CHKBOX, CBookmarkEx::CHKBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure21[3 + 1 + 12] = { -1, 1, 11, 2, 2, 2, 1, 2, 1, 1, 6, 4, 2, 1, 1, 1 };
+	//
+	const wchar_t *pBookmarks3[10] = { _T("有无"), _T("姓名"), _T("单位"), _T("现任职务"), _T("单位性质1"), _T("单位性质2"), _T("单位性质3"), _T("单位性质4"), _T("证件名称"), _T("证件号码") };
+	int structure30[10] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX,
+		CBookmarkEx::CHKBOX, CBookmarkEx::CHKBOX, CBookmarkEx::CHKBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure31[3 + 1 + 10] = { -1, 1, 9, 4, 2, 1, 1, 1, 6, 4, 2, 1, 1, 1 };
+	//
+	const wchar_t *pBookmarks4[6] = { _T("有无"), _T("问题姓名"), _T("问题时间"), _T("问题原因"), _T("问题阶段"), _T("问题处理") };
+	int structure40[6] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX,	CBookmarkEx::CHKBOX,CBookmarkEx::TXTBOX };
+	int structure41[3 + 1 + 6] = { 1, 2, 5, 2, 2, 1, 1, 1, 6, 1 };
+
+
+	vector<CBookmarkEx> vBke;
+	for (int i = 0; i < 12; i++) {
+		CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+	vBke.clear();
+	for (int i = 0; i < 10; i++) {
+		CBookmarkEx bookmark(structure30[i], pBookmarks3[i], structure31[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+	vBke.clear();
+	for (int i = 0; i < 6; i++) {
+		CBookmarkEx bookmark(structure40[i], pBookmarks4[i], structure41[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure21[i]);
+	_vvSubformFlags.push_back(vStr);
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure31[i]);
+	_vvSubformFlags.push_back(vStr);
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure41[i]);
+	_vvSubformFlags.push_back(vStr);
+
 }
 
 CPersonalForm07::~CPersonalForm07()
@@ -504,6 +552,33 @@ FillComplete :
 void CPersonalForm07::OnBnClickedCmdPrintForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str(""); ss.clear();
+
+	help->closeDB(); delete help;
+
+	ss.str("");  ss.clear();
+	ss << "select * from file_form_12_c where file_id=" << file_id << " limit 1,2;";
+	_vSubformQueryString.push_back(ss.str());
+	ss.str(""); ss.clear();
+	ss << "select cl.* from file_form_12_c as c left outer join file_form_12_cl as cl on c.file_ChildrenName=cl.file_ChildrenName  where c.file_id=" << file_id << " limit 1,2;";
+	_vSubformQueryString.push_back(ss.str());
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_13 where file_id=" << file_id << " limit 0,2;";
+	_vSubformQueryString.push_back(ss.str());
+	ss.str("");  ss.clear();
+
+	DoPrintForm(CString(_T("表2-6.dotx")));
 }
 
 
