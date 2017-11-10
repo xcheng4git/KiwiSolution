@@ -33,6 +33,8 @@ CPersonalForm13::CPersonalForm13()
 	{ IDC_EDIT55, IDC_EDIT123, IDC_EDIT140, IDC_EDIT155, IDC_EDIT148 },
 	{ IDC_EDIT91, IDC_EDIT124, IDC_EDIT141, IDC_EDIT156, IDC_EDIT149 } };
 	int structure1[7] = { 10, 5, EDITBX, EDITBX, EDITBX, EDITBX, EDITNUM };
+	int parameters2[1][1] = { { IDC_EDIT161 } };
+	int structure2[3] = { 1, 1, EDITNUM };
 
 	vector<vector<int>> vvPara;
 	for (int i = 0; i < 10; i++) {
@@ -42,22 +44,39 @@ CPersonalForm13::CPersonalForm13()
 		vvPara.push_back(vPara);
 	}
 	_vvvParameters.push_back(vvPara);
+	vvPara.clear();
+	for (int i = 0; i < 1; i++) {
+		vector<int> vPara;
+		for (int j = 0; j < 1; j++)
+			vPara.push_back(parameters2[i][j]);
+		vvPara.push_back(vPara);
+	}
+	_vvvParameters.push_back(vvPara);
 
 	vector<int> vStr;
 	for (int i = 0; i < 7; i++) {
 		vStr.push_back(structure1[i]);
 	}
 	_vvSubformStructure.push_back(vStr);
+	vStr.clear();
+	for (int i = 0; i < 3; i++) {
+		vStr.push_back(structure2[i]);
+	}
+	_vvSubformStructure.push_back(vStr);
 
-	_vHaveDataSubform.push_back(-1);
+	_vHaveDataSubform.push_back(-1); _vHaveDataSubform.push_back(-1);
 
 	vStr.clear(); vStr.push_back(0); vStr.push_back(10); _vvSubformRecordRange.push_back(vStr);
+	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
 
 	//以下是为了打印的预设
-	const wchar_t *pBookmarks1[7] = { _T("有无"), _T("姓名"), _T("保险全称"), _T("保单号"), _T("保险公司"), _T("保费"),_T("总额") };
-	int structure10[7] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
-	int structure11[3 + 1 + 7] = { 0, 9, 5, 2,  2, 1, 1 ,1, 1, 1,1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
-	
+	const wchar_t *pBookmarks1[6] = { _T("有无"), _T("姓名"), _T("保险全称"), _T("保单号"), _T("保险公司"), _T("保费") };
+	int structure10[6] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure11[3 + 1 + 6] = { 0, 10, 5, 2,  2, 1, 1 ,1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	const wchar_t *pBookmarks2[2] = { _T("有无"), _T("总额") };
+	int structure20[2] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX };
+	int structure21[3 + 1 + 2] = { -1, 1, 1, 2, 2, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+
 
 
 	vector<CBookmarkEx> vBke;
@@ -66,13 +85,21 @@ CPersonalForm13::CPersonalForm13()
 		vBke.push_back(bookmark);
 	}
 	_vvBookmarks.push_back(vBke);
-	
+	vBke.clear();
+	for (int i = 0; i < 2; i++) {
+		CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
 
 	vStr.clear();
 	for (int i = 0; i < 4; i++)
 		vStr.push_back(structure11[i]);
 	_vvSubformFlags.push_back(vStr);
-	
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure21[i]);
+	_vvSubformFlags.push_back(vStr);
 
 }
 
@@ -193,6 +220,20 @@ void CPersonalForm13::OnBnClickedCmdSaveForm()
 
 	CString strText;
 
+	if (m_Radio12_3_0 == -1) {
+		MessageBox(_T("请选择是否存在 12-3 本人等投资保险的情况 ！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+		help->closeDB(); delete help;
+		ss.str("");  ss.clear();
+		return;
+	}
+	else {
+		ss.str(""); ss.clear();
+		ss << "update file_form_flags set file_19IfHaveThisSituation=";
+		ss << m_Radio12_3_0 << " where file_id = " << file_id;
+		help->execSQL(ss.str().c_str());
+	}
+
+#if 0
 	if (m_Radio12_3_0 == 1)
 	{
 		ss << "update file_form_flags set file_19IfHaveThisSituation=0 where file_id=" << file_id;
@@ -208,7 +249,7 @@ void CPersonalForm13::OnBnClickedCmdSaveForm()
 		ss.str(""); ss.clear();
 	}
 
-#if 0
+
 	int Parameters[10][5] = { { IDC_EDIT47, IDC_EDIT98, IDC_EDIT97, IDC_EDIT99, IDC_EDIT100 },
 	{ IDC_EDIT48, IDC_EDIT102, IDC_EDIT133, IDC_EDIT110, IDC_EDIT101 },
 	{ IDC_EDIT49, IDC_EDIT103, IDC_EDIT134, IDC_EDIT111, IDC_EDIT129 },
@@ -284,8 +325,11 @@ void CPersonalForm13::OnBnClickedCmdPrintForm()
 	ss.str(""); ss.clear();
 	ss << "select * from file_form_19 where file_id=" << file_id << " limit 0,10;";
 	_vSubformQueryString.push_back(ss.str());
-	
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_19_1 where file_id=" << file_id << " limit 0,1;";
+	_vSubformQueryString.push_back(ss.str());
 
+	ss.str(""); ss.clear();
 	DoPrintForm(CString(_T("表2-12.dotx")));
 }
 
@@ -365,6 +409,25 @@ void CPersonalForm13::OnInitialUpdate()
 	help->closeDB();
 	delete help;
 #endif
+	vector<vector<vector<int>>>::iterator itVVVparameter = _vvvParameters.begin();
+	int i = 0;
+	while (itVVVparameter != _vvvParameters.end()) {
+		vector<vector<int>>::iterator itVVparameter = itVVVparameter->begin();
+		while (itVVparameter != itVVVparameter->end()) {
+			int j = 0;
+
+			vector<int>::iterator itV = itVVparameter->begin();
+			while (itV != itVVparameter->end()) {
+				if ((_vvSubformStructure[i][2 + j] != RADIOBTN) && (_vvSubformStructure[i][2 + j] != ATTACHMENTBX)) {
+					GetDlgItem(*itV)->SetFont(&m_fontEdit);
+				}
+
+				itV++; j++;
+			}
+			itVVparameter++;
+		}
+		itVVVparameter++; i++;
+	}
 
 	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
 	DoShowForm();
@@ -379,7 +442,7 @@ void CPersonalForm13::OnInitialUpdate()
 	}
 	if (hasData) {
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
-		GetDlgItem(IDC_CMD_UPDATE_FORM3)->ShowWindow(SW_SHOW);
+		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
 	}
 
 	stringstream ss;
@@ -393,13 +456,14 @@ void CPersonalForm13::OnInitialUpdate()
 	int file_id = atoi(re[1 * col + 0]);
 
 	ss.str(""); ss.clear();
-	ss << "select file_17IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
+	ss << "select file_19IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	if (row < 1) {
 		m_Radio12_3_0 = -1;
 	}
 	else
-		m_Radio12_3_0 = 1 - atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+		m_Radio12_3_0 = atoi(re[1 * col + 0]);  
+
 	help->closeDB(); delete help;
 
 	UpdateData(FALSE);

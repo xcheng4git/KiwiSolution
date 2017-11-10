@@ -257,7 +257,7 @@ void CPersonalFormInterface::DoPrintForm(CString &templateName)
 				TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
 				re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 				if (row >= 1) {
-					has_or_no = 1-atoi(re[1 * col + _vvSubformFlags[i][0]]);
+					has_or_no = atoi(re[1 * col + _vvSubformFlags[i][0]]);
 				}
 				
 				for (int j = 0; j < itVbookmark[0].nsub; j++) {

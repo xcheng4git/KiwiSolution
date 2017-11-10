@@ -463,7 +463,7 @@ FillForm8 :
 	GetDlgItem(IDC_EDIT47)->GetWindowTextW(strText);
 	if (strText == _T("нч"))
 	{
-		ss << "update file_form_flags set file_13IfHaveThisSituation=0 where file_id=" << file_id;
+		ss << "update file_form_flags set file_13IfHaveThisSituation=1 where file_id=" << file_id;
 
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
@@ -471,12 +471,20 @@ FillForm8 :
 	}
 
 	{
-		ss << "update file_form_flags set file_13IfHaveThisSituation=1 where file_id=" << file_id;
+		ss << "update file_form_flags set file_13IfHaveThisSituation=0 where file_id=" << file_id;
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
 	}
 
 	{
+		if (m_Radio8_0 != -1) {
+			ss.str(""); ss.clear();
+			ss << "update file_form_flags set file_10IfChange=";
+			ss << m_Radio8_0 << " where file_id=" << file_id;
+			help->execSQL(ss.str().c_str());
+		}
+
+#if 0
 		if (m_Radio8_0 == 1)
 		{
 			ss << "update file_form_flags set file_13IfChange=0 where file_id=" << file_id;
@@ -490,6 +498,7 @@ FillForm8 :
 			help->execSQL(ss.str().c_str());
 			ss.str(""); ss.clear();
 		}
+#endif
 	}
 	/*
 	{

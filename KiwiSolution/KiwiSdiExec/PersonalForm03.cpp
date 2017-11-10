@@ -428,7 +428,7 @@ void PersonalForm03::OnInitialUpdate()
 		m_Radio2_0 = -1;
 	}
 	else
-		m_Radio2_0 = 1 - atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+		m_Radio2_0 = atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
 	help->closeDB(); delete help;
 
 	UpdateData(FALSE);
@@ -489,34 +489,22 @@ void PersonalForm03::OnBnClickedCmdSaveForm()
 #pragma region FillForm2_1
 	
 	GetDlgItem(IDC_EDIT1)->GetWindowTextW(strText);
-	if (strText == _T("无"))
-	{
-		ss << "update file_form_flags set file_4IfHaveThisSituation=0 where file_id=" << file_id; 
-		help->execSQL(ss.str().c_str());
+	if (strText == _T("无")){
 		ss.str(""); ss.clear();
-		goto FillForm2_2;
-	}
-
-	{
-		ss << "update file_form_flags set file_4IfHaveThisSituation=1 where file_id=" << file_id;
+		ss << "update file_form_flags set file_4IfHaveThisSituation=1 where file_id=" << file_id; 
 		help->execSQL(ss.str().c_str());
+	} else {
 		ss.str(""); ss.clear();
+		ss << "update file_form_flags set file_4IfHaveThisSituation=0 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
 	}
 	
+	if ( m_Radio1_0 != -1)
 	{
-		if (((CButton *)GetDlgItem(IDC_RADIO2))->GetCheck() == 1)
-		{
-			ss << "update file_form_flags set file_4IfChange=0 where file_id=" << file_id;
-			help->execSQL(ss.str().c_str()); 
-			ss.str(""); ss.clear();
-			goto FillForm2_2;
-		}
-		else if (((CButton *)GetDlgItem(IDC_RADIO1))->GetCheck() == 1)
-		{
-			ss << "update file_form_flags set file_4IfChange=1 where file_id=" << file_id;
-			help->execSQL(ss.str().c_str());
-			ss.str(""); ss.clear();
-		}
+		ss.str(""); ss.clear();
+		ss << "update file_form_flags set file_4IfChange=";
+		ss << m_Radio1_0 << " where file_id = " << file_id;
+		help->execSQL(ss.str().c_str()); 
 	}
 #if 0
 	{
@@ -550,22 +538,35 @@ void PersonalForm03::OnBnClickedCmdSaveForm()
 	/////////////////////////////////////////////////////////////////////////////
 	//表2-2
 #pragma region FillForm2_2
-FillForm2_2:
-	{
-		if (((CButton *)GetDlgItem(IDC_RADIO3))->GetCheck() == 1)
-		{
-			ss << "update file_form_flags set file_5IfHaveThisSituation=0 where file_id=" << file_id;
-			help->execSQL(ss.str().c_str());
-			ss.str(""); ss.clear();
-			goto FillForm2_3;
-		}
 
-		ss << "update file_form_flags set file_5IfHaveThisSituation=1 where file_id=" << file_id;
-		help->execSQL(ss.str().c_str());
+	if (m_Radio2_0 == -1) {
+		MessageBox(_T("请选择是否存在 2- 本人因私出国的情况 ！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+		help->closeDB(); delete help;
+		ss.str("");  ss.clear();
+		return;
+	}
+	else {
 		ss.str(""); ss.clear();
+		ss << "update file_form_flags set file_5IfHaveThisSituation=";
+		ss << m_Radio2_0 << " where file_id = " << file_id;
+		help->execSQL(ss.str().c_str());
 	}
 
 #if 0
+FillForm2_2 :
+{
+	if (((CButton *)GetDlgItem(IDC_RADIO3))->GetCheck() == 1)
+	{
+		ss << "update file_form_flags set file_5IfHaveThisSituation=0 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+		goto FillForm2_3;
+	}
+
+	ss << "update file_form_flags set file_5IfHaveThisSituation=1 where file_id=" << file_id;
+	help->execSQL(ss.str().c_str());
+	ss.str(""); ss.clear();
+}
 	{
 		for (int i = 0; i < 3; i++) {
 			GetDlgItem(parameters2[i][0])->GetWindowTextW(strText);
@@ -592,12 +593,33 @@ FillForm2_2:
 		}
 	}
 #endif
-
 #pragma endregion
+
 
 	/////////////////////////////////////////////////////////////////////////////
 	//表3-1
 #pragma region FillForm2_3
+
+	GetDlgItem(IDC_EDIT33)->GetWindowTextW(strText);
+	if (strText == _T("无")){
+		ss.str(""); ss.clear();
+		ss << "update file_form_flags set file_6IfHaveThisSituation=1 where file_id=" << file_id; 
+		help->execSQL(ss.str().c_str());
+	} else {
+		ss.str(""); ss.clear();
+		ss << "update file_form_flags set file_6IfHaveThisSituation=0 where file_id=" << file_id;
+		help->execSQL(ss.str().c_str());
+	}
+
+	if ( m_Radio3_0 != -1)
+	{
+		ss.str(""); ss.clear();
+		ss << "update file_form_flags set file_6IfChange=";
+		ss << m_Radio3_0 << " where file_id = " << file_id;
+		help->execSQL(ss.str().c_str()); 
+	}
+
+#if 0
 FillForm2_3 :
 	GetDlgItem(IDC_EDIT33)->GetWindowTextW(strText);
 	if (strText == _T("无"))
@@ -631,7 +653,7 @@ FillForm2_3 :
 		}
 	}
 
-#if 0
+
 	{
 		for (int i = 0; i < 3; i++) {
 			GetDlgItem(parameters3[i][0])->GetWindowTextW(strText);

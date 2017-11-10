@@ -99,7 +99,7 @@ CPersonalForm08::CPersonalForm08()
 	//
 	const wchar_t *pBookmarks3[9] = { _T("有无"), _T("姓名"), _T("来源"), _T("去向"), _T("具体地址"), _T("面积"), _T("房产性质"), _T("交易时间"), _T("交易价格") };
 	int structure30[9] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
-	int structure31[3 + 1 + 9] = { 1, 2, 8, 2, 2, 1, 4,3,1, 1, 7, 1,1 };
+	int structure31[3 + 1 + 9] = { 1, 2, 8, 2, 2, 1, 4,3,1, 1, 7, 1,1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 
 	vector<CBookmarkEx> vBke;
 	for (int i = 0; i < 5; i++) {
@@ -341,6 +341,20 @@ FillForm9:
 
 #pragma region FillForm10
 FillForm10:
+	if (m_Radio10_0 == -1) {
+		MessageBox(_T("请选择是否存在 10 本人从事各种劳务所得 ！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+		help->closeDB(); delete help;
+		ss.str("");  ss.clear();
+		return;
+	}
+	else {
+		ss.str(""); ss.clear();
+		ss << "update file_form_flags set file_15IfHaveThisSituation=";
+		ss << m_Radio10_0 << " where file_id = " << file_id;
+		help->execSQL(ss.str().c_str());
+	}
+
+#if 0
 	if (m_Radio10_0 == 1) {
 		ss.str(""); ss.clear();
 		ss << "update file_form_flags set file_15IfHaveThisSituation=0 where file_id=" << file_id;
@@ -350,6 +364,7 @@ FillForm10:
 		ss << "update file_form_flags set file_15IfHaveThisSituation=1 where file_id=" << file_id;
 		help->execSQL(ss.str().c_str());
 	}
+#endif
 	/*
 	{
 		ss << "insert into file_form_15 values(" << file_id << ",";
@@ -383,14 +398,22 @@ FillForm11 :
 	if (strText == _T("无"))
 	{
 		ss.str(""); ss.clear();
-		ss << "update file_form_flags set file_16IfHaveThisSituation=0 where file_id=" << file_id;
+		ss << "update file_form_flags set file_16IfHaveThisSituation=1 where file_id=" << file_id;
 		help->execSQL(ss.str().c_str());
 	} else {
 		ss.str(""); ss.clear();
-		ss << "update file_form_flags set file_16IfHaveThisSituation=1 where file_id=" << file_id;
+		ss << "update file_form_flags set file_16IfHaveThisSituation=0 where file_id=" << file_id;
 		help->execSQL(ss.str().c_str());
 	}
 
+	if (m_Radio11_0 != -1) {
+		ss.str(""); ss.clear();
+		ss << "update file_form_flags set file_16IfChange=";
+		ss << m_Radio11_0 << " where file_id = " << file_id;
+		help->execSQL(ss.str().c_str());
+	}
+
+#if 0
 	if (m_Radio11_0 == 1){
 		ss.str(""); ss.clear();
 		ss << "update file_form_flags set file_16IfChange=0 where file_id=" << file_id;
@@ -401,6 +424,7 @@ FillForm11 :
 			ss << "update file_form_flags set file_16IfChange=1 where file_id=" << file_id;
 			help->execSQL(ss.str().c_str());
 		}
+#endif
 	/*
 	int Parameters[2][8] = { { IDC_EDIT52, m_Radio11_1_1, m_Radio11_1_2, IDC_EDIT54, IDC_EDIT55, m_Radio11_1_3, IDC_EDIT103, IDC_EDIT105 },
 	{ IDC_EDIT53, m_Radio11_2_1, m_Radio11_2_2, IDC_EDIT63, IDC_EDIT64, m_Radio11_2_3, IDC_EDIT107, IDC_EDIT108 } };
@@ -642,7 +666,7 @@ FillForm16 :
 	if (row < 1) {
 		m_Radio10_0 = -1;
 	} else 
-		m_Radio10_0 = 1-atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+		m_Radio10_0 = atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
 	help->closeDB(); delete help;
 
 	UpdateData(FALSE);

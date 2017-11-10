@@ -406,7 +406,7 @@ void CPersonalForm06::OnBnClickedCmdSaveForm()
 	GetDlgItem(IDC_EDIT78)->GetWindowTextW(strText);
 	if (m_Radio7_0==-1 || strText == _T("нч"))
 	{
-		ss << "update file_form_flags set file_12IfHaveThisSituation=0 where file_id=" << file_id;
+		ss << "update file_form_flags set file_12IfHaveThisSituation=1 where file_id=" << file_id;
 
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
@@ -414,12 +414,20 @@ void CPersonalForm06::OnBnClickedCmdSaveForm()
 	}
 
 	{
-		ss << "update file_form_flags set file_12IfHaveThisSituation=1 where file_id=" << file_id;
+		ss << "update file_form_flags set file_12IfHaveThisSituation=0 where file_id=" << file_id;
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
 	}
 
 	{
+		if (m_Radio7 != -1) {
+			ss.str(""); ss.clear();
+			ss << "update file_form_flags set file_12IfChange=";
+			ss << m_Radio7 << " where file_id=" << file_id;
+			help->execSQL(ss.str().c_str());
+		}
+
+#if 0
 		if (m_Radio7 == 1)
 		{
 			ss << "update file_form_flags set file_12IfChange=0 where file_id=" << file_id;
@@ -433,6 +441,7 @@ void CPersonalForm06::OnBnClickedCmdSaveForm()
 			help->execSQL(ss.str().c_str());
 			ss.str(""); ss.clear();
 		}
+#endif
 	}
 
 	/*

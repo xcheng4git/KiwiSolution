@@ -420,7 +420,7 @@ void CPersonalForm10::OnInitialUpdate()
 		m_Radio12_1_0 = -1;
 	}
 	else
-		m_Radio12_1_0 = 1 - atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+		m_Radio12_1_0 = atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
 	help->closeDB(); delete help;
 
 	UpdateData(FALSE);

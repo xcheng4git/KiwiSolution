@@ -481,9 +481,9 @@ void CPersonalForm04::OnBnClickedCmdSaveForm()
 	GetDlgItem(IDC_EDIT45)->GetWindowTextW(strText);
 	ss.str(""); ss.clear();
 	if (strText == _T("无"))
-		ss << "update file_form_flags set file_8IfHaveThisSituation=0 where file_id=" << file_id;
-	else 
 		ss << "update file_form_flags set file_8IfHaveThisSituation=1 where file_id=" << file_id;
+	else 
+		ss << "update file_form_flags set file_8IfHaveThisSituation=0 where file_id=" << file_id;
 
 	help->execSQL(ss.str().c_str());
 
@@ -643,9 +643,9 @@ FillForm4:
 	GetDlgItem(IDC_EDIT60)->GetWindowTextW(strText);
 	ss.str(""); ss.clear();
 	if (strText == _T("无"))
-		ss << "update file_form_flags set file_9IfHaveThisSituation=0 where file_id=" << file_id;
-	else
 		ss << "update file_form_flags set file_9IfHaveThisSituation=1 where file_id=" << file_id;
+	else
+		ss << "update file_form_flags set file_9IfHaveThisSituation=0 where file_id=" << file_id;
 
 	help->execSQL(ss.str().c_str());
 
@@ -935,7 +935,7 @@ void CPersonalForm04::OnInitialUpdate()
 		m_Radio7_0 = -1;
 	}
 	else
-		m_Radio7_0 = 1 - atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+		m_Radio7_0 = atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
 	help->closeDB(); delete help;
 
 	UpdateData(FALSE);

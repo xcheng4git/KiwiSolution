@@ -483,7 +483,7 @@ void CPersonalForm12::OnInitialUpdate()
 		m_Radio12_2_0 = -1;
 	}
 	else
-		m_Radio12_2_0 = 1 - atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+		m_Radio12_2_0 = atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
 	help->closeDB(); delete help;
 
 	UpdateData(FALSE);

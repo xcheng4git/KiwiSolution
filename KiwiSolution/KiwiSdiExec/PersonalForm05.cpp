@@ -246,7 +246,7 @@ FillForm6_1:
 	GetDlgItem(IDC_EDIT45)->GetWindowTextW(strText);
 	if (strText == _T("нч"))
 	{
-		ss << "update file_form_flags set file_10IfHaveThisSituation=0 where file_id=" << file_id;
+		ss << "update file_form_flags set file_10IfHaveThisSituation=1 where file_id=" << file_id;
 
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
@@ -254,12 +254,20 @@ FillForm6_1:
 	}
 
 	{
-		ss << "update file_form_flags set file_10IfHaveThisSituation=1 where file_id=" << file_id;
+		ss << "update file_form_flags set file_10IfHaveThisSituation=0 where file_id=" << file_id;
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
 	}
 
 	{
+		if (m_Radio6_1 != -1) {
+			ss.str(""); ss.clear();
+			ss << "update file_form_flags set file_10IfChange=";
+			ss << m_Radio6_1 << " where file_id=" << file_id;
+			help->execSQL(ss.str().c_str());
+		}
+
+#if 0
 		if  (m_Radio6_1 == 1)
 		{
 			ss << "update file_form_flags set file_10IfChange=0 where file_id=" << file_id;
@@ -273,6 +281,7 @@ FillForm6_1:
 			help->execSQL(ss.str().c_str());
 			ss.str(""); ss.clear();
 		}
+#endif
 	}
 	
 	int Parameters1[3][7] = { { IDC_EDIT45, IDC_EDIT47, IDC_EDIT50, IDC_EDIT53, m_Radio6_1_1, IDC_DATETIMEPICKER1, IDC_EDIT74},
@@ -314,7 +323,7 @@ FillForm6_2:
 	GetDlgItem(IDC_EDIT78)->GetWindowTextW(strText);
 	if (strText == _T("нч"))
 	{
-		ss << "update file_form_flags set file_11IfHaveThisSituation=0 where file_id=" << file_id;
+		ss << "update file_form_flags set file_11IfHaveThisSituation=1 where file_id=" << file_id;
 
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
@@ -322,12 +331,19 @@ FillForm6_2:
 	}
 
 	{
-		ss << "update file_form_flags set file_11IfHaveThisSituation=1 where file_id=" << file_id;
+		ss << "update file_form_flags set file_11IfHaveThisSituation=0 where file_id=" << file_id;
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
 	}
 
 	{
+		if (m_Radio6_2 != -1) {
+			ss.str(""); ss.clear();
+			ss << "update file_form_flags set file_11IfChange=";
+			ss << m_Radio6_2 << " where file_id=" << file_id;
+			help->execSQL(ss.str().c_str());
+		}
+#if 0
 		if (m_Radio6_2 == 1)
 		{
 			ss << "update file_form_flags set file_11IfChange=0 where file_id=" << file_id;
@@ -341,6 +357,7 @@ FillForm6_2:
 			help->execSQL(ss.str().c_str());
 			ss.str(""); ss.clear();
 		}
+#endif
 	}
 
 	int Parameters2[3][5] = { { IDC_EDIT78, IDC_EDIT63, IDC_EDIT66, IDC_DATETIMEPICKER22, IDC_EDIT80 },
