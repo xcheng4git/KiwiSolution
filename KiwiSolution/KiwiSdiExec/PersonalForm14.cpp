@@ -50,12 +50,12 @@ CPersonalForm14::CPersonalForm14()
 	//以下是为了打印的预设
 	const wchar_t *pBookmarks1[13] = { _T("有无"), _T("姓名"), _T("统一社会信用"), _T("企业或其他"), _T("成立日期"), _T("经营范围"), _T("注册地"), _T("经营地"), _T("企业或其他市场类型主体"), _T("注册资本"), _T("个人认缴出资额"), _T("个人认缴出资比例或个人出资比例"), _T("备注") };
 	int structure10[13] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, };
-	int structure11[3 + 1 + 13] = { 1, 1, 10, 2, 2, 1, 1, 1, 1, 1, 1, 1,  7, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	int structure11[3 + 1 + 13] = { 1, 2, 12, 2, 2, 1, 1, 1, 1, 1, 1, 1,  7, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 	//
-	const wchar_t *pBookmarks2[13] = { _T("有无"), _T("姓名"), _T("统一社会信用"), _T("企业或其他"), _T("成立日期"), _T("经营范围"), _T("注册地"), _T("经营地"), _T("企业或其他市场类型主体"), _T("注册资本"), _T("个人认缴出资额"), _T("个人认缴出资比例或个人出资比例"), _T("备注") };
-	int structure20[13] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, };
-	int structure21[3 + 1 + 12] = { -1, 1, 10, 2,  1, 1, 1, 1, 1, 1, 1, 7, 1, 1, 1, 1 };
-	//
+	//const wchar_t *pBookmarks2[13] = { _T("有无"), _T("姓名"), _T("统一社会信用"), _T("企业或其他"), _T("成立日期"), _T("经营范围"), _T("注册地"), _T("经营地"), _T("企业或其他市场类型主体"), _T("注册资本"), _T("个人认缴出资额"), _T("个人认缴出资比例或个人出资比例"), _T("备注") };
+	//int structure20[13] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, };
+	//int structure21[3 + 1 + 12] = { -1, 1, 10, 2,  1, 1, 1, 1, 1, 1, 1, 7, 1, 1, 1, 1 };
+	////
 	
 
 
@@ -65,12 +65,12 @@ CPersonalForm14::CPersonalForm14()
 		vBke.push_back(bookmark);
 	}
 	_vvBookmarks.push_back(vBke);
-	vBke.clear();
-	for (int i = 0; i < 12; i++) {
-		CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[4 + i]);
-		vBke.push_back(bookmark);
-	}
-	_vvBookmarks.push_back(vBke);
+	//vBke.clear();
+	//for (int i = 0; i < 12; i++) {
+	//	CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[4 + i]);
+	//	vBke.push_back(bookmark);
+	//}
+	//_vvBookmarks.push_back(vBke);
 	
 
 	vStr.clear();
@@ -78,9 +78,9 @@ CPersonalForm14::CPersonalForm14()
 		vStr.push_back(structure11[i]);
 	_vvSubformFlags.push_back(vStr);
 	vStr.clear();
-	for (int i = 0; i < 4; i++)
-		vStr.push_back(structure21[i]);
-	_vvSubformFlags.push_back(vStr);
+	//for (int i = 0; i < 4; i++)
+	//	vStr.push_back(structure21[i]);
+	//_vvSubformFlags.push_back(vStr);
 	
 }
 
@@ -334,11 +334,7 @@ void CPersonalForm14::OnBnClickedCmdPrintForm2()
 
 	
 	ss.str(""); ss.clear();
-	ss << "select * from file_form_20 where file_id=" << file_id << " limit 0,1;";
-	_vSubformQueryString.push_back(ss.str());
-
-	ss.str(""); ss.clear();
-	ss << "select * from file_form_20 where file_id=" << file_id << " limit 1,2;";
+	ss << "select * from file_form_20 where file_id=" << file_id << " limit 0,2;";
 	_vSubformQueryString.push_back(ss.str());
 	
 	ss.str(""); ss.clear();
