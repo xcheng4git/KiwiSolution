@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include "KiwiSdiExec.h"
 #include "PersonalForm20.h"
+#include "resource.h"
+
 #include <sstream>
 using namespace std;
 #include "Utility.h"
@@ -18,23 +20,23 @@ IMPLEMENT_DYNCREATE(CPersonalForm20, CFormView)
 CPersonalForm20::CPersonalForm20()
 : CFormView(CPersonalForm20::IDD)
 {
-	//LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
-	//m_fontEdit.CreateFontIndirect(&lf);
+	_strReportImagePath = _T("");
+
 	m_FormID = 20;
-	int parameters1[1][2] = { { IDC_EDIT237, IDC_EDIT58 } };
-	int structure1[4] = { 1, 2, EDITBX, EDITBX };
+	int parameters1[1][3] = { { IDC_EDIT237, IDC_EDIT58,0 } };
+	int structure1[5] = { 1, 3, EDITBX, EDITBX, ATTACHMENTBX };
 
 	vector<vector<int>> vvPara;
 	for (int i = 0; i < 1; i++) {
 		vector<int> vPara;
-		for (int j = 0; j < 2; j++)
+		for (int j = 0; j < 3; j++)
 			vPara.push_back(parameters1[i][j]);
 		vvPara.push_back(vPara);
 	}
 	_vvvParameters.push_back(vvPara);
 
 	vector<int> vStr;
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 5; i++) {
 		vStr.push_back(structure1[i]);
 	}
 	_vvSubformStructure.push_back(vStr);
@@ -44,12 +46,12 @@ CPersonalForm20::CPersonalForm20()
 	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
 
 	//以下是为了打印的预设
-	const wchar_t *pBookmarks1[4] = { _T("有无"), _T("年度"), _T("报告内容"), _T("本年度体检报告") };
-	int structure10[4] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
-	int structure11[4 + 3] = { -1, 1, 2, 2, 1, 1 ,1};  //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	const wchar_t *pBookmarks1[3] = { _T("有无"), _T("年度"), _T("报告内容") };
+	int structure10[3] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure11[4 + 3] = { -1, 1, 2, 2,2, 1, 1};  //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 
 	vector<CBookmarkEx> vBke;//循环次数改一下
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 3; i++) {
 		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[4 + i]);
 		vBke.push_back(bookmark);
 	}
@@ -77,6 +79,8 @@ CPersonalForm20::~CPersonalForm20()
 void CPersonalForm20::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATIC_HEALTH_REPORT, m_reportImage);
+	DDX_Control(pDX, IDC_EDIT1, m_editReportImage);
 }
 
 BEGIN_MESSAGE_MAP(CPersonalForm20, CFormView)
@@ -84,6 +88,8 @@ BEGIN_MESSAGE_MAP(CPersonalForm20, CFormView)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm20::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm20::OnBnClickedButtonCloseForm3)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm20::OnBnClickedCmdUpdateForm)
+	ON_EN_CHANGE(IDC_EDIT1, &CPersonalForm20::OnEnChangeEdit1)
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -183,8 +189,27 @@ FillComplete:
 	help->closeDB(); delete help;
 	ss.str("");  ss.clear();
 #endif
-	DoSaveForm();
+	CString form_recid = DoSaveForm();
+
 	//保存体检报告单图片
+	if (!_strReportImagePath.IsEmpty()){
+		CImage  image;
+		image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库 
+		_strReportImagePath.ReleaseBuffer();
+		_strReportImagePath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".jpg");
+		image.Save(_strReportImagePath.GetBuffer());
+
+		stringstream ss;
+		ss << "update file_form_26 set file_ReportPic= ";
+		ss << "'" << CW2A(_strReportImagePath.GetBuffer(), CP_UTF8) << "' where form_recid= ";
+		ss << "'" << CW2A(form_recid.GetBuffer(), CP_UTF8) << "';";
+		CSQLiteHelper *help = new CSQLiteHelper();
+		help->openDB("kiwi.db3");
+		help->execSQL(ss.str().c_str());
+		ss.str("");
+		help->closeDB(); delete help;
+	}
+
 
 	GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 }
@@ -234,6 +259,7 @@ void CPersonalForm20::OnInitialUpdate()
 	// TODO:  在此添加专用代码和/或调用基类
 	GetDlgItem(IDC_EDIT237)->SetFont(&m_fontEdit);
 	GetDlgItem(IDC_EDIT58)->SetFont(&m_fontEdit);
+	m_editReportImage.Initialize(this, BES_XTP_CHOOSEFILE);
 
 #if 0
 	stringstream ss;
@@ -281,12 +307,26 @@ void CPersonalForm20::OnInitialUpdate()
 	}
 	if (hasData) {
 		//显示图片
+		stringstream ss;
+		ss << "select file_ReportPic from file_form_26 where form_recid=";
+		ss << "'" << CW2A(_vvSubformRecid[0][0].GetBuffer(), CP_UTF8) << "';";
+		CSQLiteHelper *help = new CSQLiteHelper();
+		help->openDB("kiwi.db3");
+		int row, col;
+		char *eee = "i"; char **result = &eee;
+		char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		if (row >= 1) {
+			_strReportImagePath.ReleaseBuffer();
+			_strReportImagePath.Format(_T("%s"), CA2W(re[1 * col + 0]));
 
+			UpdateWindow();
+		}
+		help->closeDB(); delete help;
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
-		GetDlgItem(IDC_CMD_UPDATE_FORM3)->ShowWindow(SW_SHOW);
+		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
 	}
 
-
+	
 }
 
 
@@ -296,4 +336,38 @@ void CPersonalForm20::OnBnClickedCmdUpdateForm()
 	DoUpdateForm();
 
 	//更新图片地址
+}
+
+void CPersonalForm20::OnEnChangeEdit1()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 __super::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	m_editReportImage.GetWindowTextW(_strReportImagePath);
+	CImage  image;
+	image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
+	CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+	CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
+	image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+	ReleaseDC(pDc);
+
+	// TODO:  在此添加控件通知处理程序代码
+}
+
+void CPersonalForm20::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+	// TODO:  在此处添加消息处理程序代码
+	// 不为绘图消息调用 __super::OnPaint()
+
+	if (!_strReportImagePath.IsEmpty()) {
+		CImage  image;
+		image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
+		CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+		CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
+		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+		ReleaseDC(pDc);
+	}
 }

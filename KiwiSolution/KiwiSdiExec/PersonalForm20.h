@@ -2,6 +2,7 @@
 
 
 #include "PersonalFormInterface.h"
+#include "afxwin.h"
 // CPersonalForm20 窗体视图
 
 class CPersonalForm20 : public CFormView, public CPersonalFormInterface
@@ -35,6 +36,9 @@ public:
 
 	virtual BOOL hasData(int isub, int irow);
 
+private:
+	CString _strReportImagePath;
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
@@ -45,6 +49,10 @@ public:
 	afx_msg void OnBnClickedButtonCloseForm3();
 	virtual void OnInitialUpdate();
 	afx_msg void OnBnClickedCmdUpdateForm();
+	CStatic m_reportImage;
+	CXTPBrowseEdit m_editReportImage;
+	afx_msg void OnEnChangeEdit1();
+	afx_msg void OnPaint();
 };
 
 
