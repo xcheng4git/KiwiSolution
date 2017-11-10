@@ -346,13 +346,15 @@ void CPersonalForm20::OnEnChangeEdit1()
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
 	m_editReportImage.GetWindowTextW(_strReportImagePath);
-	CImage  image;
-	image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
-	CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-	CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
-	image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-	ReleaseDC(pDc);
-
+	_strReportImagePath.Trim();
+	if (!_strReportImagePath.IsEmpty()) {
+		CImage  image;
+		image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
+		CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+		CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
+		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+		ReleaseDC(pDc);
+	}
 	// TODO:  在此添加控件通知处理程序代码
 }
 
