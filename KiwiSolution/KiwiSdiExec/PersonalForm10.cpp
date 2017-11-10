@@ -198,19 +198,17 @@ void CPersonalForm10::OnBnClickedCmdSaveForm()
 	}
 
 	CString strText;
-	if (m_Radio12_1_0 == 1)
-	{
-		ss << "update file_form_flags set file_17IfHaveThisSituation=0 where file_id=" << file_id;
-
-		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
-		goto FillComplete;
+	if (m_Radio12_1_0 == -1) {
+		MessageBox(_T("请选择是否存在 12-1 本人等持有股票的情况 ！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+		help->closeDB(); delete help;
+		ss.str("");  ss.clear();
+		return;
 	}
-
-	{
-		ss << "update file_form_flags set file_17IfHaveThisSituation=1 where file_id=" << file_id;
-		help->execSQL(ss.str().c_str());
+	else {
 		ss.str(""); ss.clear();
+		ss << "update file_form_flags set file_17IfHaveThisSituation=";
+		ss << m_Radio12_1_0 << " where file_id = " << file_id;
+		help->execSQL(ss.str().c_str());
 	}
 #if 0
 	int Parameters[18][4] = { { IDC_EDIT47, IDC_EDIT98, IDC_EDIT97, IDC_EDIT99 }, 
@@ -257,7 +255,7 @@ void CPersonalForm10::OnBnClickedCmdSaveForm()
 
 FillComplete :
 	help->closeDB(); delete help;
-			 ss.str("");  ss.clear();
+	ss.str("");  ss.clear();
 
 			 DoSaveForm();
 			 GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
@@ -369,6 +367,25 @@ void CPersonalForm10::OnInitialUpdate()
 	delete help;
 	UpdateData(FALSE);
 #endif
+	vector<vector<vector<int>>>::iterator itVVVparameter = _vvvParameters.begin();
+	int i = 0;
+	while (itVVVparameter != _vvvParameters.end()) {
+		vector<vector<int>>::iterator itVVparameter = itVVVparameter->begin();
+		while (itVVparameter != itVVVparameter->end()) {
+			int j = 0;
+
+			vector<int>::iterator itV = itVVparameter->begin();
+			while (itV != itVVparameter->end()) {
+				if ((_vvSubformStructure[i][2 + j] != RADIOBTN) && (_vvSubformStructure[i][2 + j] != ATTACHMENTBX)) {
+					GetDlgItem(*itV)->SetFont(&m_fontEdit);
+				}
+
+				itV++; j++;
+			}
+			itVVparameter++;
+		}
+		itVVVparameter++; i++;
+	}
 
 	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
 	DoShowForm();
@@ -383,7 +400,7 @@ void CPersonalForm10::OnInitialUpdate()
 	}
 	if (hasData) {
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
-		GetDlgItem(IDC_CMD_UPDATE_FORM3)->ShowWindow(SW_SHOW);
+		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
 	}
 
 	stringstream ss;

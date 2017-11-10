@@ -126,8 +126,9 @@ CKiwiSdiExecDoc::CKiwiSdiExecDoc()
 	vFormByTables.push_back(_T("±Ì2-11"));
 	vFormByTables.push_back(CA2W(re[12 * col + 1], CP_UTF8));
 	vFormByTables.push_back(_T("file_form_18"));
+	vFormByTables.push_back(_T("file_form_18_1"));
 	m_vvFormByTables.push_back(vFormByTables); vFormByTables.clear();
-	vFormBySubform.clear(); vFormBySubform.push_back(18); m_vvFormBySubform.push_back(vFormBySubform);
+	vFormBySubform.clear(); vFormBySubform.push_back(18); vFormBySubform.push_back(-1); m_vvFormBySubform.push_back(vFormBySubform);
 
 	vFormByTables.push_back(_T("±Ì2-12"));
 	vFormByTables.push_back(CA2W(re[13 * col + 1], CP_UTF8));
@@ -359,3 +360,4 @@ void CKiwiSdiExecDoc::Dump(CDumpContext& dc) const
 
 
 // CKiwiSdiExecDoc √¸¡Ó
+

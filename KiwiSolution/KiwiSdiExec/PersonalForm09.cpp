@@ -24,7 +24,7 @@ CPersonalForm09::CPersonalForm09()
 	int parameters1[4][8] = { { IDC_EDIT52, 1*256+1, 1*256+2, IDC_EDIT54, IDC_EDIT55, 1*256+3, IDC_EDIT103, IDC_EDIT105 },
 	{ IDC_EDIT53, 1*256+4, 1*256+5, IDC_EDIT63, IDC_EDIT64, 1*256+6, IDC_EDIT107, IDC_EDIT108 },
 	{ IDC_EDIT96, 1*256+7, 1*256+8, IDC_EDIT68, IDC_EDIT110, 1*256+10, IDC_EDIT114, IDC_EDIT116 },
-	{ IDC_EDIT109, 1*256+10, 1*256+11, IDC_EDIT66, IDC_EDIT111, 1*256+12, IDC_EDIT115, IDC_EDIT117 } };
+	{ IDC_EDIT109, 1*256+10, 1*256+11, IDC_EDIT69, IDC_EDIT111, 1*256+12, IDC_EDIT115, IDC_EDIT117 } };
 	int structure1[10] = { 4, 8, EDITBX, RADIOBTN, RADIOBTN, EDITBX, EDITBX, RADIOBTN, EDITBX, EDITBX };
 
 	vector<vector<int>> vvPara;
@@ -44,12 +44,12 @@ CPersonalForm09::CPersonalForm09()
 
 	_vHaveDataSubform.push_back(-1);
 
-	vStr.clear(); vStr.push_back(2); vStr.push_back(5); _vvSubformRecordRange.push_back(vStr);
+	vStr.clear(); vStr.push_back(2); vStr.push_back(6); _vvSubformRecordRange.push_back(vStr);
 
 	//以下是为了打印的预设
 	const wchar_t *pBookmarks1[9] = { _T("有无"), _T("姓名"), _T("来源"), _T("去向"), _T("地址"), _T("面积"), _T("房产性质"), _T("交易时间"), _T("交易价格") };
-	int structure10[9] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
-	int structure11[3 + 1 + 8] = { -1, 4, 8, 2,        1, 4, 3, 1, 1, 7, 1,1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	int structure10[9] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure11[3 + 1 + 9] = { -1, 4, 8, 2,        2,1, 4, 3, 1, 1, 7, 1,1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 	
 
 
@@ -328,7 +328,7 @@ void CPersonalForm09::OnBnClickedCmdPrintForm()
 
 	
 	ss.str(""); ss.clear();
-	ss << "select * from file_form_16 where file_id=" << file_id << " limit 0,4;";
+	ss << "select * from file_form_16 where file_id=" << file_id << " limit 2,6;";
 	_vSubformQueryString.push_back(ss.str());
 	
 	ss.str(""); ss.clear();

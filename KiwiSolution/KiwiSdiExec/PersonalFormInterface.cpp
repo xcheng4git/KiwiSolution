@@ -462,7 +462,7 @@ void CPersonalFormInterface::DoUpdateForm()
 
 			for (int j = 0; j < numSubformColumn; j++) {
 				//GetDlgItem(itV[k])->GetWindowTextW(strText); strText.Trim();
-				ss << re[2 + j];
+				ss << "[" << re[2 + j] << "]";
 				if (_vvSubformStructure[i][2 + j] == RADIOBTN) {
 					int iData;
 					GetData(_vvSubformStructure[i][2 + j], itV[j], iData);

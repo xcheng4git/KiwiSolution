@@ -73,23 +73,33 @@ CPersonalForm11::CPersonalForm11()
 	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
 
 	//以下是为了打印的预设
-	const wchar_t *pBookmarks1[7] = { _T("有无"), _T("持有人姓名"), _T("名称或代码"), _T("持股数量"), _T("前一日市值"), _T("前一日总市值"), _T("备注") };
-	int structure10[7] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
-	int structure11[3 + 1 + 6] = { -1, 12, 6, 2,       1, 1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
-	
-
+	const wchar_t *pBookmarks1[5] = { _T("有无"), _T("持有人姓名"), _T("名称或代码"), _T("持股数量"), _T("前一日市值") };
+	int structure10[5] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX};
+	int structure11[3 + 1 + 5] = { -1, 12, 4, 2,       2, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	const wchar_t *pBookmarks2[3] = { _T("有无"), _T("前一日总市值"), _T("备注")};
+	int structure20[3] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX};
+	int structure21[3 + 1 + 3] = { -1, 1, 2, 2, 2, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 
 	vector<CBookmarkEx> vBke;
-	for (int i = 0; i < 7; i++) {
+	for (int i = 0; i < 5; i++) {
 		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[4 + i]);
 		vBke.push_back(bookmark);
 	}
 	_vvBookmarks.push_back(vBke);
-	
+	vBke.clear();
+	for (int i = 0; i < 3; i++) {
+		CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
 
 	vStr.clear();
 	for (int i = 0; i < 4; i++)
 		vStr.push_back(structure11[i]);
+	_vvSubformFlags.push_back(vStr);
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure21[i]);
 	_vvSubformFlags.push_back(vStr);
 	
 }
@@ -285,7 +295,7 @@ void CPersonalForm11::OnBnClickedCmdPrintForm()
 
 	
 	ss.str(""); ss.clear();
-	ss << "select * from file_form_17 where file_id=" << file_id << " limit 0,12;";
+	ss << "select * from file_form_17 where file_id=" << file_id << " limit 18,30;";
 	_vSubformQueryString.push_back(ss.str());
 
 	ss.str(""); ss.clear();
@@ -369,6 +379,25 @@ void CPersonalForm11::OnInitialUpdate()
 	help->closeDB();
 	delete help;
 #endif
+	vector<vector<vector<int>>>::iterator itVVVparameter = _vvvParameters.begin();
+	int i = 0;
+	while (itVVVparameter != _vvvParameters.end()) {
+		vector<vector<int>>::iterator itVVparameter = itVVVparameter->begin();
+		while (itVVparameter != itVVVparameter->end()) {
+			int j = 0;
+
+			vector<int>::iterator itV = itVVparameter->begin();
+			while (itV != itVVparameter->end()) {
+				if ((_vvSubformStructure[i][2 + j] != RADIOBTN) && (_vvSubformStructure[i][2 + j] != ATTACHMENTBX)) {
+					GetDlgItem(*itV)->SetFont(&m_fontEdit);
+				}
+
+				itV++; j++;
+			}
+			itVVparameter++;
+		}
+		itVVVparameter++; i++;
+	}
 
 	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
 	DoShowForm();
@@ -383,7 +412,7 @@ void CPersonalForm11::OnInitialUpdate()
 	}
 	if (hasData) {
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
-		GetDlgItem(IDC_CMD_UPDATE_FORM3)->ShowWindow(SW_SHOW);
+		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
 	}
 }
 
