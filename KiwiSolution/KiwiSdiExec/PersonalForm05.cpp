@@ -635,7 +635,7 @@ void CPersonalForm05::OnInitialUpdate()
 
 			vector<int>::iterator itV = itVVparameter->begin();
 			while (itV != itVVparameter->end()) {
-				if (_vvSubformStructure[i][2 + j] != ATTACHMENTBX) {
+				if ((_vvSubformStructure[i][2 + j] != RADIOBTN) && (_vvSubformStructure[i][2 + j] != ATTACHMENTBX)) {
 					GetDlgItem(*itV)->SetFont(&m_fontEdit);
 				}
 

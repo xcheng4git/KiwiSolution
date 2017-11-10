@@ -87,6 +87,53 @@ CPersonalForm08::CPersonalForm08()
 	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
 	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
 	vStr.clear(); vStr.push_back(0); vStr.push_back(2); _vvSubformRecordRange.push_back(vStr);
+
+	//以下是为了打印的预设
+	const wchar_t *pBookmarks1[5] = { _T("有无"), _T("工资"), _T("奖金"), _T("其他"), _T("合计") };
+	int structure10[5] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX};
+	int structure11[3 + 1 + 5] = { -1, 1, 4, 2, 2, 1, 1, 1, 1};
+	//
+	const wchar_t *pBookmarks2[8] = { _T("有无"), _T("讲学"), _T("写作"), _T("咨询"), _T("审稿"), _T("书画"), _T("其他"), _T("合计") };
+	int structure20[8] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure21[3 + 1 + 8] = { 0, 1, 7, 2, 2, 1, 1, 1, 1, 1,1,1 };
+	//
+	const wchar_t *pBookmarks3[9] = { _T("有无"), _T("姓名"), _T("来源"), _T("去向"), _T("具体地址"), _T("面积"), _T("房产性质"), _T("交易时间"), _T("交易价格") };
+	int structure30[9] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure31[3 + 1 + 9] = { 1, 2, 8, 2, 2, 1, 4,3,1, 1, 7, 1,1 };
+
+	vector<CBookmarkEx> vBke;
+	for (int i = 0; i < 5; i++) {
+		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+	vBke.clear();
+	for (int i = 0; i < 8; i++) {
+		CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+	vBke.clear();
+	for (int i = 0; i < 9; i++) {
+		CBookmarkEx bookmark(structure30[i], pBookmarks3[i], structure31[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure11[i]);
+	_vvSubformFlags.push_back(vStr);
+
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure21[i]);
+	_vvSubformFlags.push_back(vStr);
+
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure31[i]);
+	_vvSubformFlags.push_back(vStr);
 }
 
 CPersonalForm08::~CPersonalForm08()
@@ -222,16 +269,18 @@ BOOL CPersonalForm08::hasData(int isub, int irow)
 	else if (isub == 3) {
 		switch (irow) {
 		case 1:
-			GetDlgItem(IDC_EDIT52)->GetWindowTextW(strText);
-			if (strText == _T("无"))
-				return FALSE;
-			break;
 		case 2:
-			GetDlgItem(IDC_EDIT53)->GetWindowTextW(strText);
-			strText.Trim();
+			GetDlgItem(IDC_EDIT52)->GetWindowTextW(strText);
+			//if (strText == _T("无"))
 			if (!strText.IsEmpty())
 				return FALSE;
 			break;
+		//case 2:
+		//	GetDlgItem(IDC_EDIT53)->GetWindowTextW(strText);
+		//	strText.Trim();
+		//	if (!strText.IsEmpty())
+		//		return FALSE;
+		//	break;
 		}
 	}
 
@@ -399,6 +448,33 @@ FillComplete:
 void CPersonalForm08::OnBnClickedCmdPrintForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str(""); ss.clear();
+
+	help->closeDB(); delete help;
+
+	ss.str("");  ss.clear();
+	ss << "select * from file_form_14 where file_id=" << file_id << " limit 0,1;";
+	_vSubformQueryString.push_back(ss.str());
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_15 where file_id=" << file_id << " limit 0,1;";
+	_vSubformQueryString.push_back(ss.str());
+	ss.str(""); ss.clear();
+	ss << "select * from file_form_16 where file_id=" << file_id << " limit 0,2;";
+	_vSubformQueryString.push_back(ss.str());
+	ss.str(""); ss.clear();
+
+	DoPrintForm(CString(_T("表2-7.dotx")));
 }
 
 
@@ -511,6 +587,28 @@ FillForm16 :
 	delete help;
 	UpdateData(FALSE);
 #endif
+	GetDlgItem(IDC_STATIC_FORM_HEADER)->SetFont(&m_fontHeader);
+
+	vector<vector<vector<int>>>::iterator itVVVparameter = _vvvParameters.begin();
+	int i = 0;
+	while (itVVVparameter != _vvvParameters.end()) {
+		vector<vector<int>>::iterator itVVparameter = itVVVparameter->begin();
+		while (itVVparameter != itVVVparameter->end()) {
+			int j = 0;
+
+			vector<int>::iterator itV = itVVparameter->begin();
+			while (itV != itVVparameter->end()) {
+				if ((_vvSubformStructure[i][2 + j] != RADIOBTN) && (_vvSubformStructure[i][2 + j] != ATTACHMENTBX)) {
+					GetDlgItem(*itV)->SetFont(&m_fontEdit);
+				}
+
+				itV++; j++;
+			}
+			itVVparameter++;
+		}
+		itVVVparameter++; i++;
+	}
+
 
 	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
 	DoShowForm();

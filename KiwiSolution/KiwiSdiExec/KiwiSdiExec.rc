@@ -1271,7 +1271,7 @@ BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDVERT | WS_BORDER,384,81,1,87
     CTEXT           "工资（含津贴、补贴）",IDC_STATICBOX19,31,82,133,17,SS_CENTERIMAGE
     CTEXT           "（万元、全年）",IDC_STATICBOX20,393,61,74,17,SS_CENTERIMAGE
-    CTEXT           "《规定》第四条所列事项",IDC_STATICBOX22,179,38,150,17,SS_CENTERIMAGE
+    CTEXT           "《规定》第四条所列事项",IDC_STATIC_FORM_HEADER,134,38,245,17,SS_CENTERIMAGE
     LTEXT           "表2-7",IDC_STATIC,33,31,33,8
     CONTROL         "、津贴、补贴等全年实际所得的情况。住房公积金包括个人缴纳部分和单位缴纳部分，计入工资收入。企业领导人员薪酬包括",IDC_STATIC,
                     "Static",SS_LEFTNOWORDWRAP | SS_CENTERIMAGE | SS_PATHELLIPSIS | WS_GROUP,30,185,443,11
