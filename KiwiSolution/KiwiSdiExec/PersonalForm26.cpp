@@ -125,7 +125,7 @@ void CPersonalForm26::ShowAttachment()
 
 void CPersonalForm26::SaveAttachment(CString form_recid)
 {
-	if (m_vAttachPath.size() < 1)
+	if (m_vAttachment.size() < 1)
 		return;
 	
 	stringstream ss;
@@ -150,6 +150,7 @@ void CPersonalForm26::SaveAttachment(CString form_recid)
 			ss << "'" << CW2A(form_recid.GetBuffer(), CP_UTF8) << "'" << ",";
 			CString attachId = CUtility::GetGuid();
 			ss << "'" << CW2A(attachId.GetBuffer(), CP_UTF8) << "',";
+			ss << 1 << ",";
 			ss << "'" << CW2A(itAttachment->path.GetBuffer(), CP_UTF8) << "',";
 			ss << "date(), date());";
 		}
@@ -188,6 +189,7 @@ void CPersonalForm26::UpdateAttachment()
 			ss << "'" << CW2A(_vvSubformRecid[0][0].GetBuffer(), CP_UTF8) << "'" << "," ;
 			CString attachId = CUtility::GetGuid();
 			ss << "'" << CW2A(attachId.GetBuffer(), CP_UTF8) << "',";
+			ss << 1 << ",";
 			ss << "'" << CW2A(itAttachment->path.GetBuffer(), CP_UTF8) << "',";
 			ss << "date(), date());";
 			TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));

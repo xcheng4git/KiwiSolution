@@ -26,7 +26,8 @@ CPersonalForm25::CPersonalForm25()
 		IDI_ICON_EXT_PDF,
 		IDI_ICON_EXT_DOC,
 		IDI_ICON_EXT_ZIP,
-		IDI_ICON_EXT_XLS
+		IDI_ICON_EXT_XLS,
+		IDI_ICON_EXT_NO
 	};
 	m_ilIcons.Create(48, 48, ILC_MASK | ILC_COLOR32, 1, 1);
 	for (int i = 0; i < _countof(attachmentIcons); i++) {
@@ -34,7 +35,8 @@ CPersonalForm25::CPersonalForm25()
 		ASSERT(hIcon);
 		m_ilIcons.Add(hIcon);
 	}
-
+	m_nCheckAttachCount = 0;
+	m_nRegisterAttachCount = 0;
 
 	m_FormID = 25;
 	int parameters1[1][10] = { { IDC_EDIT1, IDC_EDIT12, IDC_DATETIMEPICKER1, IDC_EDIT13, IDC_EDIT370, IDC_DATETIMEPICKER45, IDC_EDIT347, IDC_EDIT344, 0, 0 } };
@@ -84,13 +86,211 @@ CPersonalForm25::~CPersonalForm25()
 {
 }
 
+void CPersonalForm25::InsertListItem(CListCtrl &list, CString& ext, int cntAttach, int data)
+{
+	int nItem;
+	if (ext == _T("jpeg") || ext == _T("jpg"))
+		nItem = list.InsertItem(cntAttach, _T(""), 0);
+	else if (ext == _T("bmp"))
+		nItem = list.InsertItem(cntAttach, _T(""), 1);
+	else if (ext == _T("pdf"))
+		nItem = list.InsertItem(cntAttach, _T(""), 2);
+	else if (ext == _T("doc"))
+		nItem = list.InsertItem(cntAttach, _T(""), 3);
+	else if (ext == _T("zip"))
+		nItem = list.InsertItem(cntAttach, _T(""), 4);
+	else
+		nItem = list.InsertItem(cntAttach, _T(""), 6);
+
+	list.SetItemData(nItem, (DWORD)data);
+}
+
+void CPersonalForm25::ShowAttachment()
+{
+	stringstream ss;
+	ss << "select attachment_recid, which_attachment, attachment_path from file_form_attachment where form_recid=";
+	ss << "'" << CW2A(_vvSubformRecid[0][0].GetBuffer(), CP_UTF8) << "';";
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row >= 1) {
+		m_nCheckAttachCount = 0;
+		m_nRegisterAttachCount = 0;
+		for (int r = 0; r < row; r++) {
+			CString strPath; strPath.Format(_T("%s"), CA2W(re[(r + 1) * col + 2]));
+			CString ext = strPath.Right(strPath.GetLength() - strPath.ReverseFind('.') - 1); ext.MakeLower();
+
+			int nWhich = atoi(re[(r + 1)*col + 1]);
+			if (nWhich == 1) {
+				InsertListItem(m_listCheckImages, ext, m_nCheckAttachCount, m_nCheckAttachCount);
+				m_vCheckAttachment.push_back(Attachment(CString(CA2W(re[(r + 1) * col + 0])), strPath, 1));
+				m_nCheckAttachCount++;
+			} 
+			else {
+				InsertListItem(m_listRegisterImages, ext, m_nRegisterAttachCount, m_nRegisterAttachCount);
+				m_vRegisterAttachment.push_back(Attachment(CString(CA2W(re[(r + 1) * col + 0])), strPath, 1));
+				m_nRegisterAttachCount++;
+			}
+		}
+	}
+	help->closeDB(); delete help;
+}
+
+void CPersonalForm25::SaveAttachment(CString form_recid)
+{
+	if (m_vCheckAttachment.size() < 1 && m_vRegisterAttachment.size() < 1)
+		return;
+
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+
+
+	vector<Attachment>::iterator itAttachment = m_vCheckAttachment.begin();
+	while (itAttachment != m_vCheckAttachment.end()) {
+		if (itAttachment->status == 0) {
+			ss.str(""); ss.clear();
+			ss << "insert into file_form_attachment values (" << file_id << ",";
+			ss << m_FormID << ",";
+			ss << "'" << CW2A(form_recid.GetBuffer(), CP_UTF8) << "'" << ",";
+			CString attachId = CUtility::GetGuid();
+			ss << "'" << CW2A(attachId.GetBuffer(), CP_UTF8) << "',";
+			ss << 1 << ",";
+			ss << "'" << CW2A(itAttachment->path.GetBuffer(), CP_UTF8) << "',";
+			ss << "date(), date());";
+		}
+		TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+		itAttachment->status = 1;
+
+		itAttachment++;
+	}
+	////
+	itAttachment = m_vRegisterAttachment.begin();
+	while (itAttachment != m_vRegisterAttachment.end()) {
+		if (itAttachment->status == 0) {
+			ss.str(""); ss.clear();
+			ss << "insert into file_form_attachment values (" << file_id << ",";
+			ss << m_FormID << ",";
+			ss << "'" << CW2A(form_recid.GetBuffer(), CP_UTF8) << "'" << ",";
+			CString attachId = CUtility::GetGuid();
+			ss << "'" << CW2A(attachId.GetBuffer(), CP_UTF8) << "',";
+			ss << 2 << ",";
+			ss << "'" << CW2A(itAttachment->path.GetBuffer(), CP_UTF8) << "',";
+			ss << "date(), date());";
+		}
+		TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+		itAttachment->status = 1;
+
+		itAttachment++;
+	}
+	help->closeDB(); delete help;
+}
+
+void CPersonalForm25::UpdateAttachment()
+{
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+
+
+	vector<Attachment>::iterator itAttachment = m_vCheckAttachment.begin();
+	while (itAttachment != m_vCheckAttachment.end()) {
+		if (itAttachment->status == 0) {
+			ss.str(""); ss.clear();
+			ss << "insert into file_form_attachment values (" << file_id << ",";
+			ss << m_FormID << ",";
+			ss << "'" << CW2A(_vvSubformRecid[0][0].GetBuffer(), CP_UTF8) << "'" << ",";
+			CString attachId = CUtility::GetGuid();
+			ss << "'" << CW2A(attachId.GetBuffer(), CP_UTF8) << "',";
+			ss << 1 << ",";
+			ss << "'" << CW2A(itAttachment->path.GetBuffer(), CP_UTF8) << "',";
+			ss << "date(), date());";
+			TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+			help->execSQL(ss.str().c_str());
+			itAttachment->status = 1;
+
+			itAttachment++;  continue;
+		}
+		else if (itAttachment->status == -1) {
+			ss.str(""); ss.clear();
+			ss << "delete from file_form_attachment where attachment_recid=";
+			ss << "'" << CW2A(itAttachment->recid.GetBuffer(), CP_UTF8) << "';";
+			TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+			help->execSQL(ss.str().c_str());
+
+			itAttachment = m_vCheckAttachment.erase(itAttachment); continue;
+		}
+		TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+		itAttachment->status = 1;
+
+		itAttachment++;
+	}
+	////
+	itAttachment = m_vRegisterAttachment.begin();
+	while (itAttachment != m_vRegisterAttachment.end()) {
+		if (itAttachment->status == 0) {
+			ss.str(""); ss.clear();
+			ss << "insert into file_form_attachment values (" << file_id << ",";
+			ss << m_FormID << ",";
+			ss << "'" << CW2A(_vvSubformRecid[0][0].GetBuffer(), CP_UTF8) << "'" << ",";
+			CString attachId = CUtility::GetGuid();
+			ss << "'" << CW2A(attachId.GetBuffer(), CP_UTF8) << "',";
+			ss << 2 << ",";
+			ss << "'" << CW2A(itAttachment->path.GetBuffer(), CP_UTF8) << "',";
+			ss << "date(), date());";
+			TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+			help->execSQL(ss.str().c_str());
+			itAttachment->status = 1;
+
+			itAttachment++;  continue;
+		}
+		else if (itAttachment->status == -1) {
+			ss.str(""); ss.clear();
+			ss << "delete from file_form_attachment where attachment_recid=";
+			ss << "'" << CW2A(itAttachment->recid.GetBuffer(), CP_UTF8) << "';";
+			TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+			help->execSQL(ss.str().c_str());
+
+			itAttachment = m_vRegisterAttachment.erase(itAttachment); continue;
+		}
+		TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+		itAttachment->status = 1;
+
+		itAttachment++;
+	}
+
+	help->closeDB(); delete help;
+}
+
 void CPersonalForm25::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_EDIT2, m_editCheckImage);
-	DDX_Control(pDX, IDC_EDIT348, m_editRegisterImage);
-	DDX_Control(pDX, IDC_STATIC_CHECK_ATTACHMENT, m_checkImage);
-	DDX_Control(pDX, IDC_STATIC_REGISTER_ATTACHMENT, m_registerImage);
+	DDX_Control(pDX, IDC_EDIT348, m_editCheckPath);
+	DDX_Control(pDX, IDC_EDIT2, m_editRegisterPath);
+	DDX_Control(pDX, IDC_LIST_ATTACHMENT2, m_listCheckImages);
+	DDX_Control(pDX, IDC_LIST_ATTACHMENT, m_listRegisterImages);
 }
 
 BEGIN_MESSAGE_MAP(CPersonalForm25, CFormView)
@@ -98,9 +298,8 @@ BEGIN_MESSAGE_MAP(CPersonalForm25, CFormView)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm25::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm25::OnBnClickedButtonCloseForm3)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm25::OnBnClickedCmdUpdateForm)
-	ON_EN_CHANGE(IDC_EDIT2, &CPersonalForm25::OnEnChangeEdit2)
-	ON_EN_CHANGE(IDC_EDIT348, &CPersonalForm25::OnEnChangeEdit348)
-//	ON_WM_PAINT()
+	ON_BN_CLICKED(IDC_BUTTON_ADD_IMAGE2, &CPersonalForm25::OnBnClickedButtonAddCheckImage)
+	ON_BN_CLICKED(IDC_BUTTON_ADD_IMAGE, &CPersonalForm25::OnBnClickedButtonAddRegisterImage)
 END_MESSAGE_MAP()
 
 
@@ -169,7 +368,19 @@ BOOL CPersonalForm25::hasData(int isub, int irow)
 void CPersonalForm25::OnBnClickedCmdSaveForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
-	DoSaveForm();
+	vector<vector<vector<int>>>::iterator itVVVparameter = _vvvParameters.begin();
+	while (itVVVparameter != _vvvParameters.end()) {
+		vector<vector<int>>::iterator itVVparameter = itVVVparameter->begin();
+		itVVparameter[0][8] = m_nCheckAttachCount; 
+		itVVparameter[0][9] = m_nRegisterAttachCount;
+		break;
+
+		itVVVparameter++;
+	}
+
+	CString form_recid = DoSaveForm();
+
+	SaveAttachment(form_recid);
 
 	GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 }
@@ -215,7 +426,19 @@ void CPersonalForm25::OnBnClickedButtonCloseForm3()
 
 void CPersonalForm25::OnBnClickedCmdUpdateForm()
 {
+	vector<vector<vector<int>>>::iterator itVVVparameter = _vvvParameters.begin();
+	while (itVVVparameter != _vvvParameters.end()) {
+		vector<vector<int>>::iterator itVVparameter = itVVVparameter->begin();
+		itVVparameter[0][8] = m_nCheckAttachCount;
+		itVVparameter[0][9] = m_nRegisterAttachCount;
+		break;
+
+		itVVVparameter++;
+	}
+
 	DoUpdateForm();
+
+	UpdateAttachment();
 }
 
 
@@ -225,8 +448,10 @@ void CPersonalForm25::OnInitialUpdate()
 
 	// TODO:  在此添加专用代码和/或调用基类
 	GetDlgItem(IDC_STATIC_FORM_HEADER)->SetFont(&m_fontHeader);
-	m_editCheckImage.Initialize(this, BES_XTP_CHOOSEFILE);
-	m_editRegisterImage.Initialize(this, BES_XTP_CHOOSEFILE);
+	m_editCheckPath.Initialize(this, BES_XTP_CHOOSEFILE);
+	m_listCheckImages.SetImageList(&m_ilIcons, LVSIL_NORMAL);
+	m_editRegisterPath.Initialize(this, BES_XTP_CHOOSEFILE);
+	m_listRegisterImages.SetImageList(&m_ilIcons, LVSIL_NORMAL);
 
 	vector<vector<vector<int>>>::iterator itVVVparameter = _vvvParameters.begin();
 	int i = 0;
@@ -260,6 +485,7 @@ void CPersonalForm25::OnInitialUpdate()
 		itHas++;
 	}
 	if (hasData) {
+		ShowAttachment();
 
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
@@ -292,87 +518,43 @@ void CPersonalForm25::OnInitialUpdate()
 }
 
 
-void CPersonalForm25::OnEnChangeEdit2()
+void CPersonalForm25::OnBnClickedButtonAddCheckImage()
 {
-	// TODO:  如果该控件是 RICHEDIT 控件，它将不
-	// 发送此通知，除非重写 __super::OnInitDialog()
-	// 函数并调用 CRichEditCtrl().SetEventMask()，
-	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+	// TODO:  在此添加控件通知处理程序代码
+	CString strPath;
+	m_editCheckPath.GetWindowTextW(strPath);
+	strPath.Trim();
+	if (!strPath.IsEmpty()) {
+		int Which = strPath.ReverseFind('.');
+		CString ext = strPath.Right(strPath.GetLength() - Which - 1); ext.MakeLower();
+		CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
 
-	m_editCheckImage.GetWindowTextW(m_strCheckImage);
-	m_strCheckImage.Trim();
-	if (!m_strCheckImage.IsEmpty()) {
-		CImage  image;
-		image.Load(m_strCheckImage); //把图像保存到特定目录,然后将路径存数据库
-		CRect   rect; m_checkImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-		CDC *pDc = m_checkImage.GetDC();//获取picture的DC  
-		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-		ReleaseDC(pDc);
+		if (CopyFile(strPath, strKiwiPath, FALSE)) {
+
+			InsertListItem(m_listCheckImages, ext, m_nCheckAttachCount,-1);
+
+			m_vCheckAttachment.push_back(Attachment(_T(""), strKiwiPath)); m_nCheckAttachCount++;
+		}
 	}
 }
 
 
-void CPersonalForm25::OnEnChangeEdit348()
+void CPersonalForm25::OnBnClickedButtonAddRegisterImage()
 {
-	// TODO:  如果该控件是 RICHEDIT 控件，它将不
-	// 发送此通知，除非重写 __super::OnInitDialog()
-	// 函数并调用 CRichEditCtrl().SetEventMask()，
-	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+	// TODO:  在此添加控件通知处理程序代码
+	CString strPath;
+	m_editRegisterPath.GetWindowTextW(strPath);
+	strPath.Trim();
+	if (!strPath.IsEmpty()) {
+		int Which = strPath.ReverseFind('.');
+		CString ext = strPath.Right(strPath.GetLength() - Which - 1); ext.MakeLower();
+		CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
 
-	m_editRegisterImage.GetWindowTextW(m_strRegisterImage);
-	m_strRegisterImage.Trim();
-	if (!m_strRegisterImage.IsEmpty()) {
-		CImage  image;
-		image.Load(m_strRegisterImage); //把图像保存到特定目录,然后将路径存数据库
-		CRect   rect; m_registerImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-		CDC *pDc = m_registerImage.GetDC();//获取picture的DC  
-		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-		ReleaseDC(pDc);
+		if (CopyFile(strPath, strKiwiPath, FALSE)) {
+
+			InsertListItem(m_listRegisterImages, ext, m_nRegisterAttachCount,-1);
+
+			m_vRegisterAttachment.push_back(Attachment(_T(""), strKiwiPath)); m_nRegisterAttachCount++;
+		}
 	}
-}
-
-
-//void CPersonalForm25::OnPaint()
-//{
-//	CPaintDC dc(this); // device context for painting
-//	// TODO:  在此处添加消息处理程序代码
-//	// 不为绘图消息调用 __super::OnPaint()
-//	if (!m_strCheckImage.IsEmpty()) {
-//		CImage  image;
-//		image.Load(m_strCheckImage); //把图像保存到特定目录,然后将路径存数据库
-//		CRect   rect; m_checkImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-//		CDC *pDc = m_checkImage.GetDC();//获取picture的DC  
-//		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-//		ReleaseDC(pDc);
-//	}
-//
-//	if (!m_strRegisterImage.IsEmpty()) {
-//		CImage  image;
-//		image.Load(m_strRegisterImage); //把图像保存到特定目录,然后将路径存数据库
-//		CRect   rect; m_registerImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-//		CDC *pDc = m_registerImage.GetDC();//获取picture的DC  
-//		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-//		ReleaseDC(pDc);
-//	}
-//}
-
-void CPersonalForm25::OnDraw(CDC* /*pDC*/)
-{
-		if (!m_strCheckImage.IsEmpty()) {
-			CImage  image;
-			image.Load(m_strCheckImage); //把图像保存到特定目录,然后将路径存数据库
-			CRect   rect; m_checkImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-			CDC *pDc = m_checkImage.GetDC();//获取picture的DC  
-			image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-			ReleaseDC(pDc);
-		}
-	
-		if (!m_strRegisterImage.IsEmpty()) {
-			CImage  image;
-			image.Load(m_strRegisterImage); //把图像保存到特定目录,然后将路径存数据库
-			CRect   rect; m_registerImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-			CDC *pDc = m_registerImage.GetDC();//获取picture的DC  
-			image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-			ReleaseDC(pDc);
-		}
 }

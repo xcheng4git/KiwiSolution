@@ -4,6 +4,7 @@
 
 #include "PersonalFormInterface.h"
 #include "afxwin.h"
+#include "afxcmn.h"
 // CPersonalForm25 窗体视图
 
 class CPersonalForm25 : public CFormView, public CPersonalFormInterface
@@ -34,13 +35,17 @@ public:
 	virtual BOOL hasData(int isub, int irow);
 
 private:
-	CString m_strCheckImage;
-	CString m_strRegisterImage;
 	CImageList m_ilIcons;
+	int m_nCheckAttachCount, m_nRegisterAttachCount;
+	vector<Attachment> m_vCheckAttachment;
+	vector<Attachment> m_vRegisterAttachment;
+	void InsertListItem(CListCtrl &list, CString& ext, int cntAttach, int data);
+	void ShowAttachment();
+	void SaveAttachment(CString form_recid);
+	void UpdateAttachment();
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-	virtual void OnDraw(CDC* /*pDC*/);
 
 	DECLARE_MESSAGE_MAP()
 public:
@@ -49,13 +54,12 @@ public:
 	afx_msg void OnBnClickedButtonCloseForm3();
 	afx_msg void OnBnClickedCmdUpdateForm();
 	virtual void OnInitialUpdate();
-	CXTPBrowseEdit m_editCheckImage;
-	CXTPBrowseEdit m_editRegisterImage;
-	CStatic m_checkImage;
-	CStatic m_registerImage;
-	afx_msg void OnEnChangeEdit2();
-	afx_msg void OnEnChangeEdit348();
-//	afx_msg void OnPaint();
+	CXTPBrowseEdit m_editCheckPath;
+	CXTPBrowseEdit m_editRegisterPath;
+	CListCtrl m_listCheckImages;
+	CListCtrl m_listRegisterImages;
+	afx_msg void OnBnClickedButtonAddCheckImage();
+	afx_msg void OnBnClickedButtonAddRegisterImage();
 };
 
 
