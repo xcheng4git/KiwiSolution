@@ -373,3 +373,17 @@ void CPersonalForm20::OnPaint()
 		ReleaseDC(pDc);
 	}
 }
+
+
+void CPersonalForm20::OnDraw(CDC* /*pDC*/)
+{
+	// TODO:  在此添加专用代码和/或调用基类
+	if (!_strReportImagePath.IsEmpty()) {
+		CImage  image;
+		image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
+		CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+		CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
+		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+		ReleaseDC(pDc);
+	}
+}

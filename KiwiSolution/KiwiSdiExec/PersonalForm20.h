@@ -53,6 +53,7 @@ public:
 	CXTPBrowseEdit m_editReportImage;
 	afx_msg void OnEnChangeEdit1();
 	afx_msg void OnPaint();
+	virtual void OnDraw(CDC* /*pDC*/);
 };
 
 
