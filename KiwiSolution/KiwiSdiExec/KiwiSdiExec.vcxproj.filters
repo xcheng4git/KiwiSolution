@@ -516,5 +516,26 @@
     <Image Include="res\bmreport.bmp">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="res\BMP_File_Extension_48px_1140142_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\DOC_File_Extension_48px_1140154_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\JPEG_File_Extension_48px_1140172_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\PDF_File_Extension_48px_1140191_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\XLS_File_Extension_48px_1140230_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\ZIP_File_Extension_48px_1140232_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\BMP_no_text_48px_1098707_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

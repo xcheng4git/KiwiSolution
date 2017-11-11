@@ -264,8 +264,11 @@
     <Image Include="res\bmp00003.bmp" />
     <Image Include="res\bmp00004.bmp" />
     <Image Include="res\bmp00005.bmp" />
+    <Image Include="res\BMP_File_Extension_48px_1140142_easyicon.net.ico" />
     <Image Include="res\bmp_four_xt.bmp" />
+    <Image Include="res\BMP_no_text_48px_1098707_easyicon.net.ico" />
     <Image Include="res\bmreport.bmp" />
+    <Image Include="res\DOC_File_Extension_48px_1140154_easyicon.net.ico" />
     <Image Include="res\ico00001.ico" />
     <Image Include="res\icon1.ico" />
     <Image Include="res\icon11.ico" />
@@ -275,10 +278,14 @@
     <Image Include="res\icon6.ico" />
     <Image Include="res\icon7.ico" />
     <Image Include="res\icon8.ico" />
+    <Image Include="res\JPEG_File_Extension_48px_1140172_easyicon.net.ico" />
     <Image Include="res\KiwiSdiExec.ico" />
     <Image Include="res\KiwiSdiExecDoc.ico" />
+    <Image Include="res\PDF_File_Extension_48px_1140191_easyicon.net.ico" />
     <Image Include="res\splash.bmp" />
     <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\XLS_File_Extension_48px_1140230_easyicon.net.ico" />
+    <Image Include="res\ZIP_File_Extension_48px_1140232_easyicon.net.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
