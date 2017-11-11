@@ -70,3 +70,12 @@ private:
 	void PrintData(CBookmarkEx &theBookmark, int subform, int row, char *data, CBookmarks &bookmarks);
 };
 
+class Attachment{
+public:
+	Attachment() {};
+	Attachment(CString _recid, CString _path) { recid = _recid; path = _path, status = 0; }
+	Attachment(CString _recid, CString _path, int _status) { recid = _recid; path = _path, status = _status; }
+	CString recid;
+	CString path;
+	int status;
+};
