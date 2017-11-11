@@ -36,8 +36,6 @@ private:
 	CImageList m_ilIcons;
 	int m_nAttachCount;
 	vector<Attachment> m_vAttachment;
-	vector<CString> m_vAttachPath;
-	vector<CString> m_vAttachRecid;
 	void ShowAttachment();
 	void SaveAttachment(CString form_recid);
 	void UpdateAttachment();
