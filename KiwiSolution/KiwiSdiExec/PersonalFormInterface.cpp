@@ -405,6 +405,13 @@ void CPersonalFormInterface::PrintData(CBookmarkEx &theBookmark, int subform, in
 			}
 
 		}
+		else if (theBookmark.type == CBookmarkEx::ATTBOX) {
+			swprintf_s(szBookmark, 50, _T("%s%d%d"), theBookmark.bookmark, subform + 1, row + 1);
+			bookmark = bookmarks.Item(&_variant_t(szBookmark));
+			range = bookmark.get_Range();
+			CString a = CString(_T("附件包含的文件个数为：")) + (CString)data;
+			range.put_Text(a);
+		}
 	}
 	CATCH(CException, e)
 	{
