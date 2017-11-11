@@ -89,7 +89,6 @@ BEGIN_MESSAGE_MAP(CPersonalForm20, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm20::OnBnClickedButtonCloseForm3)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm20::OnBnClickedCmdUpdateForm)
 	ON_EN_CHANGE(IDC_EDIT1, &CPersonalForm20::OnEnChangeEdit1)
-	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -317,7 +316,16 @@ void CPersonalForm20::OnInitialUpdate()
 		char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 		if (row >= 1) {
 			_strReportImagePath.ReleaseBuffer();
-			_strReportImagePath.Format(_T("%s"), CA2W(re[1 * col + 0]));
+			_strReportImagePath.Format(_T("%s"), strlen(re[1 * col + 0])>1 ? CA2W(re[1 * col + 0], CP_UTF8) : _T(""));
+
+			if (!_strReportImagePath.IsEmpty() && _strReportImagePath != _T("(null)")) {
+				if (false == (bool)PathFileExists(_strReportImagePath.GetBuffer())) 
+					_strReportImagePath.Empty();
+			}
+			else
+				_strReportImagePath.Empty();
+
+
 
 			UpdateWindow();
 		}
@@ -357,23 +365,6 @@ void CPersonalForm20::OnEnChangeEdit1()
 	}
 	// TODO:  在此添加控件通知处理程序代码
 }
-
-void CPersonalForm20::OnPaint()
-{
-	CPaintDC dc(this); // device context for painting
-	// TODO:  在此处添加消息处理程序代码
-	// 不为绘图消息调用 __super::OnPaint()
-
-	if (!_strReportImagePath.IsEmpty()) {
-		CImage  image;
-		image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
-		CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-		CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
-		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-		ReleaseDC(pDc);
-	}
-}
-
 
 void CPersonalForm20::OnDraw(CDC* /*pDC*/)
 {
