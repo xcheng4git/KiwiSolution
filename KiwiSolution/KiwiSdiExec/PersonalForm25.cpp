@@ -19,6 +19,23 @@ IMPLEMENT_DYNCREATE(CPersonalForm25, CFormView)
 CPersonalForm25::CPersonalForm25()
 	: CFormView(CPersonalForm25::IDD)
 {
+	UINT attachmentIcons[] =
+	{
+		IDI_ICON_EXT_JPEG,
+		IDI_ICON_EXT_BMP,
+		IDI_ICON_EXT_PDF,
+		IDI_ICON_EXT_DOC,
+		IDI_ICON_EXT_ZIP,
+		IDI_ICON_EXT_XLS
+	};
+	m_ilIcons.Create(48, 48, ILC_MASK | ILC_COLOR32, 1, 1);
+	for (int i = 0; i < _countof(attachmentIcons); i++) {
+		HICON hIcon = AfxGetApp()->LoadIcon(attachmentIcons[i]);
+		ASSERT(hIcon);
+		m_ilIcons.Add(hIcon);
+	}
+
+
 	m_FormID = 25;
 	int parameters1[1][10] = { { IDC_EDIT1, IDC_EDIT12, IDC_DATETIMEPICKER1, IDC_EDIT13, IDC_EDIT370, IDC_DATETIMEPICKER45, IDC_EDIT347, IDC_EDIT344, 0, 0 } };
 	int structure1[12] = { 1, 10, EDITBX, EDITBX, DATEPKR, EDITBX, EDITBX, DATEPKR, EDITBX, EDITBX, ATTACHMENTBX, ATTACHMENTBX };
@@ -63,7 +80,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm25, CFormView)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm25::OnBnClickedCmdUpdateForm)
 	ON_EN_CHANGE(IDC_EDIT2, &CPersonalForm25::OnEnChangeEdit2)
 	ON_EN_CHANGE(IDC_EDIT348, &CPersonalForm25::OnEnChangeEdit348)
-	ON_WM_PAINT()
+//	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -272,26 +289,47 @@ void CPersonalForm25::OnEnChangeEdit348()
 }
 
 
-void CPersonalForm25::OnPaint()
-{
-	CPaintDC dc(this); // device context for painting
-	// TODO:  在此处添加消息处理程序代码
-	// 不为绘图消息调用 __super::OnPaint()
-	if (!m_strCheckImage.IsEmpty()) {
-		CImage  image;
-		image.Load(m_strCheckImage); //把图像保存到特定目录,然后将路径存数据库
-		CRect   rect; m_checkImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-		CDC *pDc = m_checkImage.GetDC();//获取picture的DC  
-		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-		ReleaseDC(pDc);
-	}
+//void CPersonalForm25::OnPaint()
+//{
+//	CPaintDC dc(this); // device context for painting
+//	// TODO:  在此处添加消息处理程序代码
+//	// 不为绘图消息调用 __super::OnPaint()
+//	if (!m_strCheckImage.IsEmpty()) {
+//		CImage  image;
+//		image.Load(m_strCheckImage); //把图像保存到特定目录,然后将路径存数据库
+//		CRect   rect; m_checkImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+//		CDC *pDc = m_checkImage.GetDC();//获取picture的DC  
+//		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+//		ReleaseDC(pDc);
+//	}
+//
+//	if (!m_strRegisterImage.IsEmpty()) {
+//		CImage  image;
+//		image.Load(m_strRegisterImage); //把图像保存到特定目录,然后将路径存数据库
+//		CRect   rect; m_registerImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+//		CDC *pDc = m_registerImage.GetDC();//获取picture的DC  
+//		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+//		ReleaseDC(pDc);
+//	}
+//}
 
-	if (!m_strRegisterImage.IsEmpty()) {
-		CImage  image;
-		image.Load(m_strRegisterImage); //把图像保存到特定目录,然后将路径存数据库
-		CRect   rect; m_registerImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-		CDC *pDc = m_registerImage.GetDC();//获取picture的DC  
-		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-		ReleaseDC(pDc);
-	}
+void CPersonalForm25::OnDraw(CDC* /*pDC*/)
+{
+		if (!m_strCheckImage.IsEmpty()) {
+			CImage  image;
+			image.Load(m_strCheckImage); //把图像保存到特定目录,然后将路径存数据库
+			CRect   rect; m_checkImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+			CDC *pDc = m_checkImage.GetDC();//获取picture的DC  
+			image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+			ReleaseDC(pDc);
+		}
+	
+		if (!m_strRegisterImage.IsEmpty()) {
+			CImage  image;
+			image.Load(m_strRegisterImage); //把图像保存到特定目录,然后将路径存数据库
+			CRect   rect; m_registerImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+			CDC *pDc = m_registerImage.GetDC();//获取picture的DC  
+			image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+			ReleaseDC(pDc);
+		}
 }

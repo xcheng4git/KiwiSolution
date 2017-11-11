@@ -36,9 +36,11 @@ public:
 private:
 	CString m_strCheckImage;
 	CString m_strRegisterImage;
+	CImageList m_ilIcons;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	virtual void OnDraw(CDC* /*pDC*/);
 
 	DECLARE_MESSAGE_MAP()
 public:
@@ -53,7 +55,7 @@ public:
 	CStatic m_registerImage;
 	afx_msg void OnEnChangeEdit2();
 	afx_msg void OnEnChangeEdit348();
-	afx_msg void OnPaint();
+//	afx_msg void OnPaint();
 };
 
 
