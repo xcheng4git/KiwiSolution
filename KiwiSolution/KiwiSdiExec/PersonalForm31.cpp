@@ -40,6 +40,28 @@ CPersonalForm31::CPersonalForm31()
 	_vHaveDataSubform.push_back(-1);
 
 	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
+
+	//以下是为了打印的预设
+	const wchar_t *pBookmarks1[13] = { _T("有无"), _T("姓名"), _T("工作单位及职务"), _T("处分类型"), _T("案件性质"),
+		_T("处理机关"), _T("处分文号"), _T("处分起始时间"), _T("处分终止时间"),
+		_T("违纪事实"), _T("处理情况"), _T("附件"), _T("备注") };
+	int structure10[13] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure11[3 + 1 + 12] = { -1, 1, 12, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+
+
+
+	vector<CBookmarkEx> vBke;
+	for (int i = 0; i < 13; i++) {
+		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
+
+
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure11[i]);
+	_vvSubformFlags.push_back(vStr);
 }
 
 CPersonalForm31::~CPersonalForm31()
@@ -133,6 +155,29 @@ void CPersonalForm31::OnBnClickedCmdSaveForm()
 void CPersonalForm31::OnBnClickedCmdPrintForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str(""); ss.clear();
+
+	help->closeDB(); delete help;
+
+
+	ss.str(""); ss.clear();
+	ss << "select * from file_invertigated_form_16 where file_id=" << file_id << " limit 0,1;";
+	_vSubformQueryString.push_back(ss.str());
+
+	ss.str(""); ss.clear();
+
+	DoPrintForm(CString(_T("表16.dotx")));
 }
 
 
