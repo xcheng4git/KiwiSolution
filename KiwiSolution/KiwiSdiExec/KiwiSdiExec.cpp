@@ -120,12 +120,12 @@ BOOL CKiwiSdiExecApp::InitInstance()
 	//CSplashWnd::ShowSplashScreen(m_pMainWnd);
 	
 	/*
-	对话框
+	对话框*/
 	CDlgLogin dlgLogin;
 	dlgLogin.DoModal();
 	if (!dlgLogin.m_isLogined)
 		exit(0);
-	*/
+	
 
 	int width = GetSystemMetrics(SM_CXSCREEN);
 	if (width > 1024) {
