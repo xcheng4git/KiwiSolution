@@ -259,7 +259,7 @@ void CPersonalForm01::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CPersonalForm01, CFormView)
-	ON_WM_SIZE()
+//	ON_WM_SIZE()
 	ON_BN_CLICKED(IDC_CMD_SAVE_FORM, &CPersonalForm01::OnClickedCmdSaveForm)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm01::OnClickedCmdPrintForm)
 	ON_STN_CLICKED(IDC_FILE_PICTURE, &CPersonalForm01::OnClickedFilePicture)
@@ -295,6 +295,8 @@ void CPersonalForm01::OnInitialUpdate()
 	// TODO:  在此添加专用代码和/或调用基类
 	//SetScaleToFitSize(CSize(1, 1));
 	//ModifyStyle(0, WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
+	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM01))->SetBitmap(m_bmpClose);
+
 	LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 30;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 700;
 	CFont font; VERIFY(font.CreateFontIndirect(&lf));
 	GetDlgItem(IDC_STATIC_FORM01_HEADER)->SetFont(&font);
@@ -407,140 +409,140 @@ void CPersonalForm01::OnDraw(CDC* /*pDC*/)
 }
 
 
-void CPersonalForm01::OnSize(UINT nType, int cx, int cy)
-{
-	CFormView::OnSize(nType, cx, cy);
-
-	// TODO:  在此处添加消息处理程序代码
-	CRect rt; GetClientRect(&rt);
-	CWnd *pWnd; CRect *pRt;
-	//////////////////////////////////////////////////////
-	if (pWnd = GetDlgItem(IDC_FILE_PICTURE)) {
-		pRt = new CRect(rt.left + 630, rt.top + 120, rt.left + 750, rt.top + 280);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	if (pWnd = GetDlgItem(IDC_BUTTON_CLOSE_FORM01)) {
-		((CButton*)pWnd)->SetBitmap(m_bmpClose);
-	}
-	return;
-
-#if 0
-	if (pWnd = GetDlgItem(IDC_BUTTON_CLOSE_FORM01)) {
-		pRt = new CRect(rt.right - MARGIN_X - 17, rt.top + MARGIN_Y, rt.right - MARGIN_X, rt.top + MARGIN_Y + 17);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-		((CButton*)pWnd)->SetBitmap(m_bmpClose);
-	}
-
-	rt.left += (MARGIN_X + PAGE_START_OFFSET_X + HEADER_START_OFFSET_X);
-	rt.top += (MARGIN_Y + PAGE_START_OFFSET_Y + HEADER_START_OFFSET_Y + HEADER_HEIGHT + 1);
-	rt.right -= (MARGIN_X + PAGE_START_OFFSET_X);
-	rt.bottom -= (MARGIN_Y + PAGE_START_OFFSET_Y);
-
-	int len = rt.right - rt.left;
-
-	 
-	if (pWnd = GetDlgItem(IDC_EDIT_NAME)) {
-		pRt = new CRect(rt.left + int(1 * len*CELL_WIDTH_RATIO + 5), rt.top + 0 * CELL_HEIGHT + 5, rt.left + 2 * len*CELL_WIDTH_RATIO - 5, rt.top + 1 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-		if (pWnd = GetDlgItem(IDC_EDIT_GENDER)) {
-			pRt = new CRect(rt.left + 3 * len*CELL_WIDTH_RATIO + 5, rt.top + 0 * CELL_HEIGHT + 5, rt.left + 4 * len*CELL_WIDTH_RATIO - 5, rt.top + 1 * CELL_HEIGHT - 5);
-			pWnd->MoveWindow(pRt, FALSE); delete pRt;
-		}
-			if (pWnd = GetDlgItem(IDC_EDIT_NATION)) {
-				pRt = new CRect(rt.left + 5 * len*CELL_WIDTH_RATIO + 5, rt.top + 0 * CELL_HEIGHT + 5, rt.left + 6 * len*CELL_WIDTH_RATIO - 5, rt.top + 1 * CELL_HEIGHT - 5);
-				pWnd->MoveWindow(pRt, FALSE); delete pRt;
-			}
-	///////////////////////////////////////////////////////
-	if (pWnd = GetDlgItem(IDC_EDIT_BIRTH_PLACE)) {
-		pRt = new CRect(rt.left + 1 * len*CELL_WIDTH_RATIO + 5, rt.top + 1 * CELL_HEIGHT + 5, rt.left + 2 * len*CELL_WIDTH_RATIO - 5, rt.top + 2 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	if (pWnd = GetDlgItem(IDC_COMBO_BIRTHDAY)) {
-		pRt = new CRect(rt.left + 3 * len*CELL_WIDTH_RATIO + 5, rt.top + 1 * CELL_HEIGHT + 5, rt.left + 4 * len*CELL_WIDTH_RATIO - 5, rt.top + 2 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	if (pWnd = GetDlgItem(IDC_COMBO_PARTY)) {
-		pRt = new CRect(rt.left + 5 * len*CELL_WIDTH_RATIO + 5, rt.top + 1 * CELL_HEIGHT + 5, rt.left + 6 * len*CELL_WIDTH_RATIO - 5, rt.top + 2 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	//////////////////////////////////////////////////////
-	if (pWnd = GetDlgItem(IDC_PICKER_INPARTY_DATE)) {
-		pRt = new CRect(rt.left + 1 * len*CELL_WIDTH_RATIO + 5, rt.top + 2 * CELL_HEIGHT + 5, rt.left + 2 * len*CELL_WIDTH_RATIO - 5, rt.top + 3 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	if (pWnd = GetDlgItem(IDC_PICKER_INWORK_DATE)) {
-		pRt = new CRect(rt.left + 3 * len*CELL_WIDTH_RATIO + 5, rt.top + 2 * CELL_HEIGHT + 5, rt.left + 4 * len*CELL_WIDTH_RATIO - 5, rt.top + 3 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	if (pWnd = GetDlgItem(IDC_EDIT_PROFESSION)) {
-		pRt = new CRect(rt.left + 5 * len*CELL_WIDTH_RATIO + 5, rt.top + 2 * CELL_HEIGHT + 5, rt.left + 6 * len*CELL_WIDTH_RATIO - 5, rt.top + 3 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	//////////////////////////////////////////////////////
-	if (pWnd = GetDlgItem(IDC_FILE_PICTURE)) {
-		pRt = new CRect(rt.left + 6 * len*CELL_WIDTH_RATIO + 5, rt.top + 0 * CELL_HEIGHT + 5, rt.right - 5, rt.top + 5 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	//////////////////////////////////////////////////////
-	if (pWnd = GetDlgItem(IDC_EDIT_FULL_EDUCATE_DEGREE)) {
-		pRt = new CRect(rt.left + 2 * len*CELL_WIDTH_RATIO + 5, rt.top + 3 * CELL_HEIGHT + 5, rt.left + 3 * len*CELL_WIDTH_RATIO - 5, rt.top + 4 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	if (pWnd = GetDlgItem(IDC_EDIT_FULL_EDUCATE_PLACE)) {
-		pRt = new CRect(rt.left + 4 * len*CELL_WIDTH_RATIO*1.1 + 5, rt.top + 3 * CELL_HEIGHT + 5, rt.left + 6 * len*CELL_WIDTH_RATIO - 5, rt.top + 4 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	//////////////////////////////////////////////////////
-	if (pWnd = GetDlgItem(IDC_EDIT_PART_EDUCATE_DEGREE)) {
-		pRt = new CRect(rt.left + 2 * len*CELL_WIDTH_RATIO + 5, rt.top + 4 * CELL_HEIGHT + 5, rt.left + 3 * len*CELL_WIDTH_RATIO - 5, rt.top + 5 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	if (pWnd = GetDlgItem(IDC_EDIT_PART_EDUCATE_PLACE)) {
-		pRt = new CRect(rt.left + 4 * len*CELL_WIDTH_RATIO*1.1 + 5, rt.top + 4 * CELL_HEIGHT + 5, rt.left + 6 * len*CELL_WIDTH_RATIO - 5, rt.top + 5 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	//////////////////////////////////////////////////////
-	if (pWnd = GetDlgItem(IDC_EDIT_PARTY_REP)) {
-		pRt = new CRect(rt.left + 1 * len*CELL_WIDTH_RATIO + 5, rt.top + 5 * CELL_HEIGHT + 5, rt.left + 2 * len*CELL_WIDTH_RATIO - 5, rt.top + 6 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	if (pWnd = GetDlgItem(IDC_EDIT_NPC_MEMBER)) {
-		pRt = new CRect(rt.left + 3 * len*CELL_WIDTH_RATIO + 5, rt.top + 5 * CELL_HEIGHT + 5, rt.left + 4 * len*CELL_WIDTH_RATIO - 5, rt.top + 6 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	if (pWnd = GetDlgItem(IDC_EDIT_CPPCC_MEMBER)) {
-		pRt = new CRect(rt.left + 5 * len*CELL_WIDTH_RATIO + 5, rt.top + 5 * CELL_HEIGHT + 5, rt.right - 5, rt.top + 6 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	//////////////////////////////////////////////////////
-	if (pWnd = GetDlgItem(IDC_EDIT_WORKING_UNIT)) {
-		pRt = new CRect(rt.left + 1 * len*CELL_WIDTH_RATIO + 5, rt.top + 6 * CELL_HEIGHT + 5, rt.left + 3 * len*CELL_WIDTH_RATIO - 5, rt.top + 7 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	if (pWnd = GetDlgItem(IDC_EDIT_CURRENT_POSITION)) {
-		pRt = new CRect(rt.left + 5 * len*CELL_WIDTH_RATIO + 5, rt.top + 6 * CELL_HEIGHT + 5, rt.right - 5, rt.top + 7 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	//////////////////////////////////////////////////////
-	if (pWnd = GetDlgItem(IDC_EDIT_HOME_ADDRESS)) {
-		pRt = new CRect(rt.left + 1 * len*CELL_WIDTH_RATIO + 5, rt.top + 7 * CELL_HEIGHT + 5, rt.left + 4 * len*CELL_WIDTH_RATIO - 5, rt.top + 8 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	if (pWnd = GetDlgItem(IDC_EDIT_PHONE)) {
-		pRt = new CRect(rt.left + 5 * len*CELL_WIDTH_RATIO + 5, rt.top + 7 * CELL_HEIGHT + 5, rt.right - 5, rt.top + 8 * CELL_HEIGHT - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-	//////////////////////////////////////////////////////
-	if (pWnd = GetDlgItem(IDC_EDIT_RESUME)) {
-		pRt = new CRect(rt.left + 1 * len*CELL_WIDTH_RATIO + 5, rt.top + 9 * CELL_HEIGHT + 5, rt.right - 5, rt.bottom - 5);
-		pWnd->MoveWindow(pRt, FALSE); delete pRt;
-	}
-#endif
-
-
-	//InvalidateRect(NULL);
-}
+//void CPersonalForm01::OnSize(UINT nType, int cx, int cy)
+//{
+//	CFormView::OnSize(nType, cx, cy);
+//
+//	// TODO:  在此处添加消息处理程序代码
+//	CRect rt; GetClientRect(&rt);
+//	CWnd *pWnd; CRect *pRt;
+//	//////////////////////////////////////////////////////
+//	//if (pWnd = GetDlgItem(IDC_FILE_PICTURE)) {
+//	//	pRt = new CRect(rt.left + 630, rt.top + 120, rt.left + 750, rt.top + 280);
+//	//	pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	//}
+//	if (pWnd = GetDlgItem(IDC_BUTTON_CLOSE_FORM01)) {
+//		((CButton*)pWnd)->SetBitmap(m_bmpClose);
+//	}
+//	return;
+//
+//#if 0
+//	if (pWnd = GetDlgItem(IDC_BUTTON_CLOSE_FORM01)) {
+//		pRt = new CRect(rt.right - MARGIN_X - 17, rt.top + MARGIN_Y, rt.right - MARGIN_X, rt.top + MARGIN_Y + 17);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//		((CButton*)pWnd)->SetBitmap(m_bmpClose);
+//	}
+//
+//	rt.left += (MARGIN_X + PAGE_START_OFFSET_X + HEADER_START_OFFSET_X);
+//	rt.top += (MARGIN_Y + PAGE_START_OFFSET_Y + HEADER_START_OFFSET_Y + HEADER_HEIGHT + 1);
+//	rt.right -= (MARGIN_X + PAGE_START_OFFSET_X);
+//	rt.bottom -= (MARGIN_Y + PAGE_START_OFFSET_Y);
+//
+//	int len = rt.right - rt.left;
+//
+//	 
+//	if (pWnd = GetDlgItem(IDC_EDIT_NAME)) {
+//		pRt = new CRect(rt.left + int(1 * len*CELL_WIDTH_RATIO + 5), rt.top + 0 * CELL_HEIGHT + 5, rt.left + 2 * len*CELL_WIDTH_RATIO - 5, rt.top + 1 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//		if (pWnd = GetDlgItem(IDC_EDIT_GENDER)) {
+//			pRt = new CRect(rt.left + 3 * len*CELL_WIDTH_RATIO + 5, rt.top + 0 * CELL_HEIGHT + 5, rt.left + 4 * len*CELL_WIDTH_RATIO - 5, rt.top + 1 * CELL_HEIGHT - 5);
+//			pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//		}
+//			if (pWnd = GetDlgItem(IDC_EDIT_NATION)) {
+//				pRt = new CRect(rt.left + 5 * len*CELL_WIDTH_RATIO + 5, rt.top + 0 * CELL_HEIGHT + 5, rt.left + 6 * len*CELL_WIDTH_RATIO - 5, rt.top + 1 * CELL_HEIGHT - 5);
+//				pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//			}
+//	///////////////////////////////////////////////////////
+//	if (pWnd = GetDlgItem(IDC_EDIT_BIRTH_PLACE)) {
+//		pRt = new CRect(rt.left + 1 * len*CELL_WIDTH_RATIO + 5, rt.top + 1 * CELL_HEIGHT + 5, rt.left + 2 * len*CELL_WIDTH_RATIO - 5, rt.top + 2 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	if (pWnd = GetDlgItem(IDC_COMBO_BIRTHDAY)) {
+//		pRt = new CRect(rt.left + 3 * len*CELL_WIDTH_RATIO + 5, rt.top + 1 * CELL_HEIGHT + 5, rt.left + 4 * len*CELL_WIDTH_RATIO - 5, rt.top + 2 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	if (pWnd = GetDlgItem(IDC_COMBO_PARTY)) {
+//		pRt = new CRect(rt.left + 5 * len*CELL_WIDTH_RATIO + 5, rt.top + 1 * CELL_HEIGHT + 5, rt.left + 6 * len*CELL_WIDTH_RATIO - 5, rt.top + 2 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	//////////////////////////////////////////////////////
+//	if (pWnd = GetDlgItem(IDC_PICKER_INPARTY_DATE)) {
+//		pRt = new CRect(rt.left + 1 * len*CELL_WIDTH_RATIO + 5, rt.top + 2 * CELL_HEIGHT + 5, rt.left + 2 * len*CELL_WIDTH_RATIO - 5, rt.top + 3 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	if (pWnd = GetDlgItem(IDC_PICKER_INWORK_DATE)) {
+//		pRt = new CRect(rt.left + 3 * len*CELL_WIDTH_RATIO + 5, rt.top + 2 * CELL_HEIGHT + 5, rt.left + 4 * len*CELL_WIDTH_RATIO - 5, rt.top + 3 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	if (pWnd = GetDlgItem(IDC_EDIT_PROFESSION)) {
+//		pRt = new CRect(rt.left + 5 * len*CELL_WIDTH_RATIO + 5, rt.top + 2 * CELL_HEIGHT + 5, rt.left + 6 * len*CELL_WIDTH_RATIO - 5, rt.top + 3 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	//////////////////////////////////////////////////////
+//	if (pWnd = GetDlgItem(IDC_FILE_PICTURE)) {
+//		pRt = new CRect(rt.left + 6 * len*CELL_WIDTH_RATIO + 5, rt.top + 0 * CELL_HEIGHT + 5, rt.right - 5, rt.top + 5 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	//////////////////////////////////////////////////////
+//	if (pWnd = GetDlgItem(IDC_EDIT_FULL_EDUCATE_DEGREE)) {
+//		pRt = new CRect(rt.left + 2 * len*CELL_WIDTH_RATIO + 5, rt.top + 3 * CELL_HEIGHT + 5, rt.left + 3 * len*CELL_WIDTH_RATIO - 5, rt.top + 4 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	if (pWnd = GetDlgItem(IDC_EDIT_FULL_EDUCATE_PLACE)) {
+//		pRt = new CRect(rt.left + 4 * len*CELL_WIDTH_RATIO*1.1 + 5, rt.top + 3 * CELL_HEIGHT + 5, rt.left + 6 * len*CELL_WIDTH_RATIO - 5, rt.top + 4 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	//////////////////////////////////////////////////////
+//	if (pWnd = GetDlgItem(IDC_EDIT_PART_EDUCATE_DEGREE)) {
+//		pRt = new CRect(rt.left + 2 * len*CELL_WIDTH_RATIO + 5, rt.top + 4 * CELL_HEIGHT + 5, rt.left + 3 * len*CELL_WIDTH_RATIO - 5, rt.top + 5 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	if (pWnd = GetDlgItem(IDC_EDIT_PART_EDUCATE_PLACE)) {
+//		pRt = new CRect(rt.left + 4 * len*CELL_WIDTH_RATIO*1.1 + 5, rt.top + 4 * CELL_HEIGHT + 5, rt.left + 6 * len*CELL_WIDTH_RATIO - 5, rt.top + 5 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	//////////////////////////////////////////////////////
+//	if (pWnd = GetDlgItem(IDC_EDIT_PARTY_REP)) {
+//		pRt = new CRect(rt.left + 1 * len*CELL_WIDTH_RATIO + 5, rt.top + 5 * CELL_HEIGHT + 5, rt.left + 2 * len*CELL_WIDTH_RATIO - 5, rt.top + 6 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	if (pWnd = GetDlgItem(IDC_EDIT_NPC_MEMBER)) {
+//		pRt = new CRect(rt.left + 3 * len*CELL_WIDTH_RATIO + 5, rt.top + 5 * CELL_HEIGHT + 5, rt.left + 4 * len*CELL_WIDTH_RATIO - 5, rt.top + 6 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	if (pWnd = GetDlgItem(IDC_EDIT_CPPCC_MEMBER)) {
+//		pRt = new CRect(rt.left + 5 * len*CELL_WIDTH_RATIO + 5, rt.top + 5 * CELL_HEIGHT + 5, rt.right - 5, rt.top + 6 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	//////////////////////////////////////////////////////
+//	if (pWnd = GetDlgItem(IDC_EDIT_WORKING_UNIT)) {
+//		pRt = new CRect(rt.left + 1 * len*CELL_WIDTH_RATIO + 5, rt.top + 6 * CELL_HEIGHT + 5, rt.left + 3 * len*CELL_WIDTH_RATIO - 5, rt.top + 7 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	if (pWnd = GetDlgItem(IDC_EDIT_CURRENT_POSITION)) {
+//		pRt = new CRect(rt.left + 5 * len*CELL_WIDTH_RATIO + 5, rt.top + 6 * CELL_HEIGHT + 5, rt.right - 5, rt.top + 7 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	//////////////////////////////////////////////////////
+//	if (pWnd = GetDlgItem(IDC_EDIT_HOME_ADDRESS)) {
+//		pRt = new CRect(rt.left + 1 * len*CELL_WIDTH_RATIO + 5, rt.top + 7 * CELL_HEIGHT + 5, rt.left + 4 * len*CELL_WIDTH_RATIO - 5, rt.top + 8 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	if (pWnd = GetDlgItem(IDC_EDIT_PHONE)) {
+//		pRt = new CRect(rt.left + 5 * len*CELL_WIDTH_RATIO + 5, rt.top + 7 * CELL_HEIGHT + 5, rt.right - 5, rt.top + 8 * CELL_HEIGHT - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//	//////////////////////////////////////////////////////
+//	if (pWnd = GetDlgItem(IDC_EDIT_RESUME)) {
+//		pRt = new CRect(rt.left + 1 * len*CELL_WIDTH_RATIO + 5, rt.top + 9 * CELL_HEIGHT + 5, rt.right - 5, rt.bottom - 5);
+//		pWnd->MoveWindow(pRt, FALSE); delete pRt;
+//	}
+//#endif
+//
+//
+//	//InvalidateRect(NULL);
+//}
 
 
 void CPersonalForm01::OnClickedCmdSaveForm()
