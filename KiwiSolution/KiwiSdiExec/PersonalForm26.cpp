@@ -60,14 +60,14 @@ CPersonalForm26::CPersonalForm26()
 	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
 
 	//以下是为了打印的预设
-	const wchar_t *pBookmarks1[7] = { _T("有无"), _T("姓名"), _T("工作单位及职务"), _T("通报曝光时间"), _T("通报曝光载体"), _T("主要问题典型"), _T("附件") };
-	int structure10[7] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
-	int structure11[3 + 1 + 6] = { -1, 1, 6, 2, 1, 1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	const wchar_t *pBookmarks1[8] = { _T("有无"), _T("姓名"), _T("工作单位及职务"), _T("通报曝光时间"), _T("通报曝光载体"), _T("主要问题典型"), _T("通报曝光典型"), _T("附件") };
+	int structure10[8] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::ATTBOX };
+	int structure11[3 + 1 + 7] = { -1, 1, 7, 2,   1, 1, 1, 1, 1, 1,1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 
 
 
 	vector<CBookmarkEx> vBke;
-	for (int i = 0; i < 7; i++) {
+	for (int i = 0; i < 8; i++) {
 		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[4 + i]);
 		vBke.push_back(bookmark);
 	}

@@ -6,7 +6,7 @@ using namespace std;
 class CBookmarkEx
 {
 public:
-	enum { CHKBOX, TXTBOX };
+	enum { CHKBOX, TXTBOX, ATTBOX };
 	CBookmarkEx(int type_, const wchar_t* bookmark_, int nsub_) {
 		type = type_; bookmark = bookmark_; nsub = nsub_;
 	}
