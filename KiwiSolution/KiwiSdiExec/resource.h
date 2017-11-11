@@ -75,7 +75,6 @@
 #define IDI_ICON_EXT_PDF                371
 #define IDI_ICON_EXT_XLS                372
 #define IDI_ICON_EXT_ZIP                373
-#define IDI_ICON1                       374
 #define IDI_ICON_EXT_NO                 374
 #define IDC_EDIT_TEST                   1011
 #define IDC_LIST_SHORTCUT               1012
@@ -930,10 +929,10 @@
 #define IDC_COMBO3                      1548
 #define IDC_BUTTON1                     1549
 #define IDC_STATIC_HEALTH_REPORT        1550
-#define IDC_STATIC_CHECK_ATTACHMENT     1551
-#define IDC_STATIC_REGISTER_ATTACHMENT  1552
 #define IDC_BUTTON_ADD_IMAGE            1552
 #define IDC_LIST_ATTACHMENT             1553
+#define IDC_BUTTON_ADD_IMAGE2           1554
+#define IDC_LIST_ATTACHMENT2            1555
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 #define ID_Menu                         32773
