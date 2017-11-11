@@ -63,7 +63,7 @@ CPersonalForm25::CPersonalForm25()
 
 	//以下是为了打印的预设
 	const wchar_t *pBookmarks1[11] = { _T("有无"), _T("姓名"), _T("工作单位及职务"), _T("初核时间"), _T("初核结论"), _T("适当处理"), _T("立案时间"), _T("立案结论"), _T("适当处理"), _T("初核附件"), _T("立案附件") };
-	int structure10[11] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure10[11] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::ATTBOX, CBookmarkEx::ATTBOX };
 	int structure11[3 + 1 + 10] = { -1, 1, 10, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 
 
