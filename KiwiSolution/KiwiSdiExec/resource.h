@@ -69,6 +69,14 @@
 #define IDD_PERSONAL_FORM31             365
 #define IDD_PERSONAL_FORM30             366
 #define IDB_BITMAP_FOUR_XT              366
+#define IDI_ICON_EXT_BMP                368
+#define IDI_ICON_EXT_DOC                369
+#define IDI_ICON_EXT_JPEG               370
+#define IDI_ICON_EXT_PDF                371
+#define IDI_ICON_EXT_XLS                372
+#define IDI_ICON_EXT_ZIP                373
+#define IDI_ICON1                       374
+#define IDI_ICON_EXT_NO                 374
 #define IDC_EDIT_TEST                   1011
 #define IDC_LIST_SHORTCUT               1012
 #define IDC_TREE_ORGNIZATION            1013
@@ -923,8 +931,9 @@
 #define IDC_BUTTON1                     1549
 #define IDC_STATIC_HEALTH_REPORT        1550
 #define IDC_STATIC_CHECK_ATTACHMENT     1551
-#define IDC_STATIC_CHECK_ATTACHMENT2    1552
 #define IDC_STATIC_REGISTER_ATTACHMENT  1552
+#define IDC_BUTTON_ADD_IMAGE            1552
+#define IDC_LIST_ATTACHMENT             1553
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 #define ID_Menu                         32773
@@ -950,9 +959,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        368
+#define _APS_NEXT_RESOURCE_VALUE        375
 #define _APS_NEXT_COMMAND_VALUE         32791
-#define _APS_NEXT_CONTROL_VALUE         1552
+#define _APS_NEXT_CONTROL_VALUE         1554
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
