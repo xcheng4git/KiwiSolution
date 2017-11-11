@@ -46,12 +46,12 @@ CPersonalForm20::CPersonalForm20()
 	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
 
 	//以下是为了打印的预设
-	const wchar_t *pBookmarks1[3] = { _T("有无"), _T("年度"), _T("报告内容") };
-	int structure10[3] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
-	int structure11[4 + 3] = { -1, 1, 2, 2,2, 1, 1};  //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	const wchar_t *pBookmarks1[4] = { _T("有无"), _T("年度"), _T("报告内容"), _T("本年度体检报告") };
+	int structure10[4] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure11[4 + 3] = { -1, 1, 2, 2,   1, 1, 1};  //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 
 	vector<CBookmarkEx> vBke;//循环次数改一下
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[4 + i]);
 		vBke.push_back(bookmark);
 	}
