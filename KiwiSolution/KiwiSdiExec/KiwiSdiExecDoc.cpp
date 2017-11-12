@@ -250,7 +250,7 @@ CKiwiSdiExecDoc::CKiwiSdiExecDoc()
 	help->closeDB();
 	delete help;
 
-	m_currentUserGroup = 3;
+	//((CKiwiSdiExecApp*)AfxGetApp())->m_currentUserGroup = 3;
 }
 
 CKiwiSdiExecDoc::~CKiwiSdiExecDoc()

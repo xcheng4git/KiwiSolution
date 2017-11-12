@@ -20,6 +20,10 @@ public:
 	CKiwiSdiExecApp();
 
 	enum { DateTimeTimer=1 };
+
+public:
+	int m_currentUserGroup;
+
 // ÖØÐ´
 public:
 	virtual BOOL InitInstance();

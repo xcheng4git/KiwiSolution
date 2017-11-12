@@ -606,8 +606,7 @@ afx_msg LRESULT CMainFrame::OnModifyPersonalForm(WPARAM wParam, LPARAM lParam)
 void CMainFrame::OnDatabaseInitial()
 {
 	// TODO:  在此添加命令处理程序代码
-	CKiwiSdiExecDoc* pDoc = GetDocument();
-	if (pDoc->m_currentUserGroup != 0) {
+	if (((CKiwiSdiExecApp*)AfxGetApp())->m_currentUserGroup != 0) {
 		MessageBox(_T("对不起，你不是管理员，不能使用该命令！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
 		return;
 	}
@@ -652,8 +651,7 @@ void CMainFrame::OnDatabaseBackup()
 void CMainFrame::OnToolNewUser()
 {
 	// TODO:  在此添加命令处理程序代码
-	CKiwiSdiExecDoc* pDoc = GetDocument();
-	if (pDoc->m_currentUserGroup != 0) {
+	if (((CKiwiSdiExecApp*)AfxGetApp())->m_currentUserGroup != 0) {
 		MessageBox(_T("对不起，你不是管理员，不能使用该命令！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
 		return;
 	}

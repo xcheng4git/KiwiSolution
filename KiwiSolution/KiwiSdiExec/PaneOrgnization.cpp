@@ -94,12 +94,12 @@ void CPaneOrgnization::OnSelchangedTreeOrgnization(NMHDR *pNMHDR, LRESULT *pResu
 	// TODO:  在此添加控件通知处理程序代码
 	*pResult = 0;
 
-	if (!m_bClicked) return;
+	//if (!m_bClicked) return;
 	HTREEITEM hItem = m_treeOrignization.GetSelectedItem();
 	HTREEITEM hItemParent = m_treeOrignization.GetParentItem(hItem);
 	if (hItemParent != NULL) {
 		m_strCurrentFolder = m_treeOrignization.GetItemText(hItemParent);
-		m_strCurrentFile = m_treeOrignization.GetItemText(hItem); m_bClicked = false;
+		m_strCurrentFile = m_treeOrignization.GetItemText(hItem); //m_bClicked = false;
 		CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 		::PostMessage(pWnd->m_hWnd, WM_SHOW_PERSONAL_SUMMARY, WPARAM(&m_strCurrentFolder), LPARAM(&m_strCurrentFile));
 
@@ -108,7 +108,7 @@ void CPaneOrgnization::OnSelchangedTreeOrgnization(NMHDR *pNMHDR, LRESULT *pResu
 	else
 	{
 		m_strCurrentFolder = m_treeOrignization.GetItemText(hItem);
-		m_strCurrentFile.Empty(); m_bClicked = false;
+		m_strCurrentFile.Empty(); //m_bClicked = false;
 		CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 		::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
 
@@ -172,24 +172,58 @@ void CPaneOrgnization::OnClickTreeOrgnization(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	// TODO:  在此添加控件通知处理程序代码
+	CPoint oPoint;
+	UINT nFlag;
+	GetCursorPos(&oPoint);
+	m_treeOrignization.ScreenToClient(&oPoint);
+	HTREEITEM oSelectItem = m_treeOrignization.HitTest(oPoint, &nFlag);
+	if (oSelectItem == NULL)
+		return;
+
+	m_treeOrignization.SelectItem(oSelectItem);
+
+	HTREEITEM hItemParent = m_treeOrignization.GetParentItem(oSelectItem);
+	if (hItemParent != NULL) {
+		m_strCurrentFolder = m_treeOrignization.GetItemText(hItemParent);
+		m_strCurrentFile = m_treeOrignization.GetItemText(oSelectItem); //m_bClicked = false;
+		CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+		::PostMessage(pWnd->m_hWnd, WM_SHOW_PERSONAL_SUMMARY, WPARAM(&m_strCurrentFolder), LPARAM(&m_strCurrentFile));
+	}
+	else	{
+		m_strCurrentFolder = m_treeOrignization.GetItemText(oSelectItem);
+		m_strCurrentFile.Empty(); //m_bClicked = false;
+		CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+		::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
+
+		GetDlgItem(IDC_STATIC_CURSELECTION)->SetWindowText(m_strCurrentFolder + _T("\\*"));
+	}
+
 	*pResult = 0;
 
-	m_bClicked = true;
+	//m_bClicked = true;
 
-	CRect rt;
-	HTREEITEM hItem = m_treeOrignization.GetSelectedItem();
-	HTREEITEM hItemParent = m_treeOrignization.GetParentItem(hItem);
-	if (hItemParent != NULL) {
-		m_treeOrignization.GetItemRect(hItem, &rt, FALSE);
-		CPoint pt; GetCursorPos(&pt); m_treeOrignization.ScreenToClient(&pt);
-		//UINT uFlags;  HTREEITEM hClickedItem = m_treeOrignization.HitTest(pt, &uFlags);
-		if (rt.PtInRect(pt)) {
-			m_strCurrentFolder = m_treeOrignization.GetItemText(hItemParent);
-			m_strCurrentFile = m_treeOrignization.GetItemText(hItem); m_bClicked = false;
-			CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
-			::PostMessage(pWnd->m_hWnd, WM_SHOW_PERSONAL_SUMMARY, WPARAM(&m_strCurrentFolder), LPARAM(&m_strCurrentFile));
-		}
-	}
+	//CRect rt;
+	//HTREEITEM hItem = m_treeOrignization.GetSelectedItem();
+	//HTREEITEM hItemParent = m_treeOrignization.GetParentItem(hItem);
+	//if (hItemParent != NULL) {
+	//	m_treeOrignization.GetItemRect(hItem, &rt, FALSE);
+	//	CPoint pt; GetCursorPos(&pt); m_treeOrignization.ScreenToClient(&pt);
+	//	//UINT uFlags;  HTREEITEM hClickedItem = m_treeOrignization.HitTest(pt, &uFlags);
+	//	if (rt.PtInRect(pt)) {
+	//		m_strCurrentFolder = m_treeOrignization.GetItemText(hItemParent);
+	//		m_strCurrentFile = m_treeOrignization.GetItemText(hItem); m_bClicked = false;
+	//		CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	//		::PostMessage(pWnd->m_hWnd, WM_SHOW_PERSONAL_SUMMARY, WPARAM(&m_strCurrentFolder), LPARAM(&m_strCurrentFile));
+	//	}
+	//}
+	//else	{
+	//	m_strCurrentFolder = m_treeOrignization.GetItemText(hItem);
+	//	m_strCurrentFile.Empty(); m_bClicked = false;
+	//	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	//	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
+
+	//	GetDlgItem(IDC_STATIC_CURSELECTION)->SetWindowText(m_strCurrentFolder + _T("\\*"));
+	//}
 }
 
 
