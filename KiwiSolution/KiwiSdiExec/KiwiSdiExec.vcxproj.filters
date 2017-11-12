@@ -540,5 +540,29 @@
     <Image Include="res\print_32px_1196212_easyicon.net.ico">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="res\information_personal_48px_33217_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\information_personal_64px_33217_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\clock_128px_1203053_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\human_72px_1094883_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\search_cat_48px_1141878_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\User_login_128px_500811_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\exit_32px_27110_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\Login_32px_1186301_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

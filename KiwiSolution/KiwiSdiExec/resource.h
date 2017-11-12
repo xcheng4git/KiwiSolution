@@ -77,6 +77,15 @@
 #define IDI_ICON_EXT_ZIP                373
 #define IDI_ICON_EXT_NO                 374
 #define IDI_ICON_PRINT                  375
+#define IDI_ICON_PERSONAL_INFO          376
+#define IDI_ICON_PERSONAL_INFO_64       377
+#define IDI_ICON_CLOCK_128              379
+#define IDI_ICON_HUMAN_72               380
+#define IDI_ICON_SEARCH                 381
+#define IDI_ICON_LOGIN                  382
+#define IDI_ICON_EXIT                   383
+#define IDI_ICON2                       384
+#define IDI_ICON_LOGIN_IN               384
 #define IDC_EDIT_TEST                   1011
 #define IDC_LIST_SHORTCUT               1012
 #define IDC_TREE_ORGNIZATION            1013
@@ -935,6 +944,15 @@
 #define IDC_BUTTON_ADD_IMAGE2           1554
 #define IDC_BUTTON_PRINT_ALL            1554
 #define IDC_LIST_ATTACHMENT2            1555
+#define IDC_BUTTON_GRP12_DATA           1555
+#define IDC_BUTTON_GRP11_DATA           1556
+#define IDC_STATIC_LOGIN_ICON           1556
+#define IDC_BUTTON_GRP32_DATA           1557
+#define IDC_BUTTON_GRP31_DATA           1558
+#define IDC_BUTTON_GRP21_DATA           1559
+#define IDC_BUTTON_GRP22_DATA           1560
+#define IDC_BUTTON_GRP23_DATA           1562
+#define IDC_BUTTON_GRP24_DATA           1563
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
 #define ID_Menu                         32773
@@ -960,9 +978,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        376
+#define _APS_NEXT_RESOURCE_VALUE        385
 #define _APS_NEXT_COMMAND_VALUE         32791
-#define _APS_NEXT_CONTROL_VALUE         1555
+#define _APS_NEXT_CONTROL_VALUE         1557
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
