@@ -79,32 +79,38 @@ CPersonalForm18::CPersonalForm18()
 	vStr.clear(); vStr.push_back(0); vStr.push_back(9); _vvSubformRecordRange.push_back(vStr);
 
 	//以下是为了打印的预设
-	const wchar_t *pBookmarks1[9] = { _T("有无"), _T("姓名"), _T("单位"), _T("职务"), _T("时间"), _T("获奖名称"), _T("资历机关"), _T("文号"), _T("备注") };
-	int structure10[9] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX,
-		CBookmarkEx::TXTBOX };
-	int structure11[3 + 1 + 8] = { -1, 9, 5, 2,  1, 1, 1, 1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	const wchar_t *pBookmarks1[6] = { _T("有无"), _T("时间"), _T("获奖单位"), _T("资历机关"), _T("文号"), _T("备注") };
+	int structure10[6] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX};
+	int structure11[3 + 1 + 6] = { -1, 9, 5, 2,  2, 1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 	//
-	const wchar_t *pBookmarks2[9] = { _T("有无"), _T("姓名"), _T("单位"), _T("职务"), _T("时间"), _T("获奖名称"), _T("资历机关"), _T("文号"), _T("备注") };
-	int structure20[9] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX,
-		CBookmarkEx::TXTBOX };
-	int structure21[3 + 1 + 8] = { -1, 9, 5, 2, 1, 1, 1, 1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	const wchar_t *pBookmarks2[6] = { _T("有无"), _T("时间"), _T("获奖单位"), _T("资历机关"), _T("文号"), _T("备注") };
+	int structure20[6] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX};
+	int structure21[3 + 1 + 6] = { -1, 9, 5, 2, 2, 1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 	//
-	
+	const wchar_t *pBookmarks3[4] = { _T("有无"), _T("姓名"), _T("单位"), _T("职务") };
+	int structure30[4] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure31[3 + 1 + 4] = { -1, 1, 3, 0, 2, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+
 
 
 	vector<CBookmarkEx> vBke;
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 6; i++) {
 		CBookmarkEx bookmark(structure10[i], pBookmarks1[i], structure11[4 + i]);
 		vBke.push_back(bookmark);
 	}
 	_vvBookmarks.push_back(vBke);
 	vBke.clear();
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 6; i++) {
 		CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[4 + i]);
 		vBke.push_back(bookmark);
 	}
 	_vvBookmarks.push_back(vBke);
-	
+	vBke.clear();
+	for (int i = 0; i < 4; i++) {
+		CBookmarkEx bookmark(structure30[i], pBookmarks3[i], structure31[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
 
 	vStr.clear();
 	for (int i = 0; i < 4; i++)
@@ -113,6 +119,10 @@ CPersonalForm18::CPersonalForm18()
 	vStr.clear();
 	for (int i = 0; i < 4; i++)
 		vStr.push_back(structure21[i]);
+	_vvSubformFlags.push_back(vStr);
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure31[i]);
 	_vvSubformFlags.push_back(vStr);
 	
 }
@@ -194,7 +204,7 @@ BOOL CPersonalForm18::hasData(int isub, int irow)
 
 	if ((isub == 1) || (isub == 2)) {
 		vector<vector<int>> vvParam = _vvvParameters[isub - 1];
-		GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
+		GetDlgItem(vvParam[irow][1])->GetWindowTextW(strText); strText.Trim();
 		if (strText.IsEmpty())
 			return FALSE;
 	}
@@ -329,7 +339,9 @@ void CPersonalForm18::OnBnClickedCmdPrintForm()
 	ss.str(""); ss.clear();
 	ss << "select * from file_form_24_2 where file_id=" << file_id << " limit 0,9;";
 	_vSubformQueryString.push_back(ss.str());
-
+	ss.str(""); ss.clear();
+	ss << "select file_name, file_WorkUnit, file_CurrentPosition from file_form_02 where file_id=" << file_id << ";";
+	_vSubformQueryString.push_back(ss.str());
 	ss.str(""); ss.clear();
 
 	DoPrintForm(CString(_T("表3.dotx")));
@@ -421,6 +433,30 @@ void CPersonalForm18::OnInitialUpdate()
 	help->closeDB();
 	delete help;
 #endif
+	GetDlgItem(IDC_STATIC_FORM_HEADER)->SetFont(&m_fontHeader);
+	vector<vector<vector<int>>>::iterator itVVVparameter = _vvvParameters.begin();
+	int i = 0;
+	while (itVVVparameter != _vvvParameters.end()) {
+		vector<vector<int>>::iterator itVVparameter = itVVVparameter->begin();
+		while (itVVparameter != itVVVparameter->end()) {
+			int j = 0;
+
+			vector<int>::iterator itV = itVVparameter->begin();
+			while (itV != itVVparameter->end()) {
+				if ((_vvSubformStructure[i][2 + j] != RADIOBTN) && (_vvSubformStructure[i][2 + j] != ATTACHMENTBX)) {
+					GetDlgItem(*itV)->SetFont(&m_fontEdit);
+				}
+
+				itV++; j++;
+			}
+			itVVparameter++;
+		}
+		itVVVparameter++; i++;
+	}
+	GetDlgItem(IDC_EDIT1)->SetFont(&m_fontEdit);
+	GetDlgItem(IDC_EDIT12)->SetFont(&m_fontEdit);
+	GetDlgItem(IDC_EDIT13)->SetFont(&m_fontEdit);
+
 	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
 	DoShowForm();
 
@@ -436,6 +472,31 @@ void CPersonalForm18::OnInitialUpdate()
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
 	}
+
+#pragma region 填不可更改的姓名单位信息
+
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+
+	ss.str(""); ss.clear();
+	ss << "select file_name, file_WorkUnit, file_CurrentPosition from file_form_02 where file_id=" << file_id << ";";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row >= 1) {
+		GetDlgItem(IDC_EDIT1)->SetWindowTextW(CA2W(re[1 * col + 0], CP_UTF8));
+		GetDlgItem(IDC_EDIT12)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+		GetDlgItem(IDC_EDIT13)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
+	}
+	help->closeDB(); delete help;
+#pragma endregion
 }
 
 void CPersonalForm18::OnBnClickedCmdUpdateForm()
