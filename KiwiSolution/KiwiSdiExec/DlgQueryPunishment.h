@@ -39,4 +39,5 @@ public:
 	afx_msg void OnSetfocusComboFile();
 	afx_msg void OnDropdownComboFolder();
 	afx_msg void OnClickTree1(NMHDR *pNMHDR, LRESULT *pResult);
+	CXTPButton m_btnSearch;
 };

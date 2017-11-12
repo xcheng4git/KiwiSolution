@@ -147,6 +147,7 @@ void CDlgQueryPunishment::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST1, m_listFiles);
 	DDX_Control(pDX, IDC_COMBO_FILE, m_comboFiles);
 	DDX_Control(pDX, IDC_COMBO_FOLDER, m_combo_Folders);
+	DDX_Control(pDX, IDC_BUTTON_SEARCH, m_btnSearch);
 }
 
 
@@ -274,6 +275,9 @@ BOOL CDlgQueryPunishment::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	// TODO:  在此添加额外的初始化
+	HICON hicon = AfxGetApp()->LoadIcon(IDI_ICON_SEARCH);
+	m_btnSearch.SetIcon(CSize(32, 32), hicon); DestroyIcon(hicon);
+
 #pragma region Init_ComboFolder
 
 	m_combo_Folders.AddString(_T(""));
