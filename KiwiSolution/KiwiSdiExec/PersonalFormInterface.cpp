@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "PersonalFormInterface.h"
 #include <sstream>
 using namespace std;
 #include "Utility.h"
@@ -7,6 +6,9 @@ using namespace std;
 #include "msword/msword.h"
 #include "MainFrm.h"
 #include "resource.h"
+
+#include "PersonalFormInterface.h"
+
 
 CPersonalFormInterface::CPersonalFormInterface()
 {
@@ -187,7 +189,6 @@ void CPersonalFormInterface::DoShowForm()
 
 		itVVVparameter++;
 	}
-
 	help->closeDB(); 
 	delete help;
 	ss.str(""); ss.clear();
@@ -290,6 +291,8 @@ void CPersonalFormInterface::DoPrintForm(CString &templateName)
 	
 				for (int c = 0; c < numSubformColumn; c++) {
 					PrintData(itVbookmark[c + 1], i, r, re[(r + 1) * col + c + _vvSubformFlags[i][3]], bookmarks);
+					if (itVbookmark[c + 1].type == CBookmarkEx::PICBOX)
+						PrintPic(itVbookmark[c + 1], i, r, re[(r + 1) * col + c + _vvSubformFlags[i][3]], bookmarks, docx);
 				}
 			}
 			/////////////////////////////////////////////
@@ -391,7 +394,7 @@ void CPersonalFormInterface::PrintData(CBookmarkEx &theBookmark, int subform, in
 			bookmark = bookmarks.Item(&_variant_t(szBookmark));
 			range = bookmark.get_Range();
 			range.put_Text((CA2W(data, CP_UTF8)));
-		}
+		}	
 		else if (theBookmark.type == CBookmarkEx::CHKBOX) {
 			int value = atoi(data);
 			for (int j = 0; j < theBookmark.nsub; j++) {
@@ -412,6 +415,7 @@ void CPersonalFormInterface::PrintData(CBookmarkEx &theBookmark, int subform, in
 			CString a = CString(_T("附件包含的文件个数为：")) + (CString)data;
 			range.put_Text(a);
 		}
+		
 	}
 	CATCH(CException, e)
 	{
@@ -421,6 +425,30 @@ void CPersonalFormInterface::PrintData(CBookmarkEx &theBookmark, int subform, in
 	}
 	END_CATCH
 }
+
+void CPersonalFormInterface::PrintPic(CBookmarkEx &theBookmark, int subform, int row, char *data, CBookmarks &bookmarks, CDocument0 &docx)
+{
+	wchar_t szBookmark[50];
+	CBookmark0 bookmark;
+	CRange range;
+
+	TRY{	
+			swprintf_s(szBookmark, 50, _T("%s%d%d"), theBookmark.bookmark, subform + 1, row + 1);
+			bookmark = bookmarks.Item(&_variant_t(szBookmark));
+			range = bookmark.get_Range();
+			COleVariant covZero((short)0), covTrue((short)TRUE), covFalse((short)FALSE);
+			CnlineShapes shape = docx.get_InlineShapes();
+			shape.AddPicture((CA2W(data, CP_UTF8)), covFalse, covTrue, &_variant_t(range));
+	}
+		CATCH(CException, e)
+	{
+
+		TRACE(_T("\nPrint fault: s:%d - r:%d -t:%d, %s, %s"), subform, row, theBookmark.type, theBookmark.bookmark, data);
+		throw(e);
+	}
+	END_CATCH
+}
+
 
 void CPersonalFormInterface::DoUpdateForm()
 {

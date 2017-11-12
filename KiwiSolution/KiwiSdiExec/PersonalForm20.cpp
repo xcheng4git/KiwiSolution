@@ -47,8 +47,8 @@ CPersonalForm20::CPersonalForm20()
 
 	//以下是为了打印的预设
 	const wchar_t *pBookmarks1[4] = { _T("有无"), _T("年度"), _T("报告内容"), _T("本年度体检报告") };
-	int structure10[4] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
-	int structure11[4 + 3] = { -1, 1, 2, 2,   1, 1, 1};  //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	int structure10[4] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::PICBOX };
+	int structure11[4 + 3] = { -1, 1, 3, 2,   1, 1, 1};  //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 
 	vector<CBookmarkEx> vBke;//循环次数改一下
 	for (int i = 0; i < 4; i++) {
@@ -216,6 +216,10 @@ FillComplete:
 
 void CPersonalForm20::OnBnClickedCmdPrintForm()
 {
+
+	
+
+
 	// TODO:  在此添加控件通知处理程序代码
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
@@ -238,6 +242,47 @@ void CPersonalForm20::OnBnClickedCmdPrintForm()
 	ss.str(""); ss.clear();
 
 	DoPrintForm(CString(_T("表5.dotx")));
+
+	
+	/*
+	ss << "select file_ReportPic from file_form_26 where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		help->closeDB(); delete help;
+		AfxMessageBox(_T("没有从数据库检索到 " + m_strCurrentFolder + m_strCurrentFile + " 的数据"));
+		return;
+	}
+	_strReportImagePath = re[1 * col + 0];
+	
+
+	COleVariant covZero((short)0), covTrue((short)TRUE), covFalse((short)FALSE), covOptional((long)DISP_E_PARAMNOTFOUND, VT_ERROR),
+		covDocxType((short)0), start_line, end_line, dot(CUtility::GetModuleDirectory() + _T("\\template\\表5.dotx")); //dot(_T("template1.dot")); // 
+
+	CApplication wordApp;
+	CDocuments docs;
+	CDocument0 docx;
+	CBookmarks bookmarks;
+	CBookmark0 bookmark;
+	CRange range;
+	CCell cell;
+
+	if (!wordApp.CreateDispatch(_T("Word.Application"))) {
+		AfxMessageBox(_T("no word product."));
+		return;
+	}	
+	
+	//插入图片
+	bookmark = bookmarks.Item(&_variant_t(_T("本年度体检报告")));
+	range = bookmark.get_Range();
+	CnlineShapes shape = docx.get_InlineShapes();
+	//shape.AddPicture(_T("C:\\Projects\\Kiwi.Git\\KiwiSolution\\KiwiSdiExec\\a.jpg"), covFalse, covTrue, &_variant_t(range));
+	shape.AddPicture(_strReportImagePath.GetBuffer(), covFalse, covTrue, &_variant_t(range));
+	
+
+	
+	help->closeDB(); delete help;
+	*/
 }
 
 
@@ -293,6 +338,9 @@ void CPersonalForm20::OnInitialUpdate()
 	delete help;
 #endif
 
+	
+
+
 	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
 	DoShowForm();
 
@@ -332,9 +380,47 @@ void CPersonalForm20::OnInitialUpdate()
 		help->closeDB(); delete help;
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
+		
 	}
-
 	
+	//显示图片
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str("");
+
+	ss << "select file_ReportPic from file_form_26 where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+
+	if (row < 1) {
+		ss.str(""); ss.clear();
+		help->closeDB(); delete help;
+		return;
+	}
+	_strReportImagePath.Format(_T("%s"), CA2W(re[1 * col + 0], CP_UTF8));
+	if (!_strReportImagePath.IsEmpty() && _strReportImagePath != _T("(null)")) {
+		if (true == (bool)PathFileExists(_strReportImagePath.GetBuffer())) {
+			CImage  image;
+			image.Load(_strReportImagePath);
+			CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+			CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
+			image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+			ReleaseDC(pDc);
+		}
+		else
+			_strReportImagePath.Empty();
+	}
+	else
+		_strReportImagePath.Empty();
+	help->closeDB(); delete help;
 }
 
 
@@ -378,3 +464,5 @@ void CPersonalForm20::OnDraw(CDC* /*pDC*/)
 		ReleaseDC(pDc);
 	}
 }
+
+

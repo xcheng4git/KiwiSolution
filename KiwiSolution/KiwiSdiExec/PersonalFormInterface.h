@@ -1,12 +1,14 @@
 #pragma once
 
+//
+
 #include <vector>
 using namespace std;
 
 class CBookmarkEx
 {
 public:
-	enum { CHKBOX, TXTBOX, ATTBOX };
+	enum { CHKBOX, TXTBOX, ATTBOX, PICBOX };
 	CBookmarkEx(int type_, const wchar_t* bookmark_, int nsub_) {
 		type = type_; bookmark = bookmark_; nsub = nsub_;
 	}
@@ -17,7 +19,8 @@ public:
 	int nsub;
 };
 
-class CBookmarks;
+class CBookmarks; 
+class CDocument0;
 class CPersonalFormInterface
 {
 public:
@@ -68,6 +71,7 @@ private:
 	void GetData(int type, int nID, double &data);
 
 	void PrintData(CBookmarkEx &theBookmark, int subform, int row, char *data, CBookmarks &bookmarks);
+	void PrintPic(CBookmarkEx &theBookmark, int subform, int row, char *data, CBookmarks &bookmarks, CDocument0& docx);
 };
 
 class Attachment{
