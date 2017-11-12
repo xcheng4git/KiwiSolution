@@ -282,6 +282,7 @@
     <Image Include="res\KiwiSdiExec.ico" />
     <Image Include="res\KiwiSdiExecDoc.ico" />
     <Image Include="res\PDF_File_Extension_48px_1140191_easyicon.net.ico" />
+    <Image Include="res\print_32px_1196212_easyicon.net.ico" />
     <Image Include="res\splash.bmp" />
     <Image Include="res\Toolbar.bmp" />
     <Image Include="res\XLS_File_Extension_48px_1140230_easyicon.net.ico" />

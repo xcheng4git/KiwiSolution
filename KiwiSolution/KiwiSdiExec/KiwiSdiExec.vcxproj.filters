@@ -537,5 +537,8 @@
     <Image Include="res\BMP_no_text_48px_1098707_easyicon.net.ico">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="res\print_32px_1196212_easyicon.net.ico">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

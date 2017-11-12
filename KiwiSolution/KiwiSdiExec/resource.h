@@ -76,6 +76,7 @@
 #define IDI_ICON_EXT_XLS                372
 #define IDI_ICON_EXT_ZIP                373
 #define IDI_ICON_EXT_NO                 374
+#define IDI_ICON_PRINT                  375
 #define IDC_EDIT_TEST                   1011
 #define IDC_LIST_SHORTCUT               1012
 #define IDC_TREE_ORGNIZATION            1013
@@ -932,6 +933,7 @@
 #define IDC_BUTTON_ADD_IMAGE            1552
 #define IDC_LIST_ATTACHMENT             1553
 #define IDC_BUTTON_ADD_IMAGE2           1554
+#define IDC_BUTTON_PRINT_ALL            1554
 #define IDC_LIST_ATTACHMENT2            1555
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
@@ -958,9 +960,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        375
+#define _APS_NEXT_RESOURCE_VALUE        376
 #define _APS_NEXT_COMMAND_VALUE         32791
-#define _APS_NEXT_CONTROL_VALUE         1554
+#define _APS_NEXT_CONTROL_VALUE         1555
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
