@@ -431,11 +431,13 @@ void CPersonalFormInterface::PrintPic(CBookmarkEx &theBookmark, int subform, int
 	wchar_t szBookmark[50];
 	CBookmark0 bookmark;
 	CRange range;
-
+	
 	TRY{	
 			swprintf_s(szBookmark, 50, _T("%s%d%d"), theBookmark.bookmark, subform + 1, row + 1);
 			bookmark = bookmarks.Item(&_variant_t(szBookmark));
 			range = bookmark.get_Range();
+			if (false == (bool)PathFileExists(CA2W(data, CP_UTF8)))
+				return;
 			COleVariant covZero((short)0), covTrue((short)TRUE), covFalse((short)FALSE);
 			CnlineShapes shape = docx.get_InlineShapes();
 			shape.AddPicture((CA2W(data, CP_UTF8)), covFalse, covTrue, &_variant_t(range));
