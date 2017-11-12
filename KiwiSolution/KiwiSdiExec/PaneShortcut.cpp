@@ -118,7 +118,7 @@ void CPaneShortcut::DoDeleteFile()
 	help->execSQL(ss.str().c_str());
 #else
 	ss.str(""); ss.clear();
-	ss << "update orgnization_file set del_status=1 where file_id=" << file_id << "';";
+	ss << "update orgnization_file set del_status=1 where file_id=" << file_id << ";";
 	help->execSQL(ss.str().c_str());
 #endif
 
@@ -141,6 +141,7 @@ void CPaneShortcut::DoDeleteFolder()
 	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	
 	if (row < 1) {
+		//folder 下面没有 file， 物理删除
 		ss.str(""); ss.clear();
 		ss << "delete from orgnization_folder where folder_name='" << CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
 		TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
