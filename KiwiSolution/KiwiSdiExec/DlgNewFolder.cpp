@@ -64,7 +64,8 @@ void CDlgNewFolder::OnOK()
 		ss << "'" << CW2A(m_strFolderName.GetBuffer(), CP_UTF8) << "', ";
 		ss << "'" << CW2A(m_strContactName.GetBuffer(), CP_UTF8) << "', ";
 		ss << "'" << CW2A(m_strContactTel.GetBuffer(), CP_UTF8) << "', ";
-		ss << "'" << CW2A(m_strContactPhone.GetBuffer(), CP_UTF8) << "') ";
+		ss << "'" << CW2A(m_strContactPhone.GetBuffer(), CP_UTF8) << "',";
+		ss << 0 << "); ";
 		//char value[500];
 		////USES_CONVERSION;
 		////sprintf_s(value, 500, "insert into orgnization_folder(folder_id, folder_name) values (null, '%s')", G2U(W2A(m_strFolderName.GetBuffer())));

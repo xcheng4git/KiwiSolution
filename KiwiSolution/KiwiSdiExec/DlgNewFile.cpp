@@ -81,7 +81,8 @@ void CDlgNewFile::OnOK()
 		ss << "insert into orgnization_file values (null, ";
 		ss << "'" << CW2A(m_strFileName.GetBuffer(0), CP_UTF8) << "', ";
 		ss << "'" << CW2A(m_strFilePhone.GetBuffer(0), CP_UTF8) << "', ";
-		ss << "'" << CW2A(m_strCurrentFolder.GetBuffer(0), CP_UTF8) << "'); ";
+		ss << "'" << CW2A(m_strCurrentFolder.GetBuffer(0), CP_UTF8) << "',";
+		ss << 0 << "); ";
 		//char value[500];
 		////sprintf_s(value, 500, "insert into orgnization_file(file_id, file_name, folder_name) values (null, '%s', '%s')", CW2A(m_strFileName.GetBuffer(0), CP_UTF8), CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8));
 		//USES_CONVERSION;
