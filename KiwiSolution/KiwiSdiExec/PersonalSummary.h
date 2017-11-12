@@ -3,6 +3,7 @@
 
 
 #include "ListCtrlEx.h"
+#include "afxwin.h"
 // CPersonalSummary ¥∞ÃÂ ”Õº
 
 class CPersonalSummary : public CFormView
@@ -44,4 +45,6 @@ public:
 	afx_msg void OnClickedButtonClose();
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	CXTButton m_btnPrintAll;
+	afx_msg void OnBnClickedButtonPrintAll();
 };

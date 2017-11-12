@@ -41,12 +41,14 @@ void CPersonalSummary::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST_SUMMARY_1, m_listSummary1);
 	DDX_Text(pDX, IDC_STATICBOX2, m_strBox2);
 	DDX_Control(pDX, IDC_LIST_SUMMARY_2, m_listSummary2);
+	DDX_Control(pDX, IDC_BUTTON_PRINT_ALL, m_btnPrintAll);
 }
 
 BEGIN_MESSAGE_MAP(CPersonalSummary, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE, &CPersonalSummary::OnClickedButtonClose)
 	ON_WM_CTLCOLOR()
 	ON_WM_TIMER()
+	ON_BN_CLICKED(IDC_BUTTON_PRINT_ALL, &CPersonalSummary::OnBnClickedButtonPrintAll)
 END_MESSAGE_MAP()
 
 
@@ -243,7 +245,7 @@ void CPersonalSummary::OnInitialUpdate()
 		if (row > 0) {
 			m_listSummary2.SetItem(iRow, 3, LVIF_TEXT, CA2W(re[1 * col + 1], CP_UTF8), 0, NULL, NULL, NULL);
 			m_listSummary2.SetItem(iRow, 4, LVIF_TEXT, CA2W(re[1 * col + 2], CP_UTF8), 0, NULL, NULL, NULL);
-			m_listSummary2.createItemButton(iRow, 5, m_listSummary2, _T("修改"), &file_id);
+			m_listSummary2.createItemButton(iRow, 5, m_listSummary2, _T("查阅修改"), &file_id);
 		}
 		else
 			m_listSummary2.SetItem(iRow, 2, LVIF_TEXT, _T("未填报"), 0, NULL, NULL, NULL);
@@ -257,6 +259,10 @@ void CPersonalSummary::OnInitialUpdate()
 #pragma endregion
 	help->closeDB(); delete help;
 
+
+	HICON hicon = AfxGetApp()->LoadIcon(IDI_ICON_PRINT);
+	//((CButton*)GetDlgItem(IDC_BUTTON_PRINT_ALL))->SetIcon(hicon);
+	m_btnPrintAll.SetIcon(CSize(32,32),hicon); DestroyIcon(hicon);
 }
 
 
@@ -299,4 +305,13 @@ void CPersonalSummary::OnTimer(UINT_PTR nIDEvent)
 		SetTimer(DateTimeTimer, 1000, NULL);
 	}
 	CFormView::OnTimer(nIDEvent);
+}
+
+
+void CPersonalSummary::OnBnClickedButtonPrintAll()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	if (IDOK == MessageBox(_T("请确认，打印当前人员的所有廉政档案！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION | IDOK)) {
+
+	}
 }
