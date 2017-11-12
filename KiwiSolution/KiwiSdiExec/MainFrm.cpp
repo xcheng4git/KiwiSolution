@@ -613,7 +613,7 @@ void CMainFrame::OnDatabaseInitial()
 	}
 
 	int ok1 = MessageBox(_T("请确认初始化数据库前，已经备份当前数据库！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION | IDOK);
-	if (ok1 = IDOK) {
+	if (ok1 == IDOK) {
 		int ok2 = MessageBox(_T("请再次确认初始化数据库前，已经备份当前数据库！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION | IDOK);
 		if (ok2 != IDOK)
 			return;
