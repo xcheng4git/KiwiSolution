@@ -85,10 +85,8 @@ void CDlgLogin::OnOK()
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
 
-		CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
-		CKiwiSdiExecDoc* pDoc = pWnd->GetDocument();
 		m_isLogined = true;
-		pDoc->m_currentUserGroup = atoi(re[1 * col + 0]);
+		((CKiwiSdiExecApp*)AfxGetApp())->m_currentUserGroup = atoi(re[1 * col + 0]);
 	}
 	else {
 		m_isLogined = false;
@@ -135,10 +133,17 @@ BOOL CDlgLogin::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
+
 	// TODO:  在此添加额外的初始化
+	//CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	//pWnd->ShowWindow(SW_HIDE);
+
 	if (!m_bitmap.LoadBitmap(IDB_BMP_SPLASH))
 		return FALSE;
 
+	//HICON hIcon = (HICON)LoadImage(NULL, _T("res\\User_login_128px_500811_easyicon.net.ico"), IMAGE_ICON, 0, 0, LR_CREATEDIBSECTION | LR_DEFAULTSIZE | LR_LOADFROMFILE);
+	//CDC *pDC = m_picLoginIcon.GetDC();
+	//pDC->DrawIcon(0, 0, hIcon);
 	HICON hicon = AfxGetApp()->LoadIcon(IDI_ICON_EXIT);
 	m_btnCancel.SetIcon(CSize(32, 32), hicon); DestroyIcon(hicon); m_btnCancel.SetFlatStyle();
 	hicon = AfxGetApp()->LoadIcon(IDI_ICON_LOGIN_IN);
