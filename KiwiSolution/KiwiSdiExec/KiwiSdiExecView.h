@@ -50,6 +50,14 @@ protected:
 public:
 	CStatic m_picGroup1_2;
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	CXTPButton m_btnGroup12_Data;
+	CXTPButton m_btnGroup11_Data;
+	CXTPButton m_btnGroup32_Data;
+	CXTPButton m_btnGroup31_Data;
+	CXTPButton m_btnGroup21_Data;
+	CXTPButton m_btnGroup22_Data;
+	CXTPButton m_btnGroup23_Data;
+	CXTPButton m_btnGroup24_Data;
 };
 
 #ifndef _DEBUG  // KiwiSdiExecView.cpp 中的调试版本
