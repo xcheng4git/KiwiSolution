@@ -192,21 +192,23 @@ FillComplete:
 
 	//保存体检报告单图片
 	if (!_strReportImagePath.IsEmpty()){
-		CImage  image;
-		image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库 
-		_strReportImagePath.ReleaseBuffer();
-		_strReportImagePath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".jpg");
-		image.Save(_strReportImagePath.GetBuffer());
+		if (PathFileExists(_strReportImagePath)) {
+			CImage  image;
+			image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库 
+			_strReportImagePath.ReleaseBuffer();
+			_strReportImagePath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".jpg");
+			image.Save(_strReportImagePath.GetBuffer());
 
-		stringstream ss;
-		ss << "update file_form_26 set file_ReportPic= ";
-		ss << "'" << CW2A(_strReportImagePath.GetBuffer(), CP_UTF8) << "' where form_recid= ";
-		ss << "'" << CW2A(form_recid.GetBuffer(), CP_UTF8) << "';";
-		CSQLiteHelper *help = new CSQLiteHelper();
-		help->openDB("kiwi.db3");
-		help->execSQL(ss.str().c_str());
-		ss.str("");
-		help->closeDB(); delete help;
+			stringstream ss;
+			ss << "update file_form_26 set file_ReportPic= ";
+			ss << "'" << CW2A(_strReportImagePath.GetBuffer(), CP_UTF8) << "' where form_recid= ";
+			ss << "'" << CW2A(form_recid.GetBuffer(), CP_UTF8) << "';";
+			CSQLiteHelper *help = new CSQLiteHelper();
+			help->openDB("kiwi.db3");
+			help->execSQL(ss.str().c_str());
+			ss.str("");
+			help->closeDB(); delete help;
+		}
 	}
 
 
@@ -435,21 +437,23 @@ void CPersonalForm20::OnBnClickedCmdUpdateForm()
 
 	//更新图片地址
 	if (!_strReportImagePath.IsEmpty()) {
-		CImage  image;
-		image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库 
-		_strReportImagePath.ReleaseBuffer();
-		_strReportImagePath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".jpg");
-		image.Save(_strReportImagePath.GetBuffer());
+		if (PathFileExists(_strReportImagePath)) {
+			CImage  image;
+			image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库 
+			_strReportImagePath.ReleaseBuffer();
+			_strReportImagePath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".jpg");
+			image.Save(_strReportImagePath.GetBuffer());
 
-		stringstream ss;
-		ss << "update file_form_26 set file_ReportPic= ";
-		ss << "'" << CW2A(_strReportImagePath.GetBuffer(), CP_UTF8) << "' where form_recid= ";
-		ss << "'" << CW2A(_vvSubformRecid[0][0].GetBuffer(), CP_UTF8) << "';";
-		CSQLiteHelper *help = new CSQLiteHelper();
-		help->openDB("kiwi.db3");
-		help->execSQL(ss.str().c_str());
-		ss.str("");
-		help->closeDB(); delete help;
+			stringstream ss;
+			ss << "update file_form_26 set file_ReportPic= ";
+			ss << "'" << CW2A(_strReportImagePath.GetBuffer(), CP_UTF8) << "' where form_recid= ";
+			ss << "'" << CW2A(_vvSubformRecid[0][0].GetBuffer(), CP_UTF8) << "';";
+			CSQLiteHelper *help = new CSQLiteHelper();
+			help->openDB("kiwi.db3");
+			help->execSQL(ss.str().c_str());
+			ss.str("");
+			help->closeDB(); delete help;
+		}
 	}
 }
 
@@ -463,12 +467,14 @@ void CPersonalForm20::OnEnChangeEdit1()
 	m_editReportImage.GetWindowTextW(_strReportImagePath);
 	_strReportImagePath.Trim();
 	if (!_strReportImagePath.IsEmpty()) {
-		CImage  image;
-		image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
-		CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-		CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
-		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-		ReleaseDC(pDc);
+		if (PathFileExists(_strReportImagePath)) {
+			CImage  image;
+			image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
+			CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+			CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
+			image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+			ReleaseDC(pDc);
+		}
 	}
 	// TODO:  在此添加控件通知处理程序代码
 }
@@ -477,12 +483,14 @@ void CPersonalForm20::OnDraw(CDC* /*pDC*/)
 {
 	// TODO:  在此添加专用代码和/或调用基类
 	if (!_strReportImagePath.IsEmpty()) {
-		CImage  image;
-		image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
-		CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-		CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
-		image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-		ReleaseDC(pDc);
+		if (PathFileExists(_strReportImagePath)) {
+			CImage  image;
+			image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
+			CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+			CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
+			image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+			ReleaseDC(pDc);
+		}
 	}
 }
 

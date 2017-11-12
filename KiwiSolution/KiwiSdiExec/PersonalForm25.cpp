@@ -525,15 +525,17 @@ void CPersonalForm25::OnBnClickedButtonAddCheckImage()
 	m_editCheckPath.GetWindowTextW(strPath);
 	strPath.Trim();
 	if (!strPath.IsEmpty()) {
-		int Which = strPath.ReverseFind('.');
-		CString ext = strPath.Right(strPath.GetLength() - Which - 1); ext.MakeLower();
-		CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
+		if (PathFileExists(strPath)) {
+			int Which = strPath.ReverseFind('.');
+			CString ext = strPath.Right(strPath.GetLength() - Which - 1); ext.MakeLower();
+			CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
 
-		if (CopyFile(strPath, strKiwiPath, FALSE)) {
+			if (CopyFile(strPath, strKiwiPath, FALSE)) {
 
-			InsertListItem(m_listCheckImages, ext, m_nCheckAttachCount,-1);
+				InsertListItem(m_listCheckImages, ext, m_nCheckAttachCount, -1);
 
-			m_vCheckAttachment.push_back(Attachment(_T(""), strKiwiPath)); m_nCheckAttachCount++;
+				m_vCheckAttachment.push_back(Attachment(_T(""), strKiwiPath)); m_nCheckAttachCount++;
+			}
 		}
 	}
 }
@@ -546,15 +548,17 @@ void CPersonalForm25::OnBnClickedButtonAddRegisterImage()
 	m_editRegisterPath.GetWindowTextW(strPath);
 	strPath.Trim();
 	if (!strPath.IsEmpty()) {
-		int Which = strPath.ReverseFind('.');
-		CString ext = strPath.Right(strPath.GetLength() - Which - 1); ext.MakeLower();
-		CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
+		if (PathFileExists(strPath)) {
+			int Which = strPath.ReverseFind('.');
+			CString ext = strPath.Right(strPath.GetLength() - Which - 1); ext.MakeLower();
+			CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
 
-		if (CopyFile(strPath, strKiwiPath, FALSE)) {
+			if (CopyFile(strPath, strKiwiPath, FALSE)) {
 
-			InsertListItem(m_listRegisterImages, ext, m_nRegisterAttachCount,-1);
+				InsertListItem(m_listRegisterImages, ext, m_nRegisterAttachCount, -1);
 
-			m_vRegisterAttachment.push_back(Attachment(_T(""), strKiwiPath)); m_nRegisterAttachCount++;
+				m_vRegisterAttachment.push_back(Attachment(_T(""), strKiwiPath)); m_nRegisterAttachCount++;
+			}
 		}
 	}
 }

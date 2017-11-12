@@ -451,27 +451,29 @@ void CPersonalForm26::OnBnClickedButtonAddImage()
 	m_editImagePath.GetWindowTextW(strPath);
 	strPath.Trim();
 	if (!strPath.IsEmpty()) {
-		int Which = strPath.ReverseFind('.');
-		CString ext = strPath.Right(strPath.GetLength() - Which - 1); ext.MakeLower();
-		CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
+		if (PathFileExists(strPath)) {
+			int Which = strPath.ReverseFind('.');
+			CString ext = strPath.Right(strPath.GetLength() - Which - 1); ext.MakeLower();
+			CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
 
-		if (CopyFile(strPath, strKiwiPath, FALSE)) {
-			int nItem;
-			if (ext == _T("jpeg") || ext == _T("jpg"))
-				nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 0);
-			else if (ext == _T("bmp"))
-				nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 1);
-			else if (ext == _T("pdf"))
-				nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 2);
-			else if (ext == _T("doc"))
-				nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 3);
-			else if (ext == _T("zip"))
-				nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 4);
-			else
-				nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 6);
+			if (CopyFile(strPath, strKiwiPath, FALSE)) {
+				int nItem;
+				if (ext == _T("jpeg") || ext == _T("jpg"))
+					nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 0);
+				else if (ext == _T("bmp"))
+					nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 1);
+				else if (ext == _T("pdf"))
+					nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 2);
+				else if (ext == _T("doc"))
+					nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 3);
+				else if (ext == _T("zip"))
+					nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 4);
+				else
+					nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 6);
 
-			m_listAttachments.SetItemData(nItem, (DWORD)-1);
-			m_vAttachment.push_back(Attachment(_T(""), strKiwiPath)); m_nAttachCount++;
+				m_listAttachments.SetItemData(nItem, (DWORD)-1);
+				m_vAttachment.push_back(Attachment(_T(""), strKiwiPath)); m_nAttachCount++;
+			}
 		}
 	}
 

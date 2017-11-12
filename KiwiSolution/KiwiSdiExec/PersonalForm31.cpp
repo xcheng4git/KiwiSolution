@@ -455,15 +455,17 @@ void CPersonalForm31::OnBnClickedButtonAddImage()
 	m_editAttachPath.GetWindowTextW(strPath);
 	strPath.Trim();
 	if (!strPath.IsEmpty()) {
-		int Which = strPath.ReverseFind('.');
-		CString ext = strPath.Right(strPath.GetLength() - Which - 1); ext.MakeLower();
-		CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
+		if (PathFileExists(strPath)) {
+			int Which = strPath.ReverseFind('.');
+			CString ext = strPath.Right(strPath.GetLength() - Which - 1); ext.MakeLower();
+			CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
 
-		if (CopyFile(strPath, strKiwiPath, FALSE)) {
+			if (CopyFile(strPath, strKiwiPath, FALSE)) {
 
-			InsertListItem(m_listAttachments, ext, m_nAttachCount, -1);
+				InsertListItem(m_listAttachments, ext, m_nAttachCount, -1);
 
-			m_vAttachment.push_back(Attachment(_T(""), strKiwiPath)); m_nAttachCount++;
+				m_vAttachment.push_back(Attachment(_T(""), strKiwiPath)); m_nAttachCount++;
+			}
 		}
 	}
 }
