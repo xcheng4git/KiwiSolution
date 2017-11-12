@@ -34,6 +34,9 @@ void CDlgLogin::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT_NAME, m_strUsername);
 	DDX_Text(pDX, IDC_EDIT_PWD, m_strUserpwd);
+	DDX_Control(pDX, IDC_STATIC_LOGIN_ICON, m_picLoginIcon);
+	DDX_Control(pDX, IDOK, m_btnOk);
+	DDX_Control(pDX, IDCANCEL, m_btnCancel);
 }
 
 
@@ -51,19 +54,20 @@ void CDlgLogin::OnOK()
 	// TODO:  在此添加专用代码和/或调用基类
 	UpdateData();
 
+
+	m_strUsername.Trim(); m_strUserpwd.Trim();
+	if (m_strUsername.IsEmpty() || m_strUserpwd.IsEmpty()) {
+		m_isLogined = false;
+		GetDlgItem(IDC_STATIC_WRONG)->ShowWindow(SW_SHOW);
+		return;
+	}
+
 	stringstream ss;
 	CSQLiteHelper *help = new CSQLiteHelper();
 	help->openDB("kiwi.db3");
 	int row, col;
 	char *eee = "i"; char **result = &eee;
 	char **re;
-
-	m_strUsername.Trim(); m_strUserpwd.Trim();
-	if (m_strUsername.IsEmpty() || m_strUserpwd.IsEmpty()) {
-		m_isLogined = false;
-		help->closeDB(); delete help;
-		return;
-	}
 
 	CString cpwd = CUtility::Crypt(m_strUserpwd);
 	ss << "select user_group from kiwi_users where user_name='" << CW2A(m_strUsername.GetBuffer(), CP_UTF8) << "' and ";
@@ -134,6 +138,11 @@ BOOL CDlgLogin::OnInitDialog()
 	// TODO:  在此添加额外的初始化
 	if (!m_bitmap.LoadBitmap(IDB_BMP_SPLASH))
 		return FALSE;
+
+	HICON hicon = AfxGetApp()->LoadIcon(IDI_ICON_EXIT);
+	m_btnCancel.SetIcon(CSize(32, 32), hicon); DestroyIcon(hicon); m_btnCancel.SetFlatStyle();
+	hicon = AfxGetApp()->LoadIcon(IDI_ICON_LOGIN_IN);
+	m_btnOk.SetIcon(CSize(32, 32), hicon); DestroyIcon(hicon); m_btnOk.SetFlatStyle();
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常:  OCX 属性页应返回 FALSE

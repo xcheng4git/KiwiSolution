@@ -268,7 +268,10 @@
     <Image Include="res\bmp_four_xt.bmp" />
     <Image Include="res\BMP_no_text_48px_1098707_easyicon.net.ico" />
     <Image Include="res\bmreport.bmp" />
+    <Image Include="res\clock_128px_1203053_easyicon.net.ico" />
     <Image Include="res\DOC_File_Extension_48px_1140154_easyicon.net.ico" />
+    <Image Include="res\exit_32px_27110_easyicon.net.ico" />
+    <Image Include="res\human_72px_1094883_easyicon.net.ico" />
     <Image Include="res\ico00001.ico" />
     <Image Include="res\icon1.ico" />
     <Image Include="res\icon11.ico" />
@@ -278,12 +281,18 @@
     <Image Include="res\icon6.ico" />
     <Image Include="res\icon7.ico" />
     <Image Include="res\icon8.ico" />
+    <Image Include="res\information_personal_48px_33217_easyicon.net.ico" />
+    <Image Include="res\information_personal_64px_33217_easyicon.net.ico" />
     <Image Include="res\JPEG_File_Extension_48px_1140172_easyicon.net.ico" />
     <Image Include="res\KiwiSdiExec.ico" />
     <Image Include="res\KiwiSdiExecDoc.ico" />
+    <Image Include="res\Login_32px_1186301_easyicon.net.ico" />
     <Image Include="res\PDF_File_Extension_48px_1140191_easyicon.net.ico" />
+    <Image Include="res\print_32px_1196212_easyicon.net.ico" />
+    <Image Include="res\search_cat_48px_1141878_easyicon.net.ico" />
     <Image Include="res\splash.bmp" />
     <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\User_login_128px_500811_easyicon.net.ico" />
     <Image Include="res\XLS_File_Extension_48px_1140230_easyicon.net.ico" />
     <Image Include="res\ZIP_File_Extension_48px_1140232_easyicon.net.ico" />
   </ItemGroup>

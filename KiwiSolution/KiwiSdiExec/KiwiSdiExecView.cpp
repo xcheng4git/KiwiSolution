@@ -12,6 +12,12 @@
 #include "KiwiSdiExecDoc.h"
 #include "KiwiSdiExecView.h"
 
+#include "SQLiteHelper.h"
+#include <sstream>
+using namespace std;
+#include "MainFrm.h"
+#include "Utility.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -57,6 +63,14 @@ void CKiwiSdiExecView::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_PIC_GROUP1_2, m_picGroup1_2);
+	DDX_Control(pDX, IDC_BUTTON_GRP12_DATA, m_btnGroup12_Data);
+	DDX_Control(pDX, IDC_BUTTON_GRP11_DATA, m_btnGroup11_Data);
+	DDX_Control(pDX, IDC_BUTTON_GRP32_DATA, m_btnGroup32_Data);
+	DDX_Control(pDX, IDC_BUTTON_GRP31_DATA, m_btnGroup31_Data);
+	DDX_Control(pDX, IDC_BUTTON_GRP21_DATA, m_btnGroup21_Data);
+	DDX_Control(pDX, IDC_BUTTON_GRP22_DATA, m_btnGroup22_Data);
+	DDX_Control(pDX, IDC_BUTTON_GRP23_DATA, m_btnGroup23_Data);
+	DDX_Control(pDX, IDC_BUTTON_GRP24_DATA, m_btnGroup24_Data);
 }
 
 BOOL CKiwiSdiExecView::PreCreateWindow(CREATESTRUCT& cs)
@@ -79,11 +93,10 @@ void CKiwiSdiExecView::OnInitialUpdate()
 
 	CStatic* pPic;
 	GetDlgItem(IDC_STATIC_GROUP1_1_TIP)->SetFont(&m_fontTip);
-	pPic = (CStatic *)GetDlgItem(IDC_PIC_GROUP1_1); pPic->ModifyStyle(0xf, SS_BITMAP | SS_CENTERIMAGE); pPic->SetBitmap(m_bmpTip);
+	//pPic = (CStatic *)GetDlgItem(IDC_PIC_GROUP1_1); pPic->ModifyStyle(0xf, SS_BITMAP | SS_CENTERIMAGE); pPic->SetBitmap(m_bmpTip);
 	GetDlgItem(IDC_STATIC_GROUP1_1_DATA)->SetFont(&m_fontTip);
 	GetDlgItem(IDC_STATIC_GROUP1_2_TIP)->SetFont(&m_fontTip);
-	m_picGroup1_2.ModifyStyle(0xf, SS_BITMAP | SS_CENTERIMAGE); m_picGroup1_2.SetBitmap(m_bmpTip);
-
+	//m_picGroup1_2.ModifyStyle(0xf, SS_BITMAP | SS_CENTERIMAGE); m_picGroup1_2.SetBitmap(m_bmpTip);
 	GetDlgItem(IDC_STATIC_GROUP1_2_DATA)->SetFont(&m_fontTip);
 
 	GetDlgItem(IDC_STATIC_GROUP2_1_TIP)->SetFont(&m_fontTip);
@@ -100,11 +113,10 @@ void CKiwiSdiExecView::OnInitialUpdate()
 	GetDlgItem(IDC_STATIC_GROUP2_4_DATA)->SetFont(&m_fontTip);
 
 	GetDlgItem(IDC_STATIC_GROUP3_1_TIP)->SetFont(&m_fontTip);
-	pPic = (CStatic *)GetDlgItem(IDC_PIC_GROUP3_1); pPic->ModifyStyle(0xf, SS_BITMAP | SS_CENTERIMAGE); pPic->SetBitmap(m_bmpTip);
+	//pPic = (CStatic *)GetDlgItem(IDC_PIC_GROUP3_1); pPic->ModifyStyle(0xf, SS_BITMAP | SS_CENTERIMAGE); pPic->SetBitmap(m_bmpTip);
 	GetDlgItem(IDC_STATIC_GROUP3_1_DATA)->SetFont(&m_fontTip);
 	GetDlgItem(IDC_STATIC_GROUP3_2_TIP)->SetFont(&m_fontTip);
-	pPic = (CStatic *)GetDlgItem(IDC_PIC_GROUP3_2); 
-	pPic->ModifyStyle(0xf, SS_BITMAP | SS_CENTERIMAGE); pPic->SetBitmap(m_bmpTip); 
+	//pPic = (CStatic *)GetDlgItem(IDC_PIC_GROUP3_2); pPic->ModifyStyle(0xf, SS_BITMAP | SS_CENTERIMAGE); pPic->SetBitmap(m_bmpTip); 
 	GetDlgItem(IDC_STATIC_GROUP3_2_DATA)->SetFont(&m_fontTip);
 
 
@@ -118,6 +130,122 @@ void CKiwiSdiExecView::OnInitialUpdate()
 
 	SetTimer(DateTimeTimer, 1000, NULL);
 
+	///////////////////////////////////////////////////////////////////////
+	
+	stringstream ss;
+	CString strText;
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i";
+	char **result = &eee;
+	char **re = help->rawQuery("select count(*) from file_invertigated_form_12", &row, &col, result);
+	if (row >= 1) {
+		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
+#ifdef _XTP_INCLUDE_MARKUP
+		m_btnGroup11_Data.EnableMarkup();
+		m_btnGroup11_Data.SetWindowText(strText);
+		m_btnGroup11_Data.SetFlatStyle();
+#else
+		GetDlgItem(IDC_STATIC_GROUP1_1_DATA)->SetWindowTextW(strText);
+#endif
+	}
+	re = help->rawQuery("select count(*) from file_invertigated_form_13", &row, &col, result);
+	if (row >= 1) {
+		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
+		
+#ifdef _XTP_INCLUDE_MARKUP
+		m_btnGroup12_Data.EnableMarkup();
+		m_btnGroup12_Data.SetWindowText(strText);
+		m_btnGroup12_Data.SetFlatStyle();
+#else
+		GetDlgItem(IDC_STATIC_GROUP1_2_DATA)->SetWindowTextW(strText);
+#endif
+	}
+	//////////////////////////////////
+	ss.str(""); ss.clear();
+	ss << "select count(*) from file_invertigated_form_13 where clearing_four_xt in (select punish_id from four_punish_category where punish_type=1);";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row >= 1) {
+		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
+#ifdef _XTP_INCLUDE_MARKUP
+		m_btnGroup21_Data.EnableMarkup();
+		m_btnGroup21_Data.SetWindowText(strText);
+		m_btnGroup21_Data.SetFlatStyle();
+#else
+		GetDlgItem(IDC_STATIC_GROUP2_1_DATA)->SetWindowTextW(strText);
+#endif
+	}
+	ss.str(""); ss.clear();
+	ss << "select count(*) from file_invertigated_form_13 where clearing_four_xt in (select punish_id from four_punish_category where punish_type=2);";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row >= 1) {
+		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
+#ifdef _XTP_INCLUDE_MARKUP
+		m_btnGroup22_Data.EnableMarkup();
+		m_btnGroup22_Data.SetWindowText(strText);
+		m_btnGroup22_Data.SetFlatStyle();
+#else
+		GetDlgItem(IDC_STATIC_GROUP2_2_DATA)->SetWindowTextW(strText);
+#endif
+	}
+	ss.str(""); ss.clear();
+	ss << "select count(*) from file_invertigated_form_13 where clearing_four_xt in (select punish_id from four_punish_category where punish_type=3);";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row >= 1) {
+		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
+#ifdef _XTP_INCLUDE_MARKUP
+		m_btnGroup23_Data.EnableMarkup();
+		m_btnGroup23_Data.SetWindowText(strText);
+		m_btnGroup23_Data.SetFlatStyle();
+#else
+		GetDlgItem(IDC_STATIC_GROUP2_3_DATA)->SetWindowTextW(strText);
+#endif
+	}
+	ss.str(""); ss.clear();
+	ss << "select count(*) from file_invertigated_form_13 where clearing_four_xt in (select punish_id from four_punish_category where punish_type=4);";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row >= 1) {
+		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
+#ifdef _XTP_INCLUDE_MARKUP
+		m_btnGroup24_Data.EnableMarkup();
+		m_btnGroup24_Data.SetWindowText(strText);
+		m_btnGroup24_Data.SetFlatStyle();
+#else
+		GetDlgItem(IDC_STATIC_GROUP2_4_DATA)->SetWindowTextW(strText);
+#endif
+	}
+	//////////////////////////////////
+	re = help->rawQuery("select count(*)from file_invertigated_form_13 where clearing_punish_start_date<=date() and clearing_punish_end_date>date();", &row, &col, result);
+	if (row >= 1) {
+		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
+#ifdef _XTP_INCLUDE_MARKUP
+		m_btnGroup31_Data.EnableMarkup();
+		m_btnGroup31_Data.SetWindowText(strText);
+		m_btnGroup31_Data.SetFlatStyle();
+#else
+		GetDlgItem(IDC_STATIC_GROUP3_1_DATA)->SetWindowTextW(strText);
+#endif
+	}
+	COleDateTime curDate; curDate = COleDateTime::GetCurrentTime(); 
+	COleDateTimeSpan ts; ts.SetDateTimeSpan(30, 0, 0, 0); 
+	COleDateTime tt = ts + curDate;
+	ss.str(""); ss.clear();
+	ss << "select count(*) from file_invertigated_form_13 where clearing_punish_end_date<=";
+	ss << "'" << tt.GetYear() << "-" << tt.GetMonth() << "-" << tt.GetDay() << "';";
+	//TRACE(_T("\n%s"), CA2W(ss.str().c_str(), CP_UTF8));
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row >= 1) {
+		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
+
+#ifdef _XTP_INCLUDE_MARKUP
+		m_btnGroup32_Data.EnableMarkup();
+		m_btnGroup32_Data.SetWindowText(strText);
+		m_btnGroup32_Data.SetFlatStyle();
+#else
+		GetDlgItem(IDC_STATIC_GROUP3_2_DATA)->SetWindowTextW(strText);
+#endif
+	}
 }
 
 

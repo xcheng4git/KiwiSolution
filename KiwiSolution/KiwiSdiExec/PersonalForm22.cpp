@@ -24,16 +24,16 @@ CPersonalForm22::CPersonalForm22()
 	int parameters1[16][6] = { { IDC_EDIT264, IDC_EDIT248, IDC_EDIT236, IDC_EDIT237, IDC_DATETIMEPICKER25, IDC_EDIT259 },
 	{ IDC_EDIT253, IDC_EDIT238, IDC_EDIT260, IDC_EDIT226, IDC_DATETIMEPICKER27, IDC_EDIT249 },
 	{ IDC_EDIT254, IDC_EDIT239, IDC_EDIT261, IDC_EDIT227, IDC_DATETIMEPICKER28, IDC_EDIT250 },
-	{ IDC_EDIT255, IDC_EDIT240, IDC_EDIT262, IDC_EDIT228, IDC_DATETIMEPICKER28, IDC_EDIT251 },
+	{ IDC_EDIT255, IDC_EDIT240, IDC_EDIT262, IDC_EDIT228, IDC_DATETIMEPICKER29, IDC_EDIT251 },
 	{ IDC_EDIT256, IDC_EDIT241, IDC_EDIT263, IDC_EDIT229, IDC_DATETIMEPICKER30, IDC_EDIT252 },
 	{ IDC_EDIT267, IDC_EDIT274, IDC_EDIT302, IDC_EDIT308, IDC_DATETIMEPICKER31, IDC_EDIT318 },
 	{ IDC_EDIT257, IDC_EDIT242, IDC_EDIT279, IDC_EDIT230, IDC_DATETIMEPICKER32, IDC_EDIT314 },
 	{ IDC_EDIT258, IDC_EDIT243, IDC_EDIT280, IDC_EDIT231, IDC_DATETIMEPICKER33, IDC_EDIT315 },
 	{ IDC_EDIT265, IDC_EDIT244, IDC_EDIT281, IDC_EDIT232, IDC_DATETIMEPICKER34, IDC_EDIT316 },
-	{ IDC_EDIT266, IDC_EDIT245, IDC_EDIT282, IDC_EDIT233, IDC_DATETIMEPICKER34, IDC_EDIT317 },
+	{ IDC_EDIT266, IDC_EDIT245, IDC_EDIT282, IDC_EDIT233, IDC_DATETIMEPICKER35, IDC_EDIT317 },
 	{ IDC_EDIT272, IDC_EDIT277, IDC_EDIT303, IDC_EDIT334, IDC_DATETIMEPICKER36, IDC_EDIT323 },
 	{ IDC_EDIT268, IDC_EDIT246, IDC_EDIT284, IDC_EDIT313, IDC_DATETIMEPICKER37, IDC_EDIT319 },
-	{ IDC_EDIT269, IDC_EDIT247, IDC_EDIT304, IDC_EDIT309, IDC_DATETIMEPICKER37, IDC_EDIT320 },
+	{ IDC_EDIT269, IDC_EDIT247, IDC_EDIT304, IDC_EDIT309, IDC_DATETIMEPICKER38, IDC_EDIT320 },
 	{ IDC_EDIT270, IDC_EDIT275, IDC_EDIT305, IDC_EDIT310, IDC_DATETIMEPICKER39, IDC_EDIT321 },
 	{ IDC_EDIT271, IDC_EDIT276, IDC_EDIT306, IDC_EDIT311, IDC_DATETIMEPICKER40, IDC_EDIT322 },
 	{ IDC_EDIT273, IDC_EDIT278, IDC_EDIT307, IDC_EDIT312, IDC_DATETIMEPICKER41, IDC_EDIT324 } };
@@ -60,9 +60,12 @@ CPersonalForm22::CPersonalForm22()
 	vStr.clear(); vStr.push_back(0); vStr.push_back(16); _vvSubformRecordRange.push_back(vStr);
 
 	//以下是为了打印的预设
-	const wchar_t *pBookmarks1[7] = { _T("有无"), _T("上交礼金"), _T("名称"), _T("数量"), _T("折合价值"), _T("上交时间"), _T("上交部门") };
+	const wchar_t *pBookmarks1[7] = { _T("有无"), _T("金额"), _T("名称"), _T("数量"), _T("折合价值"), _T("上交时间"), _T("上交部门") };
 	int structure10[7] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
-	int structure11[3 + 1 + 6] = { -1, 16, 6, 2,  1, 1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	int structure11[3 + 1 + 7] = { -1, 16, 6, 2, 2, 1, 1, 1, 1, 1,1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	const wchar_t *pBookmarks2[4] = { _T("有无"), _T("姓名"), _T("单位"), _T("职务") };
+	int structure20[4] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
+	int structure21[3 + 1 + 4] = { -1, 1, 3, 0, 2, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 
 
 
@@ -72,11 +75,20 @@ CPersonalForm22::CPersonalForm22()
 		vBke.push_back(bookmark);
 	}
 	_vvBookmarks.push_back(vBke);
-
+	vBke.clear();
+	for (int i = 0; i < 4; i++) {
+		CBookmarkEx bookmark(structure20[i], pBookmarks2[i], structure21[4 + i]);
+		vBke.push_back(bookmark);
+	}
+	_vvBookmarks.push_back(vBke);
 
 	vStr.clear();
 	for (int i = 0; i < 4; i++)
 		vStr.push_back(structure11[i]);
+	_vvSubformFlags.push_back(vStr);
+	vStr.clear();
+	for (int i = 0; i < 4; i++)
+		vStr.push_back(structure21[i]);
 	_vvSubformFlags.push_back(vStr);
 }
 
@@ -262,7 +274,9 @@ void CPersonalForm22::OnBnClickedCmdPrintForm()
 	ss.str(""); ss.clear();
 	ss << "select * from file_form_28 where file_id=" << file_id << " limit 0,16;";
 	_vSubformQueryString.push_back(ss.str());
-	
+	ss.str(""); ss.clear();
+	ss << "select file_name, file_WorkUnit, file_CurrentPosition from file_form_02 where file_id=" << file_id << ";";
+	_vSubformQueryString.push_back(ss.str());
 	ss.str(""); ss.clear();
 
 	DoPrintForm(CString(_T("表7.dotx")));
@@ -340,6 +354,32 @@ void CPersonalForm22::OnInitialUpdate()
 	delete help;
 #endif
 	
+	GetDlgItem(IDC_STATIC_FORM_HEADER)->SetFont(&m_fontHeader);
+	vector<vector<vector<int>>>::iterator itVVVparameter = _vvvParameters.begin();
+	int i = 0;
+	while (itVVVparameter != _vvvParameters.end()) {
+		vector<vector<int>>::iterator itVVparameter = itVVVparameter->begin();
+		while (itVVparameter != itVVVparameter->end()) {
+			int j = 0;
+
+			vector<int>::iterator itV = itVVparameter->begin();
+			while (itV != itVVparameter->end()) {
+				if ((_vvSubformStructure[i][2 + j] != RADIOBTN) && (_vvSubformStructure[i][2 + j] != ATTACHMENTBX)) {
+					GetDlgItem(*itV)->SetFont(&m_fontEdit);
+				}
+
+				itV++; j++;
+			}
+			itVVparameter++;
+		}
+		itVVVparameter++; i++;
+	}
+	GetDlgItem(IDC_EDIT1)->SetFont(&m_fontEdit);
+	GetDlgItem(IDC_EDIT12)->SetFont(&m_fontEdit);
+	GetDlgItem(IDC_EDIT13)->SetFont(&m_fontEdit);
+
+
+
 	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
 	DoShowForm();
 
@@ -355,6 +395,31 @@ void CPersonalForm22::OnInitialUpdate()
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
 	}
+
+#pragma region 填不可更改的姓名单位信息
+
+		stringstream ss;
+		ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+			CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+
+		CSQLiteHelper *help = new CSQLiteHelper();
+		help->openDB("kiwi.db3");
+		int row, col;
+		char *eee = "i"; char **result = &eee;
+		char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		int file_id = atoi(re[1 * col + 0]);
+
+		ss.str(""); ss.clear();
+		ss << "select file_name, file_WorkUnit, file_CurrentPosition from file_form_02 where file_id=" << file_id << ";";
+		TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		if (row >= 1) {
+			GetDlgItem(IDC_EDIT1)->SetWindowTextW(CA2W(re[1 * col + 0], CP_UTF8));
+			GetDlgItem(IDC_EDIT12)->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
+			GetDlgItem(IDC_EDIT13)->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
+		}
+		help->closeDB(); delete help;
+#pragma endregion
 
 }
 
