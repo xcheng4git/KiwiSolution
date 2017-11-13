@@ -329,6 +329,10 @@ BOOL PersonalForm03::hasData(int isub, int irow)
 	else if (isub == 2) {
 		if (m_Radio2_0 == -1 || m_Radio2_0 == 1)
 			return FALSE;
+		vector<vector<int>> vvParam = _vvvParameters[isub - 1];
+		GetDlgItem(vvParam[irow][2])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty())
+			return FALSE;
 	}
 
 	return TRUE;

@@ -743,12 +743,14 @@ void CPersonalForm01::OnClickedCmdPrintForm()
 		range.put_Text((CA2W(re[1 * col + i + 3], CP_UTF8)));
 	}
 
-	//≤Â»ÎÕº∆¨
-	bookmark = bookmarks.Item(&_variant_t(_T("’’∆¨")));
-	range = bookmark.get_Range();
-	CnlineShapes shape = docx.get_InlineShapes();
-	//shape.AddPicture(_T("C:\\Projects\\Kiwi.Git\\KiwiSolution\\KiwiSdiExec\\a.jpg"), covFalse, covTrue, &_variant_t(range));
-	shape.AddPicture(m_strPicPathname.GetBuffer(), covFalse, covTrue, &_variant_t(range));
+	if (PathFileExists(m_strPicPathname)) {
+		//≤Â»ÎÕº∆¨
+		bookmark = bookmarks.Item(&_variant_t(_T("’’∆¨")));
+		range = bookmark.get_Range();
+		CnlineShapes shape = docx.get_InlineShapes();
+		//shape.AddPicture(_T("C:\\Projects\\Kiwi.Git\\KiwiSolution\\KiwiSdiExec\\a.jpg"), covFalse, covTrue, &_variant_t(range));
+		shape.AddPicture(m_strPicPathname.GetBuffer(), covFalse, covTrue, &_variant_t(range));
+	}
 
 	CString strSavePath = CUtility::GetModuleDirectory() + _T("\\temp.docx");
 	docx.SaveAs(COleVariant(strSavePath), covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional);
