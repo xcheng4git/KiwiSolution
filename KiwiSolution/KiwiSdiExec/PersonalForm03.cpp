@@ -449,6 +449,7 @@ void PersonalForm03::OnBnClickedButtonCloseForm3()
 
 void PersonalForm03::OnBnClickedCmdSaveForm()
 {
+	UpdateData();
 	// TODO:  在此添加控件通知处理程序代码
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
