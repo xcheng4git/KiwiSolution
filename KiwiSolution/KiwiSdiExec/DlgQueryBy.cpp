@@ -254,11 +254,219 @@ void CDlgQueryBy::DoQueryByAge()
 	m_listQuerySummary.InsertColumn(1, _T("年龄段"), LVCFMT_CENTER, 120);
 	m_listQuerySummary.InsertColumn(2, _T("人数"), LVCFMT_CENTER, 50);
 	m_listQuerySummary.InsertColumn(3, _T("比例"), LVCFMT_CENTER, 60);
+
+	COleDateTime today = COleDateTime::GetCurrentTime();
+	COleDateTimeSpan ts; 
+	ts.SetDateTimeSpan(365*10, 0, 0, 0);
+	COleDateTime age30(today.GetYear() - 30, today.GetMonth(), today.GetDay(), 0, 0, 0);
+	COleDateTime age40(today.GetYear() - 40, today.GetMonth(), today.GetDay(), 0, 0, 0);
+	COleDateTime age50(today.GetYear() - 50, today.GetMonth(), today.GetDay(), 0, 0, 0);
+	COleDateTime age60(today.GetYear() - 60, today.GetMonth(), today.GetDay(), 0, 0, 0);
+
+	CString strText;
+	m_comboFolder.GetWindowTextW(strText); strText.Trim();
+
+	stringstream ss;
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i";
+	char **result = &eee;
+	char **re;
+	
+	CString str;
+	int nItem = 0; float sum = 0.0; vector<int> vFileCount;
+
+	m_listQuerySummary.InsertItem(nItem, _T("1"));
+	m_listQuerySummary.SetItem(nItem, 1, LVIF_TEXT, _T("小于30岁"), 0, NULL, NULL, NULL);
+	ss.str(""); ss.clear();
+	ss << "select count(*) from file_form_01 where file_birth_date > '" << CW2A((age30.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "' ";
+	ss << " and file_id in (select file_id from orgnization_file where del_status=0 ";
+	if (!strText.IsEmpty()) {
+		ss << " and folder_name=";
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+	}
+	ss << "); ";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result); //row 是查出多少行记录,col是每条记录多少个字段
+	if (row < 1) {
+		vFileCount.push_back(0);
+		m_listQuerySummary.SetItem(nItem, 2, LVIF_TEXT, _T("无"), 0, NULL, NULL, NULL);
+	}
+	else {
+		int t = atoi(re[1 * col + 0]); sum += (float)t; vFileCount.push_back(t);
+		m_listQuerySummary.SetItem(nItem, 2, LVIF_TEXT, CA2W(re[1 * col + 0], CP_UTF8), 0, NULL, NULL, NULL);
+	}
+	////
+	nItem++;
+	m_listQuerySummary.InsertItem(nItem, _T("2"));
+	m_listQuerySummary.SetItem(nItem, 1, LVIF_TEXT, _T("30岁到40岁"), 0, NULL, NULL, NULL);
+	ss.str(""); ss.clear();
+	ss << "select count(*) from file_form_01 where file_birth_date <= '" << CW2A((age30.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "' and ";
+	ss << "file_birth_date > '" << CW2A((age40.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "' ";
+	ss << " and file_id in (select file_id from orgnization_file where del_status=0 ";
+	if (!strText.IsEmpty()) {
+		ss << " and folder_name=";
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+	}
+	ss << "); ";
+
+	TRACE(_T("\n%s"), CA2W(ss.str().c_str(), CP_UTF8));
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result); //row 是查出多少行记录,col是每条记录多少个字段
+	if (row < 1) {
+		vFileCount.push_back(0);
+		m_listQuerySummary.SetItem(nItem, 2, LVIF_TEXT, _T("无"), 0, NULL, NULL, NULL);
+	}
+	else {
+		int t = atoi(re[1 * col + 0]); sum += (float)t; vFileCount.push_back(t);
+		m_listQuerySummary.SetItem(nItem, 2, LVIF_TEXT, CA2W(re[1 * col + 0], CP_UTF8), 0, NULL, NULL, NULL);
+	}
+	////
+	nItem++;
+	m_listQuerySummary.InsertItem(nItem, _T("3"));
+	m_listQuerySummary.SetItem(nItem, 1, LVIF_TEXT, _T("40岁到50岁"), 0, NULL, NULL, NULL);
+	ss.str(""); ss.clear();
+	ss << "select count(*) from file_form_01 where file_birth_date <= '" << CW2A((age40.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "' and ";
+	ss << "file_birth_date > '" << CW2A((age50.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "' ";
+	ss << " and file_id in (select file_id from orgnization_file where del_status=0 ";
+	if (!strText.IsEmpty()) {
+		ss << " and folder_name=";
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+	}
+	ss << "); ";
+
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result); //row 是查出多少行记录,col是每条记录多少个字段
+	if (row < 1) {
+		vFileCount.push_back(0);
+		m_listQuerySummary.SetItem(nItem, 2, LVIF_TEXT, _T("无"), 0, NULL, NULL, NULL);
+	}
+	else {
+		int t = atoi(re[1 * col + 0]); sum += (float)t; vFileCount.push_back(t);
+		m_listQuerySummary.SetItem(nItem, 2, LVIF_TEXT, CA2W(re[1 * col + 0], CP_UTF8), 0, NULL, NULL, NULL);
+	}
+	////
+	nItem++;
+	m_listQuerySummary.InsertItem(nItem, _T("4"));
+	m_listQuerySummary.SetItem(nItem, 1, LVIF_TEXT, _T("50岁到60岁"), 0, NULL, NULL, NULL);
+	ss.str(""); ss.clear();
+	ss << "select count(*) from file_form_01 where file_birth_date <= '" << CW2A((age50.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "' and ";
+	ss << "file_birth_date > '" << CW2A((age60.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "' ";
+	ss << " and file_id in (select file_id from orgnization_file where del_status=0 ";
+	if (!strText.IsEmpty()) {
+		ss << " and folder_name=";
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+	}
+	ss << "); ";
+
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result); //row 是查出多少行记录,col是每条记录多少个字段
+	if (row < 1) {
+		vFileCount.push_back(0);
+		m_listQuerySummary.SetItem(nItem, 2, LVIF_TEXT, _T("无"), 0, NULL, NULL, NULL);
+	}
+	else {
+		int t = atoi(re[1 * col + 0]); sum += (float)t; vFileCount.push_back(t);
+		m_listQuerySummary.SetItem(nItem, 2, LVIF_TEXT, CA2W(re[1 * col + 0], CP_UTF8), 0, NULL, NULL, NULL);
+	}
+	////
+	nItem++;
+	m_listQuerySummary.InsertItem(nItem, _T("5"));
+	m_listQuerySummary.SetItem(nItem, 1, LVIF_TEXT, _T("大于60岁"), 0, NULL, NULL, NULL);
+	ss.str(""); ss.clear();
+	ss << "select count(*) from file_form_01 where file_birth_date < '" << CW2A((age60.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "'  ";
+	ss << " and file_id in (select file_id from orgnization_file where del_status=0 ";
+	if (!strText.IsEmpty()) {
+		ss << " and folder_name=";
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+	}
+	ss << "); ";
+
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result); //row 是查出多少行记录,col是每条记录多少个字段
+
+	if (row < 1) {
+		vFileCount.push_back(0);
+		m_listQuerySummary.SetItem(nItem, 2, LVIF_TEXT, _T("无"), 0, NULL, NULL, NULL);
+	}
+	else {
+		int t = atoi(re[1 * col + 0]); sum += (float)t; vFileCount.push_back(t);
+		m_listQuerySummary.SetItem(nItem, 2, LVIF_TEXT, CA2W(re[1 * col + 0], CP_UTF8), 0, NULL, NULL, NULL);
+	}
+	////
+
+	for (int i = 0; i < vFileCount.size(); i++) {
+		CString str;
+		str.ReleaseBuffer(); str.Format(_T("%2.1f%%"), (vFileCount[i] / sum) * 100);
+		m_listQuerySummary.SetItem(i, 3, LVIF_TEXT, str, 0, NULL, NULL, NULL);
+	}
 }
 
 void CDlgQueryBy::DoQueryByAgeDetail()
 {
+	m_listQueryDetail.DeleteAllItems();
+	stringstream ss;
 
+	COleDateTime today = COleDateTime::GetCurrentTime();
+	COleDateTimeSpan ts;
+	ts.SetDateTimeSpan(365 * 10, 0, 0, 0);
+	COleDateTime age30(today.GetYear() - 30, today.GetMonth(), today.GetDay(), 0, 0, 0);
+	COleDateTime age40(today.GetYear() - 40, today.GetMonth(), today.GetDay(), 0, 0, 0);
+	COleDateTime age50(today.GetYear() - 50, today.GetMonth(), today.GetDay(), 0, 0, 0);
+	COleDateTime age60(today.GetYear() - 60, today.GetMonth(), today.GetDay(), 0, 0, 0);
+
+	ss << "select file_name, file_gender, file_nation, file_CurrentPosition from file_form_02 where ";
+	ss << "file_id in (select file_id from file_form_01 where ";
+	switch (atoi(CW2A(m_vParam4Detail[0].GetBuffer(), CP_UTF8))) {
+	case 1:
+		ss << "file_birth_date > '" << CW2A((age30.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "') ";
+		break;
+	case 2:
+		ss << "file_birth_date <= '" << CW2A((age30.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "' and ";
+		ss << "file_birth_date > '" << CW2A((age40.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "') "; 
+		break;
+	case 3:
+		ss << "file_birth_date <= '" << CW2A((age40.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "' and ";
+		ss << "file_birth_date > '" << CW2A((age50.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "') ";
+		break;
+	case 4:
+		ss << "file_birth_date <= '" << CW2A((age50.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "' and ";
+		ss << "file_birth_date > '" << CW2A((age60.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "') ";
+		break;
+	case 5:
+		ss << "file_birth_date < '" << CW2A((age60.Format(_T("%Y-%m-%d"))).GetBuffer(), CP_UTF8) << "') ";
+		break;
+	}
+	ss << " and file_id in (select file_id from orgnization_file where del_status = 0 ";
+	CString strText;
+	m_comboFolder.GetWindowTextW(strText); strText.Trim();
+	if (!strText.IsEmpty()) {
+		ss << " and folder_name=";
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+	}
+	ss << "); ";
+
+	TRACE(_T("\n%s"), CA2W(ss.str().c_str(), CP_UTF8));
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+
+
+	int row, col;
+	char *eee = "i";
+	char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result); //row 是查出多少行记录,col是每条记录多少个字段
+
+	if (row < 1) {
+		help->closeDB(); delete help;
+		return;
+	}
+
+	for (int r = 0; r < row; r++) {
+		CString str;
+		str.Format(_T("%d"), r + 1);
+		m_listQueryDetail.InsertItem(r, str);
+
+		for (int i = 0; i < 4; i++)
+			m_listQueryDetail.SetItem(r, i + 1, LVIF_TEXT, CA2W(re[(r + 1) * col + i], CP_UTF8), 0, NULL, NULL, NULL);
+	}
+
+	help->closeDB(); delete help;
 }
 
 void CDlgQueryBy::DoQueryByDegree()
@@ -272,6 +480,7 @@ void CDlgQueryBy::DoQueryByDegree()
 	m_listQuerySummary.InsertColumn(1, _T("学位"), LVCFMT_CENTER, 120);
 	m_listQuerySummary.InsertColumn(2, _T("人数"), LVCFMT_CENTER, 50);
 	m_listQuerySummary.InsertColumn(3, _T("比例"), LVCFMT_CENTER, 60);
+
 }
 
 void CDlgQueryBy::DoQueryByDegreeDetail()
@@ -453,6 +662,7 @@ BEGIN_MESSAGE_MAP(CDlgQueryBy, CDialogEx)
 	ON_NOTIFY(NM_CLICK, IDC_LIST_QUERY_TYPE, &CDlgQueryBy::OnClickListQueryType)
 	ON_NOTIFY(NM_CLICK, IDC_LIST_QUERY_SUMMARY, &CDlgQueryBy::OnClickListQuerySummary)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_LIST_QUERY_TYPE, &CDlgQueryBy::OnCustomdrawListQueryType)
+
 END_MESSAGE_MAP()
 
 
