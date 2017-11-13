@@ -37,6 +37,8 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 
+private:
+	BOOL m_bOuterS1, m_bOuterS2, m_bOuterS3;
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedCmdSaveForm();
@@ -58,6 +60,8 @@ public:
 	afx_msg void OnBnClickedCmdUpdateForm3();
 	virtual void OnInitialUpdate();
 	afx_msg void OnBnClickedRadio43();
+	afx_msg void OnBnClickedRadio58();
+	afx_msg void OnBnClickedRadio73();
 };
 
 

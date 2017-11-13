@@ -30,6 +30,7 @@ CPersonalForm06::CPersonalForm06()
 , m_Radio7_0(-1)
 , m_Radio7_4_1(-1)
 {
+	m_bOuterS1 = FALSE; m_bOuterS2 = FALSE; m_bOuterS3 = FALSE;
 	//LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
 	//m_fontEdit.CreateFontIndirect(&lf);
 
@@ -178,6 +179,8 @@ BEGIN_MESSAGE_MAP(CPersonalForm06, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm06::OnBnClickedButtonCloseForm3)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM3, &CPersonalForm06::OnBnClickedCmdUpdateForm3)
 	ON_BN_CLICKED(IDC_RADIO43, &CPersonalForm06::OnBnClickedRadio43)
+	ON_BN_CLICKED(IDC_RADIO58, &CPersonalForm06::OnBnClickedRadio58)
+	ON_BN_CLICKED(IDC_RADIO73, &CPersonalForm06::OnBnClickedRadio73)
 END_MESSAGE_MAP()
 
 
@@ -324,7 +327,7 @@ void CPersonalForm06::GetNumber(int nWhich, int &num)
 			num = m_Radio7_6;
 			break;
 		case 6:
-			((CButton *)GetDlgItem(IDC_RADIO58))->GetCheck();
+			num = ((CButton *)GetDlgItem(IDC_RADIO58))->GetCheck();
 			break;
 		}
 	}
@@ -340,7 +343,7 @@ void CPersonalForm06::GetNumber(int nWhich, int &num)
 			num = m_Radio7_9;
 			break;
 		case 5:
-			((CButton *)GetDlgItem(IDC_RADIO73))->GetCheck();
+			num = ((CButton *)GetDlgItem(IDC_RADIO73))->GetCheck();
 			break;
 		}
 	}
@@ -579,7 +582,7 @@ void CPersonalForm06::OnBnClickedCmdPrintForm()
 	ss << "select * from file_form_12_c where file_id=" << file_id << " limit 0,1;";
 	_vSubformQueryString.push_back(ss.str());
 	ss.str(""); ss.clear();
-	ss << "select cl.* from file_form_12_c as c left outer join file_form_12_cl as cl on c.file_ChildrenName=cl.file_ChildrenName  where c.file_id=" << file_id << " limit 0,1;";
+	ss << "select cl.* from file_form_12_c as c inner join file_form_12_cl as cl on c.file_ChildrenName=cl.file_ChildrenName  where c.file_id=" << file_id << " limit 0,1;";
 	_vSubformQueryString.push_back(ss.str());
 	ss.str(""); ss.clear();
 
@@ -655,6 +658,24 @@ void CPersonalForm06::OnInitialUpdate()
 void CPersonalForm06::OnBnClickedRadio43()
 {
 	// TODO:  在此添加控件通知处理程序代码
-	if (((CButton *)GetDlgItem(IDC_RADIO43))->GetCheck())
-		((CButton *)GetDlgItem(IDC_RADIO43))->SetCheck(FALSE);
+	m_bOuterS1 = !m_bOuterS1;
+
+	//if ( !m_bOuterS1)
+		((CButton *)GetDlgItem(IDC_RADIO43))->SetCheck(m_bOuterS1);
+}
+
+
+void CPersonalForm06::OnBnClickedRadio58()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	m_bOuterS2 = !m_bOuterS2;
+	((CButton *)GetDlgItem(IDC_RADIO58))->SetCheck(m_bOuterS2);
+}
+
+
+void CPersonalForm06::OnBnClickedRadio73()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	m_bOuterS3 = !m_bOuterS3;
+	((CButton *)GetDlgItem(IDC_RADIO73))->SetCheck(m_bOuterS3);
 }

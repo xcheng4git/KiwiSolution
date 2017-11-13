@@ -282,9 +282,9 @@ void CPersonalFormInterface::DoPrintForm(CString &templateName)
 			//re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 			TRACE(_T("%s\n"), CA2W(_vSubformQueryString[i].c_str(), CP_UTF8));
 			re = help->rawQuery(_vSubformQueryString[i].c_str(), &row, &col, result);
-			if (row < 1) {
-				itVVbookmark++;  continue;
-			}
+			//if (row >= 1) {
+			//	itVVbookmark++;  continue;
+			//}
 	
 			int numSubformRow = _vvSubformFlags[i][1], numSubformColumn = _vvSubformFlags[i][2];
 			for (int r = 0; r < (row>numSubformRow ? numSubformRow : row); r++) {
