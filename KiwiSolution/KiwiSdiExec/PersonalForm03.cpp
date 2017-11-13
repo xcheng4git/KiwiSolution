@@ -545,7 +545,7 @@ void PersonalForm03::OnBnClickedCmdSaveForm()
 #pragma region FillForm2_2
 
 	if (m_Radio2_0 == -1) {
-		MessageBox(_T("请选择是否存在 2- 本人因私出国的情况 ！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+		MessageBox(_T("请选择是否存在 2-2 本人因私出国的情况 ！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
 		help->closeDB(); delete help;
 		ss.str("");  ss.clear();
 		return;

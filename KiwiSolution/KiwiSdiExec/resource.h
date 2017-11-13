@@ -480,6 +480,7 @@
 #define IDC_EDIT197                     1215
 #define IDC_EDIT74                      1216
 #define IDC_EDIT198                     1216
+#define IDC_DATETIMEPICKER48            1216
 #define IDC_EDIT95                      1217
 #define IDC_EDIT199                     1217
 #define IDC_RADIO81                     1218
