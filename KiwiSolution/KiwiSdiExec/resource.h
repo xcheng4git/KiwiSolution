@@ -84,8 +84,8 @@
 #define IDI_ICON_SEARCH                 381
 #define IDI_ICON_LOGIN                  382
 #define IDI_ICON_EXIT                   383
-#define IDI_ICON2                       384
 #define IDI_ICON_LOGIN_IN               384
+#define IDD_DIALOG_SHOW_ATTACHMENT      385
 #define IDC_EDIT_TEST                   1011
 #define IDC_LIST_SHORTCUT               1012
 #define IDC_TREE_ORGNIZATION            1013
@@ -948,7 +948,9 @@
 #define IDC_BUTTON_GRP11_DATA           1556
 #define IDC_STATIC_LOGIN_ICON           1556
 #define IDC_BUTTON_GRP32_DATA           1557
+#define IDC_STATIC_IMAGE_ATTACHMENT     1557
 #define IDC_BUTTON_GRP31_DATA           1558
+#define IDC_STATIC_GROUP_BOUNDBOX       1558
 #define IDC_BUTTON_GRP21_DATA           1559
 #define IDC_BUTTON_GRP22_DATA           1560
 #define IDC_BUTTON_GRP23_DATA           1562
@@ -978,9 +980,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        385
+#define _APS_NEXT_RESOURCE_VALUE        386
 #define _APS_NEXT_COMMAND_VALUE         32791
-#define _APS_NEXT_CONTROL_VALUE         1557
+#define _APS_NEXT_CONTROL_VALUE         1559
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

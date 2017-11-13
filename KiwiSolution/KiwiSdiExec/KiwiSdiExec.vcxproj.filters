@@ -264,6 +264,9 @@
     <ClInclude Include="DlgQueryPunishment.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DlgShowAttachment.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KiwiSdiExec.cpp">
@@ -429,6 +432,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DlgQueryPunishment.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgShowAttachment.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
