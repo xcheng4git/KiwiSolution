@@ -585,14 +585,14 @@ void CPersonalForm01::OnClickedCmdSaveForm()
 
 	GetDlgItem(IDC_EDIT_BIRTH_PLACE)->GetWindowTextW(strText);
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_COMBO_BIRTHDAY)->GetWindowTextW(strText);
+	GetDlgItem(IDC_COMBO_BIRTHDAY)->GetWindowTextW(strText); strText.Replace(_T("/"), _T("-"));
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 	GetDlgItem(IDC_COMBO_PARTY)->GetWindowTextW(strText);
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 
-	GetDlgItem(IDC_PICKER_INPARTY_DATE)->GetWindowTextW(strText);
+	GetDlgItem(IDC_PICKER_INPARTY_DATE)->GetWindowTextW(strText); strText.Replace(_T("/"), _T("-"));
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_PICKER_INWORK_DATE)->GetWindowTextW(strText);
+	GetDlgItem(IDC_PICKER_INWORK_DATE)->GetWindowTextW(strText); strText.Replace(_T("/"), _T("-"));
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 	GetDlgItem(IDC_EDIT_PROFESSION)->GetWindowTextW(strText);
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
@@ -618,8 +618,7 @@ void CPersonalForm01::OnClickedCmdSaveForm()
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 	GetDlgItem(IDC_EDIT_CURRENT_POSITION)->GetWindowTextW(strText);
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-	GetDlgItem(IDC_DATE_4_CURPOSITION)->GetWindowTextW(strText);
-	strText.Replace(_T("/"), _T("-"));
+	GetDlgItem(IDC_DATE_4_CURPOSITION)->GetWindowTextW(strText); strText.Replace(_T("/"), _T("-"));
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 
 	GetDlgItem(IDC_EDIT_HOME_ADDRESS)->GetWindowTextW(strText);
