@@ -43,7 +43,7 @@ CPersonalForm27::CPersonalForm27()
 	vStr.clear(); vStr.push_back(0); vStr.push_back(1); _vvSubformRecordRange.push_back(vStr);
 
 	//以下是为了打印的预设
-	const wchar_t *pBookmarks1[15] = { _T("有无"), _T("信访登记号"), _T("信访时间"), _T("信访来源单位"), _T("被反映人姓名"), _T("被反映人职务"), _T("被反映人单位"), _T("反映人姓名"), _T("通联"), _T("单位"), _T("职务"), _T("信访反映内容"), _T("调查情况及结论"), _T("处理结果"), _T("备注") };
+	const wchar_t *pBookmarks1[15] = { _T("有无"), _T("信访登记号"), _T("信访时间"), _T("信访来源单位"), _T("被反映人姓名"), _T("被反映人职务"), _T("被反映人单位"), _T("反映人姓名"), _T("通联"), _T("反映人单位"), _T("反映人职务"), _T("信访反映内容"), _T("调查情况及结论"), _T("处理结果"), _T("备注") };
 	int structure10[15] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX };
 	int structure11[3 + 1 + 14] = { -1, 1, 14, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 
