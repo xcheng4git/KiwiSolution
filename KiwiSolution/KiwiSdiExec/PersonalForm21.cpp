@@ -24,20 +24,20 @@ CPersonalForm21::CPersonalForm21()
 
 	//m_isCurrentModify = FALSE;
 	m_FormID = 21;
-	int parameters1[1][2] = { { IDC_EDIT237, IDC_EDIT58 } };
-	int structure1[4] = { 1, 2, EDITBX, EDITBX };
+	int parameters1[1][3] = { { IDC_EDIT237, IDC_EDIT58,0  } };
+	int structure1[5] = { 1, 3, EDITBX, EDITBX, ATTACHMENTBX };
 
 	vector<vector<int>> vvPara;
 	for (int i = 0; i < 1; i++) {
 		vector<int> vPara;
-		for (int j = 0; j < 2; j++)
+		for (int j = 0; j < 3; j++)
 			vPara.push_back(parameters1[i][j]);
 		vvPara.push_back(vPara);
 	}
 	_vvvParameters.push_back(vvPara);
 
 	vector<int> vStr;
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 5; i++) {
 		vStr.push_back(structure1[i]);
 	}
 	_vvSubformStructure.push_back(vStr);
