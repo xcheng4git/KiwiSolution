@@ -38,7 +38,7 @@ CPersonalForm29::CPersonalForm29()
 
 	m_FormID = 29;
 	int parameters1[1][8] = { { IDC_EDIT1, IDC_EDIT12, IDC_DATETIMEPICKER1, IDC_EDIT13, IDC_EDIT344, IDC_EDIT345, IDC_EDIT346,0} };
-	int structure1[10] = { 1, 8, EDITBX, EDITBX, DATEPKR, EDITBX, EDITBX, EDITBX, EDITBX,ATTACHMENTBX};
+	int structure1[10] = { 1, 8, EDITBX, EDITBX, DATEPKR, EDITBX, EDITBX, EDITBX, EDITBX, ATTACHMENTBX};
 
 	vector<vector<int>> vvPara;
 	for (int i = 0; i < 1; i++) {
@@ -63,7 +63,7 @@ CPersonalForm29::CPersonalForm29()
 	const wchar_t *pBookmarks1[9] = { _T("有无"), _T("姓名"), _T("工作单位及职务"), _T("谈话时间"), _T("谈话人"), 
 													_T("谈话类型"),_T("谈话事由"), _T("谈话内容"), _T("附件")};
 	int structure10[9] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::ATTBOX };
-	int structure11[3 + 1 + 8] = { -1, 1, 8, 2, 1, 1, 1, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
+	int structure11[3 + 1 + 9] = { -1, 1, 8, 2, 2,1, 1, 1, 1, 1, 1, 1,1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 
 
 
@@ -309,7 +309,7 @@ void CPersonalForm29::OnBnClickedCmdSaveForm()
 	vector<vector<vector<int>>>::iterator itVVVparameter = _vvvParameters.begin();
 	while (itVVVparameter != _vvvParameters.end()) {
 		vector<vector<int>>::iterator itVVparameter = itVVVparameter->begin();
-		itVVparameter[0][6] = m_nAttachCount; break;
+		itVVparameter[0][7] = m_nAttachCount; break;
 
 		itVVVparameter++;
 	}
@@ -476,6 +476,9 @@ void CPersonalForm29::OnNMDblclkListAttachment(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	// TODO:  在此添加控件通知处理程序代码
+	if (-1 == pNMItemActivate->iItem)
+		return;
+
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
 		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
