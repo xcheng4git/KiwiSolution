@@ -777,6 +777,7 @@ void CPersonalForm01::OnClickedCmdPrintForm()
 	wordApp.Quit(covOptional, covOptional, covOptional);
 	range.ReleaseDispatch(); bookmarks.ReleaseDispatch(); wordApp.ReleaseDispatch();
 
+	help->closeDB(); delete help;
 }
 
 
