@@ -11,6 +11,8 @@ using namespace std;
 #include "msword/msword.h"
 #include "MainFrm.h"
 
+#include "dlgshowattachment.h"
+
 // CPersonalForm26
 
 IMPLEMENT_DYNCREATE(CPersonalForm26, CFormView)
@@ -84,6 +86,25 @@ CPersonalForm26::~CPersonalForm26()
 {
 }
 
+void CPersonalForm26::InsertListItem(CListCtrl &list, CString& ext, int cntAttach, int data)
+{
+	int nItem;
+	if (ext == _T("jpeg") || ext == _T("jpg"))
+		nItem = list.InsertItem(cntAttach, _T(""), 0);
+	else if (ext == _T("bmp"))
+		nItem = list.InsertItem(cntAttach, _T(""), 1);
+	else if (ext == _T("pdf"))
+		nItem = list.InsertItem(cntAttach, _T(""), 2);
+	else if (ext == _T("doc"))
+		nItem = list.InsertItem(cntAttach, _T(""), 3);
+	else if (ext == _T("zip"))
+		nItem = list.InsertItem(cntAttach, _T(""), 4);
+	else
+		nItem = list.InsertItem(cntAttach, _T(""), 6);
+
+	list.SetItemData(nItem, (DWORD)data);
+}
+
 void CPersonalForm26::ShowAttachment()
 {
 	stringstream ss;
@@ -101,21 +122,8 @@ void CPersonalForm26::ShowAttachment()
 
 			int Which = strPath.ReverseFind('.');
 			CString ext = strPath.Right(strPath.GetLength() - Which - 1); ext.MakeLower();
-			int nItem;
-			if (ext == _T("jpeg") || ext == _T("jpg"))
-				nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 0);
-			else if (ext == _T("bmp"))
-				nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 1);
-			else if (ext == _T("pdf"))
-				nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 2);
-			else if (ext == _T("doc"))
-				nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 3);
-			else if (ext == _T("zip"))
-				nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 4);
-			else
-				nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 6);
+			InsertListItem(m_listAttachments, ext, m_nAttachCount, m_nAttachCount);
 
-			m_listAttachments.SetItemData(nItem, (DWORD)m_nAttachCount);
 			m_vAttachment.push_back(Attachment(CString(CA2W(re[(r + 1) * col + 0])), strPath, 1));
 			m_nAttachCount++;
 		}
@@ -228,6 +236,8 @@ BEGIN_MESSAGE_MAP(CPersonalForm26, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm26::OnBnClickedButtonCloseForm3)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm26::OnBnClickedCmdUpdateForm)
 	ON_BN_CLICKED(IDC_BUTTON_ADD_IMAGE, &CPersonalForm26::OnBnClickedButtonAddImage)
+//	ON_NOTIFY(HDN_ITEMDBLCLICK, 0, &CPersonalForm26::OnHdnItemdblclickListAttachment)
+	ON_NOTIFY(NM_DBLCLK, IDC_LIST_ATTACHMENT, &CPersonalForm26::OnNMDblclkListAttachment)
 END_MESSAGE_MAP()
 
 
@@ -457,24 +467,45 @@ void CPersonalForm26::OnBnClickedButtonAddImage()
 			CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
 
 			if (CopyFile(strPath, strKiwiPath, FALSE)) {
-				int nItem;
-				if (ext == _T("jpeg") || ext == _T("jpg"))
-					nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 0);
-				else if (ext == _T("bmp"))
-					nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 1);
-				else if (ext == _T("pdf"))
-					nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 2);
-				else if (ext == _T("doc"))
-					nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 3);
-				else if (ext == _T("zip"))
-					nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 4);
-				else
-					nItem = m_listAttachments.InsertItem(m_nAttachCount, _T(""), 6);
-
-				m_listAttachments.SetItemData(nItem, (DWORD)-1);
+				InsertListItem(m_listAttachments, ext, m_nAttachCount, -1);
 				m_vAttachment.push_back(Attachment(_T(""), strKiwiPath)); m_nAttachCount++;
 			}
 		}
 	}
 
+}
+
+
+//void CPersonalForm26::OnHdnItemdblclickListAttachment(NMHDR *pNMHDR, LRESULT *pResult)
+//{
+//	LPNMHEADER phdr = reinterpret_cast<LPNMHEADER>(pNMHDR);
+//	// TODO:  在此添加控件通知处理程序代码
+//
+//	*pResult = 0;
+//}
+
+
+void CPersonalForm26::OnNMDblclkListAttachment(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO:  在此添加控件通知处理程序代码
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	help->closeDB(); delete help;
+	
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	CKiwiSdiExecDoc* pDoc = pWnd->GetDocument();
+	CString str; str.Format(_T("%d:表11"), file_id);
+	::PostMessage(pWnd->m_hWnd, WM_SHOW_PERSONAL_FORM_ATTACHMENT, WPARAM(new CString(str)),LPARAM(&(m_vAttachment[pNMItemActivate->iItem].path)));
+
+
+	*pResult = 0;
 }

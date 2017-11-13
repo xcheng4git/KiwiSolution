@@ -56,6 +56,7 @@ public:
 	CListCtrl m_listAttachments;
 	CXTPBrowseEdit m_editAttachPath;
 	afx_msg void OnBnClickedButtonAddImage();
+	afx_msg void OnNMDblclkListAttachment(NMHDR *pNMHDR, LRESULT *pResult);
 };
 
 

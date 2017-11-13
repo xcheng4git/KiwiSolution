@@ -78,5 +78,7 @@ public:
 	afx_msg void OnQueryByPunish();
 	afx_msg void OnQueryByDegree();
 	afx_msg void OnQueryByAge();
+protected:
+	afx_msg LRESULT OnShowPersonalFormAttachment(WPARAM wParam, LPARAM lParam);
 };
 

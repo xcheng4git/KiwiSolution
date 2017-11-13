@@ -50,6 +50,8 @@
 #include "DlgNewUser.h"
 #include "DlgQueryPunishment.h"
 
+#include "DlgShowAttachment.h"
+
 #include "SQLiteHelper.h"
 #include <sstream>
 using namespace std;
@@ -84,6 +86,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_QUERY_BY_PUNISH, &CMainFrame::OnQueryByPunish)
 	ON_COMMAND(ID_QUERY_BY_DEGREE, &CMainFrame::OnQueryByDegree)
 	ON_COMMAND(ID_QUERY_BY_AGE, &CMainFrame::OnQueryByAge)
+	ON_MESSAGE(WM_SHOW_PERSONAL_FORM_ATTACHMENT, &CMainFrame::OnShowPersonalFormAttachment)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -726,4 +729,18 @@ void CMainFrame::OnQueryByAge()
 	dlgQuery.m_queryType = CDlgQueryBy::QUERY_BY_AGE;
 
 	dlgQuery.DoModal();
+}
+
+
+afx_msg LRESULT CMainFrame::OnShowPersonalFormAttachment(WPARAM wParam, LPARAM lParam)
+{
+	if (lParam != NULL) {
+		CString *path = (CString *)lParam;
+		CString *file_form = (CString *)wParam;
+		//int file_id = (int)wParam;
+
+		CDlgShowAttachment dlgShow(*file_form, *path);
+		dlgShow.DoModal();
+	}
+	return 0;
 }

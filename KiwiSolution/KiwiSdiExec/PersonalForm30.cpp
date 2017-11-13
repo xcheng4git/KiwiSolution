@@ -237,6 +237,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm30, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm30::OnBnClickedButtonCloseForm3)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm30::OnBnClickedCmdUpdateForm)
 	ON_BN_CLICKED(IDC_BUTTON_ADD_IMAGE, &CPersonalForm30::OnBnClickedButtonAddImage)
+	ON_NOTIFY(NM_DBLCLK, IDC_LIST_ATTACHMENT, &CPersonalForm30::OnNMDblclkListAttachment)
 END_MESSAGE_MAP()
 
 
@@ -468,4 +469,30 @@ void CPersonalForm30::OnBnClickedButtonAddImage()
 			}
 		}
 	}
+}
+
+
+void CPersonalForm30::OnNMDblclkListAttachment(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO:  在此添加控件通知处理程序代码
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	help->closeDB(); delete help;
+
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	CKiwiSdiExecDoc* pDoc = pWnd->GetDocument();
+	CString str; str.Format(_T("%d:表15"), file_id);
+	::PostMessage(pWnd->m_hWnd, WM_SHOW_PERSONAL_FORM_ATTACHMENT, WPARAM(new CString(str)), LPARAM(&(m_vAttachment[pNMItemActivate->iItem].path)));
+
+
+	*pResult = 0;
 }

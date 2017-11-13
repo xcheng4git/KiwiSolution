@@ -36,6 +36,7 @@ private:
 	CImageList m_ilIcons;
 	int m_nAttachCount;
 	vector<Attachment> m_vAttachment;
+	void InsertListItem(CListCtrl &list, CString& ext, int cntAttach, int data);
 	void ShowAttachment();
 	void SaveAttachment(CString form_recid);
 	void UpdateAttachment();
@@ -53,6 +54,8 @@ public:
 	CXTPBrowseEdit m_editImagePath;
 	CListCtrl m_listAttachments;
 	afx_msg void OnBnClickedButtonAddImage();
+//	afx_msg void OnHdnItemdblclickListAttachment(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNMDblclkListAttachment(NMHDR *pNMHDR, LRESULT *pResult);
 };
 
 
