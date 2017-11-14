@@ -1161,4 +1161,6 @@ void CPersonalForm04::OnBnClickedCmdUpdateForm3()
 	UpdateData();
 
 	DoUpdateForm();
+
+	DoUpdateFlag(1, 0, m_Radio7_0);
 }

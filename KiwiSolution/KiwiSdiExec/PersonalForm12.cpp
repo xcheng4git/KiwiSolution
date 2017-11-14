@@ -492,5 +492,9 @@ void CPersonalForm12::OnInitialUpdate()
 void CPersonalForm12::OnBnClickedCmdUpdateForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	UpdateData();
+
 	DoUpdateForm();
+
+	DoUpdateFlag(1, 0, m_Radio12_2_0);
 }

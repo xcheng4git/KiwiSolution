@@ -900,4 +900,6 @@ void PersonalForm03::OnBnClickedCmdUpdateForm()
 	UpdateData();
 
 	DoUpdateForm();
+
+	DoUpdateFlag(2, 0, m_Radio2_0);
 }

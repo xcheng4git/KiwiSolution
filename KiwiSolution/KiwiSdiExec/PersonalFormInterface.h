@@ -63,6 +63,7 @@ protected:
 	void DoUpdateForm();
 	void DoShowForm();
 	void DoPrintForm(CString &templateName);
+	void DoUpdateFlag(int subform, int flagType, int nFlag);
 
 private:
 	void ShowData(int type, int nID, char *data);

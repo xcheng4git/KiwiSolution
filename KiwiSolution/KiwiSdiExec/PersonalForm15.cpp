@@ -191,19 +191,14 @@ void CPersonalForm15::OnBnClickedCmdSaveForm()
 
 	CString strText;
 #pragma region FillForm14
-	if (m_Radio14_1_0 == 1)
+	if (m_Radio14_1_0 != -1)
 	{
-		ss << "update file_form_flags set file_21IfHaveThisSituation=0 where file_id=" << file_id;
+		ss << "update file_form_flags set file_21IfHaveThisSituation=";
+		ss << m_Radio14_1_0 << " where file_id = " << file_id;
 
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
 		goto FillComplete;
-	}
-
-	{
-		ss << "update file_form_flags set file_21IfHaveThisSituation=1 where file_id=" << file_id;
-		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
 	}
 
 #if 0
@@ -363,7 +358,7 @@ void CPersonalForm15::OnInitialUpdate()
 	}
 	if (hasData) {
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
-		GetDlgItem(IDC_CMD_UPDATE_FORM3)->ShowWindow(SW_SHOW);
+		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
 	}
 
 	stringstream ss;
@@ -383,7 +378,7 @@ void CPersonalForm15::OnInitialUpdate()
 		m_Radio14_1_0 = -1;
 	}
 	else
-		m_Radio14_1_0 = 1 - atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+		m_Radio14_1_0 = atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
 	help->closeDB(); delete help;
 
 	UpdateData(FALSE);
@@ -395,4 +390,32 @@ void CPersonalForm15::OnBnClickedCmdUpdateForm()
 	UpdateData();
 
 	DoUpdateForm();
+
+#if 0
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str(""); ss.clear();
+
+	if (m_Radio14_1_0 != -1)
+	{
+		ss << "update file_form_flags set file_21IfHaveThisSituation=";
+		ss << m_Radio14_1_0 << " where file_id = " << file_id;
+
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
+
+	help->closeDB(); delete help;
+	ss.str("");  ss.clear();
+#endif
+
+	DoUpdateFlag(1, 0, m_Radio14_1_0);
 }
