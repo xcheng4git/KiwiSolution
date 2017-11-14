@@ -94,12 +94,12 @@ void CPaneOrgnization::OnSelchangedTreeOrgnization(NMHDR *pNMHDR, LRESULT *pResu
 	// TODO:  在此添加控件通知处理程序代码
 	*pResult = 0;
 
-	//if (!m_bClicked) return;
+	if (!m_bClicked) return;
 	HTREEITEM hItem = m_treeOrignization.GetSelectedItem();
 	HTREEITEM hItemParent = m_treeOrignization.GetParentItem(hItem);
 	if (hItemParent != NULL) {
 		m_strCurrentFolder = m_treeOrignization.GetItemText(hItemParent);
-		m_strCurrentFile = m_treeOrignization.GetItemText(hItem); //m_bClicked = false;
+		m_strCurrentFile = m_treeOrignization.GetItemText(hItem); m_bClicked = false;
 		CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 		::PostMessage(pWnd->m_hWnd, WM_SHOW_PERSONAL_SUMMARY, WPARAM(&m_strCurrentFolder), LPARAM(&m_strCurrentFile));
 
@@ -108,7 +108,7 @@ void CPaneOrgnization::OnSelchangedTreeOrgnization(NMHDR *pNMHDR, LRESULT *pResu
 	else
 	{
 		m_strCurrentFolder = m_treeOrignization.GetItemText(hItem);
-		m_strCurrentFile.Empty(); //m_bClicked = false;
+		m_strCurrentFile.Empty(); m_bClicked = false;
 		CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 		::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
 
@@ -161,15 +161,25 @@ afx_msg LRESULT CPaneOrgnization::OnUpdateOrgnization(WPARAM wParam, LPARAM lPar
 		if (hItemParent != NULL) {
 			m_treeOrignization.SelectItem(hItemParent);
 			m_treeOrignization.Expand(hItemParent, TVE_EXPAND);
+
+			GetDlgItem(IDC_STATIC_CURSELECTION)->SetWindowText(m_strCurrentFolder + _T("\\*"));
+		}
+		else {
+			m_strCurrentFolder.Empty();
+			GetDlgItem(IDC_STATIC_CURSELECTION)->SetWindowText(_T(""));
 		}
 
 	}
+	else
+		GetDlgItem(IDC_STATIC_CURSELECTION)->SetWindowText(_T(""));
+
 	return 0;
 }
 
 
 void CPaneOrgnization::OnClickTreeOrgnization(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	m_bClicked = true;
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	// TODO:  在此添加控件通知处理程序代码
 	CPoint oPoint;

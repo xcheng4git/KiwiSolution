@@ -313,10 +313,14 @@ void CPersonalForm02::OnBnClickedCmdSaveForm()
 
 	help->execSQL(ss.str().c_str());
 
-	if (!m_isModify) {
+	ss.str("");  ss.clear();
+	ss << "select count(*) from personal_form_info where file_id=" << file_id << " and form_id=" << 1 << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int hasRecord = atoi(re[1 * col + 0]);
+	if (hasRecord == 0) {
 		ss.str("");  ss.clear();
 		ss << "insert into personal_form_info values (" << file_id << ",";
-		ss << "2, " << "'" << CW2A(_T("表2-1"), CP_UTF8) << "',";
+		ss << 2 << ", " << "'" << CW2A(_T("表2-1"), CP_UTF8) << "',";
 		CTime today = CTime::GetCurrentTime();
 		strText = today.Format("%Y-%m-%d");
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', ";
@@ -324,8 +328,7 @@ void CPersonalForm02::OnBnClickedCmdSaveForm()
 		//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
 		help->execSQL(ss.str().c_str());
 	}
-	else
-	{
+	else {
 		ss.str("");  ss.clear();
 		ss << "update personal_form_info set modify_date=";
 		CTime today = CTime::GetCurrentTime();
@@ -333,10 +336,10 @@ void CPersonalForm02::OnBnClickedCmdSaveForm()
 		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', ";
 		ss << " where file_id=" << file_id << " and form_serial=";
 		ss << "'" << CW2A(_T("表2-1"), CP_UTF8) << "';";
-		//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
 		help->execSQL(ss.str().c_str());
-
 	}
+
 
 	help->closeDB();
 	delete help;
@@ -513,7 +516,9 @@ void CPersonalForm02::OnBnClickedButtonCloseForm02()
 {// TODO:  在此添加控件通知处理程序代码
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
-	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, 0l);
+	//::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, 0l);
+	::PostMessage(pWnd->m_hWnd, WM_SHOW_PERSONAL_SUMMARY, WPARAM(&m_strCurrentFolder), LPARAM(&m_strCurrentFile));
+
 	::PostMessage(this->m_hWnd, WM_DESTROY, 0L, 0L);
 }
 
