@@ -52,6 +52,8 @@
 
 #include "DlgShowAttachment.h"
 
+#include "DlgLogin.h"
+
 #include "SQLiteHelper.h"
 #include <sstream>
 using namespace std;
@@ -87,6 +89,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_QUERY_BY_DEGREE, &CMainFrame::OnQueryByDegree)
 	ON_COMMAND(ID_QUERY_BY_AGE, &CMainFrame::OnQueryByAge)
 	ON_MESSAGE(WM_SHOW_PERSONAL_FORM_ATTACHMENT, &CMainFrame::OnShowPersonalFormAttachment)
+	ON_COMMAND(ID_MENU_LOGOUT, &CMainFrame::OnMenuLogout)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -743,4 +746,18 @@ afx_msg LRESULT CMainFrame::OnShowPersonalFormAttachment(WPARAM wParam, LPARAM l
 		dlgShow.DoModal();
 	}
 	return 0;
+}
+
+
+void CMainFrame::OnMenuLogout()
+{
+	ShowWindow(SW_HIDE);
+
+	CDlgLogin dlgLogin;
+	dlgLogin.DoModal();
+	if (!dlgLogin.m_isLogined)
+		exit(0);
+
+	ShowWindow(SW_SHOW);
+	// TODO:  在此添加命令处理程序代码
 }
