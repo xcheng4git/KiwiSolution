@@ -33,6 +33,9 @@ public:
 	   CBitmap m_bmpClose;
 	   afx_msg void OnClickedButtonCloseForm02();
 	   afx_msg void OnClickedFilePicture();
+
+private:
+	BOOL m_bMarriChanged;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 	BOOL m_isModify;
@@ -50,6 +53,7 @@ public:
 	int m_Radio2_2;
 	int m_Radio2_3;
 	afx_msg void OnBnClickedCmdUpdateForm();
+	afx_msg void OnBnClickedRadio7();
 };
 
 

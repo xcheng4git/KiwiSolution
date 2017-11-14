@@ -27,6 +27,8 @@ CPersonalForm02::CPersonalForm02()
 	m_bmpClose.LoadBitmap(IDB_BITMAP_CLOSE);
 
 	m_isModify = FALSE;
+
+	m_bMarriChanged = FALSE;
 }
 
 CPersonalForm02::~CPersonalForm02()
@@ -131,6 +133,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm02, CFormView)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm02::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM02, &CPersonalForm02::OnBnClickedButtonCloseForm02)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm02::OnBnClickedCmdUpdateForm)
+	ON_BN_CLICKED(IDC_RADIO7, &CPersonalForm02::OnBnClickedRadio7)
 END_MESSAGE_MAP()
 
 
@@ -289,15 +292,20 @@ void CPersonalForm02::OnBnClickedCmdSaveForm()
 	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 	ss << parameters2[0] << ", ";
 	if (((CButton *)GetDlgItem(parameters2[1]))->GetCheck() == 1) {
-		ss << "1, ";
-		ss << parameters2[2] << ", ";
-		GetDlgItem(parameters2[3])->GetWindowTextW(strText);
-		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', "; strText.ReleaseBuffer();
-		GetDlgItem(parameters2[4])->GetWindowTextW(strText);
-		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', "; strText.ReleaseBuffer();
+		ss << "1, -1, '','', ";
 	} 
 	else {
-		ss << "-1, -1, '','', ";
+		if ( m_Radio2_3 == -1)
+			ss << "-1, -1, '','', ";
+		else {
+			ss << "-1, ";
+			ss << parameters2[2] << ", ";
+			GetDlgItem(parameters2[3])->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', "; strText.ReleaseBuffer();
+			GetDlgItem(parameters2[4])->GetWindowTextW(strText);
+			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', "; strText.ReleaseBuffer();
+
+		}
 	}
 	ss << "date(),date());";
 
@@ -515,4 +523,14 @@ void CPersonalForm02::OnBnClickedCmdUpdateForm()
 	// TODO:  在此添加控件通知处理程序代码
 	m_isModify = TRUE;
 	OnBnClickedCmdSaveForm();
+}
+
+
+void CPersonalForm02::OnBnClickedRadio7()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	m_bMarriChanged = !m_bMarriChanged;
+
+
+	((CButton *)GetDlgItem(IDC_RADIO7))->SetCheck(m_bMarriChanged);
 }

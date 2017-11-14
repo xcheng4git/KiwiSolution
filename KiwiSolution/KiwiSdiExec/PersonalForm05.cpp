@@ -249,21 +249,14 @@ void CPersonalForm05::OnBnClickedCmdSaveForm()
 	CString strText;
 #pragma region FillForm6_1
 FillForm6_1:
+	ss.str(""); ss.clear();
 	GetDlgItem(IDC_EDIT45)->GetWindowTextW(strText);
 	if (strText == _T("нч"))
-	{
 		ss << "update file_form_flags set file_10IfHaveThisSituation=1 where file_id=" << file_id;
-
-		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
-		goto FillForm6_2;
-	}
-
-	{
+	else
 		ss << "update file_form_flags set file_10IfHaveThisSituation=0 where file_id=" << file_id;
-		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
-	}
+
+	help->execSQL(ss.str().c_str());
 
 	{
 		if (m_Radio6_1 != -1) {
@@ -290,37 +283,37 @@ FillForm6_1:
 #endif
 	}
 	
-	int Parameters1[3][7] = { { IDC_EDIT45, IDC_EDIT47, IDC_EDIT50, IDC_EDIT53, m_Radio6_1_1, IDC_DATETIMEPICKER1, IDC_EDIT74},
-	{ IDC_EDIT33, IDC_EDIT48, IDC_EDIT51, IDC_EDIT54, m_Radio6_1_2, IDC_DATETIMEPICKER45, IDC_EDIT75 }, 
-	{ IDC_EDIT45, IDC_EDIT47, IDC_EDIT50, IDC_EDIT53, m_Radio6_1_3, IDC_DATETIMEPICKER46, IDC_EDIT76 }};
+	//int Parameters1[3][7] = { { IDC_EDIT45, IDC_EDIT47, IDC_EDIT50, IDC_EDIT53, m_Radio6_1_1, IDC_DATETIMEPICKER1, IDC_EDIT74},
+	//{ IDC_EDIT33, IDC_EDIT48, IDC_EDIT51, IDC_EDIT54, m_Radio6_1_2, IDC_DATETIMEPICKER45, IDC_EDIT75 }, 
+	//{ IDC_EDIT45, IDC_EDIT47, IDC_EDIT50, IDC_EDIT53, m_Radio6_1_3, IDC_DATETIMEPICKER46, IDC_EDIT76 }};
 
-	for (int i = 0; i < 3; i++)
-	{
-		GetDlgItem(Parameters1[i][0])->GetWindowTextW(strText); strText.Trim();
-		if (strText.IsEmpty())
-			goto FillForm6_2;
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	GetDlgItem(Parameters1[i][0])->GetWindowTextW(strText); strText.Trim();
+	//	if (strText.IsEmpty())
+	//		goto FillForm6_2;
 
-		ss << "insert into file_form_10 values(" << file_id << ",";
-		strText.ReleaseBuffer(); strText = CUtility::GetGuid();
-		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	//	ss << "insert into file_form_10 values(" << file_id << ",";
+	//	strText.ReleaseBuffer(); strText = CUtility::GetGuid();
+	//	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 
-		for (int j = 0; j < 4; j++) {
-			GetDlgItem(Parameters1[i][j])->GetWindowTextW(strText);
-			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-		}
+	//	for (int j = 0; j < 4; j++) {
+	//		GetDlgItem(Parameters1[i][j])->GetWindowTextW(strText);
+	//		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	//	}
 
-		ss << Parameters1[i][4] << ", ";
+	//	ss << Parameters1[i][4] << ", ";
 
-		GetDlgItem(Parameters1[i][5])->GetWindowTextW(strText);
-		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-		GetDlgItem(Parameters1[i][6])->GetWindowTextW(strText);
-		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
+	//	GetDlgItem(Parameters1[i][5])->GetWindowTextW(strText);
+	//	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	//	GetDlgItem(Parameters1[i][6])->GetWindowTextW(strText);
+	//	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
 
-		OutputDebugString(CA2W(ss.str().c_str(), CP_UTF8));
-		//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
-		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
-	}
+	//	OutputDebugString(CA2W(ss.str().c_str(), CP_UTF8));
+	//	//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+	//	help->execSQL(ss.str().c_str());
+	//	ss.str(""); ss.clear();
+	//}
 	
 #pragma endregion
 
@@ -328,19 +321,10 @@ FillForm6_1:
 FillForm6_2:
 	GetDlgItem(IDC_EDIT78)->GetWindowTextW(strText);
 	if (strText == _T("нч"))
-	{
 		ss << "update file_form_flags set file_11IfHaveThisSituation=1 where file_id=" << file_id;
-
-		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
-		goto FillComplete;
-	}
-
-	{
+	else
 		ss << "update file_form_flags set file_11IfHaveThisSituation=0 where file_id=" << file_id;
-		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
-	}
+	help->execSQL(ss.str().c_str());
 
 	{
 		if (m_Radio6_2 != -1) {
@@ -366,37 +350,39 @@ FillForm6_2:
 #endif
 	}
 
-	int Parameters2[3][5] = { { IDC_EDIT78, IDC_EDIT63, IDC_EDIT66, IDC_DATETIMEPICKER22, IDC_EDIT80 },
-	{ IDC_EDIT77, IDC_EDIT64, IDC_EDIT67, IDC_DATETIMEPICKER23, IDC_EDIT81 },
-	{ IDC_EDIT62, IDC_EDIT65, IDC_EDIT68, IDC_DATETIMEPICKER24, IDC_EDIT82 } };
+	//int Parameters2[3][5] = { { IDC_EDIT78, IDC_EDIT63, IDC_EDIT66, IDC_DATETIMEPICKER22, IDC_EDIT80 },
+	//{ IDC_EDIT77, IDC_EDIT64, IDC_EDIT67, IDC_DATETIMEPICKER23, IDC_EDIT81 },
+	//{ IDC_EDIT62, IDC_EDIT65, IDC_EDIT68, IDC_DATETIMEPICKER24, IDC_EDIT82 } };
 
-	for (int i = 0; i < 3; i++)
-	{
-		GetDlgItem(Parameters1[i][0])->GetWindowTextW(strText); strText.Trim();
-		if (strText.IsEmpty())
-			goto FillComplete;
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	GetDlgItem(Parameters1[i][0])->GetWindowTextW(strText); strText.Trim();
+	//	if (strText.IsEmpty())
+	//		goto FillComplete;
 
-		ss << "insert into file_form_11 values(" << file_id << ",";
-		strText.ReleaseBuffer(); strText = CUtility::GetGuid();
-		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	//	ss << "insert into file_form_11 values(" << file_id << ",";
+	//	strText.ReleaseBuffer(); strText = CUtility::GetGuid();
+	//	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
 
-		for (int j = 0; j < 4; j++) {
-			GetDlgItem(Parameters1[i][j])->GetWindowTextW(strText);
-			ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
-		}
-		GetDlgItem(Parameters1[i][4])->GetWindowTextW(strText);
-		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
+	//	for (int j = 0; j < 4; j++) {
+	//		GetDlgItem(Parameters1[i][j])->GetWindowTextW(strText);
+	//		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "',"; strText.ReleaseBuffer();
+	//	}
+	//	GetDlgItem(Parameters1[i][4])->GetWindowTextW(strText);
+	//	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "')"; strText.ReleaseBuffer();
 
-		OutputDebugString(CA2W(ss.str().c_str(), CP_UTF8));
-		//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
-		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
-	}
+	//	OutputDebugString(CA2W(ss.str().c_str(), CP_UTF8));
+	//	//TRACE(CA2W(ss.str().c_str(), CP_UTF8)); TRACE("\n");
+	//	help->execSQL(ss.str().c_str());
+	//	ss.str(""); ss.clear();
+	//}
 #pragma endregion
 
 FillComplete :
 	help->closeDB(); delete help;
-			 ss.str("");  ss.clear();
+	ss.str("");  ss.clear();
+
+	DoSaveForm();
 			 GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 }
 
