@@ -81,7 +81,8 @@ void CDlgLogin::OnOK()
 		CTime today = CTime::GetCurrentTime();
 		strText = today.Format("%Y-%m-%d");
 		ss << "update kiwi_users set last_login_date='" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
-		ss << " where user_name='" << m_strUsername << "'";
+		ss << " where user_name='" << CW2A(m_strUsername.GetBuffer(), CP_UTF8) << "'";
+		//TRACE(_T("\r\n%s"), CA2W(ss.str().c_str(), CP_UTF8));
 		help->execSQL(ss.str().c_str());
 		ss.str(""); ss.clear();
 
