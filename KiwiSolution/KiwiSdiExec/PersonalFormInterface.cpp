@@ -587,6 +587,7 @@ void CPersonalFormInterface::DoUpdateForm()
 	itVVVparameter = _vvvParameters.begin();
 	for (int i = 0; i < numSubform; i++) {
 		vector<vector<int>>::iterator itVVparameter = itVVVparameter->begin();
+		for (int r = 0; r < vSubformUpdatedRow[i]; r++) itVVparameter++;  //跳过旧数据行
 
 		int numSubformRow = _vvSubformStructure[i][0]; int numSubformColumn = _vvSubformStructure[i][1];
 		for (int r = vSubformUpdatedRow[i]; r < numSubformRow; r++) {
@@ -595,6 +596,7 @@ void CPersonalFormInterface::DoUpdateForm()
 			if (0 == dataFlag) break;
 
 			std::vector<int>::iterator itV = itVVparameter->begin();
+		
 
 			ss.str(""); ss.clear();
 			ss << "insert into " << CW2A(vFormByTables[2 + i], CP_UTF8) << " values(" << file_id << ", ";
