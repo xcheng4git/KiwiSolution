@@ -272,6 +272,7 @@ BEGIN_MESSAGE_MAP(PersonalForm03, CFormView)
 	ON_BN_CLICKED(IDC_CMD_SAVE_FORM, &PersonalForm03::OnBnClickedCmdSaveForm)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &PersonalForm03::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &PersonalForm03::OnBnClickedCmdUpdateForm)
+	ON_BN_CLICKED(IDC_RADIO1, &PersonalForm03::OnBnClickedRadio1)
 END_MESSAGE_MAP()
 
 
@@ -432,13 +433,20 @@ void PersonalForm03::OnInitialUpdate()
 	int file_id = atoi(re[1 * col + 0]);
 
 	ss.str(""); ss.clear();
-	ss << "select file_5IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
+	ss << "select file_4IfChange, file_5IfHaveThisSituation , file_6IfChange from file_form_flags where file_id=" << file_id << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	if (row < 1) {
+		m_Radio1_0 = -1;
 		m_Radio2_0 = -1;
+		m_Radio3_0 = -1;
 	}
 	else
-		m_Radio2_0 = atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+	{
+		m_Radio1_0 = atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+		m_Radio2_0 = atoi(re[1 * col + 1]);
+		m_Radio3_0 = atoi(re[1 * col + 2]);
+
+	}
 	help->closeDB(); delete help;
 
 	UpdateData(FALSE);
@@ -909,5 +917,14 @@ void PersonalForm03::OnBnClickedCmdUpdateForm()
 
 	DoUpdateForm();
 
+	//DoUpdateFlag(2, 0, m_Radio2_0);
+	DoUpdateFlag(1, 1, m_Radio1_0);
 	DoUpdateFlag(2, 0, m_Radio2_0);
+	DoUpdateFlag(3, 1, m_Radio3_0);
+}
+
+
+void PersonalForm03::OnBnClickedRadio1()
+{
+	// TODO:  在此添加控件通知处理程序代码
 }

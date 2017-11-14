@@ -445,7 +445,7 @@ void CPersonalForm14::OnInitialUpdate()
 	int file_id = atoi(re[1 * col + 0]);
 
 	ss.str(""); ss.clear();
-	ss << "select file_20IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
+	ss << "select file_20IfChange from file_form_flags where file_id=" << file_id << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	if (row < 1) {
 		m_Radio13_0 = -1;
@@ -463,4 +463,6 @@ void CPersonalForm14::OnBnClickedCmdUpdateForm2()
 	UpdateData();
 
 	DoUpdateForm();
+	DoUpdateFlag(1, 1, m_Radio13_0);
+	
 }

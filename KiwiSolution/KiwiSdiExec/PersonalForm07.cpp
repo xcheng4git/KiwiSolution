@@ -607,6 +607,8 @@ void CPersonalForm07::OnBnClickedCmdUpdateForm3()
 	UpdateData();
 
 	DoUpdateForm();
+	
+	DoUpdateFlag(3, 1, m_Radio8_0);
 }
 
 
@@ -650,6 +652,27 @@ void CPersonalForm07::OnInitialUpdate()
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_CMD_UPDATE_FORM3)->ShowWindow(SW_SHOW);
 	}
+
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+
+	ss.str(""); ss.clear();
+	ss << "select file_13IfChange from file_form_flags where file_id=" << file_id << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		m_Radio8_0 = -1;
+	}
+	else {
+		m_Radio8_0 = atoi(re[1 * col + 0]);  //分组的原因, m_Radio7_0=0表示有此类情况，即第一个单选按钮
+	}
+	help->closeDB(); delete help;
 
 	UpdateData(FALSE);
 }
