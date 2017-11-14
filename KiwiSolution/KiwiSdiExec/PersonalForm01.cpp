@@ -735,7 +735,7 @@ void CPersonalForm01::OnClickedCmdPrintForm()
 		int i = 17;
 		bookmark = bookmarks.Item(&_variant_t(pBookmarks[i]));
 		range = bookmark.get_Range();
-		CString strText; strText.Format(_T("%s %s"), strlen(re[1 * col + i+2]) < 1 ? _T("") : CA2W(re[1 * col + 2], CP_UTF8),
+		CString strText; strText.Format(_T("%s %s"), strlen(re[1 * col + i+2]) < 1 ? _T("") : CA2W(re[1 * col + i+2], CP_UTF8),
 			strlen(re[1 * col + i + 3]) < 1 ? _T("") : CA2W(re[1 * col + i + 3], CP_UTF8));
 		range.put_Text(strText);
 	}

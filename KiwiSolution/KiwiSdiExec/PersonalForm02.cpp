@@ -314,7 +314,7 @@ void CPersonalForm02::OnBnClickedCmdSaveForm()
 	help->execSQL(ss.str().c_str());
 
 	ss.str("");  ss.clear();
-	ss << "select count(*) from personal_form_info where file_id=" << file_id << " and form_id=" << 1 << ";";
+	ss << "select count(*) from personal_form_info where file_id=" << file_id << " and form_id=" << 2 << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	hasRecord = atoi(re[1 * col + 0]);
 	if (hasRecord == 0) {

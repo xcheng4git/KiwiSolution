@@ -662,7 +662,7 @@ FillForm4:
 	if (m_Radio9_0 != -1) {
 		ss.str(""); ss.clear();
 		ss << "update file_form_flags set file_9IfChange=";
-		ss << m_Radio8_0 << " where file_id = " << file_id;
+		ss << m_Radio9_0 << " where file_id = " << file_id;
 		help->execSQL(ss.str().c_str());
 	}
 
@@ -941,13 +941,16 @@ void CPersonalForm04::OnInitialUpdate()
 	int file_id = atoi(re[1 * col + 0]);
 
 	ss.str(""); ss.clear();
-	ss << "select file_7IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
+	ss << "select file_7IfHaveThisSituation, file_8IfChange, file_9IfChange from file_form_flags where file_id=" << file_id << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	if (row < 1) {
-		m_Radio7_0 = -1;
+		m_Radio7_0 = -1; m_Radio9_0 = -1; m_Radio9_0 = -1;
 	}
-	else
-		m_Radio7_0 = atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+	else {
+		m_Radio7_0 = atoi(re[1 * col + 0]);  //分组的原因, m_Radio7_0=0表示有此类情况，即第一个单选按钮
+		m_Radio8_0 = atoi(re[1 * col + 1]);
+		m_Radio9_0 = atoi(re[1 * col + 2]);
+	}
 	help->closeDB(); delete help;
 
 	UpdateData(FALSE);
@@ -1171,4 +1174,6 @@ void CPersonalForm04::OnBnClickedCmdUpdateForm3()
 	DoUpdateForm();
 
 	DoUpdateFlag(1, 0, m_Radio7_0);
+	DoUpdateFlag(2, 1, m_Radio8_0);
+	DoUpdateFlag(3, 1, m_Radio9_0);
 }
