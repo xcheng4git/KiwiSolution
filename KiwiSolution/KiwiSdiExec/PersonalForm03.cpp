@@ -303,8 +303,12 @@ void PersonalForm03::ShowRadiobtn(int nWhich, char *data)
 
 void PersonalForm03::ShowDatapicker(int nID, char *data)
 {
-	COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
-	((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+	if (strlen(data) < 8)
+		return;
+	else {
+		COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
+		((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+	}
 }
 
 void PersonalForm03::GetNumber(int nWhich, int &num)
@@ -317,7 +321,7 @@ void PersonalForm03::GetString(int nID, CString &str)
 	GetDlgItem(nID)->GetWindowTextW(str); str.Trim();
 }
 
-BOOL PersonalForm03::hasData(int isub, int irow)
+int PersonalForm03::hasData(int isub, int irow)
 {
 	CString strText;
 	if ((isub == 1) || (isub == 3)) {
@@ -325,6 +329,8 @@ BOOL PersonalForm03::hasData(int isub, int irow)
 		GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
 		if (strText.IsEmpty())
 			return FALSE;
+		else if (_T("нч") == strText)
+			return 2;
 	}
 	else if (isub == 2) {
 		if (m_Radio2_0 == -1 || m_Radio2_0 == 1)

@@ -64,7 +64,9 @@ CString CPersonalFormInterface::DoSaveForm()
 
 		int numSubformRow = _vvSubformStructure[i][0]; int numSubformColumn = _vvSubformStructure[i][1];
 		for (int r = 0; r < numSubformRow; r++) {
-			if (!hasData(i+1, r)) break;
+			int dataFlag = hasData(i + 1, r);
+			//if (!hasData(i+1, r)) break;
+			if (dataFlag == 0) break;
 
 			std::vector<int>::iterator itV = itVVparameter->begin();
 
@@ -92,10 +94,14 @@ CString CPersonalFormInterface::DoSaveForm()
 					ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
 				}
 				else if (_vvSubformStructure[i][2 + j] == DATEPKR){
-					CString strText;
-					GetData(_vvSubformStructure[i][2 + j], itV[j], strText);
-					strText.Replace(_T("/"), _T("-"));
-					ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+					if (dataFlag == 2)
+						ss << "''";
+					else {
+						CString strText;
+						GetData(_vvSubformStructure[i][2 + j], itV[j], strText);
+						strText.Replace(_T("/"), _T("-"));
+						ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+					}
 				}
 				else if (_vvSubformStructure[i][2 + j] == ATTACHMENTBX)
 					ss << itV[j] << " ";
@@ -584,7 +590,10 @@ void CPersonalFormInterface::DoUpdateForm()
 
 		int numSubformRow = _vvSubformStructure[i][0]; int numSubformColumn = _vvSubformStructure[i][1];
 		for (int r = vSubformUpdatedRow[i]; r < numSubformRow; r++) {
-			if (!hasData(i + 1, r)) break;
+			int dataFlag = hasData(i + 1, r);
+			//if (!hasData(i + 1, r)) break;
+			if (0 == dataFlag) break;
+
 			std::vector<int>::iterator itV = itVVparameter->begin();
 
 			ss.str(""); ss.clear();
@@ -605,10 +614,20 @@ void CPersonalFormInterface::DoUpdateForm()
 					ss << dData;
 
 				}
-				else if ((_vvSubformStructure[i][2 + j] == EDITBX) || (_vvSubformStructure[i][2 + j] == DATEPKR)){
+				else if (_vvSubformStructure[i][2 + j] == EDITBX) {
 					CString strText;
 					GetData(_vvSubformStructure[i][2 + j], itV[j], strText);
 					ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+				}
+				else if (_vvSubformStructure[i][2 + j] == DATEPKR){
+					if (dataFlag == 2)
+						ss << "''";
+					else {
+						CString strText;
+						GetData(_vvSubformStructure[i][2 + j], itV[j], strText);
+						strText.Replace(_T("/"), _T("-"));
+						ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+					}
 				}
 				else if (_vvSubformStructure[i][2 + j] == ATTACHMENTBX)
 					ss << itV[j] << " ";
@@ -630,17 +649,33 @@ void CPersonalFormInterface::DoUpdateForm()
 	/////////////////////////////////////////////////////////
 
 	ss.str("");  ss.clear();
-	ss << "update personal_form_info set modify_date=";
-	CTime today = CTime::GetCurrentTime();
-	strText = today.Format("%Y-%m-%d");
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', ";
-	ss << " where file_id=" << file_id << " and form_serial=";
-	ss << "'" << CW2A(vFormByTables[0], CP_UTF8) << "';";
-	TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
-	help->execSQL(ss.str().c_str());
+	ss << "select count(*) from personal_form_info where file_id=" << file_id << " and form_id=" << m_FormID << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int hasRecord = atoi(re[1 * col + 0]);
+	if (hasRecord == 0) {
+		ss.str("");  ss.clear();
+		ss << "insert into personal_form_info values (" << file_id << ",";
+		ss << m_FormID << ", " << "'" << CW2A(vFormByTables[0], CP_UTF8) << "',";
+		CTime today = CTime::GetCurrentTime();
+		strText = today.Format("%Y-%m-%d");
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', ";
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "');"; strText.ReleaseBuffer();
+		//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+	}
+	else {
+		ss.str("");  ss.clear();
+		ss << "update personal_form_info set modify_date=";
+		CTime today = CTime::GetCurrentTime();
+		strText = today.Format("%Y-%m-%d");
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', ";
+		ss << " where file_id=" << file_id << " and form_serial=";
+		ss << "'" << CW2A(vFormByTables[0], CP_UTF8) << "';";
+		TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+	}
 
-	help->closeDB();
-	delete help;
+	help->closeDB(); delete help;
 	ss.str("");  ss.clear();
 
 }

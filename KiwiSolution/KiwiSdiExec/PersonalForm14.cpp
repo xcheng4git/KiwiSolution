@@ -155,8 +155,12 @@ void CPersonalForm14::ShowRadiobtn(int nWhich, char *data)
 
 void CPersonalForm14::ShowDatapicker(int nID, char *data)
 {
-	COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
-	((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+	if (strlen(data) < 8)
+		return;
+	else {
+		COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
+		((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+	}
 }
 
 void CPersonalForm14::GetNumber(int nWhich, int &num)
@@ -182,7 +186,7 @@ void CPersonalForm14::GetString(int nID, CString &str)
 	GetDlgItem(nID)->GetWindowTextW(str); str.Trim();
 }
 
-BOOL CPersonalForm14::hasData(int isub, int irow)
+int CPersonalForm14::hasData(int isub, int irow)
 {
 	CString strText;
 
@@ -192,13 +196,17 @@ BOOL CPersonalForm14::hasData(int isub, int irow)
 		{
 		case 0:
 			GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
-			if (strText.IsEmpty() || strText == _T("нч"))
+			if (strText.IsEmpty())
 				return FALSE;
+			else if (_T("нч") == strText)
+				return 2;
 			break;
 		case 1:
 			GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
 			if (strText.IsEmpty())
 				return FALSE;
+			else if (_T("нч") == strText)
+				return 2;
 			break;
 		default:
 			break;

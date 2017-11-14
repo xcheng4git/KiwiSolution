@@ -34,7 +34,7 @@ public:
 	virtual void GetNumber(int nWhich, int &num);
 	virtual void GetString(int nID, CString &str);
 
-	virtual BOOL hasData(int isub, int irow);
+	virtual int hasData(int isub, int irow);
 
 private:
 	CString _strReportImagePath;

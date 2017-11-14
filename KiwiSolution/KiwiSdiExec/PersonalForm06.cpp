@@ -305,7 +305,7 @@ void CPersonalForm06::GetNumber(int nWhich, int &num)
 			num = m_Radio7_3;
 			break;
 		case 5:
-			num = ((CButton *)GetDlgItem(IDC_RADIO43))->GetCheck();
+			num = ((CButton *)GetDlgItem(IDC_RADIO43))->GetCheck()?0:-1;
 			break;
 		}
 	}
@@ -327,7 +327,7 @@ void CPersonalForm06::GetNumber(int nWhich, int &num)
 			num = m_Radio7_6;
 			break;
 		case 6:
-			num = ((CButton *)GetDlgItem(IDC_RADIO58))->GetCheck();
+			num = ((CButton *)GetDlgItem(IDC_RADIO58))->GetCheck() ? 0 : -1;
 			break;
 		}
 	}
@@ -343,7 +343,7 @@ void CPersonalForm06::GetNumber(int nWhich, int &num)
 			num = m_Radio7_9;
 			break;
 		case 5:
-			num = ((CButton *)GetDlgItem(IDC_RADIO73))->GetCheck();
+			num = ((CButton *)GetDlgItem(IDC_RADIO73))->GetCheck() ? 0 : -1;
 			break;
 		}
 	}
@@ -368,7 +368,7 @@ BOOL CPersonalForm06::hasData(int isub, int irow)
 	}
 	else if (isub == 3) {
 		GetDlgItem(IDC_EDIT91)->GetWindowTextW(strText);
-		if (strText == _T("нч"))
+		if (strText.IsEmpty())
 			return FALSE;
 	}
 

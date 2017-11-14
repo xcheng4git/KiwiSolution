@@ -38,7 +38,7 @@ public:
 	virtual void GetNumber(int nWhich, int &num) = 0;
 	virtual void GetString(int nID, CString &str) = 0;
 
-	virtual BOOL hasData(int isub, int irow) = 0;
+	virtual int hasData(int isub, int irow) = 0;
 protected:
 	vector<vector<vector<int>>> _vvvParameters;     //预设，<若干子表<若干行<若干单元格的控件id或单选组序号>>>
 	vector<vector<int>> _vvSubformStructure;        //预设，<若干子表<子表的行数，列数，若干列的控件类型>>
