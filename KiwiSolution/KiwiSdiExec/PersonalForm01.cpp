@@ -647,7 +647,7 @@ void CPersonalForm01::OnClickedCmdSaveForm()
 	ss.str("");  ss.clear();
 	ss << "select count(*) from personal_form_info where file_id=" << file_id << " and form_id=" << 1 << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
-	int hasRecord = atoi(re[1 * col + 0]);
+	hasRecord = atoi(re[1 * col + 0]);
 	if (hasRecord == 0) {
 		ss.str("");  ss.clear();
 		ss << "insert into personal_form_info values (" << file_id << ",";
