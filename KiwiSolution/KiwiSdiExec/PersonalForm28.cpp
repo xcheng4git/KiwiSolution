@@ -354,6 +354,8 @@ void CPersonalForm28::OnInitialUpdate()
 		GetDlgItem(IDC_COMBO2)->ShowWindow(SW_SHOW);
 		GetDlgItem(IDC_COMBO3)->ShowWindow(SW_SHOW);
 		GetDlgItem(IDC_BUTTON1)->ShowWindow(SW_HIDE);
+
+		InitFourType();
 	}
 }
 
