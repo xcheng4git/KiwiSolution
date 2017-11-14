@@ -953,6 +953,7 @@
 #define IDC_BUTTON_GRP31_DATA           1558
 #define IDC_STATIC_GROUP_BOUNDBOX       1558
 #define IDC_BUTTON_GRP21_DATA           1559
+#define IDC_BUTTON_MODIFY_PWD           1559
 #define IDC_BUTTON_GRP22_DATA           1560
 #define IDC_BUTTON_GRP23_DATA           1562
 #define IDC_BUTTON_GRP24_DATA           1563
@@ -976,14 +977,16 @@
 #define ID_32788                        32788
 #define ID_QUERY_BY_PUNISH              32789
 #define ID_QUERY_BY_HANDIN_FORM         32790
+#define ID_32791                        32791
+#define ID_MENU_LOGOUT                  32792
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        386
-#define _APS_NEXT_COMMAND_VALUE         32791
-#define _APS_NEXT_CONTROL_VALUE         1559
+#define _APS_NEXT_COMMAND_VALUE         32793
+#define _APS_NEXT_CONTROL_VALUE         1560
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

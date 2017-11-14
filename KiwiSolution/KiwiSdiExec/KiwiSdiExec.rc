@@ -142,7 +142,7 @@ BEGIN
     BEGIN
         MENUITEM "全屏(&F)",                      ID_TOOL_FULLSCREEN
         MENUITEM SEPARATOR
-        MENUITEM "增加用户(&U)...",                 ID_TOOL_NEW_USER
+        MENUITEM "管理用户(&U)...",                 ID_TOOL_NEW_USER
         MENUITEM SEPARATOR
         MENUITEM "备份数据库(&B)...",                ID_DATABASE_BACKUP
         MENUITEM "初始化数据库(I)",                   ID_DATABASE_INITIAL
@@ -167,6 +167,7 @@ BEGIN
     BEGIN
         MENUITEM "关于 (&A)...",                  ID_APP_ABOUT
     END
+    MENUITEM "注销",                          ID_MENU_LOGOUT
 END
 
 
@@ -2889,19 +2890,20 @@ END
 
 IDD_DIALOG_NEW_USER DIALOGEX 0, 0, 263, 143
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "《廉政档案管理系统》——新增用户"
+CAPTION "《廉政档案管理系统》——用户管理"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "确定",IDOK,121,122,50,14
+    DEFPUSHBUTTON   "新增用户",IDOK,57,122,50,14
     PUSHBUTTON      "取消",IDCANCEL,205,121,50,14
-    RTEXT           "请输入新用户名：",IDC_STATIC,45,36,76,12
+    RTEXT           "请输入用户名：",IDC_STATIC,45,36,76,12
     RTEXT           "请输入密码：",IDC_STATIC,62,57,59,12
     RTEXT           "请再次输入密码：",IDC_STATIC,48,78,73,12
     EDITTEXT        IDC_EDIT_NEW_USER_NAME,123,33,76,14,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDIT_NEW_USER_PWD,123,54,76,14,ES_PASSWORD | ES_AUTOHSCROLL
     EDITTEXT        IDC_EDIT_NEW_USER_PWD2,123,74,76,14,ES_PASSWORD | ES_AUTOHSCROLL
     RTEXT           "用户名为空或重复，两次输入的密码不相同！",IDC_STATIC_WRONG,54,97,189,8,NOT WS_VISIBLE
-    ICON            IDI_ICON_LOGIN,IDC_STATIC,19,50,21,20
+    ICON            IDI_ICON_LOGIN,IDC_STATIC,19,50,20,20
+    PUSHBUTTON      "修改密码",IDC_BUTTON_MODIFY_PWD,129,122,50,14
 END
 
 IDD_DIALOG_DATABASE_BACKUP DIALOGEX 0, 0, 275, 164

@@ -26,4 +26,5 @@ public:
 	CString m_strUserPwd2;
 	afx_msg void OnSetfocusEditNewUserPwd();
 	afx_msg void OnSetfocusEditNewUserPwd2();
+	afx_msg void OnBnClickedButtonModifyPwd();
 };
