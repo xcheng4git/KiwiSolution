@@ -17,7 +17,7 @@ IMPLEMENT_DYNCREATE(CPersonalForm16, CFormView)
 
 CPersonalForm16::CPersonalForm16()
 	: CFormView(CPersonalForm16::IDD)
-	, m_Radio14_2_0(0)
+	, m_Radio14_2_0(-1)
 {
 	//LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
 	//m_fontEdit.CreateFontIndirect(&lf);
@@ -366,7 +366,7 @@ void CPersonalForm16::OnInitialUpdate()
 	}
 	if (hasData) {
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
-		GetDlgItem(IDC_CMD_UPDATE_FORM3)->ShowWindow(SW_SHOW);
+		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
 	}
 
 	stringstream ss;
@@ -386,7 +386,7 @@ void CPersonalForm16::OnInitialUpdate()
 		m_Radio14_2_0 = -1;
 	}
 	else
-		m_Radio14_2_0 = 1 - atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+		m_Radio14_2_0 = atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
 	help->closeDB(); delete help;
 
 	UpdateData(FALSE);
@@ -399,4 +399,6 @@ void CPersonalForm16::OnBnClickedCmdUpdateForm()
 	UpdateData();
 
 	DoUpdateForm();
+
+	DoUpdateFlag(1, 0, m_Radio14_2_0);
 }

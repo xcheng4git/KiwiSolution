@@ -48,7 +48,7 @@ CPersonalForm14::CPersonalForm14()
 	vStr.clear(); vStr.push_back(0); vStr.push_back(2); _vvSubformRecordRange.push_back(vStr);
 
 	//以下是为了打印的预设
-	const wchar_t *pBookmarks1[13] = { _T("有无"), _T("姓名"), _T("统一社会信用"), _T("企业或其他"), _T("成立日期"), _T("经营范围"), _T("注册地"), _T("经营地"), _T("企业或其他市场类型主体"), _T("注册资本"), _T("个人认缴出资额"), _T("个人认缴出资比例或个人出资比例"), _T("备注") };
+	const wchar_t *pBookmarks1[13] = { _T("有无"), _T("姓名"), _T("代码或注册号"), _T("主体名称"), _T("成立日期"), _T("经营范围"), _T("注册地"), _T("经营地"), _T("主题类型"), _T("注册出资额"), _T("个人出资额"), _T("个人出资比例"), _T("备注") };
 	int structure10[13] = { CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::CHKBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, CBookmarkEx::TXTBOX, };
 	int structure11[3 + 1 + 13] = { 1, 2, 12, 2, 2, 1, 1, 1, 1, 1, 1, 1,  7, 1, 1, 1, 1 }; //有无，行，列，跳过查询结果字段数，每个单元格内的标签数目....
 	//
@@ -155,8 +155,12 @@ void CPersonalForm14::ShowRadiobtn(int nWhich, char *data)
 
 void CPersonalForm14::ShowDatapicker(int nID, char *data)
 {
-	COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
-	((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+	if (strlen(data) < 8)
+		return;
+	else {
+		COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
+		((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+	}
 }
 
 void CPersonalForm14::GetNumber(int nWhich, int &num)
@@ -182,7 +186,7 @@ void CPersonalForm14::GetString(int nID, CString &str)
 	GetDlgItem(nID)->GetWindowTextW(str); str.Trim();
 }
 
-BOOL CPersonalForm14::hasData(int isub, int irow)
+int CPersonalForm14::hasData(int isub, int irow)
 {
 	CString strText;
 
@@ -192,13 +196,17 @@ BOOL CPersonalForm14::hasData(int isub, int irow)
 		{
 		case 0:
 			GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
-			if (strText.IsEmpty() || strText == _T("无"))
+			if (strText.IsEmpty())
 				return FALSE;
+			else if (_T("无") == strText)
+				return 2;
 			break;
 		case 1:
 			GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
 			if (strText.IsEmpty())
 				return FALSE;
+			else if (_T("无") == strText)
+				return 2;
 			break;
 		default:
 			break;
@@ -441,7 +449,7 @@ void CPersonalForm14::OnInitialUpdate()
 		m_Radio13_0 = -1;
 	}
 	else
-		m_Radio13_0 = 1 - atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
+		m_Radio13_0 = atoi(re[1 * col + 0]);  //分组的原因，使得要用1-
 	help->closeDB(); delete help;
 
 	UpdateData(FALSE);

@@ -41,6 +41,7 @@ BEGIN_MESSAGE_MAP(CDlgNewUser, CDialogEx)
 	ON_WM_CTLCOLOR()
 	ON_EN_SETFOCUS(IDC_EDIT_NEW_USER_PWD, &CDlgNewUser::OnSetfocusEditNewUserPwd)
 	ON_EN_SETFOCUS(IDC_EDIT_NEW_USER_PWD2, &CDlgNewUser::OnSetfocusEditNewUserPwd2)
+	ON_BN_CLICKED(IDC_BUTTON_MODIFY_PWD, &CDlgNewUser::OnBnClickedButtonModifyPwd)
 END_MESSAGE_MAP()
 
 
@@ -114,4 +115,44 @@ void CDlgNewUser::OnSetfocusEditNewUserPwd2()
 {
 	// TODO:  在此添加控件通知处理程序代码
 	GetDlgItem(IDC_STATIC_WRONG)->ShowWindow(SW_HIDE);
+}
+
+
+void CDlgNewUser::OnBnClickedButtonModifyPwd()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	UpdateData();
+	m_strUserName.Trim(); m_strUserPwd.Trim(); m_strUserPwd2.Trim();
+
+	if (m_strUserPwd != m_strUserPwd2) {
+		GetDlgItem(IDC_STATIC_WRONG)->ShowWindow(SW_SHOW);
+		return;
+	}
+	stringstream ss;
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re;
+
+	ss << "select * from kiwi_users where user_name='" << CW2A(m_strUserName.GetBuffer(), CP_UTF8) << "';";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	if (row < 1) {
+		GetDlgItem(IDC_STATIC_WRONG)->ShowWindow(SW_SHOW);
+		help->closeDB(); delete help;
+		ss.str("");  ss.clear();
+		return;
+	}
+
+	CString cpwd = CUtility::Crypt(m_strUserPwd);
+	ss << "update kiwi_users set user_pwd= ";
+	ss << "'" << CW2A(cpwd.GetBuffer(), CP_UTF8) << "' where user_name=";
+	ss << "'" << CW2A(m_strUserName.GetBuffer(), CP_UTF8) << "'; ";
+	help->execSQL(ss.str().c_str());
+	ss.str(""); ss.clear();
+
+	help->closeDB(); delete help;
+
+	CDialogEx::OnOK();
+
 }

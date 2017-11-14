@@ -274,8 +274,12 @@ void CPersonalForm04::ShowRadiobtn(int nWhich, char *data)
 
 void CPersonalForm04::ShowDatapicker(int nID, char *data)
 {
-	COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
-	((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+	if (strlen(data) < 8)
+		return;
+	else {
+		COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
+		((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+	}
 }
 
 void CPersonalForm04::GetNumber(int nWhich, int &num)
@@ -288,7 +292,7 @@ void CPersonalForm04::GetString(int nID, CString &str)
 	GetDlgItem(nID)->GetWindowTextW(str); str.Trim();
 }
 
-BOOL CPersonalForm04::hasData(int isub, int irow)
+int CPersonalForm04::hasData(int isub, int irow)
 {
 	CString strText;
 	if ((isub == 2) || (isub == 3)) {
@@ -296,6 +300,8 @@ BOOL CPersonalForm04::hasData(int isub, int irow)
 		GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
 		if (strText.IsEmpty())
 			return FALSE;
+		else if (_T("нч") == strText)
+			return 2;
 	}
 	else if (isub == 1) {
 		if (m_Radio7_0 == -1 || m_Radio7_0 == 1)
@@ -1161,4 +1167,6 @@ void CPersonalForm04::OnBnClickedCmdUpdateForm3()
 	UpdateData();
 
 	DoUpdateForm();
+
+	DoUpdateFlag(1, 0, m_Radio7_0);
 }

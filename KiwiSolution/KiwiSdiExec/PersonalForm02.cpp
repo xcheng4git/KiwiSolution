@@ -51,7 +51,7 @@ void CPersonalForm02::QueryAndFillFileForm()
 	int file_id = atoi(re[1 * col + 0]);
 
 	ss.str(""); ss.clear();
-	ss << "select file_name, file_gender, file_nation, file_party from file_form_01 where file_id=" << file_id << ";";
+	ss << "select file_name, file_gender, file_nation, file_party, file_work_unit, file_current_position from file_form_01 where file_id=" << file_id << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	if (row < 1) {
 		ss.str(""); ss.clear();
@@ -63,6 +63,8 @@ void CPersonalForm02::QueryAndFillFileForm()
 	GetDlgItem(parameters1[1])->SetWindowTextW(CA2W(re[1 * col + 1], CP_UTF8));
 	GetDlgItem(parameters1[2])->SetWindowTextW(CA2W(re[1 * col + 2], CP_UTF8));
 	GetDlgItem(parameters1[3])->SetWindowTextW(CA2W(re[1 * col + 3], CP_UTF8));
+	GetDlgItem(parameters1[5])->SetWindowTextW(CA2W(re[1 * col + 4], CP_UTF8));
+	GetDlgItem(parameters1[6])->SetWindowTextW(CA2W(re[1 * col + 5], CP_UTF8));
 
 	ss.str(""); ss.clear();
 	ss << "select * from file_form_02 where file_id=" << file_id << ";";

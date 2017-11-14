@@ -262,8 +262,12 @@ void CPersonalForm07::ShowRadiobtn(int nWhich, char *data)
 
 void CPersonalForm07::ShowDatapicker(int nID, char *data)
 {
-	COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
-	((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+	if (strlen(data) < 8)
+		return;
+	else {
+		COleDateTime t; t.ParseDateTime(CA2W(data, CP_UTF8));
+		((CDateTimeCtrl*)GetDlgItem(nID))->SetTime(t);
+	}
 }
 
 void CPersonalForm07::GetNumber(int nWhich, int &num)
@@ -332,24 +336,18 @@ BOOL CPersonalForm07::hasData(int isub, int irow)
 			return FALSE;
 	}
 	else if (isub == 2) {
-		GetDlgItem(IDC_EDIT91)->GetWindowTextW(strText);
-		if (strText == _T("нч"))
+		vector<vector<int>> vvParam = _vvvParameters[isub - 1];
+		GetDlgItem(vvParam[irow][1])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty())
 			return FALSE;
 	}
 	else if (isub == 3) {
-		switch (irow) {
-		case 1:
-			GetDlgItem(IDC_EDIT47)->GetWindowTextW(strText);
-			if (strText == _T("нч"))
-				return FALSE;
-			break;
-		case 2:
-			GetDlgItem(IDC_EDIT48)->GetWindowTextW(strText);
-			strText.Trim();
-			if (!strText.IsEmpty())
-				return FALSE;
-			break;
-		}
+		vector<vector<int>> vvParam = _vvvParameters[isub - 1];
+		GetDlgItem(vvParam[irow][0])->GetWindowTextW(strText); strText.Trim();
+		if (strText.IsEmpty())
+			return FALSE;
+		else if (_T("нч") == strText)
+			return 2;
 	}
 
 	return TRUE;

@@ -64,7 +64,9 @@ CString CPersonalFormInterface::DoSaveForm()
 
 		int numSubformRow = _vvSubformStructure[i][0]; int numSubformColumn = _vvSubformStructure[i][1];
 		for (int r = 0; r < numSubformRow; r++) {
-			if (!hasData(i+1, r)) break;
+			int dataFlag = hasData(i + 1, r);
+			//if (!hasData(i+1, r)) break;
+			if (dataFlag == 0) break;
 
 			std::vector<int>::iterator itV = itVVparameter->begin();
 
@@ -92,10 +94,14 @@ CString CPersonalFormInterface::DoSaveForm()
 					ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
 				}
 				else if (_vvSubformStructure[i][2 + j] == DATEPKR){
-					CString strText;
-					GetData(_vvSubformStructure[i][2 + j], itV[j], strText);
-					strText.Replace(_T("/"), _T("-"));
-					ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+					if (dataFlag == 2)
+						ss << "''";
+					else {
+						CString strText;
+						GetData(_vvSubformStructure[i][2 + j], itV[j], strText);
+						strText.Replace(_T("/"), _T("-"));
+						ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+					}
 				}
 				else if (_vvSubformStructure[i][2 + j] == ATTACHMENTBX)
 					ss << itV[j] << " ";
@@ -349,6 +355,46 @@ void CPersonalFormInterface::DoPrintForm(CString &templateName)
 
 }
 
+void CPersonalFormInterface::DoUpdateFlag(int subform, int flagType, int nFlag)
+{
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	CKiwiSdiExecDoc* pDoc = pWnd->GetDocument();
+
+	stringstream ss;
+	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+		CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+	//TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+	int row, col;
+	char *eee = "i"; char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int file_id = atoi(re[1 * col + 0]);
+	ss.str(""); ss.clear();
+
+	if (nFlag != -1)
+	{
+		vector<int> vFormBySubform = pDoc->m_vvFormBySubform[m_FormID - 1];
+
+		ss << "update file_form_flags set file_" << vFormBySubform[subform-1];
+		if ( flagType == 0 )
+			ss << "IfHaveThisSituation=";
+		else ss << "IfChange=";
+
+		ss << nFlag;
+		ss << " where file_id = " << file_id << ";";
+
+		TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+		ss.str(""); ss.clear();
+	}
+
+	help->closeDB(); delete help;
+	ss.str("");  ss.clear();
+
+}
+
 void CPersonalFormInterface::ShowData(int type, int nID, char *data)
 {
 	switch (type) {
@@ -544,7 +590,10 @@ void CPersonalFormInterface::DoUpdateForm()
 
 		int numSubformRow = _vvSubformStructure[i][0]; int numSubformColumn = _vvSubformStructure[i][1];
 		for (int r = vSubformUpdatedRow[i]; r < numSubformRow; r++) {
-			if (!hasData(i + 1, r)) break;
+			int dataFlag = hasData(i + 1, r);
+			//if (!hasData(i + 1, r)) break;
+			if (0 == dataFlag) break;
+
 			std::vector<int>::iterator itV = itVVparameter->begin();
 
 			ss.str(""); ss.clear();
@@ -565,10 +614,20 @@ void CPersonalFormInterface::DoUpdateForm()
 					ss << dData;
 
 				}
-				else if ((_vvSubformStructure[i][2 + j] == EDITBX) || (_vvSubformStructure[i][2 + j] == DATEPKR)){
+				else if (_vvSubformStructure[i][2 + j] == EDITBX) {
 					CString strText;
 					GetData(_vvSubformStructure[i][2 + j], itV[j], strText);
 					ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+				}
+				else if (_vvSubformStructure[i][2 + j] == DATEPKR){
+					if (dataFlag == 2)
+						ss << "''";
+					else {
+						CString strText;
+						GetData(_vvSubformStructure[i][2 + j], itV[j], strText);
+						strText.Replace(_T("/"), _T("-"));
+						ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+					}
 				}
 				else if (_vvSubformStructure[i][2 + j] == ATTACHMENTBX)
 					ss << itV[j] << " ";
@@ -590,17 +649,33 @@ void CPersonalFormInterface::DoUpdateForm()
 	/////////////////////////////////////////////////////////
 
 	ss.str("");  ss.clear();
-	ss << "update personal_form_info set modify_date=";
-	CTime today = CTime::GetCurrentTime();
-	strText = today.Format("%Y-%m-%d");
-	ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', ";
-	ss << " where file_id=" << file_id << " and form_serial=";
-	ss << "'" << CW2A(vFormByTables[0], CP_UTF8) << "';";
-	TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
-	help->execSQL(ss.str().c_str());
+	ss << "select count(*) from personal_form_info where file_id=" << file_id << " and form_id=" << m_FormID << ";";
+	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+	int hasRecord = atoi(re[1 * col + 0]);
+	if (hasRecord == 0) {
+		ss.str("");  ss.clear();
+		ss << "insert into personal_form_info values (" << file_id << ",";
+		ss << m_FormID << ", " << "'" << CW2A(vFormByTables[0], CP_UTF8) << "',";
+		CTime today = CTime::GetCurrentTime();
+		strText = today.Format("%Y-%m-%d");
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', ";
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "');"; strText.ReleaseBuffer();
+		//TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+	}
+	else {
+		ss.str("");  ss.clear();
+		ss << "update personal_form_info set modify_date=";
+		CTime today = CTime::GetCurrentTime();
+		strText = today.Format("%Y-%m-%d");
+		ss << "'" << CW2A(strText.GetBuffer(), CP_UTF8) << "', ";
+		ss << " where file_id=" << file_id << " and form_serial=";
+		ss << "'" << CW2A(vFormByTables[0], CP_UTF8) << "';";
+		TRACE(_T("%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
+		help->execSQL(ss.str().c_str());
+	}
 
-	help->closeDB();
-	delete help;
+	help->closeDB(); delete help;
 	ss.str("");  ss.clear();
 
 }

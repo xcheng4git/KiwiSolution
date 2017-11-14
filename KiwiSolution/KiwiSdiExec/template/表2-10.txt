@@ -1,3 +1,0 @@
-const wchar_t *pBookmarks1={_T(“持有人姓名”),_T(“名称或代码”),_T("持股数量"),_T("前一日市值"),_T("前一日总市值"),_T("备注")};
-int structure10 = {TXTBX,TXTBX,TXTBX,TXTBX,TXTBX,TXTBX};
-int structure11={1,1,1,1,1,1};

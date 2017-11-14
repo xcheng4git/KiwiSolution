@@ -259,7 +259,8 @@ void CPersonalForm17::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 	// TODO:  在此添加专用代码和/或调用基类
 	GetDlgItem(IDC_EDIT58)->SetFont(&m_fontEdit);
-	
+	GetDlgItem(IDC_STATIC_FORM_HEADER)->SetFont(&m_fontHeader);
+
 #if 0
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
