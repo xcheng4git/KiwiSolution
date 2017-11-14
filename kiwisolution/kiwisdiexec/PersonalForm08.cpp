@@ -507,7 +507,9 @@ void CPersonalForm08::OnBnClickedButtonCloseForm3()
 	// TODO:  在此添加控件通知处理程序代码
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
-	::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, 0l);
+	//::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, 0l);
+	::PostMessage(pWnd->m_hWnd, WM_SHOW_PERSONAL_SUMMARY, WPARAM(&m_strCurrentFolder), LPARAM(&m_strCurrentFile));
+
 	::PostMessage(this->m_hWnd, WM_DESTROY, 0l, 0l);
 }
 
@@ -678,4 +680,6 @@ void CPersonalForm08::OnBnClickedCmdUpdateForm3()
 	UpdateData();
 
 	DoUpdateForm();
+
+	DoUpdateFlag(2, 0, m_Radio10_0);
 }
