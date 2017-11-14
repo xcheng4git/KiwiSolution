@@ -479,7 +479,7 @@ void CPersonalForm12::OnInitialUpdate()
 	int file_id = atoi(re[1 * col + 0]);
 
 	ss.str(""); ss.clear();
-	ss << "select file_17IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
+	ss << "select file_18IfHaveThisSituation from file_form_flags where file_id=" << file_id << ";";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	if (row < 1) {
 		m_Radio12_2_0 = -1;
