@@ -225,7 +225,15 @@ void CPersonalForm28::OnBnClickedCmdPrintForm()
 
 
 	ss.str(""); ss.clear();
-	ss << "select * from file_invertigated_form_13 where file_id=" << file_id << " limit 0,1;";
+	//ss << "select * from file_invertigated_form_13 where file_id=" << file_id << " limit 0,1;";
+	ss << "select f.file_id,f.form_recid,f.file_name,f.file_gender,f.file_idcard,f.file_unit,f.file_position,";
+	ss << " f.[acceptance_summary], f.acceptance_source, f.accepted_date, f.acceptance_source_file, f.[inverstigation_summary], ";
+	ss << " f.inverstigation_unit, f.[inverstigated_date], f.inverstigation_fact, f.clearing_summary, f.clearing_unit, ";
+	ss << " f.clearing_docno, f.clearing_punish_start_date, f.clearing_punish_end_date, f.clearing_memo, f.[clearing_isregister], ";
+	ss << " f.[clearing_register_date], (select b.category_name from four_punish_category as a inner join four_punish_category as b ";
+	ss << " on a.[first_category] = b.punish_id and a.punish_id=p.punish_id) || '" << CW2A(_T("¡ª¡ª"),CP_UTF8) << "' || p.category_name as punish_category_name, f.clearing_public, ";
+	ss << " f.[clearing_public_type], f.[clearing_public_degree] from file_invertigated_form_13 as f inner join four_punish_category as p ";
+	ss << " on f.clearing_four_xt = p.[punish_id] where f.file_id = " << file_id << " limit 0, 1; ";
 	_vSubformQueryString.push_back(ss.str());
 
 	ss.str(""); ss.clear();
