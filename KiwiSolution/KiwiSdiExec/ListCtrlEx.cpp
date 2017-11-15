@@ -66,6 +66,7 @@ void CListCtrlEx::deleteItemEx(int nItem)
 
 BEGIN_MESSAGE_MAP(CListCtrlEx, CListCtrl)
 	ON_WM_VSCROLL()
+	ON_WM_MOUSEWHEEL()
 END_MESSAGE_MAP()
 
 
@@ -131,4 +132,13 @@ void CListCtrlEx::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	updateListCtrlButtonPos();
 
 	Invalidate();
+}
+
+
+BOOL CListCtrlEx::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+
+	//return CListCtrl::OnMouseWheel(nFlags, zDelta, pt);
+	return TRUE;
 }

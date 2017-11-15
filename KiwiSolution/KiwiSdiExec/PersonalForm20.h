@@ -38,6 +38,7 @@ public:
 
 private:
 	CString _strReportImagePath;
+	BOOL _bIsImage;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö

@@ -32,6 +32,7 @@ public:
     CFont font;    //按钮上面的字体
     void updateListCtrlButtonPos(); //更新按钮的位置
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 };
 
 
