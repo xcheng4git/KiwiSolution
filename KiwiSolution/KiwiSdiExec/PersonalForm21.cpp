@@ -18,6 +18,7 @@ IMPLEMENT_DYNCREATE(CPersonalForm21, CFormView)
 
 CPersonalForm21::CPersonalForm21()
 : CFormView(CPersonalForm21::IDD)
+, _bIsImage(FALSE)
 {
 	//LOGFONT lf; memset(&lf, 0, sizeof(LOGFONT)); lf.lfHeight = 25;  _tcsncpy_s(lf.lfFaceName, LF_FACESIZE, _T("仿宋体"), 3); lf.lfWeight = 400;
 	//m_fontEdit.CreateFontIndirect(&lf);
@@ -91,6 +92,8 @@ CPersonalForm21::~CPersonalForm21()
 void CPersonalForm21::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_EDIT1, m_editImagePath);
+	DDX_Control(pDX, IDC_STATIC_HEALTH_REPORT, m_reportImage);
 }
 
 BEGIN_MESSAGE_MAP(CPersonalForm21, CFormView)
@@ -98,6 +101,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm21, CFormView)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm21::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm21::OnBnClickedButtonCloseForm3)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm21::OnBnClickedCmdUpdateForm)
+	ON_EN_CHANGE(IDC_EDIT1, &CPersonalForm21::OnEnChangeEdit1)
 END_MESSAGE_MAP()
 
 
@@ -208,8 +212,28 @@ FillComplete:
 	help->closeDB(); delete help;
 	ss.str("");  ss.clear();
 #endif
-	DoSaveForm();
-	//保存盖章原件图片
+	CString form_recid = DoSaveForm();
+
+	//保存盖章图片
+	if (!_strReportImagePath.IsEmpty()){
+		if (PathFileExists(_strReportImagePath)) {
+			int Which = _strReportImagePath.ReverseFind('.');
+			CString ext = _strReportImagePath.Right(_strReportImagePath.GetLength() - Which - 1); ext.MakeLower();
+			CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
+
+			if (CopyFile(_strReportImagePath, strKiwiPath, FALSE)) {
+				stringstream ss;
+				ss << "update file_form_27 set file_ReportPic= ";
+				ss << "'" << CW2A(strKiwiPath.GetBuffer(), CP_UTF8) << "' where form_recid= ";
+				ss << "'" << CW2A(_vvSubformRecid[0][0].GetBuffer(), CP_UTF8) << "';";
+				CSQLiteHelper *help = new CSQLiteHelper();
+				help->openDB("kiwi.db3");
+				help->execSQL(ss.str().c_str());
+				ss.str("");
+				help->closeDB(); delete help;
+			}
+		}
+	}
 
 	GetDlgItem(IDC_CMD_SAVE_FORM)->EnableWindow(FALSE);
 }
@@ -261,6 +285,7 @@ void CPersonalForm21::OnInitialUpdate()
 	// TODO:  在此添加专用代码和/或调用基类
 	GetDlgItem(IDC_EDIT237)->SetFont(&m_fontEdit);
 	GetDlgItem(IDC_EDIT58)->SetFont(&m_fontEdit);
+	m_editImagePath.Initialize(this, BES_XTP_CHOOSEFILE);
 
 #if 0
 	stringstream ss;
@@ -320,7 +345,42 @@ void CPersonalForm21::OnInitialUpdate()
 	}
 	if (hasData) {
 		//显示图片
+		stringstream ss;
+		ss << "select file_ReportPic from file_form_27 where form_recid=";
+		ss << "'" << CW2A(_vvSubformRecid[0][0].GetBuffer(), CP_UTF8) << "';";
+		CSQLiteHelper *help = new CSQLiteHelper();
+		help->openDB("kiwi.db3");
+		int row, col;
+		char *eee = "i"; char **result = &eee;
+		char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		if (row >= 1) {
+			if (NULL != re[1 * col + 0]) {
+				_strReportImagePath.ReleaseBuffer();
+				_strReportImagePath.Format(_T("%s"), strlen(re[1 * col + 0]) > 1 ? CA2W(re[1 * col + 0], CP_UTF8) : _T(""));
 
+				if (!_strReportImagePath.IsEmpty() && _strReportImagePath != _T("(null)")) {
+					if (!PathFileExists(_strReportImagePath))
+						_strReportImagePath.Empty();
+					else {
+						CImage  image;
+						image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
+						if (!image.IsNull()) {
+							_bIsImage = TRUE;
+						}
+						image.Destroy();
+					}
+
+				}
+				else
+					_strReportImagePath.Empty();
+			}
+			else
+				_strReportImagePath.Empty();
+
+
+			UpdateWindow();
+		}
+		help->closeDB(); delete help;
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
 	}
@@ -380,4 +440,70 @@ FillComplete:
 	DoUpdateForm();
 
 	//更新图片地址
+	if (!_strReportImagePath.IsEmpty()) {
+		if (PathFileExists(_strReportImagePath)) {
+			int Which = _strReportImagePath.ReverseFind('.');
+			CString ext = _strReportImagePath.Right(_strReportImagePath.GetLength() - Which - 1); ext.MakeLower();
+			CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
+
+			if (CopyFile(_strReportImagePath, strKiwiPath, FALSE)) {
+				stringstream ss;
+				ss << "update file_form_27 set file_ReportPic= ";
+				ss << "'" << CW2A(strKiwiPath.GetBuffer(), CP_UTF8) << "' where form_recid= ";
+				ss << "'" << CW2A(_vvSubformRecid[0][0].GetBuffer(), CP_UTF8) << "';";
+				CSQLiteHelper *help = new CSQLiteHelper();
+				help->openDB("kiwi.db3");
+				help->execSQL(ss.str().c_str());
+				ss.str("");
+				help->closeDB(); delete help;
+			}
+		}
+	}
+}
+
+
+void CPersonalForm21::OnEnChangeEdit1()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 __super::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	_bIsImage = FALSE;
+	m_editImagePath.GetWindowTextW(_strReportImagePath);
+	_strReportImagePath.Trim();
+	if (!_strReportImagePath.IsEmpty()) {
+		if (PathFileExists(_strReportImagePath)) {
+			CImage  image;
+			image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
+			if (image.IsNull()) {
+				MessageBox(_T("对不起，这不是图像文件!"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+				_strReportImagePath.Empty();
+				return;
+			}
+			_bIsImage = TRUE;
+			CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+			CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
+			image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+			ReleaseDC(pDc);
+		}
+	}
+}
+
+
+void CPersonalForm21::OnDraw(CDC* /*pDC*/)
+{
+	// TODO:  在此添加专用代码和/或调用基类
+	if (!_strReportImagePath.IsEmpty()) {
+		if (PathFileExists(_strReportImagePath)) {
+			if (_bIsImage) {
+				CImage  image;
+				image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
+				CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+				CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
+				image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+				ReleaseDC(pDc);
+			}
+		}
+	}
 }

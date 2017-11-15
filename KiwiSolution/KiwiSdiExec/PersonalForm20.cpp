@@ -19,6 +19,7 @@ IMPLEMENT_DYNCREATE(CPersonalForm20, CFormView)
 
 CPersonalForm20::CPersonalForm20()
 : CFormView(CPersonalForm20::IDD)
+, _bIsImage(FALSE)
 {
 	_strReportImagePath = _T("");
 
@@ -193,21 +194,21 @@ FillComplete:
 	//保存体检报告单图片
 	if (!_strReportImagePath.IsEmpty()){
 		if (PathFileExists(_strReportImagePath)) {
-			CImage  image;
-			image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库 
-			_strReportImagePath.ReleaseBuffer();
-			_strReportImagePath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".jpg");
-			image.Save(_strReportImagePath.GetBuffer());
+			int Which = _strReportImagePath.ReverseFind('.');
+			CString ext = _strReportImagePath.Right(_strReportImagePath.GetLength() - Which - 1); ext.MakeLower();
+			CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
 
-			stringstream ss;
-			ss << "update file_form_26 set file_ReportPic= ";
-			ss << "'" << CW2A(_strReportImagePath.GetBuffer(), CP_UTF8) << "' where form_recid= ";
-			ss << "'" << CW2A(form_recid.GetBuffer(), CP_UTF8) << "';";
-			CSQLiteHelper *help = new CSQLiteHelper();
-			help->openDB("kiwi.db3");
-			help->execSQL(ss.str().c_str());
-			ss.str("");
-			help->closeDB(); delete help;
+			if (CopyFile(_strReportImagePath, strKiwiPath, FALSE)) {
+				stringstream ss;
+				ss << "update file_form_26 set file_ReportPic= ";
+				ss << "'" << CW2A(strKiwiPath.GetBuffer(), CP_UTF8) << "' where form_recid= ";
+				ss << "'" << CW2A(_vvSubformRecid[0][0].GetBuffer(), CP_UTF8) << "';";
+				CSQLiteHelper *help = new CSQLiteHelper();
+				help->openDB("kiwi.db3");
+				help->execSQL(ss.str().c_str());
+				ss.str("");
+				help->closeDB(); delete help;
+			}
 		}
 	}
 
@@ -367,11 +368,24 @@ void CPersonalForm20::OnInitialUpdate()
 		char *eee = "i"; char **result = &eee;
 		char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 		if (row >= 1) {
-			_strReportImagePath.ReleaseBuffer();
-			_strReportImagePath.Format(_T("%s"), strlen(re[1 * col + 0])>1 ? CA2W(re[1 * col + 0], CP_UTF8) : _T(""));
+			if (NULL != re[1 * col + 0]) {
+				_strReportImagePath.ReleaseBuffer();
+				_strReportImagePath.Format(_T("%s"), strlen(re[1 * col + 0]) > 1 ? CA2W(re[1 * col + 0], CP_UTF8) : _T(""));
 
-			if (!_strReportImagePath.IsEmpty() && _strReportImagePath != _T("(null)")) {
-				if (false == (bool)PathFileExists(_strReportImagePath.GetBuffer())) 
+				if (!_strReportImagePath.IsEmpty() && _strReportImagePath != _T("(null)")) {
+					if (!PathFileExists(_strReportImagePath))
+						_strReportImagePath.Empty();
+					else {
+						CImage  image;
+						image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
+						if (!image.IsNull()) {
+							_bIsImage = TRUE;
+						}
+						image.Destroy();
+					}
+
+				}
+				else
 					_strReportImagePath.Empty();
 			}
 			else
@@ -440,21 +454,21 @@ void CPersonalForm20::OnBnClickedCmdUpdateForm()
 	//更新图片地址
 	if (!_strReportImagePath.IsEmpty()) {
 		if (PathFileExists(_strReportImagePath)) {
-			CImage  image;
-			image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库 
-			_strReportImagePath.ReleaseBuffer();
-			_strReportImagePath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".jpg");
-			image.Save(_strReportImagePath.GetBuffer());
+			int Which = _strReportImagePath.ReverseFind('.');
+			CString ext = _strReportImagePath.Right(_strReportImagePath.GetLength() - Which - 1); ext.MakeLower();
+			CString strKiwiPath = CUtility::GetModuleDirectory() + _T("\\attachment\\") + CUtility::GetGuid() + _T(".") + ext;
 
-			stringstream ss;
-			ss << "update file_form_26 set file_ReportPic= ";
-			ss << "'" << CW2A(_strReportImagePath.GetBuffer(), CP_UTF8) << "' where form_recid= ";
-			ss << "'" << CW2A(_vvSubformRecid[0][0].GetBuffer(), CP_UTF8) << "';";
-			CSQLiteHelper *help = new CSQLiteHelper();
-			help->openDB("kiwi.db3");
-			help->execSQL(ss.str().c_str());
-			ss.str("");
-			help->closeDB(); delete help;
+			if (CopyFile(_strReportImagePath, strKiwiPath, FALSE)) {
+				stringstream ss;
+				ss << "update file_form_26 set file_ReportPic= ";
+				ss << "'" << CW2A(strKiwiPath.GetBuffer(), CP_UTF8) << "' where form_recid= ";
+				ss << "'" << CW2A(_vvSubformRecid[0][0].GetBuffer(), CP_UTF8) << "';";
+				CSQLiteHelper *help = new CSQLiteHelper();
+				help->openDB("kiwi.db3");
+				help->execSQL(ss.str().c_str());
+				ss.str("");
+				help->closeDB(); delete help;
+			}
 		}
 	}
 }
@@ -466,12 +480,19 @@ void CPersonalForm20::OnEnChangeEdit1()
 	// 函数并调用 CRichEditCtrl().SetEventMask()，
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
+	_bIsImage = FALSE;
 	m_editReportImage.GetWindowTextW(_strReportImagePath);
 	_strReportImagePath.Trim();
 	if (!_strReportImagePath.IsEmpty()) {
 		if (PathFileExists(_strReportImagePath)) {
 			CImage  image;
 			image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
+			if (image.IsNull()) {
+				MessageBox(_T("对不起，这不是图像文件!"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+				_strReportImagePath.Empty();
+				return;
+			}
+			_bIsImage = TRUE;
 			CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
 			CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
 			image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
@@ -486,12 +507,14 @@ void CPersonalForm20::OnDraw(CDC* /*pDC*/)
 	// TODO:  在此添加专用代码和/或调用基类
 	if (!_strReportImagePath.IsEmpty()) {
 		if (PathFileExists(_strReportImagePath)) {
-			CImage  image;
-			image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
-			CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
-			CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
-			image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
-			ReleaseDC(pDc);
+			if (_bIsImage) {
+				CImage  image;
+				image.Load(_strReportImagePath); //把图像保存到特定目录,然后将路径存数据库
+				CRect   rect; m_reportImage.GetClientRect(&rect);//获取句柄指向控件区域的大小  
+				CDC *pDc = m_reportImage.GetDC();//获取picture的DC  
+				image.Draw(pDc->m_hDC, rect);//将图片绘制到picture表示的区域内  
+				ReleaseDC(pDc);
+			}
 		}
 	}
 }

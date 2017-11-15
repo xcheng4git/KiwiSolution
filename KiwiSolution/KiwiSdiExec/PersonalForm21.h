@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PersonalFormInterface.h"
+#include "afxwin.h"
 // CPersonalForm21 窗体视图
 
 class CPersonalForm21 : public CFormView, public CPersonalFormInterface
@@ -35,6 +36,9 @@ public:
 
 	virtual int hasData(int isub, int irow);
 
+private:
+	CString _strReportImagePath;
+	BOOL _bIsImage;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
@@ -48,6 +52,10 @@ public:
 	afx_msg void OnBnClickedButtonCloseForm3();
 	virtual void OnInitialUpdate();
 	afx_msg void OnBnClickedCmdUpdateForm();
+	CXTPBrowseEdit m_editImagePath;
+	CStatic m_reportImage;
+	afx_msg void OnEnChangeEdit1();
+	virtual void OnDraw(CDC* /*pDC*/);
 };
 
 
