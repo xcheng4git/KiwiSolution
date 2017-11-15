@@ -31,6 +31,11 @@ CDlgShowAttachment::CDlgShowAttachment(CString& file_form, CString& attachmentPa
 
 	m_nFile_Id = atoi(CW2A(fileId.GetBuffer(), CP_UTF8));
 	m_strAttachmentPath = attachmentPath;
+	CImage  image;
+	image.Load(m_strAttachmentPath); //把图像保存到特定目录,然后将路径存数据库
+	if (image.IsNull()) {
+		m_strAttachmentPath = CUtility::GetModuleDirectory() + _T("\\attachment\\not_an_image.jpg");
+	}
 }
 
 CDlgShowAttachment::~CDlgShowAttachment()
