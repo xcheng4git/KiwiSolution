@@ -306,8 +306,27 @@ void CPersonalForm24::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 
 	// TODO:  在此添加专用代码和/或调用基类
-	GetDlgItem(IDC_EDIT342)->SetFont(&m_fontEdit);
-	GetDlgItem(IDC_EDIT343)->SetFont(&m_fontEdit);
+	GetDlgItem(IDC_STATIC_FORM_HEADER)->SetFont(&m_fontHeader);
+	vector<vector<vector<int>>>::iterator itVVVparameter = _vvvParameters.begin();
+	int i = 0;
+	while (itVVVparameter != _vvvParameters.end()) {
+		vector<vector<int>>::iterator itVVparameter = itVVVparameter->begin();
+		while (itVVparameter != itVVVparameter->end()) {
+			int j = 0;
+
+			vector<int>::iterator itV = itVVparameter->begin();
+			while (itV != itVVparameter->end()) {
+				if (_vvSubformStructure[i][2 + j] != ATTACHMENTBX) {
+					GetDlgItem(*itV)->SetFont(&m_fontEdit);
+				}
+
+				itV++; j++;
+			}
+			itVVparameter++;
+		}
+		itVVVparameter++; i++;
+	}
+
 #if 0
 	stringstream ss;
 	ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
@@ -377,6 +396,28 @@ void CPersonalForm24::OnInitialUpdate()
 
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
+	}
+	else {
+		stringstream ss;
+		ss << "select file_id from orgnization_file where file_name='" << CW2A(m_strCurrentFile.GetBuffer(), CP_UTF8) << "' and folder_name='" <<
+			CW2A(m_strCurrentFolder.GetBuffer(), CP_UTF8) << "';";
+
+		CSQLiteHelper *help = new CSQLiteHelper();
+		help->openDB("kiwi.db3");
+		int row, col;
+		char *eee = "i"; char **result = &eee;
+		char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		int file_id = atoi(re[1 * col + 0]);
+
+		ss.str(""); ss.clear();
+		ss << "select file_CurrentPosition from file_form_02 where file_id=" << file_id << ";";
+		TRACE(CA2W(ss.str().c_str(), CP_UTF8));
+		re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+		if (row >= 1) {
+			GetDlgItem(IDC_EDIT342)->SetWindowTextW(CA2W(re[1 * col + 0], CP_UTF8));
+		}
+
+		help->closeDB(); delete help;
 	}
 }
 
