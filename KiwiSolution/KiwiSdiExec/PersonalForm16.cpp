@@ -192,20 +192,11 @@ void CPersonalForm16::OnBnClickedCmdSaveForm()
 	CString strText;
 #pragma region FillForm16
 FillForm16 :
-	if (m_Radio14_2_0 == 1)
-	{
-		ss << "update file_form_flags set file_22IfHaveThisSituation=0 where file_id=" << file_id;
+	ss << "update file_form_flags set file_22IfHaveThisSituation=" << m_Radio14_2_0 << " where file_id=" << file_id;
+	TRACE(_T("\r\n%s"), CA2W(ss.str().c_str(), CP_UTF8));
 
-		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
-		goto FillComplete;
-	}
-
-	{
-		ss << "update file_form_flags set file_22IfHaveThisSituation=1 where file_id=" << file_id;
-		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
-	}
+	help->execSQL(ss.str().c_str());
+	ss.str(""); ss.clear();
 
 #if 0
 	int Parameters[9][6] = { { IDC_EDIT55, IDC_EDIT56, IDC_EDIT58, IDC_EDIT203, IDC_EDIT212, IDC_EDIT221 },

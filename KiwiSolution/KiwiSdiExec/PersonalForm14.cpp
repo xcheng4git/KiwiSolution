@@ -252,33 +252,18 @@ void CPersonalForm14::OnBnClickedCmdSaveForm2()
 FillForm13_1 :
 	GetDlgItem(IDC_EDIT47)->GetWindowTextW(strText);
 	if (strText == _T("нч"))
-	{
-		ss << "update file_form_flags set file_20IfHaveThisSituation=0 where file_id=" << file_id;
-
-		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
-		goto FillComplete;
-	}
-
-	{
 		ss << "update file_form_flags set file_20IfHaveThisSituation=1 where file_id=" << file_id;
-		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
-	}
+	else
+		ss << "update file_form_flags set file_20IfHaveThisSituation=0 where file_id=" << file_id;
+	help->execSQL(ss.str().c_str());
+	ss.str(""); ss.clear();
 
 	{
-		if (m_Radio13_0 == 1)
-		{
-			ss << "update file_form_flags set file_20IfChange=0 where file_id=" << file_id;
-			help->execSQL(ss.str().c_str());
+		if (m_Radio13_0 != -1) {
 			ss.str(""); ss.clear();
-			goto FillComplete;
-		}
-		else if (m_Radio13_0 == 0)
-		{
-			ss << "update file_form_flags set file_20IfChange=1 where file_id=" << file_id;
+			ss << "update file_form_flags set file_13IfChange=";
+			ss << m_Radio13_0 << " where file_id=" << file_id;
 			help->execSQL(ss.str().c_str());
-			ss.str(""); ss.clear();
 		}
 	}
 

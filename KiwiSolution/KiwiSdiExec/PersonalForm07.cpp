@@ -460,24 +460,16 @@ FillForm7_c2_2 :
 FillForm8 :
 	GetDlgItem(IDC_EDIT47)->GetWindowTextW(strText);
 	if (strText == _T("无"))
-	{
 		ss << "update file_form_flags set file_13IfHaveThisSituation=1 where file_id=" << file_id;
-
-		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
-		goto FillComplete;
-	}
-
-	{
+	else
 		ss << "update file_form_flags set file_13IfHaveThisSituation=0 where file_id=" << file_id;
-		help->execSQL(ss.str().c_str());
-		ss.str(""); ss.clear();
-	}
+	help->execSQL(ss.str().c_str());
+	ss.str(""); ss.clear();
 
 	{
 		if (m_Radio8_0 != -1) {
 			ss.str(""); ss.clear();
-			ss << "update file_form_flags set file_10IfChange=";
+			ss << "update file_form_flags set file_13IfChange=";
 			ss << m_Radio8_0 << " where file_id=" << file_id;
 			help->execSQL(ss.str().c_str());
 		}
@@ -670,7 +662,7 @@ void CPersonalForm07::OnInitialUpdate()
 		m_Radio8_0 = -1;
 	}
 	else {
-		m_Radio8_0 = atoi(re[1 * col + 0]);  //分组的原因, m_Radio7_0=0表示有此类情况，即第一个单选按钮
+		m_Radio8_0 = atoi(re[1 * col + 0]);  //分组的原因, m_Radio8_0=0表示有此类情况，即第一个单选按钮
 	}
 	help->closeDB(); delete help;
 
