@@ -225,7 +225,7 @@ FillComplete:
 				stringstream ss;
 				ss << "update file_form_27 set file_ReportPic= ";
 				ss << "'" << CW2A(strKiwiPath.GetBuffer(), CP_UTF8) << "' where form_recid= ";
-				ss << "'" << CW2A(_vvSubformRecid[0][0].GetBuffer(), CP_UTF8) << "';";
+				ss << "'" << CW2A(form_recid.GetBuffer(), CP_UTF8) << "';";
 				CSQLiteHelper *help = new CSQLiteHelper();
 				help->openDB("kiwi.db3");
 				help->execSQL(ss.str().c_str());
