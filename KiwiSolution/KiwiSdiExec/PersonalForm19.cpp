@@ -105,6 +105,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm19, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON_ADD_IMAGE, &CPersonalForm19::OnBnClickedButtonAddImage)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST_ATTACHMENT, &CPersonalForm19::OnNMDblclkListAttachment)
 	ON_BN_CLICKED(IDC_CMD_NEXT_FORM, &CPersonalForm19::OnBnClickedCmdNextForm)
+	ON_BN_CLICKED(IDC_BUTTON_DEL_ATTACHMENT, &CPersonalForm19::OnBnClickedButtonDelAttachment)
 END_MESSAGE_MAP()
 
 
@@ -528,4 +529,18 @@ void CPersonalForm19::OnBnClickedCmdNextForm()
 	// TODO:  在此添加控件通知处理程序代码
 	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 	::PostMessage(pWnd->m_hWnd, WM_CREATE_PERSONAL_FORM, WPARAM(20), LPARAM(new CString(m_strCurrentFolder + _T("/") + m_strCurrentFile)));
+}
+
+
+void CPersonalForm19::OnBnClickedButtonDelAttachment()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	int nItem = m_listAttachments.GetNextItem(-1, LVIS_SELECTED);
+	if (nItem == -1) {
+		MessageBox(_T("请先选择要删除的附件！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION);
+	}
+	else {
+		m_listAttachments.DeleteItem(nItem);
+		m_vAttachment.at(nItem).status = -1; m_nAttachCount--;
+	}
 }

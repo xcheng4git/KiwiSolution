@@ -139,7 +139,7 @@ void CKiwiSdiExecView::OnInitialUpdate()
 	int row, col;
 	char *eee = "i";
 	char **result = &eee;
-	char **re = help->rawQuery("select count(*) from file_invertigated_form_12", &row, &col, result);
+	char **re = help->rawQuery("select count(*) from file_invertigated_form_12 where file_id in (select file_id from orgnization_file where del_status<>1 );", &row, &col, result);
 	if (row >= 1) {
 		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
 #ifdef _XTP_INCLUDE_MARKUP
@@ -150,7 +150,7 @@ void CKiwiSdiExecView::OnInitialUpdate()
 		GetDlgItem(IDC_STATIC_GROUP1_1_DATA)->SetWindowTextW(strText);
 #endif
 	}
-	re = help->rawQuery("select count(*) from file_invertigated_form_13", &row, &col, result);
+	re = help->rawQuery("select count(*) from file_invertigated_form_13 where file_id in (select file_id from orgnization_file where del_status<>1 );", &row, &col, result);
 	if (row >= 1) {
 		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
 		
@@ -164,7 +164,8 @@ void CKiwiSdiExecView::OnInitialUpdate()
 	}
 	//////////////////////////////////
 	ss.str(""); ss.clear();
-	ss << "select count(*) from file_invertigated_form_13 where clearing_four_xt in (select punish_id from four_punish_category where punish_type=1);";
+	ss << "select count(*) from file_invertigated_form_13 where clearing_four_xt in (select punish_id from four_punish_category where punish_type=1) ";
+	ss << " and  file_id in (select file_id from orgnization_file where del_status<>1); ";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	if (row >= 1) {
 		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
@@ -177,7 +178,8 @@ void CKiwiSdiExecView::OnInitialUpdate()
 #endif
 	}
 	ss.str(""); ss.clear();
-	ss << "select count(*) from file_invertigated_form_13 where clearing_four_xt in (select punish_id from four_punish_category where punish_type=2);";
+	ss << "select count(*) from file_invertigated_form_13 where clearing_four_xt in (select punish_id from four_punish_category where punish_type=2) ";
+	ss << " and  file_id in (select file_id from orgnization_file where del_status<>1); ";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	if (row >= 1) {
 		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
@@ -190,7 +192,8 @@ void CKiwiSdiExecView::OnInitialUpdate()
 #endif
 	}
 	ss.str(""); ss.clear();
-	ss << "select count(*) from file_invertigated_form_13 where clearing_four_xt in (select punish_id from four_punish_category where punish_type=3);";
+	ss << "select count(*) from file_invertigated_form_13 where clearing_four_xt in (select punish_id from four_punish_category where punish_type=3) ";
+	ss << " and  file_id in (select file_id from orgnization_file where del_status<>1); ";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	if (row >= 1) {
 		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
@@ -203,7 +206,8 @@ void CKiwiSdiExecView::OnInitialUpdate()
 #endif
 	}
 	ss.str(""); ss.clear();
-	ss << "select count(*) from file_invertigated_form_13 where clearing_four_xt in (select punish_id from four_punish_category where punish_type=4);";
+	ss << "select count(*) from file_invertigated_form_13 where clearing_four_xt in (select punish_id from four_punish_category where punish_type=4) ";
+	ss << " and  file_id in (select file_id from orgnization_file where del_status<>1); ";
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	if (row >= 1) {
 		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
@@ -216,7 +220,7 @@ void CKiwiSdiExecView::OnInitialUpdate()
 #endif
 	}
 	//////////////////////////////////
-	re = help->rawQuery("select count(*)from file_invertigated_form_13 where clearing_punish_start_date<=date() and clearing_punish_end_date>date();", &row, &col, result);
+	re = help->rawQuery("select count(*)from file_invertigated_form_13 where clearing_punish_start_date<=date() and clearing_punish_end_date>date() and  file_id in (select file_id from orgnization_file where del_status<>1);", &row, &col, result);
 	if (row >= 1) {
 		strText.ReleaseBuffer(); strText.Format(_T("<TextBlock Foreground='#ff0000' FontSize='18'>%s</TextBlock>"), CA2W(re[1 * col + 0], CP_UTF8));
 #ifdef _XTP_INCLUDE_MARKUP
@@ -232,7 +236,8 @@ void CKiwiSdiExecView::OnInitialUpdate()
 	COleDateTime tt = ts + curDate;
 	ss.str(""); ss.clear();
 	ss << "select count(*) from file_invertigated_form_13 where clearing_punish_end_date<=";
-	ss << "'" << tt.GetYear() << "-" << tt.GetMonth() << "-" << tt.GetDay() << "';";
+	ss << "'" << tt.GetYear() << "-" << tt.GetMonth() << "-" << tt.GetDay() << "' ";
+	ss << "  and  file_id in (select file_id from orgnization_file where del_status<>1)";
 	//TRACE(_T("\n%s"), CA2W(ss.str().c_str(), CP_UTF8));
 	re = help->rawQuery(ss.str().c_str(), &row, &col, result);
 	if (row >= 1) {

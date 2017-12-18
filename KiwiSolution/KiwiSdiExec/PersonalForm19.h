@@ -61,6 +61,7 @@ public:
 	afx_msg void OnBnClickedButtonAddImage();
 	afx_msg void OnNMDblclkListAttachment(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnBnClickedCmdNextForm();
+	afx_msg void OnBnClickedButtonDelAttachment();
 };
 
 

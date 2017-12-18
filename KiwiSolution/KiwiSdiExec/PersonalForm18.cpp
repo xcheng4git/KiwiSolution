@@ -437,6 +437,7 @@ void CPersonalForm18::OnInitialUpdate()
 	delete help;
 #endif
 	GetDlgItem(IDC_STATIC_FORM_HEADER)->SetFont(&m_fontHeader);
+#if 0
 	vector<vector<vector<int>>>::iterator itVVVparameter = _vvvParameters.begin();
 	int i = 0;
 	while (itVVVparameter != _vvvParameters.end()) {
@@ -456,9 +457,10 @@ void CPersonalForm18::OnInitialUpdate()
 		}
 		itVVVparameter++; i++;
 	}
+#endif
 	GetDlgItem(IDC_EDIT1)->SetFont(&m_fontEdit);
-	GetDlgItem(IDC_EDIT12)->SetFont(&m_fontEdit);
-	GetDlgItem(IDC_EDIT13)->SetFont(&m_fontEdit);
+	//GetDlgItem(IDC_EDIT12)->SetFont(&m_fontEdit);
+	//GetDlgItem(IDC_EDIT13)->SetFont(&m_fontEdit);
 
 	((CButton*)GetDlgItem(IDC_BUTTON_CLOSE_FORM3))->SetBitmap(m_bmpClose);
 	DoShowForm();

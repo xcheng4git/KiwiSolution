@@ -325,6 +325,7 @@ void CPaneShortcut::OnClickListShortcut(NMHDR *pNMHDR, LRESULT *pResult)
 
 						CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 						::PostMessage(pWnd->m_hWnd, WM_UPDATE_ORGNIZATION, 0l, 0l);
+						::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
 					}
 				}
 				else if (!m_strCurrentFolder.IsEmpty()){
@@ -334,8 +335,10 @@ void CPaneShortcut::OnClickListShortcut(NMHDR *pNMHDR, LRESULT *pResult)
 
 						CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
 						::PostMessage(pWnd->m_hWnd, WM_UPDATE_ORGNIZATION, 0l, 0l);
+						::PostMessage(pWnd->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, LPARAM(&m_strCurrentFolder));
 					}
 				}
+				
 				break;
 			}
 
