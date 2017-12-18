@@ -47,6 +47,7 @@
 #include "DlgQueryBy.h"
 #include "QueryByFolder.h"
 #include "DlgBackupDatabase.h"
+#include "DlgRestoreDatabase.h"
 #include "DlgNewUser.h"
 #include "DlgQueryPunishment.h"
 
@@ -90,6 +91,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_QUERY_BY_AGE, &CMainFrame::OnQueryByAge)
 	ON_MESSAGE(WM_SHOW_PERSONAL_FORM_ATTACHMENT, &CMainFrame::OnShowPersonalFormAttachment)
 	ON_COMMAND(ID_MENU_LOGOUT, &CMainFrame::OnMenuLogout)
+	ON_COMMAND(ID_DATABASE_RESTORE, &CMainFrame::OnDatabaseRestore)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -445,42 +447,48 @@ afx_msg LRESULT CMainFrame::OnCreatePersonalForm(WPARAM wParam, LPARAM lParam)
 		pView->OnInitialUpdate();
 		return 0;
 
-	}	case 26:
+	}	
+	case 26:
 	{
 		CPersonalForm26* pView = (CPersonalForm26*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm26), IDD_PERSONAL_FORM26);
 		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
 		pView->OnInitialUpdate();
 		return 0;
 
-	}	case 27:
+	}	
+	case 27:
 	{
 		CPersonalForm27* pView = (CPersonalForm27*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm27), IDD_PERSONAL_FORM27);
 		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
 		pView->OnInitialUpdate();
 		return 0;
 
-	}	case 28:
+	}	
+	case 28:
 	{
 		CPersonalForm28* pView = (CPersonalForm28*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm28), IDD_PERSONAL_FORM28);
 		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
 		pView->OnInitialUpdate();
 		return 0;
 
-	}	case 29:
+	}	
+	case 29:
 	{
 		CPersonalForm29* pView = (CPersonalForm29*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm29), IDD_PERSONAL_FORM29);
 		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
 		pView->OnInitialUpdate();
 		return 0;
 
-	}	case 30:
+	}	
+	case 30:
 	{
 		CPersonalForm30* pView = (CPersonalForm30*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm30), IDD_PERSONAL_FORM30);
 		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
 		pView->OnInitialUpdate();
 		return 0;
 
-	}	case 31:
+	}	
+	case 31:
 	{
 		CPersonalForm31* pView = (CPersonalForm31*)CreatePersonalForm(RUNTIME_CLASS(CPersonalForm31), IDD_PERSONAL_FORM31);
 		pView->SetCurrentFile(*(CString *)lParam); delete (CString *)lParam;
@@ -760,4 +768,21 @@ void CMainFrame::OnMenuLogout()
 
 	ShowWindow(SW_SHOW);
 	// TODO:  在此添加命令处理程序代码
+}
+
+
+void CMainFrame::OnDatabaseRestore()
+{
+	// TODO:  在此添加命令处理程序代码
+	// TODO:  在此添加命令处理程序代码
+	if (((CKiwiSdiExecApp*)AfxGetApp())->m_currentUserGroup != 0) {
+		MessageBox(_T("对不起，你不是管理员，不能使用该命令！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+		return;
+	}
+
+	int ok1 = MessageBox(_T("请确认导入数据库前，已经备份当前数据库！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION | IDOK);
+	if (ok1 == IDOK) {
+		CDlgRestoreDatabase dlgRestore;
+		dlgRestore.DoModal();
+	}
 }

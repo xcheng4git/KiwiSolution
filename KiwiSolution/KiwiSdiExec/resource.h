@@ -86,6 +86,7 @@
 #define IDI_ICON_EXIT                   383
 #define IDI_ICON_LOGIN_IN               384
 #define IDD_DIALOG_SHOW_ATTACHMENT      385
+#define IDD_DIALOG_DATABASE_RESTORE     386
 #define IDC_EDIT_TEST                   1011
 #define IDC_LIST_SHORTCUT               1012
 #define IDC_TREE_ORGNIZATION            1013
@@ -280,12 +281,15 @@
 #define IDC_PIC_GROUP1_2                1086
 #define IDC_EDIT346                     1086
 #define IDC_STATICBOX136                1086
+#define IDC_STATICBOX160                1086
 #define IDC_EDIT3                       1087
 #define IDC_EDIT347                     1087
 #define IDC_STATICBOX151                1087
+#define IDC_STATICBOX161                1087
 #define IDC_STATICBOX34                 1088
 #define IDC_STATICBOX152                1088
 #define IDC_EDIT370                     1088
+#define IDC_STATICBOX162                1088
 #define IDC_STATIC_GROUP1_1_TIP         1089
 #define IDC_STATICBOX153                1089
 #define IDC_EDIT371                     1089
@@ -880,6 +884,7 @@
 #define IDC_CHANGETIME                  1501
 #define IDC_CHECK1                      1502
 #define IDC_CHECK_START                 1502
+#define IDC_CHK_BEING_FOUR_TYPE         1502
 #define IDC_EDIT2                       1503
 #define IDC_EDIT_PWD                    1503
 #define IDC_CHECK_END                   1503
@@ -955,6 +960,8 @@
 #define IDC_BUTTON_GRP21_DATA           1559
 #define IDC_BUTTON_MODIFY_PWD           1559
 #define IDC_BUTTON_GRP22_DATA           1560
+#define IDC_CMD_NEXT_FORM               1560
+#define IDC_STATIC_EMAIL                1561
 #define IDC_BUTTON_GRP23_DATA           1562
 #define IDC_BUTTON_GRP24_DATA           1563
 #define ID_32771                        32771
@@ -979,14 +986,16 @@
 #define ID_QUERY_BY_HANDIN_FORM         32790
 #define ID_32791                        32791
 #define ID_MENU_LOGOUT                  32792
+#define ID_32793                        32793
+#define ID_DATABASE_RESTORE             32794
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        386
-#define _APS_NEXT_COMMAND_VALUE         32793
-#define _APS_NEXT_CONTROL_VALUE         1560
+#define _APS_NEXT_COMMAND_VALUE         32795
+#define _APS_NEXT_CONTROL_VALUE         1562
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

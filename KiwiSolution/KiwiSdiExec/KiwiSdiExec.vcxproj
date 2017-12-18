@@ -116,6 +116,7 @@
     <ClInclude Include="DlgNewUser.h" />
     <ClInclude Include="DlgQueryBy.h" />
     <ClInclude Include="DlgQueryPunishment.h" />
+    <ClInclude Include="DlgRestoreDatabase.h" />
     <ClInclude Include="DlgShowAttachment.h" />
     <ClInclude Include="KiwiSdiExec.h" />
     <ClInclude Include="KiwiSdiExecDoc.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="DlgNewUser.cpp" />
     <ClCompile Include="DlgQueryBy.cpp" />
     <ClCompile Include="DlgQueryPunishment.cpp" />
+    <ClCompile Include="DlgRestoreDatabase.cpp" />
     <ClCompile Include="DlgShowAttachment.cpp" />
     <ClCompile Include="KiwiSdiExec.cpp" />
     <ClCompile Include="KiwiSdiExecDoc.cpp" />

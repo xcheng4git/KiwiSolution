@@ -82,5 +82,6 @@ protected:
 	afx_msg LRESULT OnShowPersonalFormAttachment(WPARAM wParam, LPARAM lParam);
 public:
 	afx_msg void OnMenuLogout();
+	afx_msg void OnDatabaseRestore();
 };
 
