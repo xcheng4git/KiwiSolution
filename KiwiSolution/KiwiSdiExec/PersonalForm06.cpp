@@ -181,6 +181,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm06, CFormView)
 	ON_BN_CLICKED(IDC_RADIO43, &CPersonalForm06::OnBnClickedRadio43)
 	ON_BN_CLICKED(IDC_RADIO58, &CPersonalForm06::OnBnClickedRadio58)
 	ON_BN_CLICKED(IDC_RADIO73, &CPersonalForm06::OnBnClickedRadio73)
+	ON_BN_CLICKED(IDC_CMD_NEXT_FORM, &CPersonalForm06::OnBnClickedCmdNextForm)
 END_MESSAGE_MAP()
 
 
@@ -704,4 +705,12 @@ void CPersonalForm06::OnBnClickedRadio73()
 	// TODO:  在此添加控件通知处理程序代码
 	m_bOuterS3 = !m_bOuterS3;
 	((CButton *)GetDlgItem(IDC_RADIO73))->SetCheck(m_bOuterS3);
+}
+
+
+void CPersonalForm06::OnBnClickedCmdNextForm()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	::PostMessage(pWnd->m_hWnd, WM_CREATE_PERSONAL_FORM, WPARAM(7), LPARAM(new CString(m_strCurrentFolder + _T("/") + m_strCurrentFile)));
 }

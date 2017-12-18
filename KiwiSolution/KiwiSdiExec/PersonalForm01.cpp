@@ -265,6 +265,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm01, CFormView)
 	ON_STN_CLICKED(IDC_FILE_PICTURE, &CPersonalForm01::OnClickedFilePicture)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM01, &CPersonalForm01::OnClickedButtonCloseForm01)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm01::OnBnClickedCmdUpdateForm)
+	ON_BN_CLICKED(IDC_CMD_NEXT_FORM, &CPersonalForm01::OnBnClickedCmdNextForm)
 END_MESSAGE_MAP()
 
 
@@ -842,4 +843,11 @@ void CPersonalForm01::OnBnClickedCmdUpdateForm()
 	//因为数据表中只有一个记录，所以更新可以采用删除原来的，再插入新的
 	m_isModify = TRUE;
 	OnClickedCmdSaveForm();
+}
+
+void CPersonalForm01::OnBnClickedCmdNextForm()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	::PostMessage(pWnd->m_hWnd, WM_CREATE_PERSONAL_FORM, WPARAM(2), LPARAM(new CString(m_strCurrentFolder + _T("/") + m_strCurrentFile)));
 }

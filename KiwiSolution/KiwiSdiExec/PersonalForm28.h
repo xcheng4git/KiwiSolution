@@ -47,6 +47,8 @@ public:
 	virtual void OnInitialUpdate();
 	afx_msg void OnSetfocusCombo3();
 	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedCmdNextForm();
+	afx_msg void OnCbnSelchangeCombo4();
 };
 
 

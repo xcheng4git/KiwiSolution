@@ -92,6 +92,8 @@ BEGIN_MESSAGE_MAP(CPersonalForm28, CFormView)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm28::OnBnClickedCmdUpdateForm)
 	ON_CBN_SETFOCUS(IDC_COMBO3, &CPersonalForm28::OnSetfocusCombo3)
 	ON_BN_CLICKED(IDC_BUTTON1, &CPersonalForm28::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_CMD_NEXT_FORM, &CPersonalForm28::OnBnClickedCmdNextForm)
+	ON_CBN_SELCHANGE(IDC_COMBO4, &CPersonalForm28::OnCbnSelchangeCombo4)
 END_MESSAGE_MAP()
 
 
@@ -162,6 +164,8 @@ void CPersonalForm28::InitFourType()
 
 	pCombo1->SetWindowTextW(_T(""));
 	while (pCombo1->GetCount()) pCombo1->DeleteString(0);
+	pCombo2->SetWindowTextW(_T(""));
+	while (pCombo2->GetCount()) pCombo2->DeleteString(0);
 
 	stringstream ss;
 	CSQLiteHelper *help = new CSQLiteHelper();
@@ -187,16 +191,23 @@ void CPersonalForm28::InitFourType()
 void CPersonalForm28::OnBnClickedCmdSaveForm()
 {
 	// TODO:  在此添加控件通知处理程序代码
-	CComboBox* pCombo2 = (CComboBox*)GetDlgItem(IDC_COMBO3);
-	if (pCombo2->IsWindowVisible()) {
-		int nIndx = pCombo2->GetCurSel();
-		if (nIndx == -1) {
-			MessageBox(_T("请确认四种形态是否选择正确！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
-			return;
+	CComboBox* pCombo = (CComboBox*)GetDlgItem(IDC_COMBO4);
+	int nItem = pCombo->GetCurSel();
+	if (nItem == 0) {
+		GetDlgItem(IDC_EDIT368)->SetWindowTextW(_T("-1"));
+	}
+	else {
+		CComboBox* pCombo2 = (CComboBox*)GetDlgItem(IDC_COMBO3);
+		if (pCombo2->IsWindowVisible()) {
+			int nIndx = pCombo2->GetCurSel();
+			if (nIndx == -1) {
+				MessageBox(_T("请确认四种形态是否选择正确！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+				return;
+			}
+			CString strText;
+			strText.Format(_T("%d"), pCombo2->GetItemData(nIndx));
+			GetDlgItem(IDC_EDIT368)->SetWindowTextW(strText);
 		}
-		CString strText;
-		strText.Format(_T("%d"), pCombo2->GetItemData(nIndx));
-		GetDlgItem(IDC_EDIT368)->SetWindowTextW(strText);
 	}
 
 	DoSaveForm();
@@ -229,11 +240,18 @@ void CPersonalForm28::OnBnClickedCmdPrintForm()
 	ss << "select f.file_id,f.form_recid,f.file_name,f.file_gender,f.file_idcard,f.file_unit,f.file_position,";
 	ss << " f.[acceptance_summary], f.acceptance_source, f.accepted_date, f.acceptance_source_file, f.[inverstigation_summary], ";
 	ss << " f.inverstigation_unit, f.[inverstigated_date], f.inverstigation_fact, f.clearing_summary, f.clearing_unit, ";
-	ss << " f.clearing_docno, f.clearing_punish_start_date, f.clearing_punish_end_date, f.clearing_memo, f.[clearing_isregister], ";
-	ss << " f.[clearing_register_date], (select b.category_name from four_punish_category as a inner join four_punish_category as b ";
-	ss << " on a.[first_category] = b.punish_id and a.punish_id=p.punish_id) || '" << CW2A(_T("——"),CP_UTF8) << "' || p.category_name as punish_category_name, f.clearing_public, ";
-	ss << " f.[clearing_public_type], f.[clearing_public_degree] from file_invertigated_form_13 as f inner join four_punish_category as p ";
-	ss << " on f.clearing_four_xt = p.[punish_id] where f.file_id = " << file_id << " limit 0, 1; ";
+	ss << " f.clearing_docno, f.clearing_punish_start_date, f.clearing_punish_end_date, f.clearing_memo, f.[clearing_isregister], f.[clearing_register_date], ";
+	
+	//ss << "  (select b.category_name from four_punish_category as a inner join four_punish_category as b ";
+	//ss << " on a.[first_category] = b.punish_id and a.punish_id=p.punish_id) || '" << CW2A(_T("——"), CP_UTF8) << "' || p.category_name as punish_category_name, ";
+	//ss << " f.clearing_public, f.[clearing_public_type], f.[clearing_public_degree] from file_invertigated_form_13 as f inner join four_punish_category as p ";
+	//ss << " on f.clearing_four_xt = p.[punish_id] where f.file_id = " << file_id << " limit 0, 1; ";
+
+	ss << " case f.clearing_four_xt when -1 then '" << CW2A(_T("否"), CP_UTF8) << "' else ";
+	ss << " (select b.category_name || '" << CW2A(_T("——"), CP_UTF8) << "' || a.category_name from four_punish_category as a inner join four_punish_category as b";
+	ss << " on a.[first_category] = b.punish_id and a.punish_id=f.clearing_four_xt) ";
+	ss << " end as punish_category_name, ";
+	ss << " f.clearing_public, f.[clearing_public_type], f.[clearing_public_degree] from file_invertigated_form_13 as f where f.file_id = " << file_id << " limit 0, 1; ";
 	_vSubformQueryString.push_back(ss.str());
 
 	ss.str(""); ss.clear();
@@ -255,16 +273,23 @@ void CPersonalForm28::OnBnClickedButtonCloseForm3()
 
 void CPersonalForm28::OnBnClickedCmdUpdateForm()
 {
-	CComboBox* pCombo2 = (CComboBox*)GetDlgItem(IDC_COMBO3);
-	if (pCombo2->IsWindowVisible()) {
-		int nIndx = pCombo2->GetCurSel();
-		if (nIndx == -1) {
-			MessageBox(_T("请确认四种形态是否选择正确！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
-			return;
+	CComboBox* pCombo = (CComboBox*)GetDlgItem(IDC_COMBO4);
+	int nItem = pCombo->GetCurSel();
+	if (nItem == 0) {
+		GetDlgItem(IDC_EDIT368)->SetWindowTextW(_T("-1"));
+	}
+	else {
+		CComboBox* pCombo2 = (CComboBox*)GetDlgItem(IDC_COMBO3);
+		if (pCombo2->IsWindowVisible()) {
+			int nIndx = pCombo2->GetCurSel();
+			if (nIndx == -1) {
+				MessageBox(_T("请确认四种形态是否选择正确！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+				return;
+			}
+			CString strText;
+			strText.Format(_T("%d"), pCombo2->GetItemData(nIndx));
+			GetDlgItem(IDC_EDIT368)->SetWindowTextW(strText);
 		}
-		CString strText;
-		strText.Format(_T("%d"), pCombo2->GetItemData(nIndx));
-		GetDlgItem(IDC_EDIT368)->SetWindowTextW(strText);
 	}
 	DoUpdateForm();
 }
@@ -407,4 +432,76 @@ void CPersonalForm28::OnBnClickedButton1()
 	GetDlgItem(IDC_BUTTON1)->ShowWindow(SW_HIDE);
 
 	InitFourType();
+}
+
+
+void CPersonalForm28::OnBnClickedCmdNextForm()
+{
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	::PostMessage(pWnd->m_hWnd, WM_CREATE_PERSONAL_FORM, WPARAM(29), LPARAM(new CString(m_strCurrentFolder + _T("/") + m_strCurrentFile)));
+}
+
+
+void CPersonalForm28::OnCbnSelchangeCombo4()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	CComboBox* pCombo = (CComboBox*)GetDlgItem(IDC_COMBO4);
+	int nItem = pCombo->GetCurSel();
+	if (nItem == 0) {
+		GetDlgItem(IDC_EDIT_FOUR_XT_SHOW)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_COMBO2)->ShowWindow(SW_SHOW);
+		GetDlgItem(IDC_COMBO3)->ShowWindow(SW_SHOW);
+		GetDlgItem(IDC_BUTTON1)->ShowWindow(SW_HIDE);
+
+		GetDlgItem(IDC_COMBO2)->SetWindowTextW(_T(""));
+		GetDlgItem(IDC_COMBO3)->SetWindowTextW(_T(""));
+		GetDlgItem(IDC_COMBO2)->EnableWindow(FALSE);
+		GetDlgItem(IDC_COMBO3)->EnableWindow(FALSE);
+	}
+	else {
+		BOOL hasData = FALSE;
+		vector<int>::iterator itHas = _vHaveDataSubform.begin();
+		while (itHas != _vHaveDataSubform.end()) {
+			if (*itHas != -1) {
+				hasData = TRUE; break;
+			}
+			itHas++;
+		}
+		if (hasData) {
+			CString strText;
+			GetDlgItem(IDC_EDIT368)->GetWindowTextW(strText); strText.Trim();
+			if (!strText.IsEmpty()) {
+				stringstream ss;
+				ss << "select b.[punish_id],a.[category_name] as first_category,b.[category_name] as second_category from four_punish_category as a left join four_punish_category as b on b.first_category=a.punish_id where b.first_category<>-1 and b.[punish_id]=";
+				ss << CW2A(strText.GetBuffer(), CP_UTF8) << ";";
+				TRACE(_T("\n%s"), CA2W(ss.str().c_str(), CP_UTF8));
+
+				CSQLiteHelper *help = new CSQLiteHelper();
+				help->openDB("kiwi.db3");
+				int row, col;
+				char *eee = "i"; char **result = &eee;
+				char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+				if (row >= 1) {
+					strText.ReleaseBuffer();
+					strText.Format(_T("%s-%s"), strlen(re[1 * col + 1]) < 1 ? _T("") : CA2W(re[1 * col + 1], CP_UTF8),
+						strlen(re[1 * col + 2]) < 1 ? _T("") : CA2W(re[1 * col + 2], CP_UTF8));
+					GetDlgItem(IDC_EDIT_FOUR_XT_SHOW)->SetWindowText(strText);
+				}
+			}
+			GetDlgItem(IDC_EDIT_FOUR_XT_SHOW)->ShowWindow(SW_SHOW);
+			GetDlgItem(IDC_COMBO2)->ShowWindow(SW_HIDE);
+			GetDlgItem(IDC_COMBO3)->ShowWindow(SW_HIDE);
+			GetDlgItem(IDC_BUTTON1)->ShowWindow(SW_SHOW);
+		}
+		else {
+			GetDlgItem(IDC_EDIT_FOUR_XT_SHOW)->ShowWindow(SW_HIDE);
+			GetDlgItem(IDC_COMBO2)->ShowWindow(SW_SHOW);
+			GetDlgItem(IDC_COMBO3)->ShowWindow(SW_SHOW);
+			GetDlgItem(IDC_BUTTON1)->ShowWindow(SW_HIDE);
+
+			InitFourType();
+		}
+		GetDlgItem(IDC_COMBO2)->EnableWindow(TRUE);
+		GetDlgItem(IDC_COMBO3)->EnableWindow(TRUE);
+	}
 }

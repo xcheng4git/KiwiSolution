@@ -125,6 +125,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm13, CFormView)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm13::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm13::OnBnClickedButtonCloseForm3)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm13::OnBnClickedCmdUpdateForm)
+	ON_BN_CLICKED(IDC_CMD_NEXT_FORM, &CPersonalForm13::OnBnClickedCmdNextForm)
 END_MESSAGE_MAP()
 
 
@@ -479,4 +480,12 @@ void CPersonalForm13::OnBnClickedCmdUpdateForm()
 	DoUpdateForm();
 
 	DoUpdateFlag(1, 0, m_Radio12_3_0);
+}
+
+
+void CPersonalForm13::OnBnClickedCmdNextForm()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	::PostMessage(pWnd->m_hWnd, WM_CREATE_PERSONAL_FORM, WPARAM(14), LPARAM(new CString(m_strCurrentFolder + _T("/") + m_strCurrentFile)));
 }

@@ -98,6 +98,7 @@ public:
 	afx_msg void OnClickedButtonCloseForm01();
 	CComboBox m_comboGender;
 	afx_msg void OnBnClickedCmdUpdateForm();
+	afx_msg void OnBnClickedCmdNextForm();
 };
 
 #define MARGIN_X 20

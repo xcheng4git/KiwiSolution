@@ -53,6 +53,7 @@ public:
 	virtual void OnInitialUpdate();
 	afx_msg void OnBnClickedCmdUpdateForm3();
 
+	afx_msg void OnBnClickedCmdNextForm();
 };
 
 

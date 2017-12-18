@@ -41,6 +41,7 @@ private:
 	void SaveAttachment(CString form_recid);
 	void UpdateAttachment();
 
+	void InitFourType();
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 
@@ -56,6 +57,10 @@ public:
 	afx_msg void OnBnClickedButtonAddImage();
 //	afx_msg void OnHdnItemdblclickListAttachment(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnNMDblclkListAttachment(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnBnClickedCmdNextForm();
+	afx_msg void OnBnClickedChkBeingFourType();
+	afx_msg void OnCbnSetfocusCombo3();
+	afx_msg void OnBnClickedButton1();
 };
 
 

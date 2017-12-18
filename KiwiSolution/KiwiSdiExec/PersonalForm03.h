@@ -61,6 +61,7 @@ public:
 	int m_Radio2_0;
 	int m_Radio3_0;
 	afx_msg void OnBnClickedRadio1();
+	afx_msg void OnBnClickedCmdNextForm();
 };
 
 

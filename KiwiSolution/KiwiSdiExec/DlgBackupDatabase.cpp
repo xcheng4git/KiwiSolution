@@ -14,7 +14,7 @@ IMPLEMENT_DYNAMIC(CDlgBackupDatabase, CDialogEx)
 CDlgBackupDatabase::CDlgBackupDatabase(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CDlgBackupDatabase::IDD, pParent)
 {
-
+	hasEncodedName = false;
 }
 
 CDlgBackupDatabase::~CDlgBackupDatabase()
@@ -56,11 +56,15 @@ void CDlgBackupDatabase::OnSetfocusEditNameBackup()
 	if (((CButton*)GetDlgItem(IDC_RADIO2))->GetCheck()) {
 		CString str;
 		m_editPath.GetWindowTextW(str);
+		str.Trim();
+		if (!str.IsEmpty() && !hasEncodedName) {
+			CString strPath;
+			CTime today = CTime::GetCurrentTime();
+			strPath.Format(_T("%s\\kiwi%s.db3"), str, today.Format("%Y%m%d"));
+			m_editPath.SetWindowTextW(strPath);
 
-		CString strPath;
-		CTime today = CTime::GetCurrentTime();
-		strPath.Format(_T("%s\\kiwi%s.db3"), str, today.Format("%Y%m%d"));
-		m_editPath.SetWindowTextW(strPath);
+			hasEncodedName = true;
+		}
 	}
 }
 

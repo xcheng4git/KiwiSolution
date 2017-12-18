@@ -2,6 +2,8 @@
 
 
 #include "PersonalFormInterface.h"
+#include "afxwin.h"
+#include "afxcmn.h"
 // CPersonalForm19 窗体视图
 
 class CPersonalForm19 : public CFormView, public CPersonalFormInterface
@@ -35,6 +37,15 @@ public:
 
 	virtual int hasData(int isub, int irow);
 
+private:
+	CImageList m_ilIcons;
+	int m_nAttachCount;
+	vector<Attachment> m_vAttachment;
+	void InsertListItem(CListCtrl &list, CString& ext, int cntAttach, int data);
+	void ShowAttachment();
+	void SaveAttachment(CString form_recid);
+	void UpdateAttachment();
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
@@ -45,6 +56,11 @@ public:
 	afx_msg void OnBnClickedButtonCloseForm3();
 	virtual void OnInitialUpdate();
 	afx_msg void OnBnClickedCmdUpdateForm();
+	CXTPBrowseEdit m_editAttachPath;
+	CListCtrl m_listAttachments;
+	afx_msg void OnBnClickedButtonAddImage();
+	afx_msg void OnNMDblclkListAttachment(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnBnClickedCmdNextForm();
 };
 
 

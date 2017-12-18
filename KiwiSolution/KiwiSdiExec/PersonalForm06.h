@@ -62,6 +62,7 @@ public:
 	afx_msg void OnBnClickedRadio43();
 	afx_msg void OnBnClickedRadio58();
 	afx_msg void OnBnClickedRadio73();
+	afx_msg void OnBnClickedCmdNextForm();
 };
 
 

@@ -548,9 +548,9 @@ CREATE TABLE [main].[file_form_25] (
   [form_recid] VARCHAR(50), 
   [file_ReportYear] VARCHAR(10), 
   [file_Annual cadre of cadres report on the report of integrity report ] TEXT, 
+  [rpt_attachment] INTEGER DEFAULT 0, 
   [create_date] DATE, 
   [modify_date] DATE);
-
 
 /* Drop table [main].[file_form_26] */
 drop table if exists [main].[file_form_26];
@@ -561,7 +561,7 @@ CREATE TABLE [main].[file_form_26] (
   [form_recid] VARCHAR(50), 
   [file_ReportYear] VARCHAR(10), 
   [file_Annual report on health] TEXT, 
-  [file_ReportPic] VARCHAR(255), 
+  [rpt_attachment] INTEGER DEFAULT 0, 
   [create_date] DATE, 
   [modify_date] DATE);
 
@@ -575,7 +575,7 @@ CREATE TABLE [main].[file_form_27] (
   [form_recid] VARCHAR(50), 
   [file_ReportYear] VARCHAR(10), 
   [file_Annual report form of social morality] TEXT, 
-  [file_ReportPic] VARCHAR(255), 
+  [rpt_attachment] INTEGER DEFAULT 0, 
   [create_date] DATE, 
   [modify_date] DATE);
 
@@ -667,7 +667,7 @@ CREATE TABLE [main].[file_form_flags] (
   [file_4IfHaveThisSituation] INTEGER DEFAULT (-1), 
   [file_4IfChange] INTEGER DEFAULT (-1), 
   [file_5IfHaveThisSituation] INTEGER DEFAULT (-1), 
-  [file_5IfChange] INTEGER, 
+  [file_5IfChange] INTEGER DEFAULT (-1), 
   [file_6IfHaveThisSituation] INTEGER DEFAULT (-1), 
   [file_6IfChange] INTEGER DEFAULT (-1), 
   [file_7IfHaveThisSituation] INTEGER DEFAULT (-1), 
@@ -741,6 +741,7 @@ CREATE TABLE [main].[file_invertigated_form_11] (
   [being_public_date] VARCHAR(20), 
   [public_media] VARCHAR(20), 
   [main_problem_indeed] VARCHAR(200), 
+  [problem_four_xt] INTEGER, 
   [public_problem_content] VARCHAR(1000), 
   [public_attachment] INTEGER, 
   [create_date] DATE, 
@@ -822,6 +823,7 @@ CREATE TABLE [main].[file_invertigated_form_14] (
   [touch_date] DATE, 
   [touch_file] VARCHAR(20), 
   [touch_type] VARCHAR(50), 
+  [touch_four_xt] INTEGER, 
   [touch_reason] VARCHAR(500), 
   [touch_content] TEXT, 
   [touch_attachment] INTEGER, 
@@ -839,7 +841,7 @@ CREATE TABLE [main].[file_invertigated_form_15] (
   [form_recid] VARCHAR(50), 
   [file_name] VARCHAR(20), 
   [file_unit_position] VARCHAR(100), 
-  [pdp_type] VARCHAR(20), 
+  [pdp_type] INTEGER, 
   [case_essence] VARCHAR(50), 
   [pdp_unit] CHAR, 
   [pdp_docno] CHAR, 
@@ -863,7 +865,7 @@ CREATE TABLE [main].[file_invertigated_form_16] (
   [form_recid] VARCHAR(50), 
   [file_name] VARCHAR(20), 
   [file_unit_position] VARCHAR(100), 
-  [odp_type] VARCHAR(20), 
+  [odp_type] INTEGER, 
   [case_essence] VARCHAR(50), 
   [odp_unit] CHAR, 
   [odp_docno] CHAR, 
@@ -977,7 +979,8 @@ CREATE TABLE [main].[kiwi_users] (
   [user_name] VARCHAR(20), 
   [user_pwd] VARCHAR(50), 
   [user_group] INTEGER DEFAULT 3, 
-  [last_login_date] VARCHAR(50));
+  [last_login_date] DATE);
+
 
 /* Data [main].[kiwi_users] */
 insert into [main].[kiwi_users] values('admin', '4acb4bc224acbbe3c2bfdcaa39a4324e', 0, null);

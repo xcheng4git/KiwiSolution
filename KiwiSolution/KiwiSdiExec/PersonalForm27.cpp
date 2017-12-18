@@ -77,6 +77,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm27, CFormView)
 	ON_BN_CLICKED(IDC_CMD_PRINT_FORM, &CPersonalForm27::OnBnClickedCmdPrintForm)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_FORM3, &CPersonalForm27::OnBnClickedButtonCloseForm3)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm27::OnBnClickedCmdUpdateForm)
+	ON_BN_CLICKED(IDC_CMD_NEXT_FORM, &CPersonalForm27::OnBnClickedCmdNextForm)
 END_MESSAGE_MAP()
 
 
@@ -264,4 +265,11 @@ void CPersonalForm27::OnInitialUpdate()
 
 		help->closeDB(); delete help;
 	}
+}
+
+
+void CPersonalForm27::OnBnClickedCmdNextForm()
+{
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	::PostMessage(pWnd->m_hWnd, WM_CREATE_PERSONAL_FORM, WPARAM(28), LPARAM(new CString(m_strCurrentFolder + _T("/") + m_strCurrentFile)));
 }

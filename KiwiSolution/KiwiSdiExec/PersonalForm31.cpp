@@ -37,7 +37,7 @@ CPersonalForm31::CPersonalForm31()
 	m_nAttachCount = 0;
 
 	m_FormID = 31;
-	int parameters1[1][12] = { { IDC_EDIT1, IDC_EDIT12, IDC_EDIT346, IDC_EDIT13, IDC_EDIT347, IDC_EDIT344, IDC_DATETIMEPICKER1, IDC_DATETIMEPICKER45, IDC_EDIT350, IDC_EDIT351, 0,IDC_EDIT353 } };
+	int parameters1[1][12] = { { IDC_EDIT1, IDC_EDIT12, IDC_EDIT368, IDC_EDIT13, IDC_EDIT347, IDC_EDIT344, IDC_DATETIMEPICKER1, IDC_DATETIMEPICKER45, IDC_EDIT350, IDC_EDIT351, 0,IDC_EDIT353 } };
 	int structure1[14] = { 1, 12, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, EDITBX, DATEPKR, DATEPKR, EDITBX, EDITBX,ATTACHMENTBX, EDITBX };
 
 	vector<vector<int>> vvPara;
@@ -95,7 +95,7 @@ void CPersonalForm31::InsertListItem(CListCtrl &list, CString& ext, int cntAttac
 		nItem = list.InsertItem(cntAttach, _T(""), 1);
 	else if (ext == _T("pdf"))
 		nItem = list.InsertItem(cntAttach, _T(""), 2);
-	else if (ext == _T("doc"))
+	else if (ext == _T("doc") || ext == _T("docx"))
 		nItem = list.InsertItem(cntAttach, _T(""), 3);
 	else if (ext == _T("zip"))
 		nItem = list.InsertItem(cntAttach, _T(""), 4);
@@ -224,6 +224,34 @@ void CPersonalForm31::UpdateAttachment()
 }
 
 
+void CPersonalForm31::InitFourType()
+{
+	CComboBox* pCombo1 = (CComboBox*)GetDlgItem(IDC_COMBO2);
+	CComboBox* pCombo2 = (CComboBox*)GetDlgItem(IDC_COMBO3);
+
+	pCombo1->SetWindowTextW(_T(""));
+	while (pCombo1->GetCount()) pCombo1->DeleteString(0);
+	pCombo2->SetWindowTextW(_T(""));
+	while (pCombo2->GetCount()) pCombo2->DeleteString(0);
+
+	stringstream ss;
+	CSQLiteHelper *help = new CSQLiteHelper();
+	help->openDB("kiwi.db3");
+
+	ss << "select * from four_punish_category where first_category=-1";
+	int row, col;
+	char *eee = "i";
+	char **result = &eee;
+	char **re = help->rawQuery(ss.str().c_str(), &row, &col, result); //row 是查出多少行记录,col是每条记录多少个字段
+	//char *lr = re[(1)*col + 1]; //re[(1)*col+1] --> re是指向数组的指针。(1)为第1行，1表示第1列,从0计数,第0行是字段名。*/
+
+	int nIndx = pCombo1->AddString(_T("")); pCombo1->SetItemData(nIndx, (DWORD)-1);
+	for (int r = 1; r <= row; r++) {
+		nIndx = pCombo1->AddString(CA2W(re[r*col + 2], CP_UTF8));
+		pCombo1->SetItemData(nIndx, (DWORD)atoi(re[r*col + 0]));
+	}
+}
+
 void CPersonalForm31::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
@@ -238,6 +266,8 @@ BEGIN_MESSAGE_MAP(CPersonalForm31, CFormView)
 	ON_BN_CLICKED(IDC_CMD_UPDATE_FORM, &CPersonalForm31::OnBnClickedCmdUpdateForm)
 	ON_BN_CLICKED(IDC_BUTTON_ADD_IMAGE, &CPersonalForm31::OnBnClickedButtonAddImage)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST_ATTACHMENT, &CPersonalForm31::OnNMDblclkListAttachment)
+	ON_BN_CLICKED(IDC_BUTTON1, &CPersonalForm31::OnBnClickedButton1)
+	ON_CBN_SETFOCUS(IDC_COMBO3, &CPersonalForm31::OnCbnSetfocusCombo3)
 END_MESSAGE_MAP()
 
 
@@ -314,6 +344,18 @@ void CPersonalForm31::OnBnClickedCmdSaveForm()
 		itVVVparameter++;
 	}
 
+	CComboBox* pCombo2 = (CComboBox*)GetDlgItem(IDC_COMBO3);
+	if (pCombo2->IsWindowVisible()) {
+		int nIndx = pCombo2->GetCurSel();
+		if (nIndx == -1) {
+			MessageBox(_T("请确认四种形态是否选择正确！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+			return;
+		}
+		CString strText;
+		strText.Format(_T("%d"), pCombo2->GetItemData(nIndx));
+		GetDlgItem(IDC_EDIT368)->SetWindowTextW(strText);
+	}
+
 	CString form_recid = DoSaveForm();
 
 	SaveAttachment(form_recid);
@@ -342,7 +384,14 @@ void CPersonalForm31::OnBnClickedCmdPrintForm()
 
 
 	ss.str(""); ss.clear();
-	ss << "select * from file_invertigated_form_16 where file_id=" << file_id << " limit 0,1;";
+	//ss << "select * from file_invertigated_form_16 where file_id=" << file_id << " limit 0,1;";
+	ss << "select file_id,form_recid,file_name,file_unit_position,";
+	ss << " case odp_type when -1 then '" << CW2A(_T("否"), CP_UTF8) << "' else ";
+	ss << " (select b.category_name || '" << CW2A(_T("——"), CP_UTF8) << "' || a.category_name from four_punish_category as a inner join four_punish_category as b";
+	ss << " on a.[first_category] = b.punish_id and a.punish_id=odp_type) ";
+	ss << " end as punish_category_name, case_essence, odp_unit, odp_docno, odp_start_date, odp_end_date, odp_reason, odp_content, odp_attachment, odp_memo ";
+	ss << " from file_invertigated_form_16 where file_id = " << file_id << " limit 0, 1; ";
+	TRACE(_T("\n%s\n"), CA2W(ss.str().c_str(), CP_UTF8));
 	_vSubformQueryString.push_back(ss.str());
 
 	ss.str(""); ss.clear();
@@ -369,6 +418,18 @@ void CPersonalForm31::OnBnClickedCmdUpdateForm()
 		itVVparameter[0][10] = m_nAttachCount; break;
 
 		itVVVparameter++;
+	}
+
+	CComboBox* pCombo2 = (CComboBox*)GetDlgItem(IDC_COMBO3);
+	if (pCombo2->IsWindowVisible()) {
+		int nIndx = pCombo2->GetCurSel();
+		if (nIndx == -1) {
+			MessageBox(_T("请确认四种形态是否选择正确！"), _T("《廉政档案管理系统》"), MB_ICONSTOP);
+			return;
+		}
+		CString strText;
+		strText.Format(_T("%d"), pCombo2->GetItemData(nIndx));
+		GetDlgItem(IDC_EDIT368)->SetWindowTextW(strText);
 	}
 
 	DoUpdateForm();
@@ -420,6 +481,27 @@ void CPersonalForm31::OnInitialUpdate()
 	if (hasData) {
 		ShowAttachment();
 
+		CString strText;
+		GetDlgItem(IDC_EDIT368)->GetWindowTextW(strText); strText.Trim();
+		if (!strText.IsEmpty()) {
+			stringstream ss;
+			ss << "select b.[punish_id],a.[category_name] as first_category,b.[category_name] as second_category from four_punish_category as a left join four_punish_category as b on b.first_category=a.punish_id where b.first_category<>-1 and b.[punish_id]=";
+			ss << CW2A(strText.GetBuffer(), CP_UTF8) << ";";
+			TRACE(_T("\n%s"), CA2W(ss.str().c_str(), CP_UTF8));
+
+			CSQLiteHelper *help = new CSQLiteHelper();
+			help->openDB("kiwi.db3");
+			int row, col;
+			char *eee = "i"; char **result = &eee;
+			char **re = help->rawQuery(ss.str().c_str(), &row, &col, result);
+			if (row >= 1) {
+				strText.ReleaseBuffer();
+				strText.Format(_T("%s-%s"), strlen(re[1 * col + 1]) < 1 ? _T("") : CA2W(re[1 * col + 1], CP_UTF8),
+					strlen(re[1 * col + 2]) < 1 ? _T("") : CA2W(re[1 * col + 2], CP_UTF8));
+				GetDlgItem(IDC_EDIT_FOUR_XT_SHOW)->SetWindowText(strText);
+			}
+		}
+
 		GetDlgItem(IDC_CMD_SAVE_FORM)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_CMD_UPDATE_FORM)->ShowWindow(SW_SHOW);
 	}
@@ -446,6 +528,13 @@ void CPersonalForm31::OnInitialUpdate()
 		}
 
 		help->closeDB(); delete help;
+
+		GetDlgItem(IDC_EDIT_FOUR_XT_SHOW)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_COMBO2)->ShowWindow(SW_SHOW);
+		GetDlgItem(IDC_COMBO3)->ShowWindow(SW_SHOW);
+		GetDlgItem(IDC_BUTTON1)->ShowWindow(SW_HIDE);
+
+		InitFourType();
 	}
 }
 
@@ -499,4 +588,44 @@ void CPersonalForm31::OnNMDblclkListAttachment(NMHDR *pNMHDR, LRESULT *pResult)
 
 
 	*pResult = 0;
+}
+
+
+void CPersonalForm31::OnBnClickedButton1()
+{
+	GetDlgItem(IDC_EDIT_FOUR_XT_SHOW)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_COMBO2)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_COMBO3)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_BUTTON1)->ShowWindow(SW_HIDE);
+
+	InitFourType();
+}
+
+
+void CPersonalForm31::OnCbnSetfocusCombo3()
+{
+	CComboBox* pCombo1 = (CComboBox*)GetDlgItem(IDC_COMBO2);
+	CComboBox* pCombo2 = (CComboBox*)GetDlgItem(IDC_COMBO3);
+
+	pCombo2->SetWindowTextW(_T(""));
+	while (pCombo2->GetCount()) pCombo2->DeleteString(0);
+
+	int nItem = pCombo1->GetCurSel();
+	if (nItem != -1) {
+		stringstream ss;
+		CSQLiteHelper *help = new CSQLiteHelper();
+		help->openDB("kiwi.db3");
+
+		ss << "select * from four_punish_category where first_category=" << pCombo1->GetItemData(nItem) << ";";
+		int row, col;
+		char *eee = "i";
+		char **result = &eee;
+		char **re = help->rawQuery(ss.str().c_str(), &row, &col, result); //row 是查出多少行记录,col是每条记录多少个字段
+		//char *lr = re[(1)*col + 1]; //re[(1)*col+1] --> re是指向数组的指针。(1)为第1行，1表示第1列,从0计数,第0行是字段名。*/
+
+		for (int r = 1; r <= row; r++) {
+			int nIndx = pCombo2->AddString(CA2W(re[r*col + 2], CP_UTF8));
+			pCombo2->SetItemData(nIndx, (DWORD)atoi(re[r*col + 0]));
+		}
+	}
 }

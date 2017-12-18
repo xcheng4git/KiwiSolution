@@ -557,9 +557,15 @@ void CPersonalFormInterface::DoUpdateForm()
 					ss << "=" << dData;
 
 				}
-				else if ((_vvSubformStructure[i][2 + j] == EDITBX) || (_vvSubformStructure[i][2 + j] == DATEPKR)){
+				else if (_vvSubformStructure[i][2 + j] == EDITBX) { 
 					CString strText;
 					GetData(_vvSubformStructure[i][2 + j], itV[j], strText);
+					ss << "='" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
+				}
+				else if (_vvSubformStructure[i][2 + j] == DATEPKR){
+					CString strText;
+					GetData(_vvSubformStructure[i][2 + j], itV[j], strText);
+					strText.Replace(_T("/"), _T("-"));
 					ss << "='" << CW2A(strText.GetBuffer(), CP_UTF8) << "' ";
 				}
 				else if (_vvSubformStructure[i][2 + j] == ATTACHMENTBX)

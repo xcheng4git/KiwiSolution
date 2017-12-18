@@ -15,6 +15,8 @@ public:
 // 对话框数据
 	enum { IDD = IDD_DIALOG_DATABASE_BACKUP };
 
+private:
+	bool hasEncodedName;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 

@@ -46,6 +46,7 @@ public:
 	afx_msg void OnBnClickedButtonCloseForm3();
 	virtual void OnInitialUpdate();
 	afx_msg void OnBnClickedCmdUpdateForm();
+	afx_msg void OnBnClickedCmdNextForm();
 };
 
 

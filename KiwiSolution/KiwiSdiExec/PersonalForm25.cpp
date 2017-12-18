@@ -95,7 +95,7 @@ void CPersonalForm25::InsertListItem(CListCtrl &list, CString& ext, int cntAttac
 		nItem = list.InsertItem(cntAttach, _T(""), 1);
 	else if (ext == _T("pdf"))
 		nItem = list.InsertItem(cntAttach, _T(""), 2);
-	else if (ext == _T("doc"))
+	else if (ext == _T("doc") || ext == _T("docx"))
 		nItem = list.InsertItem(cntAttach, _T(""), 3);
 	else if (ext == _T("zip"))
 		nItem = list.InsertItem(cntAttach, _T(""), 4);
@@ -302,6 +302,7 @@ BEGIN_MESSAGE_MAP(CPersonalForm25, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON_ADD_IMAGE, &CPersonalForm25::OnBnClickedButtonAddRegisterImage)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST_ATTACHMENT2, &CPersonalForm25::OnNMDblclkListAttachment2)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST_ATTACHMENT, &CPersonalForm25::OnNMDblclkListAttachment)
+	ON_BN_CLICKED(IDC_CMD_NEXT_FORM, &CPersonalForm25::OnBnClickedCmdNextForm)
 END_MESSAGE_MAP()
 
 
@@ -622,4 +623,12 @@ void CPersonalForm25::OnNMDblclkListAttachment(NMHDR *pNMHDR, LRESULT *pResult)
 
 
 	*pResult = 0;
+}
+
+
+void CPersonalForm25::OnBnClickedCmdNextForm()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	CMainFrame* pWnd = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	::PostMessage(pWnd->m_hWnd, WM_CREATE_PERSONAL_FORM, WPARAM(26), LPARAM(new CString(m_strCurrentFolder + _T("/") + m_strCurrentFile)));
 }
