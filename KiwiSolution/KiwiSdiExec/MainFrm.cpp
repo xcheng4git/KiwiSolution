@@ -636,6 +636,7 @@ void CMainFrame::OnDatabaseInitial()
 			MessageBox(_T("数据库已经初始化！"), _T("《廉政档案管理系统》"), MB_ICONEXCLAMATION);
 
 			::PostMessage(this->m_hWnd, WM_UPDATE_ORGNIZATION, 0l, 0l);
+			::PostMessage(this->m_hWnd, WM_SHOW_DEFAULT_SUMMARY, 0l, 0l);
 		}
 		else {
 			if (bRtc3 && bRtc2) {

@@ -963,6 +963,7 @@
 #define IDC_CMD_NEXT_FORM               1560
 #define IDC_STATIC_EMAIL                1561
 #define IDC_BUTTON_GRP23_DATA           1562
+#define IDC_BUTTON_DEL_ATTACHMENT       1562
 #define IDC_BUTTON_GRP24_DATA           1563
 #define ID_32771                        32771
 #define ID_TOOL_FULLSCREEN              32772
@@ -995,7 +996,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        386
 #define _APS_NEXT_COMMAND_VALUE         32795
-#define _APS_NEXT_CONTROL_VALUE         1562
+#define _APS_NEXT_CONTROL_VALUE         1563
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

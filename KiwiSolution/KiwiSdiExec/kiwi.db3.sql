@@ -941,20 +941,19 @@ insert into [main].[four_punish_category] values(4, -1, '党纪处理类', null)
 insert into [main].[four_punish_category] values(5, -1, '政纪处理类', null);
 insert into [main].[four_punish_category] values(6, -1, '违法处理类', null);
 insert into [main].[four_punish_category] values(8, 1, '提醒谈话', 1);
-insert into [main].[four_punish_category] values(9, 1, '约谈', 1);
-insert into [main].[four_punish_category] values(10, 1, '诫勉谈话', 3);
+insert into [main].[four_punish_category] values(10, 1, '诫勉谈话', 1);
 insert into [main].[four_punish_category] values(11, 1, '函询', 1);
 insert into [main].[four_punish_category] values(12, 2, '批评教育', 1);
 insert into [main].[four_punish_category] values(13, 2, '通报批评', 1);
 insert into [main].[four_punish_category] values(14, 2, '调离岗位', 2);
-insert into [main].[four_punish_category] values(15, 2, '降职', 2);
-insert into [main].[four_punish_category] values(16, 2, '责令辞职', 2);
-insert into [main].[four_punish_category] values(17, 2, '免职', 2);
-insert into [main].[four_punish_category] values(18, 3, '公开道歉', 2);
+insert into [main].[four_punish_category] values(15, 2, '降职', 3);
+insert into [main].[four_punish_category] values(16, 2, '责令辞职', 3);
+insert into [main].[four_punish_category] values(17, 2, '免职', 3);
+insert into [main].[four_punish_category] values(18, 3, '公开道歉', 1);
 insert into [main].[four_punish_category] values(19, 3, '停职检查', 2);
-insert into [main].[four_punish_category] values(20, 3, '引咎辞职', 2);
-insert into [main].[four_punish_category] values(21, 3, '责令辞职', 2);
-insert into [main].[four_punish_category] values(22, 3, '免职', 2);
+insert into [main].[four_punish_category] values(20, 3, '引咎辞职', 3);
+insert into [main].[four_punish_category] values(21, 3, '责令辞职', 3);
+insert into [main].[four_punish_category] values(22, 3, '免职', 3);
 insert into [main].[four_punish_category] values(23, 4, '警告', 2);
 insert into [main].[four_punish_category] values(24, 4, '严重警告', 2);
 insert into [main].[four_punish_category] values(25, 4, '撤销党内职务', 3);
@@ -967,8 +966,7 @@ insert into [main].[four_punish_category] values(31, 5, '记大过', 2);
 insert into [main].[four_punish_category] values(32, 5, '降级', 3);
 insert into [main].[four_punish_category] values(33, 5, '撤职', 3);
 insert into [main].[four_punish_category] values(34, 5, '开除', 4);
-insert into [main].[four_punish_category] values(35, 6, '被司法机关起诉但', 4);
-insert into [main].[four_punish_category] values(36, 6, '被司法机关给予管制', 4);
+insert into [main].[four_punish_category] values(35, 6, '被司法机关起诉', 4);
 
 
 /* Drop table [main].[kiwi_users] */
